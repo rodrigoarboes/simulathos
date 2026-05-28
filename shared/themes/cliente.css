@@ -1,0 +1,46 @@
+/* ==========================================================================
+   Theme: Cliente (white-label, simplified)
+   ========================================================================== */
+
+:root {
+    --zw-primary: #2C3E50;
+    --zw-primary-light: #3D5166;
+    --zw-accent: #3498DB;
+    --zw-accent-dark: #2980B9;
+    --zw-bg: #F8F9FA;
+    --zw-card-bg: #FFFFFF;
+    --zw-text: #2C3E50;
+    --zw-text-muted: #5D6D7E;
+    --zw-text-light: #95A5A6;
+    --zw-border: #DEE2E6;
+}
+
+.zw-header__logo {
+    background: var(--zw-accent);
+    color: #fff;
+}
+
+.zw-nav-link.completed {
+    color: var(--zw-accent);
+}
+
+.zw-result-hero__value {
+    color: var(--zw-accent);
+}
+
+.zw-summary-item--highlight strong {
+    color: var(--zw-accent);
+}
+
+/* Hide advanced fields in client mode */
+body[data-mode="cliente"] .zw-section-title {
+    display: none;
+}
+
+body[data-mode="cliente"] #aposentadoria .zw-info-box {
+    display: none;
+}
+
+body[data-mode="cliente"] .zw-footer::after {
+    content: "";
+}

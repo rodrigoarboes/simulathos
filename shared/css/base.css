@@ -1,8 +1,7 @@
 /* ==========================================================================
-   Zanella Wealth — Financial Planner Styles
+   Simulathos — Base Styles (shared across all simulators)
    ========================================================================== */
 
-/* --- Reset & Base --- */
 *, *::before, *::after {
     box-sizing: border-box;
     margin: 0;
@@ -29,6 +28,8 @@
     --zw-shadow-lg: 0 4px 24px rgba(0,0,0,0.08);
     --zw-transition: 0.2s ease;
     --zw-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --zw-logo-text: "ZW";
+    --zw-brand-name: "Zanella Wealth";
 }
 
 html {
@@ -90,6 +91,11 @@ body {
     justify-content: center;
 }
 
+.zw-header__logo img {
+    max-height: 28px;
+    width: auto;
+}
+
 .zw-header__title {
     font-size: 16px;
     font-weight: 600;
@@ -145,12 +151,6 @@ body {
     color: var(--zw-text-muted);
     max-width: 600px;
     margin: 0 auto;
-}
-
-/* --- Main --- */
-.zw-main {
-    min-height: calc(100vh - 64px - 80px);
-    padding-bottom: 48px;
 }
 
 /* --- Steps --- */
@@ -283,7 +283,7 @@ body {
     color: var(--zw-text-light);
 }
 
-/* --- Currency Input --- */
+/* --- Currency / Percent Input --- */
 .zw-input-currency,
 .zw-input-percent {
     display: flex;
@@ -424,7 +424,7 @@ body {
     color: var(--zw-primary);
 }
 
-/* --- Results --- */
+/* --- Result Components --- */
 .zw-result-hero {
     text-align: center;
     padding: 32px;
@@ -555,6 +555,15 @@ body {
 
 .zw-footer p + p {
     margin-top: 4px;
+}
+
+/* --- Client mode: simplified view --- */
+body[data-mode="cliente"] .zw-field__hint {
+    display: none;
+}
+
+body[data-mode="cliente"] .zw-info-box {
+    display: none;
 }
 
 /* --- Responsive --- */

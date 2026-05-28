@@ -4,16 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
-    <title>Planejamento de Vida & Aposentadoria — Zanella Wealth</title>
+    <title>Planejamento de Vida & Aposentadoria</title>
+
+    <!-- Shared base -->
+    <link rel="stylesheet" href="../shared/css/base.css">
+    <!-- Theme (swap this file to rebrand) -->
+    <link rel="stylesheet" href="../shared/themes/zanella.css" id="theme-css">
+    <!-- Simulator-specific -->
     <link rel="stylesheet" href="css/planner.css">
+
+    <script>
+        // Auto-load theme from URL: ?tema=vocebancario | zanella | cliente
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var tema = params.get('tema') || params.get('theme');
+            if (tema) {
+                document.getElementById('theme-css').href = '../shared/themes/' + tema + '.css';
+            }
+            var mode = params.get('modo') || params.get('mode');
+            if (mode) {
+                document.body.setAttribute('data-mode', mode);
+            }
+        })();
+    </script>
 </head>
 <body>
 
     <header class="zw-header">
         <div class="zw-header__inner">
             <div class="zw-header__brand">
-                <span class="zw-header__logo">ZW</span>
-                <span class="zw-header__title">Zanella Wealth</span>
+                <span class="zw-header__logo" id="brand-logo">ZW</span>
+                <span class="zw-header__title" id="brand-name">Zanella Wealth</span>
             </div>
             <nav class="zw-header__nav">
                 <a href="#dados-pessoais" class="zw-nav-link active" data-step="1">Dados Pessoais</a>
@@ -79,6 +100,7 @@
                         </div>
                     </div>
                     <div class="zw-card__footer">
+                        <span></span>
                         <button type="button" class="zw-btn zw-btn--primary" data-next="2">
                             Próximo
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -99,25 +121,16 @@
                         <div class="zw-form-grid">
                             <div class="zw-field">
                                 <label for="salario">Salário líquido mensal</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="salario" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="salario" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="outras-receitas">Outras receitas mensais</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="outras-receitas" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="outras-receitas" placeholder="0,00" data-currency></div>
                                 <span class="zw-field__hint">Aluguéis, dividendos, freelance, etc.</span>
                             </div>
                             <div class="zw-field">
                                 <label for="renda-conjuge">Renda do cônjuge (se aplicável)</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="renda-conjuge" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="renda-conjuge" placeholder="0,00" data-currency></div>
                             </div>
                         </div>
 
@@ -125,52 +138,31 @@
                         <div class="zw-form-grid">
                             <div class="zw-field">
                                 <label for="moradia">Moradia (aluguel/financiamento)</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="moradia" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="moradia" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="alimentacao">Alimentação</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="alimentacao" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="alimentacao" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="transporte">Transporte</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="transporte" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="transporte" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="saude">Saúde</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="saude" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="saude" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="educacao">Educação</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="educacao" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="educacao" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="lazer">Lazer e entretenimento</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="lazer" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="lazer" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="outras-despesas">Outras despesas</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="outras-despesas" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="outras-despesas" placeholder="0,00" data-currency></div>
                             </div>
                         </div>
 
@@ -214,31 +206,19 @@
                         <div class="zw-form-grid">
                             <div class="zw-field">
                                 <label for="renda-fixa">Renda Fixa (CDB, Tesouro, LCI/LCA)</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="renda-fixa" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="renda-fixa" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="renda-variavel">Renda Variável (Ações, FIIs, ETFs)</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="renda-variavel" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="renda-variavel" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="previdencia">Previdência Privada (PGBL/VGBL)</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="previdencia" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="previdencia" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="outros-investimentos">Outros investimentos</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="outros-investimentos" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="outros-investimentos" placeholder="0,00" data-currency></div>
                             </div>
                         </div>
 
@@ -246,17 +226,11 @@
                         <div class="zw-form-grid">
                             <div class="zw-field">
                                 <label for="imoveis">Imóveis (valor estimado)</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="imoveis" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="imoveis" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="veiculos">Veículos (valor estimado)</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="veiculos" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="veiculos" placeholder="0,00" data-currency></div>
                             </div>
                         </div>
 
@@ -264,17 +238,11 @@
                         <div class="zw-form-grid">
                             <div class="zw-field">
                                 <label for="financiamento-imovel">Financiamento imobiliário (saldo devedor)</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="financiamento-imovel" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="financiamento-imovel" placeholder="0,00" data-currency></div>
                             </div>
                             <div class="zw-field">
                                 <label for="outras-dividas">Outras dívidas</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="outras-dividas" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="outras-dividas" placeholder="0,00" data-currency></div>
                             </div>
                         </div>
 
@@ -321,18 +289,12 @@
                         <div class="zw-form-grid">
                             <div class="zw-field">
                                 <label for="renda-desejada">Renda mensal desejada na aposentadoria</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="renda-desejada" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="renda-desejada" placeholder="0,00" data-currency></div>
                                 <span class="zw-field__hint">Em valores de hoje</span>
                             </div>
                             <div class="zw-field">
                                 <label for="aporte-mensal">Aporte mensal planejado</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="aporte-mensal" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="aporte-mensal" placeholder="0,00" data-currency></div>
                                 <span class="zw-field__hint">Quanto pretende investir por mês</span>
                             </div>
                             <div class="zw-field">
@@ -352,10 +314,7 @@
                             </div>
                             <div class="zw-field">
                                 <label for="inss-estimado">INSS estimado na aposentadoria</label>
-                                <div class="zw-input-currency">
-                                    <span>R$</span>
-                                    <input type="text" id="inss-estimado" placeholder="0,00" data-currency>
-                                </div>
+                                <div class="zw-input-currency"><span>R$</span><input type="text" id="inss-estimado" placeholder="0,00" data-currency></div>
                                 <span class="zw-field__hint">Valor estimado do benefício do INSS</span>
                             </div>
                         </div>
@@ -428,9 +387,7 @@
                             <canvas id="chart-composicao" height="300"></canvas>
                         </div>
 
-                        <div class="zw-status-box" id="status-box">
-                            <!-- Populated by JS -->
-                        </div>
+                        <div class="zw-status-box" id="status-box"></div>
                     </div>
                     <div class="zw-card__footer">
                         <button type="button" class="zw-btn zw-btn--secondary" data-prev="4">
@@ -451,11 +408,12 @@
     <footer class="zw-footer">
         <div class="zw-container">
             <p>Simulação para fins educacionais. Consulte seu assessor para decisões de investimento.</p>
-            <p>&copy; 2026 Zanella Wealth. Todos os direitos reservados.</p>
+            <p>&copy; 2026 Todos os direitos reservados.</p>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="../shared/js/utils.js"></script>
     <script src="js/planner.js"></script>
 </body>
 </html>

@@ -1,0 +1,9 @@
+/* ==========================================================================
+   Simulador de Aposentadoria — Specific Styles
+   Overrides or additions not covered by base.css
+   ========================================================================== */
+
+.zw-main {
+    min-height: calc(100vh - 64px - 80px);
+    padding-bottom: 48px;
+}

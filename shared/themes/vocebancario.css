@@ -1,0 +1,47 @@
+/* ==========================================================================
+   Theme: @vocebancario / Advisor PRO
+   ========================================================================== */
+
+:root {
+    --zw-primary: #0D1B2A;
+    --zw-primary-light: #1B2D45;
+    --zw-accent: #00C2A8;
+    --zw-accent-dark: #00A38D;
+    --zw-bg: #F5F7FA;
+    --zw-card-bg: #FFFFFF;
+    --zw-text: #1A1A2E;
+    --zw-text-muted: #4A4A68;
+    --zw-text-light: #8E8EA0;
+    --zw-border: #E0E3EB;
+}
+
+.zw-header__logo {
+    background: var(--zw-accent);
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+}
+
+.zw-nav-link.completed {
+    color: var(--zw-accent);
+}
+
+.zw-result-hero {
+    background: linear-gradient(135deg, var(--zw-primary) 0%, var(--zw-primary-light) 100%);
+}
+
+.zw-result-hero__value {
+    color: var(--zw-accent);
+}
+
+.zw-summary-item--highlight strong {
+    color: var(--zw-accent);
+}
+
+.zw-footer::after {
+    content: "@vocebancario — Advisor PRO";
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--zw-text-light);
+}

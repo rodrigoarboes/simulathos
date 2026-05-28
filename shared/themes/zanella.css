@@ -1,0 +1,29 @@
+/* ==========================================================================
+   Theme: Zanella Wealth (Consultoria)
+   ========================================================================== */
+
+:root {
+    --zw-primary: #010E30;
+    --zw-primary-light: #1a2d5a;
+    --zw-accent: #BEB998;
+    --zw-accent-dark: #a8a37f;
+    --zw-bg: #FAFBFD;
+    --zw-card-bg: #FFFFFF;
+    --zw-text: #1E2132;
+    --zw-text-muted: #5A5A5A;
+    --zw-text-light: #9B9C9F;
+    --zw-border: #E2E5EA;
+}
+
+.zw-header__logo {
+    background: var(--zw-accent);
+    color: var(--zw-primary);
+}
+
+.zw-footer::after {
+    content: "Zanella Wealth — Consultoria de Investimentos";
+    display: block;
+    margin-top: 4px;
+    font-size: 11px;
+    color: var(--zw-text-light);
+}
