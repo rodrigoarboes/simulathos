@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>AIDA Allocation — Simulador de Carteira</title>
+
+    <!-- Shared base -->
+    <link rel="stylesheet" href="../shared/css/base.css">
+    <!-- Theme (swap this file to rebrand) -->
+    <link rel="stylesheet" href="../shared/themes/vocebancario.css" id="theme-css">
+
+    <script>
+        // Auto-load theme from URL: ?tema=vocebancario | zanella | cliente
+        (function () {
+            var params = new URLSearchParams(window.location.search);
+            var tema = params.get('tema') || params.get('theme');
+            if (tema) {
+                document.getElementById('theme-css').href = '../shared/themes/' + tema + '.css';
+            }
+            var mode = params.get('modo') || params.get('mode');
+            if (mode) {
+                document.body.setAttribute('data-mode', mode);
+            }
+        })();
+    </script>
+
+    <style>
+        /* ============================================================
+           AIDA Allocation — Simulator-specific styles
+           ============================================================ */
+
+        /* --- ETF Catalog Grid --- */
+        .zw-etf-group { margin-bottom: 28px; }
+
+        .zw-etf-group__title {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--zw-text-muted);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--zw-border);
+        }
+
+        .zw-etf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .zw-etf-card {
+            padding: 14px 16px;
+            background: #F6F7F9;
+            border: 2px solid var(--zw-border);
+            border-radius: var(--zw-radius-sm);
+            cursor: pointer;
+            transition: var(--zw-transition);
+            user-select: none;
+        }
+
+        .zw-etf-card:hover {
+            border-color: var(--zw-primary);
+            background: #EEF1F6;
+        }
+
+        .zw-etf-card.selected {
+            border-color: var(--zw-primary);
+            background: var(--zw-primary);
+            color: #fff;
+        }
+
+        .zw-etf-card__ticker {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: -0.01em;
+        }
+
+        .zw-etf-card__name {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+
+        .zw-etf-card__desc {
+            font-size: 11px;
+            opacity: 0.5;
+            margin-top: 4px;
+        }
+
+        /* --- Weight Sliders --- */
+        .zw-weights-section {
+            margin-top: 28px;
+        }
+
+        .zw-weights-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--zw-text-muted);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--zw-border);
+        }
+
+        .zw-weight-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .zw-weight-row__label {
+            min-width: 90px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .zw-weight-row__slider {
+            flex: 1;
+            appearance: none;
+            -webkit-appearance: none;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--zw-border);
+            outline: none;
+        }
+
+        .zw-weight-row__slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--zw-primary);
+            cursor: pointer;
+        }
+
+        .zw-weight-row__slider::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--zw-primary);
+            cursor: pointer;
+            border: none;
+        }
+
+        .zw-weight-row__input {
+            width: 70px;
+            text-align: center;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .zw-weight-row__pct {
+            font-size: 14px;
+            color: var(--zw-text-muted);
+            min-width: 16px;
+        }
+
+        /* --- Total Weight Bar --- */
+        .zw-total-bar {
+            margin-top: 20px;
+            padding: 16px 20px;
+            border-radius: var(--zw-radius-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+            font-size: 16px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+
+        .zw-total-bar.is-valid {
+            background: #E8F8EE;
+            border: 2px solid #14B550;
+            color: #0D7A33;
+        }
+
+        .zw-total-bar.is-invalid {
+            background: #FDECEC;
+            border: 2px solid #DB222A;
+            color: #A32020;
+        }
+
+        .zw-total-bar__fill {
+            height: 6px;
+            border-radius: 3px;
+            flex: 1;
+            margin: 0 20px;
+            background: var(--zw-border);
+            overflow: hidden;
+        }
+
+        .zw-total-bar__fill-inner {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s, background 0.3s;
+        }
+
+        /* --- Quick Buttons --- */
+        .zw-quick-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .zw-quick-btn {
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid var(--zw-border);
+            border-radius: var(--zw-radius-sm);
+            background: #F6F7F9;
+            cursor: pointer;
+            transition: var(--zw-transition);
+            font-family: var(--zw-font);
+        }
+
+        .zw-quick-btn:hover {
+            border-color: var(--zw-primary);
+            background: #EEF1F6;
+        }
+
+        /* --- Correlation Matrix --- */
+        .zw-corr-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+
+        .zw-corr-table th,
+        .zw-corr-table td {
+            padding: 8px 10px;
+            text-align: center;
+            border: 1px solid var(--zw-border);
+        }
+
+        .zw-corr-table th {
+            background: #F6F7F9;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .zw-corr-table td {
+            font-weight: 500;
+            min-width: 56px;
+        }
+
+        /* --- Relatório (print-friendly) --- */
+        .zw-relatorio-section {
+            margin-bottom: 28px;
+        }
+
+        .zw-relatorio-section h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--zw-primary);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--zw-primary);
+        }
+
+        .zw-relatorio-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px 24px;
+        }
+
+        .zw-relatorio-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+
+        .zw-relatorio-item span:last-child {
+            font-weight: 700;
+        }
+
+        .zw-disclaimer {
+            margin-top: 24px;
+            padding: 16px 20px;
+            background: #FFF9E6;
+            border: 1px solid #F5D68E;
+            border-radius: var(--zw-radius-sm);
+            font-size: 12px;
+            color: var(--zw-text-muted);
+            line-height: 1.6;
+        }
+
+        /* --- Error Box --- */
+        .zw-error-box {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--zw-danger, #DB222A);
+        }
+
+        .zw-error-box p {
+            margin-top: 8px;
+            font-size: 14px;
+        }
+
+        .zw-error-box code {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 16px;
+            background: #F6F7F9;
+            border-radius: var(--zw-radius-sm);
+            font-size: 13px;
+            color: var(--zw-text);
+        }
+
+        /* --- Loading Spinner --- */
+        .zw-loading {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .zw-spinner {
+            display: inline-block;
+            width: 36px;
+            height: 36px;
+            border: 3px solid var(--zw-border);
+            border-top-color: var(--zw-primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .zw-loading p {
+            margin-top: 16px;
+            font-size: 14px;
+            color: var(--zw-text-muted);
+        }
+
+        /* --- Validation message --- */
+        .zw-validation-msg {
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .zw-validation-msg.is-error {
+            color: var(--zw-danger, #DB222A);
+        }
+
+        .zw-validation-msg.is-ok {
+            color: var(--zw-success, #14B550);
+        }
+
+        /* --- Print styles --- */
+        @media print {
+            .zw-header, .zw-header__nav, .zw-card__footer, .zw-footer { display: none !important; }
+            .zw-step { display: block !important; }
+            .zw-step:not([data-step="4"]) { display: none !important; }
+            .zw-step[data-step="4"] { display: block !important; }
+            .zw-card { box-shadow: none; border: none; }
+            body { background: #fff; }
+        }
+
+        /* --- Responsive additions --- */
+        @media (max-width: 768px) {
+            .zw-etf-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
+            .zw-weight-row { flex-wrap: wrap; }
+            .zw-weight-row__slider { min-width: 100%; order: 3; }
+            .zw-relatorio-grid { grid-template-columns: 1fr; }
+            .zw-corr-table { font-size: 11px; }
+            .zw-corr-table th, .zw-corr-table td { padding: 5px 4px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="zw-header">
+        <div class="zw-header__inner">
+            <div class="zw-header__brand">
+                <span class="zw-header__logo" id="brand-logo">ZW</span>
+                <span class="zw-header__title" id="brand-name">AIDA Allocation</span>
+            </div>
+            <nav class="zw-header__nav">
+                <a href="#montar-carteira" class="zw-nav-link active" data-step="1">Montar Carteira</a>
+                <a href="#premissas" class="zw-nav-link" data-step="2">Premissas</a>
+                <a href="#resultado" class="zw-nav-link" data-step="3">Resultado</a>
+                <a href="#relatorio" class="zw-nav-link" data-step="4">Relat&oacute;rio</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="zw-main">
+        <div class="zw-container">
+
+            <div class="zw-hero">
+                <h1>AIDA Allocation</h1>
+                <p>Monte sua carteira de ETFs, defina as premissas e simule o desempenho hist&oacute;rico com dados reais.</p>
+            </div>
+
+            <!-- ============================================================
+                 Step 1: Montar Carteira
+                 ============================================================ -->
+            <section id="montar-carteira" class="zw-step active" data-step="1">
+                <div class="zw-card">
+                    <div class="zw-card__header">
+                        <span class="zw-card__step">1</span>
+                        <h2>Montar Carteira</h2>
+                    </div>
+                    <div class="zw-card__body">
+                        <p style="font-size:14px; color:var(--zw-text-muted); margin-bottom:20px;">
+                            Selecione os ETFs que deseja incluir na carteira e defina o peso (%) de cada um. A soma dos pesos deve ser exatamente 100%.
+                        </p>
+
+                        <!-- ETF catalog cards are rendered here by JS -->
+                        <div id="etf-catalog"></div>
+
+                        <!-- Weight sliders appear here when ETFs are selected -->
+                        <div id="weight-sliders" class="zw-weights-section" style="display:none;">
+                            <h3>Pesos da Carteira</h3>
+                            <div id="weight-rows"></div>
+                            <div id="total-bar" class="zw-total-bar is-invalid">
+                                <span>Total:</span>
+                                <div class="zw-total-bar__fill">
+                                    <div id="total-fill" class="zw-total-bar__fill-inner" style="width:0%; background:#DB222A;"></div>
+                                </div>
+                                <span id="total-pct">0%</span>
+                            </div>
+                            <p id="step1-validation" class="zw-validation-msg"></p>
+                        </div>
+                    </div>
+                    <div class="zw-card__footer">
+                        <span></span>
+                        <button type="button" class="zw-btn zw-btn--primary" data-next="2" id="btn-step1-next">
+                            Pr&oacute;ximo
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 Step 2: Premissas
+                 ============================================================ -->
+            <section id="premissas" class="zw-step" data-step="2">
+                <div class="zw-card">
+                    <div class="zw-card__header">
+                        <span class="zw-card__step">2</span>
+                        <h2>Premissas do Backtest</h2>
+                    </div>
+                    <div class="zw-card__body">
+                        <div class="zw-form-grid">
+                            <div class="zw-field">
+                                <label for="valor-inicial">Valor inicial</label>
+                                <div class="zw-input-currency">
+                                    <span>R$</span>
+                                    <input type="text" id="valor-inicial" placeholder="0,00" data-currency value="100.000,00">
+                                </div>
+                            </div>
+                            <div class="zw-field">
+                                <label for="aporte-mensal">Aporte mensal</label>
+                                <div class="zw-input-currency">
+                                    <span>R$</span>
+                                    <input type="text" id="aporte-mensal" placeholder="0,00" data-currency value="0,00">
+                                </div>
+                            </div>
+                            <div class="zw-field">
+                                <label for="data-inicio">Data in&iacute;cio</label>
+                                <input type="date" id="data-inicio">
+                                <div class="zw-quick-buttons">
+                                    <button type="button" class="zw-quick-btn" data-periodo="3">3 anos</button>
+                                    <button type="button" class="zw-quick-btn" data-periodo="5">5 anos</button>
+                                    <button type="button" class="zw-quick-btn" data-periodo="10">10 anos</button>
+                                </div>
+                            </div>
+                            <div class="zw-field">
+                                <label for="data-fim">Data fim</label>
+                                <input type="date" id="data-fim">
+                            </div>
+                            <div class="zw-field" style="grid-column: 1 / -1;">
+                                <label for="rebalanceamento">Frequ&ecirc;ncia de rebalanceamento</label>
+                                <select id="rebalanceamento">
+                                    <option value="0">Nunca (buy &amp; hold)</option>
+                                    <option value="21">Mensal</option>
+                                    <option value="63" selected>Trimestral</option>
+                                    <option value="252">Anual</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="zw-info-box">
+                            <strong>Nota:</strong> O simulador usa dados hist&oacute;ricos reais (EOD). Resultados passados n&atilde;o garantem retorno futuro.
+                        </div>
+                    </div>
+                    <div class="zw-card__footer">
+                        <button type="button" class="zw-btn zw-btn--secondary" data-prev="1">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Anterior
+                        </button>
+                        <button type="button" class="zw-btn zw-btn--primary" id="btn-simular">
+                            Simular
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 Step 3: Resultado
+                 ============================================================ -->
+            <section id="resultado" class="zw-step" data-step="3">
+                <div class="zw-card">
+                    <div class="zw-card__header">
+                        <span class="zw-card__step">3</span>
+                        <h2>Resultado</h2>
+                    </div>
+                    <div class="zw-card__body">
+
+                        <!-- Loading state -->
+                        <div id="resultado-loading" class="zw-loading" style="display:none;">
+                            <div class="zw-spinner"></div>
+                            <p>Processando backtest&hellip;</p>
+                        </div>
+
+                        <!-- Error state -->
+                        <div id="resultado-erro" class="zw-error-box" style="display:none;"></div>
+
+                        <!-- Results content -->
+                        <div id="resultado-content" style="display:none;">
+
+                            <!-- Hero: retorno acumulado -->
+                            <div class="zw-result-hero">
+                                <p class="zw-result-hero__label">Retorno Acumulado da Carteira</p>
+                                <p class="zw-result-hero__value" id="res-retorno-acum">0,00%</p>
+                            </div>
+
+                            <!-- Metric cards -->
+                            <div class="zw-result-grid">
+                                <div class="zw-result-card">
+                                    <span class="zw-result-card__label">Retorno Anualizado</span>
+                                    <span class="zw-result-card__value" id="res-retorno-anual">0,00%</span>
+                                </div>
+                                <div class="zw-result-card">
+                                    <span class="zw-result-card__label">Volatilidade</span>
+                                    <span class="zw-result-card__value" id="res-volatilidade">0,00%</span>
+                                </div>
+                                <div class="zw-result-card">
+                                    <span class="zw-result-card__label">&Iacute;ndice Sharpe</span>
+                                    <span class="zw-result-card__value" id="res-sharpe">0,00</span>
+                                </div>
+                                <div class="zw-result-card">
+                                    <span class="zw-result-card__label">Drawdown M&aacute;ximo</span>
+                                    <span class="zw-result-card__value" id="res-drawdown">0,00%</span>
+                                </div>
+                                <div class="zw-result-card">
+                                    <span class="zw-result-card__label">Beta (vs Ibovespa)</span>
+                                    <span class="zw-result-card__value" id="res-beta">0,00</span>
+                                </div>
+                                <div class="zw-result-card">
+                                    <span class="zw-result-card__label">% do CDI</span>
+                                    <span class="zw-result-card__value" id="res-pct-cdi">0,00%</span>
+                                </div>
+                            </div>
+
+                            <!-- Chart 1: Evolucao Patrimonial -->
+                            <div class="zw-chart-container">
+                                <h3>Evolu&ccedil;&atilde;o Patrimonial</h3>
+                                <canvas id="chart-patrimonio" height="320"></canvas>
+                            </div>
+
+                            <!-- Chart 2: Composicao Final -->
+                            <div class="zw-chart-container">
+                                <h3>Composi&ccedil;&atilde;o Final da Carteira</h3>
+                                <div style="max-width:360px; margin:0 auto;">
+                                    <canvas id="chart-composicao" height="360"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Correlation Matrix -->
+                            <div class="zw-chart-container">
+                                <h3>Matriz de Correla&ccedil;&atilde;o</h3>
+                                <div style="overflow-x:auto;">
+                                    <table id="corr-matrix" class="zw-corr-table"></table>
+                                </div>
+                            </div>
+
+                            <!-- Status Box -->
+                            <div class="zw-status-box" id="status-box"></div>
+
+                        </div>
+                    </div>
+                    <div class="zw-card__footer">
+                        <button type="button" class="zw-btn zw-btn--secondary" data-prev="2">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3l-5 5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Voltar e Ajustar
+                        </button>
+                        <button type="button" class="zw-btn zw-btn--primary" data-next="4">
+                            Ver Relat&oacute;rio
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 Step 4: Relatorio
+                 ============================================================ -->
+            <section id="relatorio" class="zw-step" data-step="4">
+                <div class="zw-card">
+                    <div class="zw-card__header">
+                        <span class="zw-card__step">4</span>
+                        <h2>Relat&oacute;rio</h2>
+                    </div>
+                    <div class="zw-card__body">
+
+                        <div class="zw-relatorio-section">
+                            <h3>Carteira Simulada</h3>
+                            <div id="rel-carteira" class="zw-relatorio-grid"></div>
+                        </div>
+
+                        <div class="zw-relatorio-section">
+                            <h3>Premissas</h3>
+                            <div id="rel-premissas" class="zw-relatorio-grid"></div>
+                        </div>
+
+                        <div class="zw-relatorio-section">
+                            <h3>M&eacute;tricas de Desempenho</h3>
+                            <div id="rel-metricas" class="zw-relatorio-grid"></div>
+                        </div>
+
+                        <div class="zw-relatorio-section">
+                            <h3>An&aacute;lise</h3>
+                            <div id="rel-analise" class="zw-status-box"></div>
+                        </div>
+
+                        <div class="zw-disclaimer">
+                            Ferramenta de uso exclusivamente educacional. Gera relat&oacute;rios ilustrativos que podem conter erros. N&atilde;o constitui recomenda&ccedil;&atilde;o, oferta ou consultoria de investimento. Dados com defasagem; rentabilidade passada n&atilde;o garante resultados futuros.
+                        </div>
+                    </div>
+                    <div class="zw-card__footer">
+                        <button type="button" class="zw-btn zw-btn--secondary" id="btn-nova-simulacao">
+                            Nova Simula&ccedil;&atilde;o
+                        </button>
+                        <button type="button" class="zw-btn zw-btn--primary" id="btn-exportar-pdf">
+                            <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1v10M4 7l4 4 4-4M2 13h12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                            Exportar PDF
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <footer class="zw-footer">
+        <div class="zw-container">
+            <p>Ferramenta de uso exclusivamente educacional. Gera relat&oacute;rios ilustrativos que podem conter erros. N&atilde;o constitui recomenda&ccedil;&atilde;o, oferta ou consultoria de investimento. Dados com defasagem; rentabilidade passada n&atilde;o garante resultados futuros.</p>
+            <p>&copy; 2026 Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+    <script src="../shared/js/utils.js"></script>
+    <script src="js/catalogo.js"></script>
+    <script src="js/metricas.js"></script>
+    <script src="js/backtest.js"></script>
+    <script src="js/alocacao.js"></script>
+</body>
+</html>

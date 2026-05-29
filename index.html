@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Simulathos — Simuladores Financeiros</title>
+    <link rel="stylesheet" href="shared/css/base.css">
+    <link rel="stylesheet" href="shared/themes/vocebancario.css" id="theme-css">
+    <style>
+        .zw-main { min-height: calc(100vh - 64px - 80px); padding-bottom: 48px; }
+        .sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 32px; }
+        .sim-card { background: var(--zw-card-bg); border-radius: var(--zw-radius); border: 1px solid var(--zw-border); box-shadow: var(--zw-shadow); padding: 32px; text-decoration: none; color: inherit; transition: var(--zw-transition); display: flex; flex-direction: column; gap: 12px; }
+        .sim-card:hover { box-shadow: var(--zw-shadow-lg); transform: translateY(-2px); }
+        .sim-card__tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--zw-accent); }
+        .sim-card__title { font-size: 20px; font-weight: 700; color: var(--zw-primary); }
+        .sim-card__desc { font-size: 14px; color: var(--zw-text-muted); line-height: 1.5; }
+        .sim-card__arrow { font-size: 14px; font-weight: 600; color: var(--zw-primary); margin-top: auto; }
+        @media (max-width: 640px) { .sim-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header class="zw-header">
+        <div class="zw-header__inner">
+            <div class="zw-header__brand">
+                <span class="zw-header__logo">S</span>
+                <span class="zw-header__title">Simulathos</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="zw-main">
+        <div class="zw-container">
+            <div class="zw-hero">
+                <h1>Simuladores Financeiros</h1>
+                <p>Ferramentas educacionais para planejamento financeiro e treino de alocação de carteiras.</p>
+            </div>
+
+            <div class="sim-grid">
+                <a href="aposentadoria/index.html" class="sim-card">
+                    <span class="sim-card__tag">Planejamento</span>
+                    <span class="sim-card__title">Vida & Aposentadoria</span>
+                    <span class="sim-card__desc">Simule seu planejamento financeiro de longo prazo. Calcule quanto precisa poupar para atingir a independência financeira.</span>
+                    <span class="sim-card__arrow">Acessar &rarr;</span>
+                </a>
+
+                <a href="alocacao/index.html" class="sim-card">
+                    <span class="sim-card__tag">Alocação</span>
+                    <span class="sim-card__title">AIDA Allocation</span>
+                    <span class="sim-card__desc">Monte uma carteira de ETFs, rode backtest com dados históricos reais, e analise métricas profissionais (Sharpe, volatilidade, % CDI, correlação).</span>
+                    <span class="sim-card__arrow">Acessar &rarr;</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <footer class="zw-footer">
+        <div class="zw-container">
+            <p>Ferramentas de uso exclusivamente educacional. Não constituem recomendação de investimento.</p>
+        </div>
+    </footer>
+</body>
+</html>
