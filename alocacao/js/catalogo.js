@@ -10,7 +10,7 @@ var Catalogo = (function() {
         { ticker: "IVVB11", nome: "iShares S&P 500", classe: "rv-intl", descricao: "S&P 500 (USD)" },
         { ticker: "NASD11", nome: "It Now Nasdaq", classe: "rv-intl", descricao: "Nasdaq 100 (USD)" },
         { ticker: "ACWI11", nome: "iShares ACWI", classe: "rv-intl", descricao: "Ações Globais" },
-        { ticker: "EURP11", nome: "It Now Europa", classe: "rv-intl", descricao: "Ações Europa" },
+        { ticker: "HASH11", nome: "Hashdex Crypto", classe: "rv-intl", descricao: "Cripto (BTC/ETH)" },
 
         // Renda Fixa / Imobiliário
         { ticker: "IMAB11", nome: "It Now IMA-B", classe: "rf", descricao: "Inflação (NTN-B)" },
