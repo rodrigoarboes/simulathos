@@ -294,38 +294,52 @@
 
         var fetchKeys = Object.keys(fetches);
         var dataMap = {};
-        var fetchCount = 0;
         var fetchErrors = [];
 
-        for (var k = 0; k < fetchKeys.length; k++) {
-            (function (key, url) {
-                fetch(url)
-                    .then(function (resp) {
-                        if (!resp.ok) throw new Error('HTTP ' + resp.status);
-                        return resp.json();
-                    })
-                    .then(function (json) {
-                        dataMap[key] = json;
-                    })
-                    .catch(function (err) {
-                        fetchErrors.push(key + ': ' + err.message);
-                    })
-                    .finally(function () {
-                        fetchCount++;
-                        if (fetchCount === fetchKeys.length) {
-                            onAllDataLoaded(dataMap, fetchErrors, {
-                                pesos: pesos,
-                                tickers: tickers,
-                                valorInicial: valorInicial,
-                                aporteMensal: aporteMensal,
-                                dataInicio: dataInicio,
-                                dataFim: dataFim,
-                                rebalDias: rebalDias
-                            });
-                        }
-                    });
-            })(fetchKeys[k], fetches[fetchKeys[k]]);
+        // Fetch files one at a time (sequential) so a single-threaded static
+        // server (e.g. python -m http.server) doesn't drop concurrent
+        // connections. Each request retries once on failure.
+        function fetchComRetry(url, tentativasRestantes) {
+            return fetch(url)
+                .then(function (resp) {
+                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                    return resp.json();
+                })
+                .catch(function (err) {
+                    if (tentativasRestantes > 0) {
+                        return fetchComRetry(url, tentativasRestantes - 1);
+                    }
+                    throw err;
+                });
         }
+
+        function carregarSequencial(indice) {
+            if (indice >= fetchKeys.length) {
+                onAllDataLoaded(dataMap, fetchErrors, {
+                    pesos: pesos,
+                    tickers: tickers,
+                    valorInicial: valorInicial,
+                    aporteMensal: aporteMensal,
+                    dataInicio: dataInicio,
+                    dataFim: dataFim,
+                    rebalDias: rebalDias
+                });
+                return;
+            }
+            var key = fetchKeys[indice];
+            fetchComRetry(fetches[key], 1)
+                .then(function (json) {
+                    dataMap[key] = json;
+                })
+                .catch(function (err) {
+                    fetchErrors.push(key + ': ' + err.message);
+                })
+                .finally(function () {
+                    carregarSequencial(indice + 1);
+                });
+        }
+
+        carregarSequencial(0);
     }
 
     function onAllDataLoaded(dataMap, fetchErrors, config) {
