@@ -11,6 +11,55 @@ var AIDASim = (function () {
   // Instância de Chart anterior, para destruir antes de recriar.
   var chartAtual = null;
 
+  // Universo combinado (B3 em BRL + offshore convertido para BRL), em cache.
+  var universoCache = null;
+
+  /**
+   * Monta o universo de ativos para simulação, todos denominados em BRL:
+   * - ETFs B3 (window.DADOS.etfs): já em reais, usados como estão.
+   * - ETFs offshore (window.DADOS.offshore): cotados em dólar, convertidos
+   *   para reais multiplicando o close (USD) pela cotação USD/BRL da data
+   *   (window.DADOS.indices.usdbrl). Datas sem câmbio carregam o último
+   *   câmbio conhecido. Assim uma carteira mista BR+offshore fica coerente.
+   */
+  function construirUniverso() {
+    if (universoCache) return universoCache;
+    var D = window.DADOS || {};
+    var uni = {};
+
+    if (D.etfs) {
+      for (var t in D.etfs) {
+        if (D.etfs.hasOwnProperty(t)) uni[t] = D.etfs[t];
+      }
+    }
+
+    var usdbrl = D.indices && D.indices.usdbrl;
+    if (D.offshore && usdbrl && usdbrl.length) {
+      var fx = {};
+      for (var i = 0; i < usdbrl.length; i++) fx[usdbrl[i].data] = usdbrl[i].close;
+
+      for (var k in D.offshore) {
+        if (!D.offshore.hasOwnProperty(k)) continue;
+        var serieUsd = D.offshore[k];
+        if (!serieUsd || !serieUsd.length) continue;
+        var serieBrl = [];
+        var ultimoFx = null;
+        for (var j = 0; j < serieUsd.length; j++) {
+          var data = serieUsd[j].data;
+          var rate = fx[data];
+          if (rate == null) rate = ultimoFx;
+          if (rate == null) continue;
+          ultimoFx = rate;
+          serieBrl.push({ data: data, close: Math.round(serieUsd[j].close * rate * 100) / 100 });
+        }
+        if (serieBrl.length >= 2) uni[k] = serieBrl;
+      }
+    }
+
+    universoCache = uni;
+    return uni;
+  }
+
   // --------------------------------------------------------------------- //
   // Helpers de formatação
   // --------------------------------------------------------------------- //
@@ -205,7 +254,7 @@ var AIDASim = (function () {
       mensagem('Backtest histórico indisponível: motor ou dados não carregados.');
       return;
     }
-    var etfs = window.DADOS.etfs;
+    var etfs = construirUniverso();
 
     // (a) Pesos da carteira do aluno
     var pctMap = montagemParaMapa(montagem);
@@ -215,7 +264,7 @@ var AIDASim = (function () {
       var falta = info.descartados.length
         ? ' Ativos sem dados: ' + info.descartados.join(', ') + '.'
         : '';
-      mensagem('Backtest histórico indisponível: a carteira precisa de ao menos 2 ativos com dados (B3).' + falta);
+      mensagem('Backtest histórico indisponível: a carteira precisa de ao menos 2 ativos com dados históricos (B3 ou offshore).' + falta);
       return;
     }
 
@@ -280,7 +329,7 @@ var AIDASim = (function () {
       { label: 'Sharpe', valor: fmtNum(resumo.sharpe, 2) },
       { label: 'Drawdown máximo', valor: fmtPct(resumo.drawdownMaximo, 1) },
       { label: 'Beta (vs Ibov)', valor: fmtNum(resumo.beta, 2) },
-      { label: '% do CDI', valor: fmtPct(resumo.percentualCDI, 1) }
+      { label: '% do CDI', valor: fmtNum(resumo.percentualCDI, 1) + '%' }
     ];
     html += '<div class="score-dimensoes" style="margin-bottom:20px;">';
     for (var m = 0; m < metricas.length; m++) {

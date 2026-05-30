@@ -15,8 +15,24 @@ const ETF_TICKERS = [
     "BOVA11", "BOVV11", "SMAL11", "DIVO11",
     "IVVB11", "NASD11", "ACWI11", "HASH11",
     "IMAB11", "B5P211", "IB5M11", "IRFM11",
-    "FIXA11", "LFTS11", "XFIX11"
+    "FIXA11", "LFTS11", "XFIX11",
+    "MATB11", "EURP11"
 ];
+
+// ── Índices internacionais (símbolos Yahoo completos, sem .SA) ────
+const INDICES = [
+    { key: "usdbrl", label: "USDBRL", symbol: "USDBRL=X" },
+    { key: "sp500", label: "S&P 500", symbol: "^GSPC" },
+    { key: "nasdaq", label: "Nasdaq", symbol: "^IXIC" }
+];
+
+// ── ETFs offshore (chave → símbolo Yahoo) ────────────────────────
+const OFFSHORE = {
+    VOO: "VOO", VTI: "VTI", VWO: "VWO",
+    CSPX: "CSPX.L", IWDA: "IWDA.L", EIMI: "EIMI.L",
+    BND: "BND", AGG: "AGG", IEF: "IEF", TLT: "TLT", TIP: "TIP",
+    GLD: "GLD", VNQ: "VNQ"
+};
 
 // ── Helpers ──────────────────────────────────────────────────────
 
@@ -113,6 +129,16 @@ function parseYahooResponse(raw) {
 async function fetchETF(ticker) {
     const suffix = ticker.startsWith("^") ? "" : ".SA";
     const url = yahooUrl(ticker + suffix);
+    const raw = await fetchUrl(url);
+    return parseYahooResponse(raw);
+}
+
+/**
+ * Fetch an arbitrary Yahoo symbol exactly as given (no .SA logic).
+ * Use for international indices and offshore ETFs.
+ */
+async function fetchYahooSymbol(symbol) {
+    const url = yahooUrl(symbol);
     const raw = await fetchUrl(url);
     return parseYahooResponse(raw);
 }
@@ -223,10 +249,38 @@ async function main() {
         console.log(`FALHOU — ${err.message}`);
     }
 
+    // ── Índices internacionais (USD/BRL, S&P 500, Nasdaq) ───────
+    ensureDir(path.join(ROOT, "indices"));
+    for (const { key, label, symbol } of INDICES) {
+        await sleep(2000);
+        try {
+            process.stdout.write(`  Índice ${label} (${symbol})... `);
+            const data = await fetchYahooSymbol(symbol);
+            saveJSON(path.join(ROOT, "indices", `${key}.json`), data);
+            console.log(`OK (${data.length} pontos)`);
+        } catch (err) {
+            console.log(`FALHOU — ${err.message}`);
+        }
+    }
+
+    // ── ETFs offshore (US-listed e UCITS .L) ────────────────────
+    ensureDir(path.join(ROOT, "offshore"));
+    for (const [key, symbol] of Object.entries(OFFSHORE)) {
+        await sleep(2000);
+        try {
+            process.stdout.write(`  Offshore ${key} (${symbol})... `);
+            const data = await fetchYahooSymbol(symbol);
+            saveJSON(path.join(ROOT, "offshore", `${key}.json`), data);
+            console.log(`OK (${data.length} pontos)`);
+        } catch (err) {
+            console.log(`FALHOU — ${err.message}`);
+        }
+    }
+
     // ── Combined embedded JS (works via double-click / file://) ─────
     try {
         process.stdout.write("  Gerando dados.js embutido... ");
-        const dados = { etfs: {}, cdi: [], ibov: [], ipca: [] };
+        const dados = { etfs: {}, cdi: [], ibov: [], ipca: [], offshore: {}, indices: {} };
         const etfsDir = path.join(ROOT, "etfs");
         if (fs.existsSync(etfsDir)) {
             for (const f of fs.readdirSync(etfsDir)) {
@@ -238,6 +292,15 @@ async function main() {
         for (const [key, file] of [["cdi", "cdi.json"], ["ibov", "ibov.json"], ["ipca", "ipca.json"]]) {
             const p = path.join(ROOT, file);
             if (fs.existsSync(p)) dados[key] = JSON.parse(fs.readFileSync(p, "utf8"));
+        }
+        for (const [bucket, dir] of [["offshore", "offshore"], ["indices", "indices"]]) {
+            const dirPath = path.join(ROOT, dir);
+            if (!fs.existsSync(dirPath)) continue;
+            for (const f of fs.readdirSync(dirPath)) {
+                if (!f.endsWith(".json")) continue;
+                const key = f.replace(".json", "");
+                dados[bucket][key] = JSON.parse(fs.readFileSync(path.join(dirPath, f), "utf8"));
+            }
         }
         const js = "// dados.js — dados de mercado embutidos (gerado por tools/fetch-dados.mjs)\n" +
             "window.DADOS = " + JSON.stringify(dados) + ";\n";
