@@ -359,11 +359,36 @@
 
         if (missingEtfs.length > 0 || !dataMap['_cdi']) {
             erroEl.style.display = '';
-            erroEl.innerHTML = '<h3>Dados não encontrados</h3>' +
+
+            var aberturaLocal = location.protocol === 'file:';
+            var so404 = fetchErrors.length > 0 && fetchErrors.every(function (e) {
+                return e.indexOf('HTTP 404') !== -1;
+            });
+
+            var html = '<h3>Dados não encontrados</h3>' +
                 '<p>Não foi possível carregar os dados necessários para a simulação.</p>' +
-                (missingEtfs.length > 0 ? '<p>ETFs faltantes: <strong>' + missingEtfs.join(', ') + '</strong></p>' : '') +
-                '<code>node tools/fetch-dados.mjs</code>' +
-                '<p style="margin-top:12px;">Execute o comando acima para baixar os dados históricos.</p>';
+                (missingEtfs.length > 0 ? '<p>ETFs faltantes: <strong>' + missingEtfs.join(', ') + '</strong></p>' : '');
+
+            if (aberturaLocal) {
+                html += '<p style="margin-top:12px;">Você abriu o arquivo com <strong>duplo-clique</strong> (endereço <code>file://</code>). ' +
+                    'O navegador bloqueia o carregamento de dados locais nesse modo.</p>' +
+                    '<p>Rode um servidor local na pasta do projeto e acesse via <code>http://localhost</code>:</p>' +
+                    '<code>python -m http.server 8080</code>' +
+                    '<p style="margin-top:8px;">Depois abra <code>http://localhost:8080/alocacao/</code></p>';
+            } else if (so404) {
+                html += '<p style="margin-top:12px;">Os arquivos de dados não foram encontrados no servidor. Baixe-os:</p>' +
+                    '<code>node tools/fetch-dados.mjs</code>';
+            } else {
+                html += '<code>node tools/fetch-dados.mjs</code>' +
+                    '<p style="margin-top:12px;">Execute o comando acima para baixar os dados históricos.</p>';
+            }
+
+            if (fetchErrors.length > 0) {
+                html += '<p style="margin-top:12px;font-size:12px;color:#888;">Detalhe técnico: ' +
+                    fetchErrors.join(' · ') + '</p>';
+            }
+
+            erroEl.innerHTML = html;
             return;
         }
 
