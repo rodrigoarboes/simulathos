@@ -390,6 +390,8 @@ body.dark .tag.perfil-arroj { background: #3a1a1a; color: #d96565; border-color:
   margin-top: 24px;
 }
 
+#card-modo-livre:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
 /* ============ TELA 3: MONTAGEM ============ */
 .montagem-grid {
   display: grid;
@@ -2385,6 +2387,17 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
     </div>
   </div>
 
+  <div class="painel" id="card-modo-livre" style="margin-bottom:24px; cursor:pointer; border:2px solid var(--brand-blue); transition:all 0.2s;" onclick="iniciarModoLivre()">
+    <div style="display:flex; align-items:center; gap:16px;">
+      <div style="font-size:32px;">🧪</div>
+      <div>
+        <h3 style="color:var(--brand-blue); margin-bottom:4px;">Modo Livre — Simular minha carteira</h3>
+        <p style="font-size:13px; color:var(--text-soft); margin:0;">Monte qualquer carteira de ETFs (B3 ou offshore) e veja o desempenho histórico real. Sem case, sem nota, sem gabarito.</p>
+      </div>
+      <div style="font-size:20px; color:var(--brand-blue); margin-left:auto;">→</div>
+    </div>
+  </div>
+
   <div class="grid-cases" id="grid-cases"></div>
 </div>
 
@@ -2476,8 +2489,8 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
   </div>
 
   <div class="acoes-tela">
-    <button onclick="irTela2()">← Voltar para briefing</button>
-    <button class="primary" onclick="submeterProposta()">Submeter proposta para avaliação →</button>
+    <button id="btn-voltar-briefing" onclick="irTela2()">← Voltar para briefing</button>
+    <button id="btn-submeter" class="primary" onclick="submeterProposta()">Submeter proposta para avaliação →</button>
   </div>
 </div>
 
@@ -2520,8 +2533,9 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
   </div>
 
   <div class="acoes-tela">
-    <button onclick="irTela3()">← Refazer montagem</button>
-    <button class="primary" onclick="irTela5()">Estruturar pitch comercial →</button>
+    <button id="btn-voltar-inicio-livre" style="display:none;" onclick="voltarTela1()">← Voltar para início</button>
+    <button id="btn-refazer-montagem" onclick="irTela3()">← Refazer montagem</button>
+    <button id="btn-ir-pitch" class="primary" onclick="irTela5()">Estruturar pitch comercial →</button>
   </div>
 </div>
 
@@ -3732,6 +3746,7 @@ const CASES = [
    ================================================================================= */
 let caseAtual = null;
 let montagemAtual = []; // [{ticker, pct}]
+let modoLivre = false;
 let chartMontagem = null;
 let chartSua = null;
 let chartGabarito = null;
@@ -4238,9 +4253,25 @@ function labelPatrim(p) {
 /* =================================================================================
    TELA 2 — Briefing
    ================================================================================= */
+function iniciarModoLivre() {
+  modoLivre = true;
+  caseAtual = null;
+  montagemAtual = [{ ticker: "", pct: 0 }, { ticker: "", pct: 0 }, { ticker: "", pct: 0 }];
+  document.getElementById("aporte").value = 100000;
+  document.getElementById("montagem-titulo").textContent = "Modo Livre — Monte sua carteira";
+  document.getElementById("btn-voltar-briefing").style.display = "none";
+  document.getElementById("btn-submeter").textContent = "Simular →";
+  renderLinhasAlocacao();
+  calcularMontagem();
+  trocarTela("tela3");
+}
+
 function abrirCase(id) {
   caseAtual = CASES.find(c => c.id === id);
   if (!caseAtual) return;
+  modoLivre = false;
+  document.getElementById("btn-voltar-briefing").style.display = "";
+  document.getElementById("btn-submeter").textContent = "Submeter proposta para avaliação →";
   registrarTentativa(id);
 
   document.getElementById("brief-numero").textContent = `CASE ${String(caseAtual.id).padStart(2,'0')}`;
@@ -4276,8 +4307,12 @@ function abrirCase(id) {
    TELA 3 — Montagem
    ================================================================================= */
 function irTela3() {
-  document.getElementById("montagem-titulo").textContent = `Montar carteira — ${caseAtual.titulo}`;
-  document.getElementById("aporte").value = caseAtual.aporte_sugerido;
+  if (modoLivre) {
+    document.getElementById("montagem-titulo").textContent = "Modo Livre — Monte sua carteira";
+  } else {
+    document.getElementById("montagem-titulo").textContent = `Montar carteira — ${caseAtual.titulo}`;
+    document.getElementById("aporte").value = caseAtual.aporte_sugerido;
+  }
   if (montagemAtual.length === 0) {
     montagemAtual = [{ ticker: "", pct: 0 }, { ticker: "", pct: 0 }, { ticker: "", pct: 0 }];
   }
@@ -4428,6 +4463,26 @@ function renderPizza(canvasId, data, chartRef, setRef) {
    TELA 4 — Score + Gabarito
    ================================================================================= */
 function submeterProposta() {
+  if (modoLivre) {
+    // Modo Livre: skip scoring, go straight to backtest results
+    document.querySelector('.score-header').style.display = 'none';
+    document.querySelector('.comparativo-grid').style.display = 'none';
+    var paineis4 = document.querySelectorAll('#tela4 > .painel');
+    for (var i = 0; i < paineis4.length; i++) {
+      var p = paineis4[i];
+      if (p.id === 'painel-backtest-real') {
+        p.style.display = '';
+      } else {
+        p.style.display = 'none';
+      }
+    }
+    document.getElementById("btn-ir-pitch").style.display = "none";
+    document.getElementById("btn-voltar-inicio-livre").style.display = "";
+    document.getElementById("btn-refazer-montagem").textContent = "← Refazer montagem";
+    if (window.AIDASim) AIDASim.render(montagemAtual, null);
+    trocarTela("tela4");
+    return;
+  }
   const score = calcularScore();
   registrarScore(caseAtual.id, score.total);
 
@@ -4546,6 +4601,15 @@ function montarRegistroAvaliacao(score) {
 }
 
 function renderTela4(score) {
+  // Restore all elements (in case they were hidden by Modo Livre)
+  document.querySelector('.score-header').style.display = '';
+  document.querySelector('.comparativo-grid').style.display = '';
+  var paineis4 = document.querySelectorAll('#tela4 > .painel');
+  for (var i = 0; i < paineis4.length; i++) paineis4[i].style.display = '';
+  document.getElementById("btn-ir-pitch").style.display = "";
+  document.getElementById("btn-voltar-inicio-livre").style.display = "none";
+  document.getElementById("btn-refazer-montagem").textContent = "← Refazer montagem";
+
   // Score grande
   const numEl = document.getElementById("score-numero");
   numEl.innerHTML = `${score.total}<small>/100</small>`;
@@ -4668,10 +4732,10 @@ function trocarTela(idTela) {
   document.getElementById(idTela).classList.add("ativo");
   window.scrollTo({ top: 0, behavior: "smooth" });
 
-  // FAB "Consultar case": telas de trabalho (3, 4, 5, 6)
+  // FAB "Consultar case": telas de trabalho (3, 4, 5, 6) — hide in Modo Livre (no case)
   const fabCase = document.getElementById("fab-case");
   const telasComFabCase = ["tela3", "tela4", "tela5", "tela6"];
-  if (telasComFabCase.includes(idTela) && caseAtual) {
+  if (telasComFabCase.includes(idTela) && caseAtual && !modoLivre) {
     fabCase.classList.add("visible");
   } else {
     fabCase.classList.remove("visible");
@@ -4696,6 +4760,7 @@ function trocarTela(idTela) {
   }
 }
 function voltarTela1() {
+  modoLivre = false;
   montagemAtual = [];
   pitchData = {};
   frameworkAtual = null;

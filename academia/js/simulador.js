@@ -311,60 +311,146 @@ var AIDASim = (function () {
     var resumo = res.resumo;
     var curvas = res.curvas;
 
+    // --- Color coding for metrics ---
+    var corRetorno = resumo.retornoAcumulado >= 0 ? 'var(--ok)' : 'var(--bad)';
+    var corRetornoAnual = resumo.retornoAnualizado >= 0 ? 'var(--ok)' : 'var(--bad)';
+    var corSharpe = resumo.sharpe >= 0.5 ? 'var(--ok)' : resumo.sharpe >= 0 ? 'var(--warn)' : 'var(--bad)';
+    var corDD = resumo.drawdownMaximo > -0.15 ? 'var(--warn)' : 'var(--bad)';
+    var corCDI = resumo.percentualCDI >= 100 ? 'var(--ok)' : resumo.percentualCDI >= 80 ? 'var(--warn)' : 'var(--bad)';
+    var corVol = 'var(--brand-blue)';
+    var corBeta = 'var(--brand-blue)';
+
     var html = '';
 
     // Intro
     html +=
-      '<p style="font-size:13px; color:var(--text-soft); line-height:1.6; margin:0 0 16px;">' +
+      '<p style="font-size:13px; color:var(--text-soft); line-height:1.6; margin:0 0 20px;">' +
       'Desempenho histórico real da carteira proposta no período de <strong>' +
       fmtData(periodo.dataInicio) + '</strong> a <strong>' + fmtData(periodo.dataFim) +
       '</strong> (' + resumo.diasUteis + ' dias úteis). Rebalanceamento trimestral, sem aportes.' +
       '</p>';
 
-    // Métricas
+    // --- Hero metric: Retorno acumulado ---
+    html +=
+      '<div style="text-align:center; margin-bottom:20px; padding:20px 16px; ' +
+      'background:var(--bg-soft); border-radius:12px; border:1px solid var(--border);">' +
+        '<div style="font-size:11px; text-transform:uppercase; letter-spacing:2px; ' +
+        'color:var(--text-soft); font-weight:700;">Retorno acumulado no período</div>' +
+        '<div style="font-family:var(--font-display); font-size:48px; font-weight:800; ' +
+        'color:' + corRetorno + '; letter-spacing:-2px; line-height:1.2; margin:4px 0;">' +
+        fmtPct(resumo.retornoAcumulado, 1) + '</div>' +
+        '<div style="font-size:13px; color:var(--text-soft);">' +
+        fmtData(periodo.dataInicio) + ' — ' + fmtData(periodo.dataFim) +
+        '</div>' +
+      '</div>';
+
+    // --- Separator ---
+    html += '<hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">';
+
+    // --- Metrics grid ---
     var metricas = [
-      { label: 'Retorno acumulado', valor: fmtPct(resumo.retornoAcumulado, 1) },
-      { label: 'Retorno anualizado', valor: fmtPct(resumo.retornoAnualizado, 1) },
-      { label: 'Volatilidade', valor: fmtPct(resumo.volatilidade, 1) },
-      { label: 'Sharpe', valor: fmtNum(resumo.sharpe, 2) },
-      { label: 'Drawdown máximo', valor: fmtPct(resumo.drawdownMaximo, 1) },
-      { label: 'Beta (vs Ibov)', valor: fmtNum(resumo.beta, 2) },
-      { label: '% do CDI', valor: fmtNum(resumo.percentualCDI, 1) + '%' }
+      { icon: '📈', label: 'Retorno anualizado', valor: fmtPct(resumo.retornoAnualizado, 1), cor: corRetornoAnual },
+      { icon: '🎯', label: '% do CDI',           valor: fmtNum(resumo.percentualCDI, 1) + '%', cor: corCDI },
+      { icon: '⚡',       label: 'Volatilidade',       valor: fmtPct(resumo.volatilidade, 1),        cor: corVol },
+      { icon: '⚖️', label: 'Sharpe',             valor: fmtNum(resumo.sharpe, 2),              cor: corSharpe },
+      { icon: '📉', label: 'Drawdown máximo', valor: fmtPct(resumo.drawdownMaximo, 1),    cor: corDD },
+      { icon: '📊', label: 'Beta (vs Ibov)',     valor: fmtNum(resumo.beta, 2),                cor: corBeta }
     ];
     html += '<div class="score-dimensoes" style="margin-bottom:20px;">';
     for (var m = 0; m < metricas.length; m++) {
       html +=
-        '<div class="dim-card">' +
-        '<h5>' + metricas[m].label + '</h5>' +
-        '<div class="dim-valor" style="color:var(--brand-blue);">' + metricas[m].valor + '</div>' +
+        '<div class="dim-card" style="border-left:3px solid ' + metricas[m].cor + ';">' +
+        '<h5 style="display:flex; align-items:center; gap:4px;">' +
+        '<span style="font-size:14px;">' + metricas[m].icon + '</span> ' +
+        metricas[m].label + '</h5>' +
+        '<div class="dim-valor" style="color:' + metricas[m].cor + '; ' +
+        'font-family:var(--font-mono);">' + metricas[m].valor + '</div>' +
         '</div>';
     }
     html += '</div>';
 
+    // --- Separator ---
+    html += '<hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">';
+
+    // --- Chart title ---
+    html +=
+      '<div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:8px; ' +
+      'font-family:var(--font-display);">' +
+      '📈 Evolução patrimonial (R$ 100 mil iniciais)</div>';
+
     // Canvas do gráfico
     html +=
-      '<div style="position:relative; height:300px; margin-bottom:8px;">' +
+      '<div style="position:relative; height:360px; margin-bottom:8px;">' +
       '<canvas id="chart-backtest-real"></canvas>' +
       '</div>';
 
-    // Verdito comparativo
+    // --- Separator ---
+    html += '<hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">';
+
+    // --- Comparison verdict card ---
+    var veredictoCDI = resumo.percentualCDI;
+    var corFundoVeredito = veredictoCDI >= 100 ? 'var(--ok)' :
+                           veredictoCDI >= 80  ? 'var(--warn)' : 'var(--bad)';
+    var labelVeredito = veredictoCDI >= 100 ? 'Carteira superou o CDI' :
+                        veredictoCDI >= 80  ? 'Carteira próxima do CDI' :
+                                              'Carteira abaixo do CDI';
+
     if (resGab && resGab.resumo) {
+      // Two-column comparison: vs Gabarito and vs CDI
       html +=
-        '<p style="font-size:13px; color:var(--text); line-height:1.6; margin:8px 0 0;">' +
-        'Sua carteira rendeu <strong>' + fmtPct(resumo.retornoAcumulado, 1) +
-        '</strong> vs <strong>' + fmtPct(resGab.resumo.retornoAcumulado, 1) +
-        '</strong> do gabarito e <strong>' + fmtPct(resumo.percentualCDI, 1) +
-        '</strong> do CDI no período.' +
-        '</p>';
+        '<div style="background:color-mix(in srgb, ' + corFundoVeredito + ' 10%, var(--bg-soft)); ' +
+        'border:1px solid color-mix(in srgb, ' + corFundoVeredito + ' 30%, var(--border)); ' +
+        'border-radius:10px; padding:16px 20px; margin-bottom:16px;">' +
+          '<div style="font-size:12px; font-weight:700; text-transform:uppercase; ' +
+          'letter-spacing:1.5px; color:var(--text-soft); margin-bottom:12px;">' +
+          '🏆 Veredito</div>' +
+          '<div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">' +
+            // Col 1: vs Gabarito
+            '<div style="text-align:center;">' +
+              '<div style="font-size:11px; color:var(--text-soft); margin-bottom:4px;">Sua carteira</div>' +
+              '<div style="font-family:var(--font-display); font-size:28px; font-weight:800; ' +
+              'color:' + corRetorno + ';">' + fmtPct(resumo.retornoAcumulado, 1) + '</div>' +
+              '<div style="font-size:11px; color:var(--text-soft); margin:4px 0;">vs gabarito</div>' +
+              '<div style="font-family:var(--font-display); font-size:28px; font-weight:800; ' +
+              'color:var(--text);">' + fmtPct(resGab.resumo.retornoAcumulado, 1) + '</div>' +
+            '</div>' +
+            // Col 2: vs CDI
+            '<div style="text-align:center;">' +
+              '<div style="font-size:11px; color:var(--text-soft); margin-bottom:4px;">% do CDI</div>' +
+              '<div style="font-family:var(--font-display); font-size:28px; font-weight:800; ' +
+              'color:' + corCDI + ';">' + fmtNum(resumo.percentualCDI, 1) + '%</div>' +
+              '<div style="font-size:11px; color:var(--text-soft); margin:4px 0;">' + labelVeredito + '</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+    } else {
+      // Single-card verdict: vs CDI only
+      html +=
+        '<div style="background:color-mix(in srgb, ' + corFundoVeredito + ' 10%, var(--bg-soft)); ' +
+        'border:1px solid color-mix(in srgb, ' + corFundoVeredito + ' 30%, var(--border)); ' +
+        'border-radius:10px; padding:16px 20px; margin-bottom:16px;">' +
+          '<div style="font-size:12px; font-weight:700; text-transform:uppercase; ' +
+          'letter-spacing:1.5px; color:var(--text-soft); margin-bottom:8px;">' +
+          '🏆 Veredito</div>' +
+          '<div style="display:flex; align-items:center; gap:12px;">' +
+            '<div style="font-family:var(--font-display); font-size:32px; font-weight:800; ' +
+            'color:' + corCDI + ';">' + fmtNum(resumo.percentualCDI, 1) + '% CDI</div>' +
+            '<div style="font-size:13px; color:var(--text); line-height:1.4;">' +
+            'Sua carteira rendeu <strong>' + fmtPct(resumo.retornoAcumulado, 1) +
+            '</strong> no período. ' + labelVeredito + '.</div>' +
+          '</div>' +
+        '</div>';
     }
 
-    // Nota sobre descartados
+    // --- Dropped tickers note (styled info box) ---
     if (info.descartados.length) {
       html +=
-        '<p style="font-size:12px; color:var(--text-soft); margin:12px 0 0;">' +
-        'Ativos sem dados históricos no protótipo, ignorados no backtest: ' +
+        '<div style="border-left:3px solid var(--brand-blue); background:var(--bg-soft); ' +
+        'border-radius:0 6px 6px 0; padding:10px 14px; margin:12px 0 0; ' +
+        'font-size:12px; color:var(--text-soft); line-height:1.5;">' +
+        '<strong>ℹ️ Ativos sem dados históricos</strong> no protótipo, ignorados no backtest: ' +
         escapeHtml(info.descartados.join(', ')) + '.' +
-        '</p>';
+        '</div>';
     }
 
     alvo.innerHTML = html;
@@ -386,19 +472,29 @@ var AIDASim = (function () {
 
     if (chartAtual) { try { chartAtual.destroy(); } catch (e) {} chartAtual = null; }
 
+    // Detect dark mode for theme-aware grid/tick colors
+    var isDark = document.body.classList.contains('dark');
+    var gridColor = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
+    var tickColor = isDark ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.45)';
+
     var MAX = 150;
     var labels = downsample(curvas.datas, MAX);
+
+    // Build gradient fill for carteira line
+    var gradientFill = ctx.createLinearGradient(0, 0, 0, canvas.parentElement ? canvas.parentElement.offsetHeight || 360 : 360);
+    gradientFill.addColorStop(0, isDark ? 'rgba(0,136,204,0.15)' : 'rgba(0,136,204,0.10)');
+    gradientFill.addColorStop(1, isDark ? 'rgba(0,136,204,0.0)' : 'rgba(0,136,204,0.0)');
 
     var datasets = [
       {
         label: 'Sua carteira',
         data: downsample(curvas.carteira, MAX),
         borderColor: '#0088cc',
-        backgroundColor: 'rgba(0,136,204,0.08)',
+        backgroundColor: gradientFill,
         borderWidth: 2.5,
         pointRadius: 0,
         tension: 0.15,
-        fill: false
+        fill: true
       }
     ];
 
@@ -455,25 +551,52 @@ var AIDASim = (function () {
         plugins: {
           legend: {
             position: 'bottom',
-            labels: { boxWidth: 14, font: { size: 11 } }
+            labels: {
+              usePointStyle: true,
+              pointStyle: 'circle',
+              padding: 16,
+              boxWidth: 8,
+              font: { size: 12 },
+              color: tickColor
+            }
           },
           tooltip: {
+            backgroundColor: isDark ? 'rgba(30,30,30,0.95)' : 'rgba(255,255,255,0.96)',
+            titleColor: isDark ? '#e0e0e0' : '#333',
+            bodyColor: isDark ? '#ccc' : '#555',
+            borderColor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)',
+            borderWidth: 1,
+            padding: 10,
+            bodyFont: { size: 12 },
+            titleFont: { size: 12, weight: '600' },
             callbacks: {
               label: function (c) {
-                return c.dataset.label + ': ' + fmtReaisCurto(c.parsed.y);
+                var val = c.parsed.y;
+                var formatted = 'R$ ' + (typeof val === 'number' ? val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : val);
+                return c.dataset.label + ': ' + formatted;
               }
             }
           }
         },
         scales: {
           x: {
-            ticks: { maxTicksLimit: 8, font: { size: 10 } },
+            ticks: {
+              maxTicksLimit: 8,
+              maxRotation: 0,
+              font: { size: 10 },
+              color: tickColor
+            },
             grid: { display: false }
           },
           y: {
             ticks: {
               font: { size: 10 },
+              color: tickColor,
               callback: function (v) { return fmtReaisCurto(v); }
+            },
+            grid: {
+              color: gridColor,
+              drawBorder: false
             }
           }
         }
