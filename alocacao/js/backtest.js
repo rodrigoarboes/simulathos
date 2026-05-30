@@ -66,23 +66,6 @@ var Backtest = (function () {
   }
 
   /**
-   * Compound daily CDI rates into an equity curve starting at valorInicial.
-   * @param {Array} cdiDiario – [{data, valor}, ...] where valor is a daily rate (e.g. 0.000507)
-   * @param {number} valorInicial
-   * @returns {Array} [{data, valor}, ...] accumulated equity values
-   */
-  function acumularCDI(cdiDiario, valorInicial) {
-    if (!cdiDiario || cdiDiario.length === 0) return [];
-    var valor = valorInicial || 1;
-    var curva = [];
-    for (var i = 0; i < cdiDiario.length; i++) {
-      valor *= (1 + (cdiDiario[i].valor || 0));
-      curva.push({ data: cdiDiario[i].data, valor: valor });
-    }
-    return curva;
-  }
-
-  /**
    * Filter a series array to entries whose .data is in the given Set.
    * @param {Array} series – [{data, ...}, ...]
    * @param {Object} dateSet – { "YYYY-MM-DD": true, ... }
@@ -115,32 +98,27 @@ var Backtest = (function () {
   }
 
   /**
-   * Build an IPCA+5% accumulated curve.
+   * Build the daily total-return series for IPCA + 5% p.a.
    * IPCA is monthly (data: "YYYY-MM", valor: percentage like 0.56 meaning 0.56%).
    * The real rate added is 5% p.a. => daily ~= (1.05)^(1/252) - 1.
    *
    * @param {Array} ipcaMensal – [{data:"YYYY-MM", valor: number}, ...]
    * @param {string[]} datasUteis – sorted trading dates
-   * @param {number} valorInicial
-   * @returns {number[]} accumulated values for each trading date
+   * @returns {number[]} daily total returns, one per trading date
    */
-  function construirIPCAMais5(ipcaMensal, datasUteis, valorInicial) {
-    if (!ipcaMensal || ipcaMensal.length === 0 || !datasUteis || datasUteis.length === 0) {
-      return datasUteis ? datasUteis.map(function () { return valorInicial; }) : [];
-    }
+  function ipcaMais5Retornos(ipcaMensal, datasUteis) {
+    if (!datasUteis || datasUteis.length === 0) return [];
 
-    // Index IPCA by "YYYY-MM"
     var ipcaMap = {};
-    for (var i = 0; i < ipcaMensal.length; i++) {
-      ipcaMap[ipcaMensal[i].data] = ipcaMensal[i].valor;
+    if (ipcaMensal) {
+      for (var i = 0; i < ipcaMensal.length; i++) {
+        ipcaMap[ipcaMensal[i].data] = ipcaMensal[i].valor;
+      }
     }
 
     var taxaDiariaReal = Math.pow(1.05, 1 / 252) - 1;
-    var valor = valorInicial;
-    var curva = [];
+    var retornos = [];
 
-    // Track which month we're in so we apply the monthly IPCA rate spread across
-    // the trading days of that month.
     var ultimoMes = '';
     var taxaDiariaIPCA = 0;
 
@@ -150,7 +128,6 @@ var Backtest = (function () {
 
       if (mesAtual !== ultimoMes) {
         ultimoMes = mesAtual;
-        // Count trading days in this month for proportional daily IPCA
         var diasNoMes = 0;
         for (var j = i; j < datasUteis.length; j++) {
           if (datasUteis[j].substring(0, 7) === mesAtual) {
@@ -160,19 +137,29 @@ var Backtest = (function () {
           }
         }
         var ipcaMes = ipcaMap[mesAtual];
-        // IPCA valor is a percentage (e.g. 0.56 => 0.0056 as decimal)
         var ipcaDecimal = (typeof ipcaMes === 'number') ? ipcaMes / 100 : 0;
-        // Convert monthly IPCA to daily: (1 + ipcaDecimal)^(1/diasNoMes) - 1
         taxaDiariaIPCA = diasNoMes > 0 ? (Math.pow(1 + ipcaDecimal, 1 / diasNoMes) - 1) : 0;
       }
 
-      // Compound: (1 + daily IPCA) * (1 + daily real rate) - 1
-      var taxaDiariaTotal = (1 + taxaDiariaIPCA) * (1 + taxaDiariaReal) - 1;
-      valor *= (1 + taxaDiariaTotal);
-      curva.push(valor);
+      retornos.push((1 + taxaDiariaIPCA) * (1 + taxaDiariaReal) - 1);
     }
 
-    return curva;
+    return retornos;
+  }
+
+  /**
+   * Build an equity curve from a daily-return series, applying the same
+   * monthly contributions used for the portfolio. This keeps every line
+   * (carteira and benchmarks) comparable when aporteMensal > 0.
+   * @returns {number[]} equity values, one per return date
+   */
+  function curvaComAportes(retornosDiarios, valorInicial, aporteMensal) {
+    var curva = Metricas.curvaPatrimonial(retornosDiarios, valorInicial, aporteMensal, 21);
+    var vals = [];
+    for (var i = 1; i < curva.length; i++) {
+      vals.push(curva[i].valor);
+    }
+    return vals;
   }
 
   /**
@@ -387,45 +374,19 @@ var Backtest = (function () {
     // Step 6: Build benchmark curves
     // -------------------------------------------------------------------
 
-    // CDI accumulated
-    var cdiParaAcumular = [];
-    for (var i = 0; i < datasRetorno.length; i++) {
-      cdiParaAcumular.push({ data: datasRetorno[i], valor: cdiRetornos[i] });
-    }
-    var cdiAcumuladoArr = acumularCDI(cdiParaAcumular, valorInicial);
-    var cdiValues = [];
-    for (var i = 0; i < cdiAcumuladoArr.length; i++) {
-      cdiValues.push(cdiAcumuladoArr[i].valor);
-    }
+    // All benchmark curves receive the SAME contributions as the portfolio,
+    // so the comparison stays fair when aporteMensal > 0 ("had I invested the
+    // same monthly amount in CDI / Ibov / IPCA+5% instead").
 
-    // Ibovespa normalized to valorInicial
-    var ibovValues = [];
-    if (ibovAlinhado.length > 0) {
-      // Use the close on the first return date's prior trading day as base
-      // Actually use the first aligned close price as base
-      var ibovBase = ibovAlinhado[0].close;
-      // Build from the ibov closes aligned to return dates
-      // Map ibov closes by date
-      var ibovCloseMap = {};
-      for (var i = 0; i < ibovAlinhado.length; i++) {
-        ibovCloseMap[ibovAlinhado[i].data] = ibovAlinhado[i].close;
-      }
-      for (var i = 0; i < datasRetorno.length; i++) {
-        var c = ibovCloseMap[datasRetorno[i]];
-        if (typeof c === 'number' && ibovBase !== 0) {
-          ibovValues.push((c / ibovBase) * valorInicial);
-        } else {
-          ibovValues.push(ibovValues.length > 0 ? ibovValues[ibovValues.length - 1] : valorInicial);
-        }
-      }
-    } else {
-      for (var i = 0; i < datasRetorno.length; i++) {
-        ibovValues.push(valorInicial);
-      }
-    }
+    // CDI: daily rates already computed in cdiRetornos
+    var cdiValues = curvaComAportes(cdiRetornos, valorInicial, aporteMensal);
 
-    // IPCA + 5%
-    var ipcaMais5Values = construirIPCAMais5(ipcaSeries, datasRetorno, valorInicial);
+    // Ibovespa: daily price returns already computed in ibovRetornos
+    var ibovValues = curvaComAportes(ibovRetornos, valorInicial, aporteMensal);
+
+    // IPCA + 5% p.a.
+    var ipcaRetornos = ipcaMais5Retornos(ipcaSeries, datasRetorno);
+    var ipcaMais5Values = curvaComAportes(ipcaRetornos, valorInicial, aporteMensal);
 
     // -------------------------------------------------------------------
     // Step 7: Calculate metrics
