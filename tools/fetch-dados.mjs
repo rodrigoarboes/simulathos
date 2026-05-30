@@ -13,7 +13,7 @@ const ROOT = path.resolve(__dirname, "..", "alocacao", "data");
 // ── ETF catalog (mirrors catalogo.js) ────────────────────────────
 const ETF_TICKERS = [
     "BOVA11", "BOVV11", "SMAL11", "DIVO11",
-    "IVVB11", "NASD11", "ACWI11", "EURP11",
+    "IVVB11", "NASD11", "ACWI11", "HASH11",
     "IMAB11", "B5P211", "IB5M11", "IRFM11",
     "FIXA11", "LFTS11", "XFIX11"
 ];
@@ -219,6 +219,30 @@ async function main() {
         const ipca = await fetchIPCA();
         saveJSON(path.join(ROOT, "ipca.json"), ipca);
         console.log(`OK (${ipca.length} pontos)`);
+    } catch (err) {
+        console.log(`FALHOU — ${err.message}`);
+    }
+
+    // ── Combined embedded JS (works via double-click / file://) ─────
+    try {
+        process.stdout.write("  Gerando dados.js embutido... ");
+        const dados = { etfs: {}, cdi: [], ibov: [], ipca: [] };
+        const etfsDir = path.join(ROOT, "etfs");
+        if (fs.existsSync(etfsDir)) {
+            for (const f of fs.readdirSync(etfsDir)) {
+                if (!f.endsWith(".json")) continue;
+                const ticker = f.replace(".json", "");
+                dados.etfs[ticker] = JSON.parse(fs.readFileSync(path.join(etfsDir, f), "utf8"));
+            }
+        }
+        for (const [key, file] of [["cdi", "cdi.json"], ["ibov", "ibov.json"], ["ipca", "ipca.json"]]) {
+            const p = path.join(ROOT, file);
+            if (fs.existsSync(p)) dados[key] = JSON.parse(fs.readFileSync(p, "utf8"));
+        }
+        const js = "// dados.js — dados de mercado embutidos (gerado por tools/fetch-dados.mjs)\n" +
+            "window.DADOS = " + JSON.stringify(dados) + ";\n";
+        fs.writeFileSync(path.join(ROOT, "dados.js"), js);
+        console.log(`OK (${Object.keys(dados.etfs).length} ETFs)`);
     } catch (err) {
         console.log(`FALHOU — ${err.message}`);
     }

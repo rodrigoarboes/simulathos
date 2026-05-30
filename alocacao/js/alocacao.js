@@ -283,7 +283,32 @@
             pesos[tickers[i]] = state.selected[tickers[i]] / 100;
         }
 
-        // Determine which data files to fetch
+        // If data was embedded via data/dados.js (loaded with a <script> tag),
+        // use it directly. This works even when the page is opened with a
+        // double-click (file://), where fetch() of local files is blocked.
+        if (window.DADOS && window.DADOS.etfs) {
+            var dataMapEmbed = {};
+            for (var te = 0; te < tickers.length; te++) {
+                if (window.DADOS.etfs[tickers[te]]) {
+                    dataMapEmbed[tickers[te]] = window.DADOS.etfs[tickers[te]];
+                }
+            }
+            dataMapEmbed['_cdi'] = window.DADOS.cdi;
+            dataMapEmbed['_ibov'] = window.DADOS.ibov;
+            dataMapEmbed['_ipca'] = window.DADOS.ipca;
+            onAllDataLoaded(dataMapEmbed, [], {
+                pesos: pesos,
+                tickers: tickers,
+                valorInicial: valorInicial,
+                aporteMensal: aporteMensal,
+                dataInicio: dataInicio,
+                dataFim: dataFim,
+                rebalDias: rebalDias
+            });
+            return;
+        }
+
+        // Otherwise, fetch the individual JSON files (requires a local server).
         var fetches = {};
         for (var t = 0; t < tickers.length; t++) {
             fetches[tickers[t]] = 'data/etfs/' + tickers[t] + '.json';
