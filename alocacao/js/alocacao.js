@@ -421,23 +421,23 @@
         try {
             var backtestConfig = {
                 pesos: config.pesos,
-                tickers: config.tickers,
                 valorInicial: config.valorInicial,
                 aporteMensal: config.aporteMensal,
                 dataInicio: config.dataInicio,
                 dataFim: config.dataFim,
-                rebalDias: config.rebalDias,
-                dadosEtfs: {},
-                dadosCdi: dataMap['_cdi'],
-                dadosIbov: dataMap['_ibov'],
-                dadosIpca: dataMap['_ipca']
+                rebalanceamento: config.rebalDias,
+                dados: {},
+                cdi: dataMap['_cdi'],
+                ibov: dataMap['_ibov'],
+                ipca: dataMap['_ipca']
             };
 
             for (var t = 0; t < config.tickers.length; t++) {
-                backtestConfig.dadosEtfs[config.tickers[t]] = dataMap[config.tickers[t]];
+                backtestConfig.dados[config.tickers[t]] = dataMap[config.tickers[t]];
             }
 
-            var resultado = Backtest.rodar(backtestConfig);
+            var bruto = Backtest.rodar(backtestConfig);
+            var resultado = adaptarResultado(bruto);
             state.resultado = resultado;
 
             contentEl.style.display = '';
@@ -453,6 +453,47 @@
     // -----------------------------------------------------------------------
     // Step 3: Render Results
     // -----------------------------------------------------------------------
+
+    // Convert the structured Backtest.rodar() output to the flat shape the
+    // render functions below expect.
+    function adaptarResultado(bruto) {
+        var resumo = bruto.resumo || {};
+        var curvas = bruto.curvas || {};
+        var corr = bruto.correlacao || { labels: [], matrix: [] };
+        var comp = bruto.composicao || { labels: [], pesos: [] };
+        var datas = curvas.datas || [];
+
+        function zip(valores) {
+            valores = valores || [];
+            var out = [];
+            for (var i = 0; i < valores.length; i++) {
+                out.push({ data: datas[i], valor: valores[i] });
+            }
+            return out;
+        }
+
+        var pesosFinais = {};
+        for (var i = 0; i < comp.labels.length; i++) {
+            pesosFinais[comp.labels[i]] = comp.pesos[i];
+        }
+
+        return {
+            retornoAcumulado:  resumo.retornoAcumulado,
+            retornoAnualizado: resumo.retornoAnualizado,
+            volatilidade:      resumo.volatilidade,
+            sharpe:            resumo.sharpe,
+            drawdownMaximo:    resumo.drawdownMaximo,
+            beta:              resumo.beta,
+            percentualCDI:     resumo.percentualCDI,
+            diasUteis:         resumo.diasUteis,
+            curvaCarteira:     zip(curvas.carteira),
+            curvaCdi:          zip(curvas.cdi),
+            curvaIbov:         zip(curvas.ibov),
+            curvaIpca5:        zip(curvas.ipcaMais5),
+            matrizCorrelacao:  { labels: corr.labels, matrix: corr.matrix },
+            pesosFinais:       pesosFinais
+        };
+    }
 
     function renderResultado(res, config) {
         // Hero: retorno acumulado
