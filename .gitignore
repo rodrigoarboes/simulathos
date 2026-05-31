@@ -1,0 +1,19 @@
+# Binaries and large files (use Google Drive instead)
+*.zip
+*.pptx
+*.ppt
+*.exe
+*.dmg
+*.iso
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node
+node_modules/
+
+# Temp
+*.tmp
+*.log
