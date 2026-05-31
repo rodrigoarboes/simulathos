@@ -1,6 +1,7 @@
 /**
  * Propostas Comerciais — VocêBancário / Academia do Assessor
  * Gerador de propostas personalizadas para prospects
+ * IIFE — vanilla JS, sem dependências
  */
 (function() {
   'use strict';
@@ -10,7 +11,7 @@
     'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'
   ];
 
-  var ABOUT_TEXT_DEFAULT = 'desde 2017, ajudo bancários a fazerem a transição para o mercado de assessoria de investimentos. Já foram mais de 400 profissionais que passaram pela Academia do Assessor — a maioria vindo do varejo bancário, exatamente como você. Minha missão é encurtar o caminho entre onde você está e onde quer chegar: com método, clareza e acompanhamento real.';
+  var ABOUT_TEXT_DEFAULT = 'desde 2017, eu trabalho exclusivamente com assessoria de investimentos. Comecei como assessor, virei sócio de um escritório, depois decidi criar o VocêBancário — um projeto que nasceu pra ajudar bancários a fazerem essa transição com mais clareza e menos sofrimento. Já ajudei mais de 300 profissionais nessa jornada. A Academia do Assessor é o que eu gostaria de ter tido quando estava começando: um método real, prático, com acompanhamento de verdade. Não é curso gravado jogado numa plataforma. É mentoria. É convivência. É construção de carreira.';
 
   var STORAGE_KEY = 'propostas_form_state';
 
@@ -114,13 +115,16 @@
     var tRows = document.querySelectorAll('.testimonial-row');
     for (var t = 0; t < tRows.length; t++) {
       var row = tRows[t];
-      dados.testimonials.push({
+      var dep = {
         nome: row.querySelector('.dep-nome').value.trim(),
         cargo: row.querySelector('.dep-cargo').value.trim(),
         empresa: row.querySelector('.dep-empresa').value.trim(),
         depoimento: row.querySelector('.dep-texto').value.trim(),
         foto: row.querySelector('.dep-foto').value.trim()
-      });
+      };
+      if (dep.nome || dep.depoimento) {
+        dados.testimonials.push(dep);
+      }
     }
 
     return dados;
@@ -229,6 +233,7 @@
 
   function atualizarBordaPilar(n) {
     var sel = document.getElementById('sel-pilar-' + n);
+    if (!sel) return;
     var bloco = sel.closest('.pilar-block');
     if (bloco) {
       bloco.style.borderLeftColor = gradeColor(sel.value);
@@ -245,12 +250,13 @@
     slides.push(
       '<div class="slide slide-capa active">' +
         '<div class="capa-content">' +
+          '<div class="capa-logo">VB</div>' +
           '<div class="capa-eyebrow">PROPOSTA PERSONALIZADA</div>' +
           '<div class="capa-line"></div>' +
           '<h1>' + escapeHtml(dados.prospectName || 'Prospect') + '</h1>' +
           '<p class="capa-date">' + formatarData(dados.dataEnvio) + '</p>' +
           '<div class="capa-author">' +
-            '<p>Rodrigo Arboés, CEA, MAP&reg;</p>' +
+            '<p>Rodrigo Arbo&eacute;s, CEA, MAP&reg;</p>' +
             '<p class="capa-social">@vocebancario &middot; Academia do Assessor</p>' +
           '</div>' +
         '</div>' +
@@ -264,7 +270,7 @@
         '<div class="quote-block">' +
           '<span class="quote-mark">&ldquo;</span>' +
           '<p class="quote-text">' + escapeHtml(dados.aboutText || ABOUT_TEXT_DEFAULT) + '</p>' +
-          '<p class="quote-author">&mdash; Rodrigo Arboés, CEA, MAP&reg;</p>' +
+          '<p class="quote-author">&mdash; Rodrigo Arbo&eacute;s, CEA, MAP&reg;</p>' +
         '</div>' +
       '</div>'
     );
@@ -323,11 +329,11 @@
       chipsHtml += '<span class="strength-chip">' + escapeHtml(sl[s]) + '</span>';
     }
     var stHtml = '';
-    var st = dados.strengthsTable || [];
-    for (var x = 0; x < st.length; x++) {
+    var stArr = dados.strengthsTable || [];
+    for (var x = 0; x < stArr.length; x++) {
       stHtml += '<div class="strength-detail-card">' +
-        '<strong>' + escapeHtml(st[x].pilar) + '</strong>' +
-        '<p>' + escapeHtml(st[x].comentario) + '</p>' +
+        '<strong>' + escapeHtml(stArr[x].pilar) + '</strong>' +
+        '<p>' + escapeHtml(stArr[x].comentario) + '</p>' +
       '</div>';
     }
     slides.push(
@@ -342,7 +348,7 @@
 
     // SLIDE 7 — O CAMINHO
     slides.push(
-      '<div class="slide">' +
+      '<div class="slide slide-caminho">' +
         '<div class="slide-num">07 / 10</div>' +
         '<h2>O CAMINHO</h2>' +
         '<div class="slide-divider"></div>' +
@@ -364,7 +370,7 @@
       var dep = deps[d];
       var fotoHtml = dep.foto
         ? '<img src="' + escapeHtml(dep.foto) + '" class="dep-avatar" alt="' + escapeHtml(dep.nome) + '"/>'
-        : '<div class="dep-avatar-placeholder">' + escapeHtml((dep.nome || '?').charAt(0)) + '</div>';
+        : '<div class="dep-avatar-placeholder">' + escapeHtml((dep.nome || '?').charAt(0).toUpperCase()) + '</div>';
       depHtml += '<div class="testimonial-card">' +
         '<div class="dep-header">' +
           fotoHtml +
@@ -484,6 +490,7 @@
     try {
       var dados = JSON.parse(jsonString);
       preencherFormulario(dados);
+      salvarEstado();
       return true;
     } catch (e) {
       alert('JSON inválido: ' + e.message);
@@ -526,6 +533,7 @@
     importarJSON: importarJSON,
     exportarJSON: exportarJSON,
     proximaQuarta: proximaQuarta,
+    hoje: hoje,
     lerFormulario: lerFormulario,
     preencherFormulario: preencherFormulario,
     salvarEstado: salvarEstado,
@@ -536,6 +544,7 @@
     adicionarDepoimento: adicionarDepoimento,
     atualizarBordaPilar: atualizarBordaPilar,
     formatarData: formatarData,
+    gradeColor: gradeColor,
     ABOUT_TEXT_DEFAULT: ABOUT_TEXT_DEFAULT
   };
 
