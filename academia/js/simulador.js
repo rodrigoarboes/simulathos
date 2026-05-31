@@ -698,7 +698,9 @@ var AIDASim = (function () {
   // --------------------------------------------------------------------- //
 
   return {
-    render: render
+    render: render,
+    buscar: buscarTicker,
+    setProxy: function(url) { PROXY_URL = url; }
   };
 
 })();
