@@ -1,0 +1,107 @@
+{
+  "titulo": "Macroalocação com ETFs",
+  "subtitulo": "Turma MAP — Módulo 3",
+  "dataCriacao": "2026-05-31",
+  "nos": [
+    {
+      "id": "n1",
+      "titulo": "Introdução",
+      "icone": "📚",
+      "duracao": "10 min",
+      "notas": "Recapitular módulo anterior\nContextualizar o cenário macro atual\nApresentar objetivos da aula",
+      "filhos": [
+        {
+          "id": "n1-1",
+          "titulo": "O que é macroalocação",
+          "icone": "🎯",
+          "duracao": "5 min",
+          "notas": "Definição formal\nDiferença de stock picking\nAbordagem top-down",
+          "filhos": []
+        },
+        {
+          "id": "n1-2",
+          "titulo": "Por que ETFs?",
+          "icone": "💡",
+          "duracao": "5 min",
+          "notas": "Custos baixos\nDiversificação imediata\nLiquidez",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "id": "n2",
+      "titulo": "Classes de Ativos",
+      "icone": "📊",
+      "duracao": "20 min",
+      "notas": "RF Pós-fixada\nRF Inflação\nRF Prefixado\nAções Brasil\nInternacional\nAlternativos",
+      "filhos": [
+        {
+          "id": "n2-1",
+          "titulo": "Renda Fixa",
+          "icone": "🔧",
+          "duracao": "10 min",
+          "notas": "IMAB11 — inflação\nIRFM11 — prefixado\nCDI via Selic",
+          "filhos": [
+            {
+              "id": "n2-1-1",
+              "titulo": "ETFs de RF no Brasil",
+              "icone": "📝",
+              "duracao": "5 min",
+              "notas": "B5P211\nIMAB11\nFIXA11",
+              "filhos": []
+            }
+          ]
+        },
+        {
+          "id": "n2-2",
+          "titulo": "Renda Variável",
+          "icone": "⚡",
+          "duracao": "10 min",
+          "notas": "BOVA11\nIVVB11\nSMAL11\nDIVD11",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "id": "n3",
+      "titulo": "Montando a Carteira",
+      "icone": "🧠",
+      "duracao": "20 min",
+      "notas": "Framework de alocação\nPerfil de risco\nHorizonte de investimento",
+      "filhos": [
+        {
+          "id": "n3-1",
+          "titulo": "Perfis de Investidor",
+          "icone": "💬",
+          "duracao": "8 min",
+          "notas": "Conservador: 80% RF / 20% RV\nModerado: 60% RF / 40% RV\nAgressivo: 30% RF / 70% RV",
+          "filhos": []
+        },
+        {
+          "id": "n3-2",
+          "titulo": "Rebalanceamento",
+          "icone": "🔧",
+          "duracao": "7 min",
+          "notas": "Periodicidade (trimestral vs semestral)\nBandas de tolerância\nCusto de transação",
+          "filhos": []
+        }
+      ]
+    },
+    {
+      "id": "n4",
+      "titulo": "Exercício Prático",
+      "icone": "📝",
+      "duracao": "15 min",
+      "notas": "Cada aluno monta sua carteira\nDebate em grupo\nApresentação rápida",
+      "filhos": []
+    },
+    {
+      "id": "n5",
+      "titulo": "Encerramento",
+      "icone": "🏆",
+      "duracao": "5 min",
+      "notas": "Resumo dos pontos-chave\nPróximos passos\nLeitura complementar",
+      "filhos": []
+    }
+  ]
+}
