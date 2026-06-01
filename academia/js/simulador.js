@@ -14,6 +14,12 @@ var AIDASim = (function () {
   // Universo combinado (B3 em BRL + offshore convertido para BRL), em cache.
   var universoCache = null;
 
+  // URL do proxy Yahoo Finance (Cloudflare Worker).
+  var PROXY_URL = 'https://aida-proxy.vocebancario.workers.dev';
+
+  // Flag para evitar loop infinito de fetch no render.
+  var fetchEmAndamento = false;
+
   /**
    * Monta o universo de ativos para simulação, todos denominados em BRL:
    * - ETFs B3 (window.DADOS.etfs): já em reais, usados como estão.
@@ -58,6 +64,77 @@ var AIDASim = (function () {
 
     universoCache = uni;
     return uni;
+  }
+
+  // --------------------------------------------------------------------- //
+  // Live ticker search via Yahoo Finance proxy
+  // --------------------------------------------------------------------- //
+
+  /**
+   * Busca dados históricos de um ticker via proxy Yahoo Finance.
+   * Regras de símbolo:
+   * - Tickers brasileiros (contêm dígito): acrescenta .SA
+   * - Já possui sufixo (.L, .SA, =X): usa como está
+   * - Letras puras (AAPL, VOO): usa como está (US-listed)
+   */
+  function buscarTicker(ticker) {
+    var symbol = ticker;
+    if (/\d/.test(ticker) && ticker.indexOf('.') === -1 && ticker.indexOf('=') === -1) {
+      symbol = ticker + '.SA';
+    }
+
+    var url = PROXY_URL + '/chart/' + encodeURIComponent(symbol) + '?range=5y&interval=1d';
+
+    return fetch(url)
+      .then(function(resp) {
+        if (!resp.ok) throw new Error('HTTP ' + resp.status);
+        return resp.json();
+      });
+  }
+
+  /**
+   * Busca sequencialmente todos os tickers faltantes e os insere no universo.
+   * Tickers offshore (sem dígitos) são convertidos de USD para BRL.
+   */
+  function buscarFaltantes(tickers) {
+    if (!tickers.length) return Promise.resolve();
+
+    var i = 0;
+    function next() {
+      if (i >= tickers.length) return Promise.resolve();
+      var ticker = tickers[i++];
+      return buscarTicker(ticker)
+        .then(function(dados) {
+          if (dados && dados.length >= 2) {
+            // Check if this is an offshore ticker (non-.SA) — convert to BRL
+            var isOffshore = !/\d/.test(ticker) || ticker.indexOf('.L') !== -1;
+            if (isOffshore && window.DADOS && window.DADOS.indices && window.DADOS.indices.usdbrl) {
+              var usdbrl = window.DADOS.indices.usdbrl;
+              var fx = {};
+              for (var j = 0; j < usdbrl.length; j++) fx[usdbrl[j].data] = usdbrl[j].close;
+              var brl = [];
+              var lastFx = null;
+              for (var j = 0; j < dados.length; j++) {
+                var rate = fx[dados[j].data];
+                if (rate == null) rate = lastFx;
+                if (rate == null) continue;
+                lastFx = rate;
+                brl.push({ data: dados[j].data, close: Math.round(dados[j].close * rate * 100) / 100 });
+              }
+              dados = brl;
+            }
+            if (dados.length >= 2) {
+              if (!universoCache) construirUniverso();
+              universoCache[ticker] = dados;
+            }
+          }
+        })
+        .catch(function(err) {
+          // Silently skip — will be listed as "descartados" by the render
+        })
+        .then(next);
+    }
+    return next();
   }
 
   // --------------------------------------------------------------------- //
@@ -259,6 +336,18 @@ var AIDASim = (function () {
     // (a) Pesos da carteira do aluno
     var pctMap = montagemParaMapa(montagem);
     var info = montarPesos(pctMap, etfs);
+
+    // Auto-fetch unknown tickers from the proxy (only once per render)
+    if (info.descartados.length > 0 && PROXY_URL && !fetchEmAndamento) {
+      fetchEmAndamento = true;
+      alvo.innerHTML = '<p style="font-size:14px; color:var(--brand-blue);">⏳ Buscando dados de <strong>' + info.descartados.join(', ') + '</strong> no Yahoo Finance...</p>';
+      buscarFaltantes(info.descartados).then(function() {
+        fetchEmAndamento = false;
+        render(montagem, caseObj);
+      });
+      return;
+    }
+    fetchEmAndamento = false;
 
     if (info.mantidos.length < 2 || info.total <= 0) {
       var falta = info.descartados.length
@@ -609,7 +698,9 @@ var AIDASim = (function () {
   // --------------------------------------------------------------------- //
 
   return {
-    render: render
+    render: render,
+    buscar: buscarTicker,
+    setProxy: function(url) { PROXY_URL = url; }
   };
 
 })();

@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VocêBancário · Planejador de Aulas</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --brand-blue: #0088cc;
+  --brand-orange: #eb8105;
+  --brand-red: #a12026;
+  --ok: #2d8c5c;
+  --bg: #f7f5f0;
+  --bg-card: #ffffff;
+  --text: #1a1a1a;
+  --text-muted: #666;
+  --border: #e0ddd8;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.1);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --transition: 0.3s ease;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body.dark {
+  --bg: #1a1a2e;
+  --bg-card: #25253d;
+  --text: #e8e8f0;
+  --text-muted: #a0a0b8;
+  --border: #3a3a55;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 16px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* ===== TOP BAR ===== */
+.topbar {
+  height: 56px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  position: relative;
+  z-index: 100;
+}
+
+.topbar-brand {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--brand-blue);
+}
+
+.topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn {
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.btn:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
+
+.btn-primary {
+  background: var(--brand-blue);
+  color: white;
+  border-color: var(--brand-blue);
+}
+.btn-primary:hover { background: #006fa8; border-color: #006fa8; color: white; }
+
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+
+.dark-toggle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all var(--transition);
+}
+.dark-toggle:hover { border-color: var(--brand-blue); }
+
+/* ===== LAYOUT ===== */
+.app-layout {
+  display: flex;
+  height: calc(100vh - 56px);
+}
+
+/* ===== SIDEBAR ===== */
+.sidebar {
+  width: 320px;
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-header .btn { width: 100%; margin-bottom: 16px; }
+
+.input-group { margin-bottom: 12px; }
+
+.input-group label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.input-group input, .input-group textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 14px;
+  background: var(--bg);
+  color: var(--text);
+  transition: border-color var(--transition);
+}
+
+.input-group input:focus, .input-group textarea:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+}
+
+.input-title {
+  font-family: var(--font-display);
+  font-size: 18px !important;
+  font-weight: 600;
+}
+
+/* Tree View */
+.tree-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+}
+
+.tree-item {
+  margin-bottom: 4px;
+}
+
+.tree-item-content {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.tree-item-content:hover { background: var(--bg); }
+.tree-item-content.selected { background: rgba(0,136,204,0.08); border: 1px solid rgba(0,136,204,0.2); }
+
+.tree-drag { cursor: grab; opacity: 0.4; font-size: 12px; }
+.tree-icon { font-size: 14px; }
+.tree-title {
+  flex: 1;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tree-actions { display: flex; gap: 2px; opacity: 0; transition: opacity var(--transition); }
+.tree-item-content:hover .tree-actions { opacity: 1; }
+
+.tree-btn {
+  width: 22px; height: 22px;
+  border-radius: 4px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all var(--transition);
+}
+.tree-btn:hover { background: var(--bg); color: var(--text); }
+.tree-btn.delete:hover { color: var(--brand-red); }
+
+.tree-children { padding-left: 20px; }
+
+.tree-add-root {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  margin-top: 8px;
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--border);
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--text-muted);
+  transition: all var(--transition);
+}
+.tree-add-root:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
+
+/* Import/Export */
+.io-section {
+  border-top: 1px solid var(--border);
+  padding: 12px 20px;
+}
+
+.io-toggle {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.io-toggle:hover { color: var(--text); }
+
+.io-content {
+  display: none;
+  margin-top: 10px;
+  gap: 8px;
+}
+.io-content.open { display: flex; flex-wrap: wrap; }
+
+/* ===== MAIN AREA ===== */
+.main-area {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.map-viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  cursor: grab;
+}
+.map-viewport:active { cursor: grabbing; }
+
+.map-container {
+  width: 5000px;
+  height: 4000px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  transition: transform 0.1s linear;
+}
+
+.map-container.smooth-transition {
+  transition: transform 0.6s ease-in-out;
+}
+
+.map-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.map-svg path {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+body.dark .map-svg path { stroke: #4a4a65; }
+
+.node {
+  position: absolute;
+  background: var(--bg-card);
+  border: 2px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+  min-width: 120px;
+  max-width: 220px;
+  text-align: center;
+  z-index: 2;
+  user-select: none;
+}
+.node:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+.node-title {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.node-icon { font-size: 18px; margin-bottom: 4px; display: block; }
+.node-duration {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-family: var(--font-mono);
+}
+
+.node.level-0 {
+  background: var(--brand-blue);
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  min-width: 200px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0,136,204,0.3);
+  padding: 20px 28px;
+}
+.node.level-0 .node-title { font-family: var(--font-display); font-size: 18px; }
+.node.level-0 .node-duration { color: rgba(255,255,255,0.8); }
+
+.node.level-1 { border-color: var(--brand-orange); }
+.node.level-1 .node-title { color: var(--brand-orange); }
+
+.node.level-2 { border-color: var(--brand-red); }
+.node.level-2 .node-title { color: var(--brand-red); }
+
+.node.level-3 { border-color: var(--ok); }
+.node.level-3 .node-title { color: var(--ok); }
+
+.node.selected {
+  border-color: var(--brand-blue) !important;
+  box-shadow: 0 0 0 3px rgba(0,136,204,0.2), var(--shadow-md);
+  transform: scale(1.05);
+}
+.node.level-0.selected { box-shadow: 0 0 0 4px rgba(0,136,204,0.3), 0 4px 20px rgba(0,136,204,0.4); }
+
+/* Map controls */
+.map-controls {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 50;
+}
+
+.map-control-btn {
+  width: 36px; height: 36px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  transition: all var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+.map-control-btn:hover { border-color: var(--brand-blue); }
+
+/* ===== NODE EDITOR PANEL ===== */
+.node-editor {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  padding: 20px 24px;
+  display: none;
+  z-index: 60;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.08);
+}
+.node-editor.open { display: block; }
+
+.node-editor-grid {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr auto;
+  gap: 16px;
+  align-items: start;
+}
+
+.editor-field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.editor-field input, .editor-field textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 13px;
+  background: var(--bg);
+  color: var(--text);
+}
+.editor-field input:focus, .editor-field textarea:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+}
+
+.editor-field textarea { resize: vertical; min-height: 60px; font-size: 12px; }
+
+.icon-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.icon-option {
+  width: 30px; height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  border: 1px solid transparent;
+  transition: all var(--transition);
+}
+.icon-option:hover { background: var(--bg); }
+.icon-option.selected { border-color: var(--brand-blue); background: rgba(0,136,204,0.1); }
+
+/* ===== PRESENTATION MODE ===== */
+.presentation-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--bg);
+  z-index: 1000;
+  display: none;
+}
+.presentation-overlay.active { display: block; }
+
+.presentation-viewport {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.presentation-container {
+  position: absolute;
+  width: 5000px;
+  height: 4000px;
+  transform-origin: 0 0;
+  transition: transform 0.6s ease-in-out;
+}
+
+.presentation-container .node {
+  transition: all 0.6s ease-in-out;
+}
+.presentation-container .node.faded { opacity: 0.2; }
+.presentation-container .node.focused {
+  transform: scale(1.1);
+  box-shadow: var(--shadow-lg);
+}
+
+.presentation-content {
+  position: fixed;
+  bottom: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 24px 32px;
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  width: 90%;
+  text-align: center;
+  z-index: 1010;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.presentation-content.visible { opacity: 1; }
+
+.presentation-content .pres-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.presentation-content .pres-icon { font-size: 36px; margin-bottom: 8px; }
+.presentation-content .pres-duration {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  background: var(--bg);
+  padding: 4px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+.presentation-content .pres-notes {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-muted);
+  text-align: left;
+  white-space: pre-line;
+}
+
+.presentation-bar {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border-radius: 30px;
+  padding: 10px 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: var(--shadow-md);
+  z-index: 1020;
+}
+
+.pres-counter {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.pres-nav-btn {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all var(--transition);
+}
+.pres-nav-btn:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
+
+.pres-exit {
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.pres-exit:hover { color: var(--text); }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+
+/* ===== PRINT ===== */
+@media print {
+  body { overflow: visible !important; }
+  .topbar, .sidebar, .node-editor, .map-controls, .presentation-overlay { display: none !important; }
+  .main-area { position: static; overflow: visible; }
+  .map-viewport { overflow: visible; position: static; }
+  .map-container {
+    position: static !important;
+    transform: scale(0.4) !important;
+    transform-origin: top left;
+    width: auto;
+    height: auto;
+  }
+  @page { size: landscape A4; margin: 1cm; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">VocêBancário · Planejador de Aulas</div>
+  <div class="topbar-actions">
+    <button class="btn btn-sm" id="btnFitAll" title="Encaixar tudo">⊞ Encaixar</button>
+    <button class="btn btn-primary" id="btnPresent">▶ Apresentar</button>
+    <button class="dark-toggle" id="darkToggle" title="Alternar tema">🌙</button>
+  </div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="app-layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <button class="btn btn-primary" id="btnNovaAula">+ Nova Aula</button>
+      <div class="input-group">
+        <label>Título da Aula</label>
+        <input type="text" id="aulaTitulo" class="input-title" placeholder="Nome da aula...">
+      </div>
+      <div class="input-group">
+        <label>Subtítulo</label>
+        <input type="text" id="aulaSubtitulo" placeholder="Turma, módulo...">
+      </div>
+    </div>
+    <div class="tree-container" id="treeContainer"></div>
+    <div class="io-section">
+      <div class="io-toggle" id="ioToggle">⚙ Importar / Exportar</div>
+      <div class="io-content" id="ioContent">
+        <button class="btn btn-sm" id="btnExport">📤 Exportar JSON</button>
+        <button class="btn btn-sm" id="btnImport">📥 Importar JSON</button>
+        <input type="file" id="fileImport" accept=".json" style="display:none">
+      </div>
+    </div>
+  </div>
+
+  <!-- MAIN AREA -->
+  <div class="main-area">
+    <div class="map-viewport" id="mapViewport">
+      <div class="map-container" id="mapContainer">
+        <svg class="map-svg" id="mapSvg"></svg>
+      </div>
+    </div>
+    <div class="map-controls">
+      <button class="map-control-btn" id="zoomIn" title="Zoom in">+</button>
+      <button class="map-control-btn" id="zoomOut" title="Zoom out">−</button>
+      <button class="map-control-btn" id="fitAll" title="Encaixar tudo">⊞</button>
+    </div>
+    <div class="node-editor" id="nodeEditor">
+      <div class="node-editor-grid">
+        <div class="editor-field">
+          <label>Título</label>
+          <input type="text" id="editorTitle">
+        </div>
+        <div class="editor-field">
+          <label>Duração</label>
+          <input type="text" id="editorDuration" placeholder="15 min">
+        </div>
+        <div class="editor-field">
+          <label>Notas</label>
+          <textarea id="editorNotes" placeholder="Pontos-chave, conceitos..."></textarea>
+        </div>
+        <div class="editor-field">
+          <label>Ícone</label>
+          <div class="icon-selector" id="iconSelector"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PRESENTATION OVERLAY -->
+<div class="presentation-overlay" id="presentationOverlay">
+  <div class="presentation-viewport">
+    <div class="presentation-container" id="presContainer"></div>
+  </div>
+  <div class="presentation-content" id="presContent">
+    <div class="pres-icon" id="presIcon"></div>
+    <div class="pres-title" id="presTitle"></div>
+    <div class="pres-duration" id="presDuration"></div>
+    <div class="pres-notes" id="presNotes"></div>
+  </div>
+  <div class="presentation-bar">
+    <button class="pres-nav-btn" id="presPrev">←</button>
+    <span class="pres-counter" id="presCounter">1 / 1</span>
+    <button class="pres-nav-btn" id="presNext">→</button>
+    <span class="pres-exit" id="presExit">Esc para sair</span>
+  </div>
+</div>
+
+<script>
+// ===== DATA =====
+const ICONS = ['📚','📊','🎯','💡','🔧','⚡','🧠','💬','📝','🏆'];
+const STORAGE_KEY = 'vocebancario_aulas';
+
+const SAMPLE_DATA = {
+  titulo: "Macroalocação com ETFs",
+  subtitulo: "Turma MAP — Módulo 3",
+  dataCriacao: "2026-05-31",
+  nos: [
+    {
+      id: "n1",
+      titulo: "Introdução",
+      icone: "📚",
+      duracao: "10 min",
+      notas: "Recapitular módulo anterior\nContextualizar o cenário macro atual\nApresentar objetivos da aula",
+      filhos: [
+        {
+          id: "n1-1",
+          titulo: "O que é macroalocação",
+          icone: "🎯",
+          duracao: "5 min",
+          notas: "Definição formal\nDiferença de stock picking\nAbordagem top-down",
+          filhos: []
+        },
+        {
+          id: "n1-2",
+          titulo: "Por que ETFs?",
+          icone: "💡",
+          duracao: "5 min",
+          notas: "Custos baixos\nDiversificação imediata\nLiquidez",
+          filhos: []
+        }
+      ]
+    },
+    {
+      id: "n2",
+      titulo: "Classes de Ativos",
+      icone: "📊",
+      duracao: "20 min",
+      notas: "RF Pós-fixada\nRF Inflação\nRF Prefixado\nAções Brasil\nInternacional\nAlternativos",
+      filhos: [
+        {
+          id: "n2-1",
+          titulo: "Renda Fixa",
+          icone: "🔧",
+          duracao: "10 min",
+          notas: "IMAB11 — inflação\nIRFM11 — prefixado\nCDI via Selic",
+          filhos: [
+            {
+              id: "n2-1-1",
+              titulo: "ETFs de RF no Brasil",
+              icone: "📝",
+              duracao: "5 min",
+              notas: "B5P211\nIMAB11\nFIXA11",
+              filhos: []
+            }
+          ]
+        },
+        {
+          id: "n2-2",
+          titulo: "Renda Variável",
+          icone: "⚡",
+          duracao: "10 min",
+          notas: "BOVA11\nIVVB11\nSMAL11\nDIVD11",
+          filhos: []
+        }
+      ]
+    },
+    {
+      id: "n3",
+      titulo: "Montando a Carteira",
+      icone: "🧠",
+      duracao: "20 min",
+      notas: "Framework de alocação\nPerfil de risco\nHorizonte de investimento",
+      filhos: [
+        {
+          id: "n3-1",
+          titulo: "Perfis de Investidor",
+          icone: "👤",
+          duracao: "8 min",
+          notas: "Conservador: 80% RF / 20% RV\nModerado: 60% RF / 40% RV\nAgressivo: 30% RF / 70% RV",
+          filhos: []
+        },
+        {
+          id: "n3-2",
+          titulo: "Rebalanceamento",
+          icone: "🔧",
+          duracao: "7 min",
+          notas: "Periodicidade (trimestral vs semestral)\nBandas de tolerância\nCusto de transação",
+          filhos: []
+        }
+      ]
+    },
+    {
+      id: "n4",
+      titulo: "Exercício Prático",
+      icone: "📝",
+      duracao: "15 min",
+      notas: "Cada aluno monta sua carteira\nDebate em grupo\nApresentação rápida",
+      filhos: []
+    },
+    {
+      id: "n5",
+      titulo: "Encerramento",
+      icone: "🏆",
+      duracao: "5 min",
+      notas: "Resumo dos pontos-chave\nPróximos passos\nLeitura complementar",
+      filhos: []
+    }
+  ]
+};
+
+// ===== STATE =====
+let aulaData = null;
+let selectedNodeId = null;
+let mapZoom = 1;
+let mapPanX = 0;
+let mapPanY = 0;
+let isDragging = false;
+let dragStartX = 0;
+let dragStartY = 0;
+let nodePositions = {};
+
+// Presentation
+let presMode = false;
+let presFlatNodes = [];
+let presCurrentIdx = 0;
+
+// ===== INIT =====
+function init() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try { aulaData = JSON.parse(saved); } catch(e) { aulaData = JSON.parse(JSON.stringify(SAMPLE_DATA)); }
+  } else {
+    aulaData = JSON.parse(JSON.stringify(SAMPLE_DATA));
+  }
+
+  // Dark mode
+  if (localStorage.getItem('vocebancario_dark') === 'true') {
+    document.body.classList.add('dark');
+  }
+
+  setupEventListeners();
+  renderAll();
+}
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(aulaData));
+}
+
+function renderAll() {
+  document.getElementById('aulaTitulo').value = aulaData.titulo;
+  document.getElementById('aulaSubtitulo').value = aulaData.subtitulo;
+  renderTree();
+  renderMap();
+}
+
+// ===== EVENT LISTENERS =====
+function setupEventListeners() {
+  // Title/Subtitle
+  document.getElementById('aulaTitulo').addEventListener('input', (e) => {
+    aulaData.titulo = e.target.value;
+    save();
+    renderMap();
+  });
+  document.getElementById('aulaSubtitulo').addEventListener('input', (e) => {
+    aulaData.subtitulo = e.target.value;
+    save();
+  });
+
+  // Dark mode
+  document.getElementById('darkToggle').addEventListener('click', () => {
+    document.body.classList.toggle('dark');
+    localStorage.setItem('vocebancario_dark', document.body.classList.contains('dark'));
+  });
+
+  // Nova Aula
+  document.getElementById('btnNovaAula').addEventListener('click', () => {
+    if (confirm('Criar nova aula? A aula atual será perdida se não exportada.')) {
+      aulaData = { titulo: "Nova Aula", subtitulo: "", dataCriacao: new Date().toISOString().split('T')[0], nos: [] };
+      selectedNodeId = null;
+      save();
+      renderAll();
+    }
+  });
+
+  // IO
+  document.getElementById('ioToggle').addEventListener('click', () => {
+    document.getElementById('ioContent').classList.toggle('open');
+  });
+  document.getElementById('btnExport').addEventListener('click', exportJSON);
+  document.getElementById('btnImport').addEventListener('click', () => document.getElementById('fileImport').click());
+  document.getElementById('fileImport').addEventListener('change', importJSON);
+
+  // Map zoom/pan
+  const viewport = document.getElementById('mapViewport');
+  viewport.addEventListener('wheel', onWheel, { passive: false });
+  viewport.addEventListener('mousedown', onMouseDown);
+  window.addEventListener('mousemove', onMouseMove);
+  window.addEventListener('mouseup', onMouseUp);
+
+  // Zoom controls
+  document.getElementById('zoomIn').addEventListener('click', () => { mapZoom = Math.min(3, mapZoom * 1.2); updateMapTransform(); });
+  document.getElementById('zoomOut').addEventListener('click', () => { mapZoom = Math.max(0.2, mapZoom / 1.2); updateMapTransform(); });
+  document.getElementById('fitAll').addEventListener('click', fitAll);
+  document.getElementById('btnFitAll').addEventListener('click', fitAll);
+
+  // Present
+  document.getElementById('btnPresent').addEventListener('click', startPresentation);
+  document.getElementById('presExit').addEventListener('click', exitPresentation);
+  document.getElementById('presPrev').addEventListener('click', () => navigatePresentation(-1));
+  document.getElementById('presNext').addEventListener('click', () => navigatePresentation(1));
+
+  // Keyboard
+  window.addEventListener('keydown', (e) => {
+    if (presMode) {
+      if (e.key === 'Escape') exitPresentation();
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); navigatePresentation(1); }
+      else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); navigatePresentation(-1); }
+    }
+  });
+
+  // Icon selector
+  const iconSel = document.getElementById('iconSelector');
+  ICONS.forEach(icon => {
+    const el = document.createElement('div');
+    el.className = 'icon-option';
+    el.textContent = icon;
+    el.dataset.icon = icon;
+    el.addEventListener('click', () => selectIcon(icon));
+    iconSel.appendChild(el);
+  });
+
+  // Editor inputs
+  document.getElementById('editorTitle').addEventListener('input', onEditorChange);
+  document.getElementById('editorDuration').addEventListener('input', onEditorChange);
+  document.getElementById('editorNotes').addEventListener('input', onEditorChange);
+}
+
+// ===== TREE RENDERING =====
+function renderTree() {
+  const container = document.getElementById('treeContainer');
+  container.innerHTML = '';
+
+  aulaData.nos.forEach(node => {
+    container.appendChild(createTreeItem(node, 0));
+  });
+
+  // Add root button
+  const addBtn = document.createElement('div');
+  addBtn.className = 'tree-add-root';
+  addBtn.innerHTML = '+ Adicionar tópico';
+  addBtn.addEventListener('click', () => addNode(null));
+  container.appendChild(addBtn);
+}
+
+function createTreeItem(node, level) {
+  const item = document.createElement('div');
+  item.className = 'tree-item';
+
+  const content = document.createElement('div');
+  content.className = 'tree-item-content' + (selectedNodeId === node.id ? ' selected' : '');
+  content.innerHTML = `
+    <span class="tree-drag">⋮⋮</span>
+    <span class="tree-icon">${node.icone || '📄'}</span>
+    <span class="tree-title">${node.titulo}</span>
+    <div class="tree-actions">
+      ${level < 2 ? '<button class="tree-btn" data-action="add" title="Adicionar subtópico">+</button>' : ''}
+      <button class="tree-btn delete" data-action="delete" title="Excluir">×</button>
+    </div>
+  `;
+
+  content.addEventListener('click', (e) => {
+    if (e.target.dataset.action === 'add') {
+      addNode(node.id);
+    } else if (e.target.dataset.action === 'delete') {
+      deleteNode(node.id);
+    } else {
+      selectNode(node.id);
+    }
+  });
+
+  item.appendChild(content);
+
+  if (node.filhos && node.filhos.length > 0) {
+    const children = document.createElement('div');
+    children.className = 'tree-children';
+    node.filhos.forEach(child => {
+      children.appendChild(createTreeItem(child, level + 1));
+    });
+    item.appendChild(children);
+  }
+
+  return item;
+}
+
+// ===== NODE OPERATIONS =====
+function generateId() {
+  return 'n' + Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
+}
+
+function findNode(id, nodes) {
+  if (!nodes) nodes = aulaData.nos;
+  for (let node of nodes) {
+    if (node.id === id) return node;
+    if (node.filhos) {
+      const found = findNode(id, node.filhos);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+function findParent(id, nodes, parent) {
+  if (!nodes) nodes = aulaData.nos;
+  for (let node of nodes) {
+    if (node.id === id) return parent;
+    if (node.filhos) {
+      const found = findParent(id, node.filhos, node);
+      if (found !== undefined) return found;
+    }
+  }
+  return undefined;
+}
+
+function addNode(parentId) {
+  const newNode = { id: generateId(), titulo: "Novo Tópico", icone: "📄", duracao: "", notas: "", filhos: [] };
+
+  if (parentId) {
+    const parent = findNode(parentId);
+    if (parent) {
+      if (!parent.filhos) parent.filhos = [];
+      parent.filhos.push(newNode);
+    }
+  } else {
+    aulaData.nos.push(newNode);
+  }
+
+  save();
+  renderTree();
+  renderMap();
+  selectNode(newNode.id);
+}
+
+function deleteNode(id) {
+  function removeFromList(list) {
+    const idx = list.findIndex(n => n.id === id);
+    if (idx >= 0) { list.splice(idx, 1); return true; }
+    for (let node of list) {
+      if (node.filhos && removeFromList(node.filhos)) return true;
+    }
+    return false;
+  }
+  removeFromList(aulaData.nos);
+  if (selectedNodeId === id) {
+    selectedNodeId = null;
+    document.getElementById('nodeEditor').classList.remove('open');
+  }
+  save();
+  renderTree();
+  renderMap();
+}
+
+function selectNode(id) {
+  selectedNodeId = id;
+  renderTree();
+  renderMap();
+  showNodeEditor(id);
+}
+
+function showNodeEditor(id) {
+  const node = findNode(id);
+  if (!node) { document.getElementById('nodeEditor').classList.remove('open'); return; }
+
+  document.getElementById('nodeEditor').classList.add('open');
+  document.getElementById('editorTitle').value = node.titulo;
+  document.getElementById('editorDuration').value = node.duracao || '';
+  document.getElementById('editorNotes').value = node.notas || '';
+
+  // Update icon selector
+  document.querySelectorAll('.icon-option').forEach(el => {
+    el.classList.toggle('selected', el.dataset.icon === node.icone);
+  });
+}
+
+function onEditorChange() {
+  if (!selectedNodeId) return;
+  const node = findNode(selectedNodeId);
+  if (!node) return;
+  node.titulo = document.getElementById('editorTitle').value;
+  node.duracao = document.getElementById('editorDuration').value;
+  node.notas = document.getElementById('editorNotes').value;
+  save();
+  renderTree();
+  renderMap();
+}
+
+function selectIcon(icon) {
+  if (!selectedNodeId) return;
+  const node = findNode(selectedNodeId);
+  if (!node) return;
+  node.icone = icon;
+  save();
+  renderTree();
+  renderMap();
+  document.querySelectorAll('.icon-option').forEach(el => {
+    el.classList.toggle('selected', el.dataset.icon === icon);
+  });
+}
+
+// ===== MAP RENDERING =====
+function renderMap() {
+  const container = document.getElementById('mapContainer');
+  // Remove old nodes
+  container.querySelectorAll('.node').forEach(el => el.remove());
+
+  // Calculate positions
+  nodePositions = {};
+  calculateLayout();
+
+  // Render SVG connections
+  renderConnections();
+
+  // Render nodes
+  renderNodes(container);
+}
+
+function calculateLayout() {
+  const centerX = 2500;
+  const centerY = 2000;
+  const hGap = 300;
+  const vGap = 90;
+
+  // Root node
+  nodePositions['root'] = { x: centerX, y: centerY, w: 200, h: 60 };
+
+  // Calculate total height needed for each node's subtree
+  function getSubtreeHeight(nodes) {
+    if (!nodes || nodes.length === 0) return 0;
+    let total = 0;
+    nodes.forEach(node => {
+      const childHeight = getSubtreeHeight(node.filhos);
+      total += Math.max(vGap, childHeight);
+    });
+    return total;
+  }
+
+  function layoutNodes(nodes, startX, startY, totalHeight, level) {
+    if (!nodes || nodes.length === 0) return;
+
+    let currentY = startY - totalHeight / 2;
+
+    nodes.forEach(node => {
+      const childSubtreeHeight = getSubtreeHeight(node.filhos);
+      const nodeHeight = Math.max(vGap, childSubtreeHeight);
+      const nodeY = currentY + nodeHeight / 2;
+
+      nodePositions[node.id] = { x: startX, y: nodeY, w: 180, h: 50, level: level };
+
+      if (node.filhos && node.filhos.length > 0) {
+        layoutNodes(node.filhos, startX + hGap, nodeY, childSubtreeHeight, level + 1);
+      }
+
+      currentY += nodeHeight;
+    });
+  }
+
+  const totalHeight = getSubtreeHeight(aulaData.nos);
+  layoutNodes(aulaData.nos, centerX + hGap, centerY, Math.max(totalHeight, vGap * aulaData.nos.length), 1);
+}
+
+function renderConnections() {
+  const svg = document.getElementById('mapSvg');
+  svg.innerHTML = '';
+
+  function drawConnection(parentPos, childPos) {
+    const x1 = parentPos.x + parentPos.w / 2;
+    const y1 = parentPos.y;
+    const x2 = childPos.x - childPos.w / 2;
+    const y2 = childPos.y;
+
+    const midX = (x1 + x2) / 2;
+
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M ${x1} ${y1} C ${midX} ${y1}, ${midX} ${y2}, ${x2} ${y2}`);
+    svg.appendChild(path);
+  }
+
+  // Root to level 1
+  const rootPos = nodePositions['root'];
+  if (rootPos) {
+    aulaData.nos.forEach(node => {
+      if (nodePositions[node.id]) {
+        drawConnection(rootPos, nodePositions[node.id]);
+      }
+    });
+  }
+
+  // All children
+  function drawChildConnections(nodes) {
+    if (!nodes) return;
+    nodes.forEach(node => {
+      if (node.filhos && nodePositions[node.id]) {
+        node.filhos.forEach(child => {
+          if (nodePositions[child.id]) {
+            drawConnection(nodePositions[node.id], nodePositions[child.id]);
+          }
+        });
+        drawChildConnections(node.filhos);
+      }
+    });
+  }
+  drawChildConnections(aulaData.nos);
+}
+
+function renderNodes(container) {
+  // Root node
+  const rootPos = nodePositions['root'];
+  if (rootPos) {
+    const rootEl = document.createElement('div');
+    rootEl.className = 'node level-0' + (selectedNodeId === 'root' ? ' selected' : '');
+    rootEl.style.left = (rootPos.x - rootPos.w / 2) + 'px';
+    rootEl.style.top = (rootPos.y - rootPos.h / 2) + 'px';
+    rootEl.innerHTML = `<span class="node-title">${aulaData.titulo || 'Aula'}</span>`;
+    if (aulaData.subtitulo) {
+      rootEl.innerHTML += `<span class="node-duration">${aulaData.subtitulo}</span>`;
+    }
+    rootEl.addEventListener('click', (e) => { e.stopPropagation(); selectedNodeId = null; document.getElementById('nodeEditor').classList.remove('open'); renderTree(); renderMap(); });
+    rootEl.addEventListener('dblclick', (e) => { e.stopPropagation(); zoomToNode(rootPos); });
+    container.appendChild(rootEl);
+  }
+
+  // All other nodes
+  function renderNodeElements(nodes, level) {
+    if (!nodes) return;
+    nodes.forEach(node => {
+      const pos = nodePositions[node.id];
+      if (!pos) return;
+
+      const el = document.createElement('div');
+      el.className = `node level-${level}` + (selectedNodeId === node.id ? ' selected' : '');
+      el.style.left = (pos.x - pos.w / 2) + 'px';
+      el.style.top = (pos.y - pos.h / 2) + 'px';
+
+      let html = '';
+      if (node.icone) html += `<span class="node-icon">${node.icone}</span>`;
+      html += `<span class="node-title">${node.titulo}</span>`;
+      if (node.duracao) html += `<span class="node-duration">${node.duracao}</span>`;
+      el.innerHTML = html;
+
+      el.addEventListener('click', (e) => { e.stopPropagation(); selectNode(node.id); });
+      el.addEventListener('dblclick', (e) => { e.stopPropagation(); zoomToNode(pos); });
+      container.appendChild(el);
+
+      if (node.filhos) renderNodeElements(node.filhos, level + 1);
+    });
+  }
+  renderNodeElements(aulaData.nos, 1);
+}
+
+// ===== ZOOM / PAN =====
+function onWheel(e) {
+  e.preventDefault();
+  const delta = e.deltaY > 0 ? 0.9 : 1.1;
+  const newZoom = Math.max(0.15, Math.min(3, mapZoom * delta));
+
+  // Zoom toward mouse position
+  const rect = document.getElementById('mapViewport').getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+
+  mapPanX -= mx * (newZoom - mapZoom) / mapZoom;
+  mapPanY -= my * (newZoom - mapZoom) / mapZoom;
+  mapZoom = newZoom;
+
+  updateMapTransform();
+}
+
+function onMouseDown(e) {
+  if (e.target.closest('.node')) return;
+  isDragging = true;
+  dragStartX = e.clientX - mapPanX;
+  dragStartY = e.clientY - mapPanY;
+}
+
+function onMouseMove(e) {
+  if (!isDragging) return;
+  mapPanX = e.clientX - dragStartX;
+  mapPanY = e.clientY - dragStartY;
+  updateMapTransform(true);
+}
+
+function onMouseUp() {
+  isDragging = false;
+}
+
+function updateMapTransform(fast) {
+  const container = document.getElementById('mapContainer');
+  container.classList.toggle('smooth-transition', !fast);
+  container.style.transform = `translate(${mapPanX}px, ${mapPanY}px) scale(${mapZoom})`;
+}
+
+function zoomToNode(pos) {
+  const viewport = document.getElementById('mapViewport');
+  const rect = viewport.getBoundingClientRect();
+
+  mapZoom = 1.5;
+  mapPanX = rect.width / 2 - pos.x * mapZoom;
+  mapPanY = rect.height / 2 - pos.y * mapZoom;
+
+  const container = document.getElementById('mapContainer');
+  container.classList.add('smooth-transition');
+  container.style.transform = `translate(${mapPanX}px, ${mapPanY}px) scale(${mapZoom})`;
+}
+
+function fitAll() {
+  const viewport = document.getElementById('mapViewport');
+  const rect = viewport.getBoundingClientRect();
+
+  // Find bounds of all nodes
+  let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+  Object.values(nodePositions).forEach(pos => {
+    minX = Math.min(minX, pos.x - pos.w / 2);
+    maxX = Math.max(maxX, pos.x + pos.w / 2);
+    minY = Math.min(minY, pos.y - pos.h / 2);
+    maxY = Math.max(maxY, pos.y + pos.h / 2);
+  });
+
+  if (minX === Infinity) {
+    // No nodes
+    mapZoom = 1;
+    mapPanX = 0;
+    mapPanY = 0;
+  } else {
+    const padding = 80;
+    const mapW = maxX - minX + padding * 2;
+    const mapH = maxY - minY + padding * 2;
+
+    mapZoom = Math.min(rect.width / mapW, rect.height / mapH, 1.5);
+    mapPanX = (rect.width - mapW * mapZoom) / 2 - (minX - padding) * mapZoom;
+    mapPanY = (rect.height - mapH * mapZoom) / 2 - (minY - padding) * mapZoom;
+  }
+
+  const container = document.getElementById('mapContainer');
+  container.classList.add('smooth-transition');
+  container.style.transform = `translate(${mapPanX}px, ${mapPanY}px) scale(${mapZoom})`;
+}
+
+// ===== PRESENTATION =====
+function flattenNodes() {
+  const result = [];
+  // Add root first
+  result.push({ id: 'root', titulo: aulaData.titulo, icone: '', duracao: '', notas: aulaData.subtitulo || '', level: 0 });
+
+  function traverse(nodes, level) {
+    if (!nodes) return;
+    nodes.forEach(node => {
+      result.push({ ...node, level });
+      if (node.filhos) traverse(node.filhos, level + 1);
+    });
+  }
+  traverse(aulaData.nos, 1);
+  return result;
+}
+
+function startPresentation() {
+  presFlatNodes = flattenNodes();
+  if (presFlatNodes.length === 0) return;
+  presCurrentIdx = 0;
+  presMode = true;
+
+  const overlay = document.getElementById('presentationOverlay');
+  overlay.classList.add('active');
+
+  // Clone the map into presentation
+  renderPresentationMap();
+  showPresentationSlide();
+}
+
+function renderPresentationMap() {
+  const container = document.getElementById('presContainer');
+  container.innerHTML = '';
+
+  // SVG
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('class', 'map-svg');
+  svg.style.width = '100%';
+  svg.style.height = '100%';
+  svg.style.position = 'absolute';
+  svg.style.top = '0';
+  svg.style.left = '0';
+  svg.style.pointerEvents = 'none';
+  svg.style.zIndex = '1';
+
+  // Draw connections
+  function drawConn(parentPos, childPos) {
+    const x1 = parentPos.x + parentPos.w / 2;
+    const y1 = parentPos.y;
+    const x2 = childPos.x - childPos.w / 2;
+    const y2 = childPos.y;
+    const midX = (x1 + x2) / 2;
+    const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', `M ${x1} ${y1} C ${midX} ${y1}, ${midX} ${y2}, ${x2} ${y2}`);
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', document.body.classList.contains('dark') ? '#4a4a65' : '#e0ddd8');
+    path.setAttribute('stroke-width', '2');
+    svg.appendChild(path);
+  }
+
+  const rootPos = nodePositions['root'];
+  if (rootPos) {
+    aulaData.nos.forEach(node => {
+      if (nodePositions[node.id]) drawConn(rootPos, nodePositions[node.id]);
+    });
+  }
+
+  function drawAllConns(nodes) {
+    if (!nodes) return;
+    nodes.forEach(node => {
+      if (node.filhos && nodePositions[node.id]) {
+        node.filhos.forEach(child => {
+          if (nodePositions[child.id]) drawConn(nodePositions[node.id], nodePositions[child.id]);
+        });
+        drawAllConns(node.filhos);
+      }
+    });
+  }
+  drawAllConns(aulaData.nos);
+  container.appendChild(svg);
+
+  // Render nodes
+  if (rootPos) {
+    const rootEl = document.createElement('div');
+    rootEl.className = 'node level-0';
+    rootEl.dataset.nodeId = 'root';
+    rootEl.style.left = (rootPos.x - rootPos.w / 2) + 'px';
+    rootEl.style.top = (rootPos.y - rootPos.h / 2) + 'px';
+    rootEl.innerHTML = `<span class="node-title">${aulaData.titulo || 'Aula'}</span>`;
+    container.appendChild(rootEl);
+  }
+
+  function renderPresNodes(nodes, level) {
+    if (!nodes) return;
+    nodes.forEach(node => {
+      const pos = nodePositions[node.id];
+      if (!pos) return;
+      const el = document.createElement('div');
+      el.className = `node level-${level}`;
+      el.dataset.nodeId = node.id;
+      el.style.left = (pos.x - pos.w / 2) + 'px';
+      el.style.top = (pos.y - pos.h / 2) + 'px';
+      let html = '';
+      if (node.icone) html += `<span class="node-icon">${node.icone}</span>`;
+      html += `<span class="node-title">${node.titulo}</span>`;
+      if (node.duracao) html += `<span class="node-duration">${node.duracao}</span>`;
+      el.innerHTML = html;
+      container.appendChild(el);
+      if (node.filhos) renderPresNodes(node.filhos, level + 1);
+    });
+  }
+  renderPresNodes(aulaData.nos, 1);
+}
+
+function showPresentationSlide() {
+  const current = presFlatNodes[presCurrentIdx];
+  if (!current) return;
+
+  const container = document.getElementById('presContainer');
+  const overlay = document.getElementById('presentationOverlay');
+  const viewportRect = overlay.querySelector('.presentation-viewport').getBoundingClientRect();
+
+  // Highlight current node, fade others
+  container.querySelectorAll('.node').forEach(el => {
+    if (el.dataset.nodeId === current.id) {
+      el.classList.add('focused');
+      el.classList.remove('faded');
+    } else {
+      el.classList.remove('focused');
+      el.classList.add('faded');
+    }
+  });
+
+  // Zoom to current node
+  const pos = nodePositions[current.id] || nodePositions['root'];
+  if (pos) {
+    const zoom = 2;
+    const tx = viewportRect.width / 2 - pos.x * zoom;
+    const ty = viewportRect.height / 2 - pos.y * zoom - 60;
+    container.style.transform = `translate(${tx}px, ${ty}px) scale(${zoom})`;
+  }
+
+  // Show content
+  const contentEl = document.getElementById('presContent');
+  contentEl.classList.remove('visible');
+  setTimeout(() => {
+    document.getElementById('presIcon').textContent = current.icone || '';
+    document.getElementById('presTitle').textContent = current.titulo;
+    document.getElementById('presDuration').textContent = current.duracao || '';
+    document.getElementById('presDuration').style.display = current.duracao ? 'inline-block' : 'none';
+    document.getElementById('presNotes').textContent = current.notas || '';
+    contentEl.classList.add('visible');
+  }, 300);
+
+  // Counter
+  document.getElementById('presCounter').textContent = `${presCurrentIdx + 1} / ${presFlatNodes.length}`;
+}
+
+function navigatePresentation(dir) {
+  const newIdx = presCurrentIdx + dir;
+  if (newIdx < 0 || newIdx >= presFlatNodes.length) return;
+  presCurrentIdx = newIdx;
+  showPresentationSlide();
+}
+
+function exitPresentation() {
+  presMode = false;
+  document.getElementById('presentationOverlay').classList.remove('active');
+}
+
+// ===== IMPORT / EXPORT =====
+function exportJSON() {
+  const blob = new Blob([JSON.stringify(aulaData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = (aulaData.titulo || 'aula').replace(/\s+/g, '_') + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importJSON(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev) => {
+    try {
+      const data = JSON.parse(ev.target.result);
+      if (data.titulo && data.nos) {
+        aulaData = data;
+        selectedNodeId = null;
+        save();
+        renderAll();
+        fitAll();
+      } else {
+        alert('Arquivo JSON inválido. Deve conter "titulo" e "nos".');
+      }
+    } catch(err) {
+      alert('Erro ao ler o arquivo JSON.');
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ===== START =====
+init();
+// Initial fit
+setTimeout(fitAll, 100);
+</script>
+</body>
+</html>

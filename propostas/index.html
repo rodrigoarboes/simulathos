@@ -1,0 +1,1501 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Proposta Comercial — VocêBancário / Academia do Assessor</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+
+<style>
+:root {
+  --brand-blue: #0088cc;
+  --brand-red: #a12026;
+  --brand-orange: #eb8105;
+  --brand-yellow: #ebe310;
+
+  --bg: #f7f5f0;
+  --bg-card: #ffffff;
+  --bg-soft: #efece5;
+  --text: #1a1a1a;
+  --text-soft: #5a5a5a;
+  --border: #d8d4c8;
+  --shadow: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+
+  --grade-a: #2d8c5c;
+  --grade-b: #d4951a;
+  --grade-c: #a12026;
+
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+body.dark {
+  --bg: #0f0f0f;
+  --bg-card: #1a1a1a;
+  --bg-soft: #222;
+  --text: #f0f0f0;
+  --text-soft: #a0a0a0;
+  --border: #2e2e2e;
+  --shadow: 0 2px 8px rgba(0,0,0,0.3);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.5;
+  transition: background 0.3s, color 0.3s;
+  min-height: 100vh;
+}
+
+/* ============ TOP BAR ============ */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  letter-spacing: -0.3px;
+}
+.brand-text span {
+  color: var(--brand-orange);
+  font-style: italic;
+  font-weight: 600;
+}
+.topbar-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+/* ============ BOTÕES ============ */
+button {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 9px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+button:hover {
+  border-color: var(--brand-blue);
+  color: var(--brand-blue);
+}
+button.primary {
+  background: var(--brand-blue);
+  color: white;
+  border-color: var(--brand-blue);
+  font-weight: 600;
+}
+button.primary:hover {
+  background: #006fa6;
+  color: white;
+}
+button.primary-lg {
+  background: var(--brand-blue);
+  color: white;
+  border-color: var(--brand-blue);
+  font-weight: 700;
+  font-size: 16px;
+  padding: 16px 32px;
+  border-radius: 10px;
+  width: 100%;
+  letter-spacing: -0.3px;
+}
+button.primary-lg:hover {
+  background: #006fa6;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,136,204,0.3);
+}
+button.ghost {
+  background: transparent;
+  border-color: var(--border);
+}
+
+/* ============ CONTAINER ============ */
+.container {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 32px 24px;
+}
+
+/* ============ TELAS ============ */
+.tela { display: none; }
+.tela.ativo { display: block; }
+
+/* ============ FORM STYLES ============ */
+.form-section {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px 28px 24px;
+  margin-bottom: 20px;
+}
+.form-section-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  letter-spacing: -0.3px;
+}
+.form-section-sub {
+  font-size: 13px;
+  color: var(--text-soft);
+  margin: 0 0 20px;
+}
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-soft);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.form-input {
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  width: 100%;
+  transition: border-color 0.2s;
+}
+.form-input:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+}
+.form-textarea {
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  width: 100%;
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.6;
+  transition: border-color 0.2s;
+}
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+}
+.form-textarea-sm {
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  width: 100%;
+  min-height: 80px;
+  resize: vertical;
+  line-height: 1.5;
+  transition: border-color 0.2s;
+}
+.form-textarea-sm:focus {
+  outline: none;
+  border-color: var(--brand-blue);
+}
+.form-row {
+  margin-bottom: 16px;
+}
+.form-row-inline {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+@media (max-width: 600px) {
+  .form-row-inline { grid-template-columns: 1fr; }
+}
+select.form-input {
+  cursor: pointer;
+  appearance: auto;
+}
+
+/* Dynamic rows */
+.dynamic-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.dynamic-row .form-input {
+  flex: 1;
+}
+.dynamic-row-wide {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  position: relative;
+  background: var(--bg);
+}
+.dynamic-row-wide .btn-remove {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+.btn-remove {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--brand-red);
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.btn-remove:hover {
+  background: var(--brand-red);
+  color: white;
+  border-color: var(--brand-red);
+}
+.btn-add {
+  font-size: 13px;
+  padding: 8px 14px;
+  margin-top: 8px;
+  color: var(--brand-blue);
+  border-color: var(--brand-blue);
+  background: transparent;
+}
+.btn-add:hover {
+  background: var(--brand-blue);
+  color: white;
+}
+
+/* Pilares */
+.pilar-block {
+  border-left: 4px solid var(--grade-b);
+  padding: 16px 20px;
+  margin-bottom: 14px;
+  background: var(--bg);
+  border-radius: 0 8px 8px 0;
+  transition: border-color 0.2s;
+}
+.pilar-block-title {
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.pilar-block .form-row-inline {
+  margin-bottom: 8px;
+}
+.pilar-block select {
+  max-width: 100px;
+}
+
+/* Testimonial rows */
+.card-mini {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 12px;
+  background: var(--bg);
+  position: relative;
+}
+.card-mini .btn-remove {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+.dep-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+@media (max-width: 600px) {
+  .dep-grid { grid-template-columns: 1fr; }
+}
+
+/* JSON section */
+.json-section {
+  margin-top: 8px;
+}
+.json-toggle {
+  font-size: 13px;
+  color: var(--text-soft);
+  cursor: pointer;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.json-toggle:hover { color: var(--brand-blue); }
+.json-body {
+  display: none;
+  margin-top: 12px;
+}
+.json-body.open { display: block; }
+.json-body textarea {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  min-height: 200px;
+}
+.json-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* About textarea */
+.about-hint {
+  font-size: 11px;
+  color: var(--text-soft);
+  margin-top: 4px;
+  font-style: italic;
+}
+
+/* ============ TELA 2: SLIDES ============ */
+.slides-container {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+}
+
+.slides-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+/* Slide viewport */
+.slide-viewport {
+  aspect-ratio: 16 / 9;
+  position: relative;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+body.dark .slide-viewport {
+  background: #14181f;
+}
+
+.slide {
+  display: none;
+  position: absolute;
+  inset: 0;
+  flex-direction: column;
+  padding: 48px 56px;
+  overflow-y: auto;
+  animation: slideIn 0.3s ease;
+}
+.slide.active { display: flex; }
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.slide::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand-blue), var(--brand-orange));
+}
+
+.slide-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: #888;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.slide h2 {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 12px;
+  letter-spacing: -0.5px;
+}
+body.dark .slide h2 { color: #f0f0f0; }
+
+.slide-divider {
+  width: 60px;
+  height: 3px;
+  background: var(--brand-blue);
+  margin-bottom: 24px;
+  border-radius: 2px;
+}
+
+.slide p, .slide li {
+  font-size: 15px;
+  line-height: 1.7;
+  color: #3a3a3a;
+}
+body.dark .slide p, body.dark .slide li { color: #c0c0c0; }
+
+/* Slide 1 — Capa */
+.slide-capa {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(0,136,204,0.06) 100%);
+}
+body.dark .slide-capa {
+  background: linear-gradient(135deg, #14181f 0%, rgba(0,136,204,0.12) 100%);
+}
+.capa-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.capa-logo {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 36px;
+  color: var(--brand-blue);
+  letter-spacing: -1px;
+}
+.capa-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 3px;
+  color: var(--brand-orange);
+  font-weight: 600;
+}
+.capa-line {
+  width: 60px;
+  height: 2px;
+  background: var(--brand-blue);
+  margin: 8px 0;
+}
+.slide-capa h1 {
+  font-family: var(--font-display);
+  font-size: 42px;
+  font-weight: 800;
+  color: #1a1a1a;
+  margin: 8px 0 4px;
+  letter-spacing: -1px;
+}
+body.dark .slide-capa h1 { color: #f5f3ee; }
+.capa-date {
+  font-size: 14px;
+  color: #666;
+}
+body.dark .capa-date { color: #999; }
+.capa-author {
+  margin-top: 24px;
+}
+.capa-author p {
+  font-size: 14px;
+  color: #444;
+  margin: 0;
+}
+body.dark .capa-author p { color: #bbb; }
+.capa-social {
+  font-size: 12px !important;
+  color: #888 !important;
+  margin-top: 2px !important;
+}
+
+/* Slide 2 — Quote */
+.slide-quote {
+  justify-content: center;
+  padding: 48px 64px;
+}
+.quote-block {
+  border-left: 4px solid var(--brand-blue);
+  padding: 24px 32px;
+  position: relative;
+}
+.quote-mark {
+  font-family: var(--font-display);
+  font-size: 72px;
+  color: var(--brand-blue);
+  opacity: 0.3;
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  line-height: 1;
+}
+.quote-text {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-style: italic;
+  line-height: 1.8;
+  color: #2a2a2a;
+  margin: 0 0 16px;
+}
+body.dark .quote-text { color: #d0d0d0; }
+.quote-author {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin: 0;
+}
+body.dark .quote-author { color: #aaa; }
+
+/* Slide 3 — Goals */
+.goals-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.goal-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: rgba(0,136,204,0.04);
+  border-left: 3px solid var(--brand-blue);
+  border-radius: 0 8px 8px 0;
+  font-size: 15px;
+  color: #2a2a2a;
+}
+body.dark .goal-row {
+  background: rgba(0,136,204,0.08);
+  color: #d0d0d0;
+}
+.goal-check {
+  color: var(--brand-blue);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Slide 4 — Feedback */
+.slide-feedback .feedback-block {
+  border-left: 4px solid var(--brand-orange);
+  padding: 20px 24px;
+  background: rgba(235,129,5,0.04);
+  border-radius: 0 8px 8px 0;
+}
+body.dark .slide-feedback .feedback-block {
+  background: rgba(235,129,5,0.08);
+}
+.feedback-block p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.8;
+}
+
+/* Slide 5 — Pilares */
+.pilares-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+@media (max-width: 700px) {
+  .pilares-grid { grid-template-columns: 1fr; }
+}
+.pilar-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  background: var(--bg-card);
+}
+body.dark .pilar-card {
+  background: #1e1e1e;
+  border-color: #333;
+}
+.pilar-card h3 {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #666;
+  margin: 0 0 12px;
+}
+body.dark .pilar-card h3 { color: #999; }
+.pilar-grade {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 800;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+.pilar-card p {
+  font-size: 13px;
+  color: #555;
+  margin: 0;
+  line-height: 1.5;
+}
+body.dark .pilar-card p { color: #aaa; }
+
+/* Slide 6 — Strengths */
+.strengths-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.strength-chip {
+  padding: 6px 14px;
+  background: rgba(0,136,204,0.08);
+  border: 1px solid rgba(0,136,204,0.2);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--brand-blue);
+}
+body.dark .strength-chip {
+  background: rgba(0,136,204,0.15);
+  border-color: rgba(0,136,204,0.3);
+}
+.strengths-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 700px) {
+  .strengths-details { grid-template-columns: 1fr; }
+}
+.strength-detail-card {
+  padding: 14px 18px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg-card);
+}
+body.dark .strength-detail-card {
+  background: #1e1e1e;
+  border-color: #333;
+}
+.strength-detail-card strong {
+  font-size: 13px;
+  color: var(--brand-blue);
+  display: block;
+  margin-bottom: 6px;
+}
+.strength-detail-card p {
+  margin: 0;
+  font-size: 13px;
+  color: #555;
+  line-height: 1.5;
+}
+body.dark .strength-detail-card p { color: #aaa; }
+
+/* Slide 7 — Caminho */
+.slide-caminho {
+  position: relative;
+}
+.caminho-intro {
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 18px;
+  color: #2a2a2a;
+}
+body.dark .caminho-intro { color: #d0d0d0; }
+.caminho-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px;
+}
+.caminho-lista li {
+  padding: 8px 0 8px 24px;
+  position: relative;
+  font-size: 15px;
+}
+.caminho-lista li::before {
+  content: "\2022";
+  position: absolute;
+  left: 8px;
+  color: var(--brand-blue);
+  font-weight: 700;
+}
+.caminho-turma {
+  padding: 14px 18px;
+  background: rgba(0,136,204,0.06);
+  border-radius: 8px;
+  font-size: 15px;
+  color: #333;
+  border-left: 3px solid var(--brand-blue);
+}
+body.dark .caminho-turma {
+  background: rgba(0,136,204,0.1);
+  color: #ccc;
+}
+
+/* Slide 8 — Testimonials */
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 700px) {
+  .testimonials-grid { grid-template-columns: 1fr; }
+}
+.testimonial-card {
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px;
+  background: var(--bg-card);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+}
+body.dark .testimonial-card {
+  background: #1e1e1e;
+  border-color: #333;
+}
+.dep-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.dep-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.dep-avatar-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--brand-blue);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+}
+.dep-info strong {
+  display: block;
+  font-size: 14px;
+  color: #1a1a1a;
+}
+body.dark .dep-info strong { color: #eee; }
+.dep-info span {
+  font-size: 12px;
+  color: #777;
+}
+body.dark .dep-info span { color: #999; }
+.dep-quote {
+  font-size: 13px;
+  font-style: italic;
+  color: #444;
+  line-height: 1.6;
+  margin: 0;
+}
+body.dark .dep-quote { color: #bbb; }
+
+/* Slide 9 — Passos */
+.passos-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 28px;
+}
+.passo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 16px;
+  color: #2a2a2a;
+}
+body.dark .passo { color: #d0d0d0; }
+.passo-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--brand-blue);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+.passos-cta {
+  padding: 20px 24px;
+  background: rgba(0,136,204,0.04);
+  border-radius: 10px;
+  border: 1px dashed var(--brand-blue);
+  text-align: center;
+}
+.passos-cta p {
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-style: italic;
+  color: #333;
+  margin: 0;
+}
+body.dark .passos-cta {
+  background: rgba(0,136,204,0.08);
+}
+body.dark .passos-cta p { color: #ccc; }
+
+/* Slide 10 — Final */
+.slide-final {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: linear-gradient(135deg, #faf9f7 0%, rgba(0,136,204,0.04) 50%, rgba(235,129,5,0.04) 100%);
+}
+body.dark .slide-final {
+  background: linear-gradient(135deg, #14181f 0%, rgba(0,136,204,0.1) 50%, rgba(235,129,5,0.08) 100%);
+}
+.final-content {
+  max-width: 560px;
+}
+.final-quote {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 600;
+  font-style: italic;
+  line-height: 1.6;
+  color: #1a1a1a;
+  margin: 0 0 20px;
+}
+body.dark .final-quote { color: #f0f0f0; }
+.final-author {
+  font-size: 15px;
+  font-weight: 600;
+  color: #555;
+  margin: 0 0 28px;
+}
+body.dark .final-author { color: #aaa; }
+.final-social p {
+  font-size: 14px;
+  color: var(--brand-blue);
+  margin: 4px 0;
+}
+
+/* Slides Nav */
+.slides-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
+  background: var(--bg-card);
+}
+.slides-nav-dots {
+  display: flex;
+  gap: 6px;
+}
+.slide-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  padding: 0;
+}
+.slide-dot:hover {
+  background: var(--brand-blue);
+  opacity: 0.6;
+}
+.slide-dot.active {
+  background: var(--brand-blue);
+  width: 28px;
+  border-radius: 5px;
+}
+.slide-nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.slide-nav-btn {
+  padding: 6px 14px;
+  font-size: 13px;
+}
+.slide-counter {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-soft);
+  min-width: 50px;
+  text-align: center;
+}
+
+/* ============ MODO APRESENTAÇÃO ============ */
+.slides-container.modo-apresentacao {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  border-radius: 0;
+  border: none;
+  display: flex;
+  flex-direction: column;
+}
+.slides-container.modo-apresentacao .slide-viewport {
+  aspect-ratio: auto;
+  flex: 1;
+}
+.slides-container.modo-apresentacao .slide {
+  padding: 5vh 8vw;
+}
+.slides-container.modo-apresentacao .slide h2 { font-size: 3.2vw; }
+.slides-container.modo-apresentacao .slide-capa h1 { font-size: 5vw; }
+.slides-container.modo-apresentacao .slide p,
+.slides-container.modo-apresentacao .slide li { font-size: 1.6vw; }
+.slides-container.modo-apresentacao .quote-text { font-size: 2vw; }
+.slides-container.modo-apresentacao .final-quote { font-size: 2.5vw; }
+.slides-container.modo-apresentacao .pilar-grade { font-size: 5vw; }
+.slides-container.modo-apresentacao .slides-nav {
+  padding: 12px 32px;
+}
+
+.btn-sair-apresentacao {
+  display: none;
+  position: fixed;
+  top: 16px;
+  right: 20px;
+  z-index: 10001;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-sair-apresentacao:hover {
+  background: rgba(0,0,0,0.85);
+}
+.btn-sair-apresentacao.visible {
+  display: block;
+}
+
+/* ============ PRINT ============ */
+@media print {
+  body { background: white !important; }
+  body.dark { --bg: #fff; --bg-card: #fff; --text: #1a1a1a; --text-soft: #555; --border: #ddd; }
+  .topbar, .slides-toolbar, .slides-nav, .btn-sair-apresentacao,
+  #tela-form { display: none !important; }
+  .tela { display: block !important; }
+  .container { max-width: none; padding: 0; }
+  .slides-container {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .slide-viewport {
+    aspect-ratio: auto;
+  }
+  .slide {
+    display: flex !important;
+    position: relative !important;
+    page-break-after: always;
+    break-after: page;
+    min-height: 100vh;
+    padding: 48px 56px;
+  }
+  .slide::after {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  @page {
+    size: landscape;
+    margin: 0;
+  }
+}
+
+/* ============ HERO ============ */
+.form-hero {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.form-hero h1 {
+  font-family: var(--font-display);
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  margin: 0 0 8px;
+}
+.form-hero h1 em {
+  color: var(--brand-blue);
+  font-style: italic;
+  font-weight: 600;
+}
+.form-hero p {
+  color: var(--text-soft);
+  font-size: 15px;
+  margin: 0;
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="brand">
+    <span class="brand-text">Voc&ecirc;Banc&aacute;rio &middot; <span>Proposta Comercial</span></span>
+  </div>
+  <div class="topbar-actions">
+    <button id="btn-voltar-form" style="display:none;" onclick="mostrarTela('form')">&#8592; Editar dados</button>
+    <button id="btn-dark-toggle" onclick="toggleDarkMode()">&#9790; Modo escuro</button>
+  </div>
+</div>
+
+<!-- TELA 1: FORMULÁRIO -->
+<div class="tela ativo" id="tela-form">
+<div class="container">
+
+  <div class="form-hero">
+    <h1>Gerador de <em>Propostas</em></h1>
+    <p>Preencha os dados do prospect para gerar uma proposta personalizada.</p>
+  </div>
+
+  <!-- Section 1: Dados do Prospect -->
+  <div class="form-section">
+    <h3 class="form-section-title">Dados do Prospect</h3>
+    <p class="form-section-sub">Informações básicas para personalizar a proposta.</p>
+
+    <div class="form-row">
+      <label class="form-label" for="inp-nome">Nome do prospect</label>
+      <input type="text" id="inp-nome" class="form-input" placeholder="Ex: João Silva"/>
+    </div>
+
+    <div class="form-row-inline">
+      <div>
+        <label class="form-label" for="inp-data-envio">Data de envio</label>
+        <input type="date" id="inp-data-envio" class="form-input"/>
+      </div>
+      <div>
+        <label class="form-label" for="inp-data-inicio">Data de início da turma</label>
+        <input type="date" id="inp-data-inicio" class="form-input"/>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Metas -->
+  <div class="form-section">
+    <h3 class="form-section-title">Metas do Prospect</h3>
+    <p class="form-section-sub">O que o prospect deseja alcançar com a transição.</p>
+
+    <div id="metas-container">
+      <div class="dynamic-row">
+        <input type="text" class="meta-input form-input" placeholder="Ex: Sair do varejo bancário"/>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      </div>
+      <div class="dynamic-row">
+        <input type="text" class="meta-input form-input" placeholder="Ex: Desenvolver repertório técnico"/>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      </div>
+      <div class="dynamic-row">
+        <input type="text" class="meta-input form-input" placeholder="Ex: Conquistar a certificação CEA"/>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      </div>
+    </div>
+    <button type="button" class="btn-add" onclick="Propostas.adicionarMeta(document.getElementById('metas-container'), '')">+ Adicionar meta</button>
+  </div>
+
+  <!-- Section 3: Avaliação Geral -->
+  <div class="form-section">
+    <h3 class="form-section-title">Avaliação Geral</h3>
+    <p class="form-section-sub">Seu parecer pessoal sobre o prospect. Escreva como se estivesse falando diretamente com ele.</p>
+
+    <div class="form-row">
+      <label class="form-label" for="inp-feedback">Texto de feedback</label>
+      <textarea id="inp-feedback" class="form-textarea" placeholder="Ex: Cara, eu vi no seu perfil que você tem uma vivência comercial forte. Isso é ouro no mercado de assessoria. O que te falta não é talento — é método e direção. A Academia foi feita exatamente pra isso."></textarea>
+    </div>
+  </div>
+
+  <!-- Section 4: Avaliação por Pilares -->
+  <div class="form-section">
+    <h3 class="form-section-title">Avaliação por Pilares</h3>
+    <p class="form-section-sub">Avalie o prospect em cada pilar (A = excelente, B = bom, C = precisa desenvolver).</p>
+
+    <div class="pilar-block" id="pilar-block-1" style="border-left-color: #d4951a;">
+      <div class="pilar-block-title">Ambiência / Comercial</div>
+      <div class="form-row-inline">
+        <div>
+          <label class="form-label" for="sel-pilar-1">Nota</label>
+          <select id="sel-pilar-1" class="form-input" onchange="Propostas.atualizarBordaPilar(1)">
+            <option value="A">A — Excelente</option>
+            <option value="B" selected>B — Bom</option>
+            <option value="C">C — Precisa desenvolver</option>
+          </select>
+        </div>
+        <div></div>
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="txt-pilar-1">Comentário</label>
+        <textarea id="txt-pilar-1" class="form-textarea-sm" placeholder="Ex: Boa desenvoltura comercial, experiência com atendimento a clientes de alta renda."></textarea>
+      </div>
+    </div>
+
+    <div class="pilar-block" id="pilar-block-2" style="border-left-color: #d4951a;">
+      <div class="pilar-block-title">Conhecimento Técnico / Macro</div>
+      <div class="form-row-inline">
+        <div>
+          <label class="form-label" for="sel-pilar-2">Nota</label>
+          <select id="sel-pilar-2" class="form-input" onchange="Propostas.atualizarBordaPilar(2)">
+            <option value="A">A — Excelente</option>
+            <option value="B" selected>B — Bom</option>
+            <option value="C">C — Precisa desenvolver</option>
+          </select>
+        </div>
+        <div></div>
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="txt-pilar-2">Comentário</label>
+        <textarea id="txt-pilar-2" class="form-textarea-sm" placeholder="Ex: Conhece os principais indicadores macro, mas precisa aprofundar em renda variável."></textarea>
+      </div>
+    </div>
+
+    <div class="pilar-block" id="pilar-block-3" style="border-left-color: #d4951a;">
+      <div class="pilar-block-title">Produtos / Recomendação</div>
+      <div class="form-row-inline">
+        <div>
+          <label class="form-label" for="sel-pilar-3">Nota</label>
+          <select id="sel-pilar-3" class="form-input" onchange="Propostas.atualizarBordaPilar(3)">
+            <option value="A">A — Excelente</option>
+            <option value="B" selected>B — Bom</option>
+            <option value="C">C — Precisa desenvolver</option>
+          </select>
+        </div>
+        <div></div>
+      </div>
+      <div class="form-row">
+        <label class="form-label" for="txt-pilar-3">Comentário</label>
+        <textarea id="txt-pilar-3" class="form-textarea-sm" placeholder="Ex: Precisa desenvolver a visão de produto e construção de carteira diversificada."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Pontos Fortes -->
+  <div class="form-section">
+    <h3 class="form-section-title">Pontos Fortes</h3>
+    <p class="form-section-sub">Destaque as qualidades do prospect em duas formas: lista rápida e detalhamento por pilar.</p>
+
+    <label class="form-label">Lista de pontos fortes</label>
+    <div id="strengths-list-container">
+      <div class="dynamic-row">
+        <input type="text" class="strength-input form-input" placeholder="Ex: Comunicação clara"/>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      </div>
+      <div class="dynamic-row">
+        <input type="text" class="strength-input form-input" placeholder="Ex: Experiência com alta renda"/>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      </div>
+      <div class="dynamic-row">
+        <input type="text" class="strength-input form-input" placeholder="Ex: Perfil empreendedor"/>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      </div>
+    </div>
+    <button type="button" class="btn-add" onclick="Propostas.adicionarStrength(document.getElementById('strengths-list-container'), '')">+ Adicionar ponto forte</button>
+
+    <div style="margin-top: 24px;">
+      <label class="form-label">Detalhamento por pilar</label>
+      <div id="strengths-table-container">
+        <div class="strength-row dynamic-row-wide">
+          <input type="text" class="st-pilar form-input" placeholder="Pilar (ex: Comercial)"/>
+          <textarea class="st-comentario form-textarea-sm" placeholder="Comentário detalhado sobre este ponto forte"></textarea>
+          <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+        <div class="strength-row dynamic-row-wide">
+          <input type="text" class="st-pilar form-input" placeholder="Pilar (ex: Técnico)"/>
+          <textarea class="st-comentario form-textarea-sm" placeholder="Comentário detalhado sobre este ponto forte"></textarea>
+          <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+        </div>
+      </div>
+      <button type="button" class="btn-add" onclick="Propostas.adicionarStrengthRow(document.getElementById('strengths-table-container'), '', '')">+ Adicionar detalhe</button>
+    </div>
+  </div>
+
+  <!-- Section 6: Depoimentos -->
+  <div class="form-section">
+    <h3 class="form-section-title">Depoimentos</h3>
+    <p class="form-section-sub">Depoimentos de alunos que já passaram pela Academia.</p>
+
+    <div id="testimonials-container">
+      <div class="testimonial-row card-mini">
+        <div class="dep-grid">
+          <input type="text" class="dep-nome form-input" placeholder="Nome" value=""/>
+          <input type="text" class="dep-cargo form-input" placeholder="Cargo" value=""/>
+          <input type="text" class="dep-empresa form-input" placeholder="Empresa" value=""/>
+          <input type="text" class="dep-foto form-input" placeholder="URL da foto (opcional)" value=""/>
+        </div>
+        <textarea class="dep-texto form-textarea-sm" placeholder="Depoimento do aluno"></textarea>
+        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      </div>
+    </div>
+    <button type="button" class="btn-add" onclick="Propostas.adicionarDepoimento(document.getElementById('testimonials-container'), {})">+ Adicionar depoimento</button>
+  </div>
+
+  <!-- Section 7: About Text -->
+  <div class="form-section">
+    <h3 class="form-section-title">Texto "Quem Sou Eu"</h3>
+    <p class="form-section-sub">Texto que aparece no slide de apresentação pessoal. Já vem pré-preenchido.</p>
+
+    <div class="form-row">
+      <label class="form-label" for="inp-about">Sobre o Rodrigo</label>
+      <textarea id="inp-about" class="form-textarea" placeholder=""></textarea>
+      <p class="about-hint">Este texto vem pré-preenchido. Edite se quiser personalizar para este prospect.</p>
+    </div>
+  </div>
+
+  <!-- Section 8: Importar JSON -->
+  <div class="form-section">
+    <div class="json-section">
+      <div class="json-toggle" onclick="toggleJson()">
+        <span id="json-arrow">&#9654;</span> Importar / Exportar JSON
+      </div>
+      <div class="json-body" id="json-body">
+        <textarea id="inp-json" class="form-textarea-sm" style="font-family: var(--font-mono); font-size: 12px; min-height: 180px;" placeholder='Cole aqui o JSON completo da proposta...'></textarea>
+        <div class="json-actions">
+          <button type="button" onclick="doImportarJson()">Importar</button>
+          <button type="button" onclick="doExportarJson()">Exportar JSON</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div style="margin-top: 24px;">
+    <button type="button" class="primary-lg" onclick="gerarEMostrar()">Gerar Proposta &#8594;</button>
+  </div>
+
+</div>
+</div>
+
+<!-- TELA 2: SLIDES -->
+<div class="tela" id="tela-slides">
+<div class="container" style="max-width: 960px;">
+
+  <div class="slides-toolbar">
+    <button onclick="entrarModoApresentacao()">&#9724; Modo apresentação</button>
+    <button onclick="imprimirProposta()">&#128424; Imprimir / PDF</button>
+    <button onclick="copiarTexto()">&#128203; Copiar texto</button>
+  </div>
+
+  <div class="slides-container" id="slides-container">
+    <div class="slide-viewport" id="slide-viewport">
+      <!-- slides injetados aqui -->
+    </div>
+    <div class="slides-nav">
+      <div class="slides-nav-dots" id="slides-dots"></div>
+      <div class="slide-nav-right">
+        <button class="slide-nav-btn" onclick="Propostas.slideAnterior()">&#8592; Anterior</button>
+        <span class="slide-counter" id="slide-counter">1 / 10</span>
+        <button class="slide-nav-btn" onclick="Propostas.slideProximo()">Próximo &#8594;</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- Botão sair apresentação -->
+<button class="btn-sair-apresentacao" id="btn-sair-apresentacao" onclick="sairModoApresentacao()">Esc &middot; Sair</button>
+
+<script src="js/propostas.js"></script>
+<script>
+(function() {
+  'use strict';
+
+  /* ===== INICIALIZAÇÃO ===== */
+  document.addEventListener('DOMContentLoaded', function() {
+    // Defaults
+    document.getElementById('inp-data-envio').value = Propostas.hoje();
+    document.getElementById('inp-data-inicio').value = Propostas.proximaQuarta();
+    document.getElementById('inp-about').value = Propostas.ABOUT_TEXT_DEFAULT;
+
+    // Carregar estado salvo
+    Propostas.carregarEstado();
+
+    // Dark mode
+    if (localStorage.getItem('propostas_dark') === '1') {
+      document.body.classList.add('dark');
+      document.getElementById('btn-dark-toggle').innerHTML = '&#9788; Modo claro';
+    }
+
+    // Auto-save a cada mudança
+    document.getElementById('tela-form').addEventListener('input', function() {
+      Propostas.salvarEstado();
+    });
+  });
+
+  /* ===== NAVEGAÇÃO ENTRE TELAS ===== */
+  window.mostrarTela = function(tela) {
+    document.getElementById('tela-form').classList.toggle('ativo', tela === 'form');
+    document.getElementById('tela-slides').classList.toggle('ativo', tela === 'slides');
+    document.getElementById('btn-voltar-form').style.display = (tela === 'slides') ? 'inline-block' : 'none';
+    if (tela === 'form') window.scrollTo(0, 0);
+  };
+
+  /* ===== DARK MODE ===== */
+  window.toggleDarkMode = function() {
+    document.body.classList.toggle('dark');
+    var isDark = document.body.classList.contains('dark');
+    localStorage.setItem('propostas_dark', isDark ? '1' : '0');
+    document.getElementById('btn-dark-toggle').innerHTML = isDark ? '&#9788; Modo claro' : '&#9790; Modo escuro';
+  };
+
+  /* ===== GERAR E MOSTRAR ===== */
+  window.gerarEMostrar = function() {
+    Propostas.salvarEstado();
+    var dados = Propostas.lerFormulario();
+
+    if (!dados.prospectName) {
+      alert('Por favor, preencha o nome do prospect.');
+      document.getElementById('inp-nome').focus();
+      return;
+    }
+
+    Propostas.renderizarSlides(dados);
+    mostrarTela('slides');
+    window.scrollTo(0, 0);
+  };
+
+  /* ===== JSON ===== */
+  window.toggleJson = function() {
+    var body = document.getElementById('json-body');
+    var arrow = document.getElementById('json-arrow');
+    body.classList.toggle('open');
+    arrow.innerHTML = body.classList.contains('open') ? '&#9660;' : '&#9654;';
+  };
+
+  window.doImportarJson = function() {
+    var raw = document.getElementById('inp-json').value.trim();
+    if (!raw) { alert('Cole o JSON antes de importar.'); return; }
+    var ok = Propostas.importarJSON(raw);
+    if (ok) alert('Dados importados com sucesso!');
+  };
+
+  window.doExportarJson = function() {
+    var json = Propostas.exportarJSON();
+    document.getElementById('inp-json').value = json;
+
+    // Copy to clipboard
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(json).then(function() {
+        alert('JSON copiado para a área de transferência!');
+      });
+    } else {
+      var textarea = document.getElementById('inp-json');
+      textarea.select();
+      document.execCommand('copy');
+      alert('JSON copiado!');
+    }
+  };
+
+  /* ===== MODO APRESENTAÇÃO ===== */
+  window.entrarModoApresentacao = function() {
+    document.getElementById('slides-container').classList.add('modo-apresentacao');
+    document.getElementById('btn-sair-apresentacao').classList.add('visible');
+
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(function() {});
+    }
+  };
+
+  window.sairModoApresentacao = function() {
+    document.getElementById('slides-container').classList.remove('modo-apresentacao');
+    document.getElementById('btn-sair-apresentacao').classList.remove('visible');
+
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(function() {});
+    }
+  };
+
+  /* ===== IMPRIMIR ===== */
+  window.imprimirProposta = function() {
+    window.print();
+  };
+
+  /* ===== COPIAR TEXTO ===== */
+  window.copiarTexto = function() {
+    var viewport = document.getElementById('slide-viewport');
+    var text = viewport.innerText || viewport.textContent;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(text).then(function() {
+        alert('Texto copiado!');
+      });
+    } else {
+      // Fallback
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      alert('Texto copiado!');
+    }
+  };
+
+  /* ===== KEYBOARD NAV ===== */
+  document.addEventListener('keydown', function(e) {
+    // Only when slides are visible
+    if (!document.getElementById('tela-slides').classList.contains('ativo')) return;
+
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      Propostas.slideProximo();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      Propostas.slideAnterior();
+    } else if (e.key === 'Escape') {
+      sairModoApresentacao();
+    }
+  });
+
+  /* ===== FULLSCREEN CHANGE ===== */
+  document.addEventListener('fullscreenchange', function() {
+    if (!document.fullscreenElement) {
+      sairModoApresentacao();
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>
