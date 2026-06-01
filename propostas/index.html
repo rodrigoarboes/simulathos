@@ -1160,6 +1160,245 @@ button:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
 .hidden { display: none !important; }
+
+/* ============ PROPOSAL THEME TOGGLE ============ */
+.theme-toggle-group {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.theme-opt {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border: 2px solid var(--border);
+  border-radius: 30px;
+  background: var(--bg-card);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+.theme-opt:hover {
+  border-color: var(--brand-blue);
+}
+.theme-opt.active {
+  border-color: var(--brand-blue);
+  background: rgba(0,136,204,0.08);
+  color: var(--brand-blue);
+  font-weight: 600;
+}
+
+/* ============ PROPOSAL DARK THEME ============ */
+.proposal-theme-dark {
+  background: #0f0f0f !important;
+  color: #f0f0f0 !important;
+}
+.proposal-theme-dark .proposal-header {
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #222 100%) !important;
+  border-bottom: 2px solid var(--brand-blue);
+}
+.proposal-theme-dark .proposal-section {
+  background: #1a1a1a;
+  border-bottom-color: #2a2a2a;
+}
+.proposal-theme-dark .proposal-section h2 {
+  color: #f0f0f0;
+}
+.proposal-theme-dark .proposal-section p {
+  color: #ccc !important;
+}
+.proposal-theme-dark .proposal-section .section-bar {
+  background: var(--brand-orange);
+}
+.proposal-theme-dark .mentor-card-proposal {
+  background: #1e1e1e !important;
+}
+.proposal-theme-dark .mentor-card-proposal .mentor-info h3 { color: #f0f0f0; }
+.proposal-theme-dark .mentor-card-proposal .mentor-info .bio { color: #bbb; }
+.proposal-theme-dark .mentor-card-proposal .mentor-info .creds { color: var(--brand-blue); }
+.proposal-theme-dark .benefits-list li {
+  border-bottom-color: #2a2a2a;
+  color: #ddd;
+}
+.proposal-theme-dark .case-card {
+  background: #222 !important;
+  border-left-color: var(--brand-blue);
+}
+.proposal-theme-dark .case-card h4 { color: #f0f0f0; }
+.proposal-theme-dark .case-card p { color: #aaa !important; }
+.proposal-theme-dark .price-display {
+  background: linear-gradient(135deg, rgba(0,136,204,0.1), rgba(0,136,204,0.05)) !important;
+  border: 1px solid #2a2a2a;
+}
+.proposal-theme-dark .price-display .cash-price { color: #aaa; }
+.proposal-theme-dark .price-display .original-price { color: #666; }
+.proposal-theme-dark .proposal-cta {
+  background: linear-gradient(135deg, #0a0a0a, #1a1a1a) !important;
+  border-top: 2px solid var(--brand-blue);
+}
+.proposal-theme-dark .proposal-footer {
+  background: #0a0a0a !important;
+  color: #666 !important;
+}
+.proposal-theme-dark .callout {
+  background: #1e1e1e;
+  color: #ccc;
+}
+.proposal-theme-dark .badge-blue {
+  background: rgba(0,136,204,0.2);
+}
+
+/* ============ SLIDE PRESENTATION ============ */
+.slide-overlay {
+  position: fixed;
+  inset: 0;
+  background: #0a0a0a;
+  z-index: 9000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.slide-viewport {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.slide-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: translateX(40px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  pointer-events: none;
+  overflow-y: auto;
+  padding: 40px 20px;
+}
+.slide.active {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.slide.prev {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+.slide-content {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 60px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  color: #1a1a1a;
+}
+.slide-content.dark {
+  background: #1a1a1a;
+  color: #f0f0f0;
+}
+.slide-content.dark h1,
+.slide-content.dark h2,
+.slide-content.dark h3,
+.slide-content.dark h4 { color: #f0f0f0; }
+.slide-content.dark p { color: #ccc !important; }
+.slide-content.dark .mentor-card-proposal { background: #1e1e1e; }
+.slide-content.dark .mentor-card-proposal .mentor-info h3 { color: #f0f0f0; }
+.slide-content.dark .mentor-card-proposal .mentor-info .bio { color: #bbb; }
+.slide-content.dark .benefits-list li { border-bottom-color: #2a2a2a; color: #ddd; }
+.slide-content.dark .case-card { background: #222; border-left-color: var(--brand-blue); }
+.slide-content.dark .case-card h4 { color: #f0f0f0; }
+.slide-content.dark .case-card p { color: #aaa !important; }
+.slide-content.dark .price-display { background: linear-gradient(135deg, rgba(0,136,204,0.12), rgba(0,136,204,0.05)); border: 1px solid #333; }
+.slide-content.dark .price-display .cash-price { color: #aaa; }
+.slide-content.dark .price-display .original-price { color: #666; }
+.slide-content.dark .proposal-footer { background: #111; color: #555; }
+.slide-content.dark .callout { background: #222; color: #ccc; }
+
+.slide-nav-area {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 15%;
+  cursor: pointer;
+  z-index: 10;
+}
+.slide-nav-area.left { left: 0; }
+.slide-nav-area.right { right: 0; }
+.slide-nav-area:hover { background: rgba(255,255,255,0.03); }
+
+.slide-bottombar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 14px 24px;
+  background: #111;
+  border-top: 1px solid #222;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+.slide-counter {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: #888;
+}
+.slide-dots {
+  display: flex;
+  gap: 6px;
+}
+.slide-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #333;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.slide-dot.active {
+  background: var(--brand-blue);
+}
+.slide-btn {
+  padding: 8px 16px;
+  border: 1px solid #333;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: #ccc;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: var(--font-body);
+  transition: all 0.2s;
+}
+.slide-btn:hover {
+  border-color: var(--brand-blue);
+  color: white;
+}
+.slide-btn-export {
+  background: var(--brand-blue) !important;
+  border-color: var(--brand-blue) !important;
+  color: white !important;
+  font-weight: 600;
+}
+.slide-btn-export:hover {
+  background: #006fa6 !important;
+}
+.slide-esc-hint {
+  font-size: 12px;
+  color: #555;
+}
 </style>
 </head>
 <body>
@@ -1373,6 +1612,20 @@ button:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
         </div>
 
         <div class="form-row">
+          <label class="form-label">Tema da Proposta</label>
+          <div class="theme-toggle-group">
+            <button type="button" class="theme-opt active" data-theme="light" onclick="selectProposalTheme('light')">
+              <span style="background:#f7f5f0;border:1px solid #d8d4c8;width:24px;height:24px;border-radius:6px;display:inline-block;vertical-align:middle"></span>
+              Claro
+            </button>
+            <button type="button" class="theme-opt" data-theme="dark" onclick="selectProposalTheme('dark')">
+              <span style="background:#1a1a1a;border:1px solid #333;width:24px;height:24px;border-radius:6px;display:inline-block;vertical-align:middle"></span>
+              Escuro (Premium)
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
           <label class="form-label">Seções Incluídas</label>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px" class="mt-8">
             <label class="check-wrap"><input type="checkbox" id="sec-diagnostico" checked> <span>Diagnóstico SPIN personalizado</span></label>
@@ -1410,6 +1663,7 @@ button:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
           <button class="btn-ghost" onclick="wizardPrev()">&larr; Voltar e Editar</button>
           <button class="btn-orange" onclick="saveProposal()">Salvar Proposta</button>
           <button class="btn-primary" onclick="generatePDF()">Gerar PDF</button>
+          <button class="btn-success" onclick="openSlidePresentation(gatherProposalData())">Modo Apresentação</button>
         </div>
       </div>
       <div id="proposal-render"></div>
@@ -1569,6 +1823,7 @@ button:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
       <h3 class="modal-title">Visualizar Proposta</h3>
       <div class="flex-gap-8">
         <button class="btn-primary btn-sm" onclick="generatePDFFromSaved()">Gerar PDF</button>
+        <button class="btn-success btn-sm" onclick="openSlidePresentationFromSaved()">Modo Apresentação</button>
         <button class="modal-close" onclick="closeViewProposalModal()">&times;</button>
       </div>
     </div>
@@ -1782,6 +2037,19 @@ function toggleDark() {
   localStorage.setItem('vb-dark', document.body.classList.contains('dark'));
 }
 if (localStorage.getItem('vb-dark') === 'true') document.body.classList.add('dark');
+
+// ============================================================
+// PROPOSAL THEME
+// ============================================================
+
+let proposalTheme = 'light';
+
+function selectProposalTheme(theme) {
+  proposalTheme = theme;
+  document.querySelectorAll('.theme-opt').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === theme);
+  });
+}
 
 // ============================================================
 // TABS
@@ -2410,6 +2678,7 @@ function gatherProposalData() {
     ctaText,
     ctaLink,
     sections,
+    theme: proposalTheme,
     date: new Date().toISOString()
   };
 }
@@ -2420,7 +2689,8 @@ function buildProposalHTML(propData) {
   const sections = propData.sections || {};
   const factor = 1 - ((propData.desconto || 0) / 100);
 
-  let html = '<div class="proposal-preview">';
+  const theme = propData.theme || 'light';
+  let html = `<div class="proposal-preview proposal-theme-${theme}">`;
 
   // Header
   html += `
@@ -2641,12 +2911,36 @@ body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a
 .proposal-footer { text-align: center; padding: 16px; font-size: 11px; color: #999; background: #f8f9fa; }
 .stack-offer-img { display: block; max-width: 100%; margin: 0 auto; border-radius: var(--radius-lg); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
 .callout { background: #fff8f0; border-left: 4px solid var(--brand-orange); padding: 14px 18px; border-radius: 0 var(--radius) var(--radius) 0; margin: 14px 0; font-size: 13px; color: #5a3e1a; }
+
+/* Dark theme for proposal output */
+.proposal-theme-dark { background: #0f0f0f; color: #f0f0f0; }
+.proposal-theme-dark .proposal-header { background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #222 100%); border-bottom: 2px solid var(--brand-blue); }
+.proposal-theme-dark .proposal-section { background: #1a1a1a; border-bottom-color: #2a2a2a; }
+.proposal-theme-dark .proposal-section h2 { color: #f0f0f0; }
+.proposal-theme-dark .proposal-section p { color: #ccc; }
+.proposal-theme-dark .proposal-section .section-bar { background: var(--brand-orange); }
+.proposal-theme-dark .mentor-card-proposal { background: #1e1e1e; }
+.proposal-theme-dark .mentor-card-proposal .mentor-info h3 { color: #f0f0f0; }
+.proposal-theme-dark .mentor-card-proposal .mentor-info .bio { color: #bbb; }
+.proposal-theme-dark .benefits-list li { border-bottom-color: #2a2a2a; color: #ddd; }
+.proposal-theme-dark .case-card { background: #222; border-left-color: var(--brand-blue); }
+.proposal-theme-dark .case-card h4 { color: #f0f0f0; }
+.proposal-theme-dark .case-card p { color: #aaa; }
+.proposal-theme-dark .price-display { background: linear-gradient(135deg, rgba(0,136,204,0.1), rgba(0,136,204,0.05)); border: 1px solid #2a2a2a; }
+.proposal-theme-dark .price-display .cash-price { color: #aaa; }
+.proposal-theme-dark .price-display .original-price { color: #666; }
+.proposal-theme-dark .proposal-cta { background: linear-gradient(135deg, #0a0a0a, #1a1a1a); border-top: 2px solid var(--brand-blue); }
+.proposal-theme-dark .proposal-footer { background: #0a0a0a; color: #666; }
+.proposal-theme-dark .callout { background: #1e1e1e; color: #ccc; }
+.proposal-theme-dark .badge-blue { background: rgba(0,136,204,0.2); }
+
 @media print {
   body { margin: 0; }
   .proposal-preview { max-width: none; }
   .proposal-section { page-break-inside: avoid; }
   .proposal-header { page-break-after: avoid; }
   .proposal-cta { page-break-before: avoid; }
+  .proposal-theme-dark { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 }
 </style>
 </head>
@@ -2756,6 +3050,7 @@ function changeProposalStatus(id, status) {
 function viewProposal(id) {
   const p = DATA.proposals.find(x => x.id === id);
   if (!p) return;
+  currentViewingProposalId = id;
   document.getElementById('view-proposal-render').innerHTML = buildProposalHTML(p);
   document.getElementById('view-proposal-modal').classList.add('open');
 }
@@ -2812,6 +3107,9 @@ function editProposal(id) {
     });
   }
 
+  // Theme
+  selectProposalTheme(p.theme || 'light');
+
   renderWizardProducts();
   updatePricePreview();
 
@@ -2838,6 +3136,351 @@ function deleteProposal(id) {
   DATA.proposals = DATA.proposals.filter(p => p.id !== id);
   saveData(DATA);
   renderSavedProposals();
+}
+
+// ============================================================
+// SLIDE PRESENTATION
+// ============================================================
+
+let currentViewingProposalId = null;
+
+function buildSlidesHTML(propData) {
+  const prod = DATA.products.find(p => p.id === propData.productId);
+  const mentor = prod ? DATA.mentors.find(m => m.id === prod.mentorId) : null;
+  const sections = propData.sections || {};
+  const factor = 1 - ((propData.desconto || 0) / 100);
+  const theme = propData.theme || 'light';
+  const darkClass = theme === 'dark' ? ' dark' : '';
+  const slides = [];
+
+  // 1. Cover
+  slides.push({
+    title: 'Capa',
+    html: `<div class="slide-content${darkClass}" style="text-align:center;padding:80px 60px">
+      <div style="font-family:var(--font-display);font-size:13px;opacity:0.6;letter-spacing:1px;text-transform:uppercase;margin-bottom:32px">VocêBancário &middot; Academia do Assessor</div>
+      <h1 style="font-family:var(--font-display);font-size:42px;font-weight:800;margin:0 0 16px;letter-spacing:-1px">Proposta Exclusiva</h1>
+      <div style="font-size:20px;opacity:0.85;margin-bottom:8px">para <strong>${escapeHtml(propData.prospect.nome)}</strong></div>
+      ${propData.prospect.cargo ? `<div style="font-size:15px;opacity:0.6">${escapeHtml(propData.prospect.cargo)}${propData.prospect.instituicao ? ' &middot; ' + escapeHtml(propData.prospect.instituicao) : ''}</div>` : ''}
+      <div style="font-size:13px;opacity:0.4;margin-top:24px">${formatDate(propData.date)}</div>
+      <div style="width:60px;height:3px;background:var(--brand-blue);border-radius:2px;margin:32px auto 0"></div>
+    </div>`
+  });
+
+  // 2. Abertura
+  if (propData.abertura) {
+    slides.push({
+      title: 'Abertura',
+      html: `<div class="slide-content${darkClass}" style="display:flex;align-items:center;justify-content:center;min-height:300px">
+        <div style="text-align:center">
+          <p style="font-size:20px;line-height:1.9;font-style:italic;max-width:700px;margin:0 auto;color:${theme === 'dark' ? '#ccc' : '#444'}">${escapeHtml(propData.abertura)}</p>
+        </div>
+      </div>`
+    });
+  }
+
+  // 3. Diagnóstico
+  if (sections.diagnostico && propData.diagnostico) {
+    slides.push({
+      title: 'Diagnóstico',
+      html: `<div class="slide-content${darkClass}">
+        <h2 style="font-family:var(--font-display);font-size:28px;font-weight:700;margin:0 0 8px">Entendemos sua situação</h2>
+        <div style="width:50px;height:3px;background:${theme === 'dark' ? 'var(--brand-orange)' : 'var(--brand-blue)'};border-radius:2px;margin-bottom:24px"></div>
+        <p style="font-size:16px;line-height:1.8;color:${theme === 'dark' ? '#ccc' : '#444'}">${escapeHtml(propData.diagnostico).replace(/\n/g, '<br>')}</p>
+      </div>`
+    });
+  }
+
+  // 4. Mentor
+  if (sections.mentor && mentor) {
+    const initials = mentor.nome.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    slides.push({
+      title: 'Mentor',
+      html: `<div class="slide-content${darkClass}">
+        <h2 style="font-family:var(--font-display);font-size:28px;font-weight:700;margin:0 0 8px">Seu Mentor</h2>
+        <div style="width:50px;height:3px;background:${theme === 'dark' ? 'var(--brand-orange)' : 'var(--brand-blue)'};border-radius:2px;margin-bottom:24px"></div>
+        <div class="mentor-card-proposal" style="background:${theme === 'dark' ? '#1e1e1e' : '#f8f9fa'};padding:24px;border-radius:12px;display:flex;gap:24px;align-items:flex-start">
+          <div class="mentor-photo" style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--brand-blue),var(--brand-orange));display:flex;align-items:center;justify-content:center;color:white;font-weight:800;font-size:28px;font-family:var(--font-display);flex-shrink:0;overflow:hidden">
+            ${mentor.foto ? `<img src="${mentor.foto}" alt="" style="width:100%;height:100%;object-fit:cover">` : initials}
+          </div>
+          <div class="mentor-info">
+            <h3 style="margin:0 0 4px;font-size:18px;font-weight:700">${escapeHtml(mentor.nome)}</h3>
+            <div class="creds" style="font-family:var(--font-mono);font-size:12px;color:var(--brand-blue);margin-bottom:8px">${escapeHtml(mentor.credenciais)}</div>
+            <div style="font-size:13px;color:${theme === 'dark' ? '#888' : '#777'};margin-bottom:6px">${escapeHtml(mentor.titulo)}</div>
+            <div class="bio" style="font-size:14px;color:${theme === 'dark' ? '#bbb' : '#555'};line-height:1.6">${escapeHtml(mentor.bio)}</div>
+            <div style="font-family:var(--font-display);font-size:16px;font-style:italic;color:var(--brand-orange);margin-top:10px">#OVarejoVenceu</div>
+          </div>
+        </div>
+      </div>`
+    });
+  }
+
+  // 5. Programa + Benefícios
+  if (prod && sections.beneficios) {
+    slides.push({
+      title: 'Programa',
+      html: `<div class="slide-content${darkClass}">
+        <h2 style="font-family:var(--font-display);font-size:28px;font-weight:700;margin:0 0 8px">${escapeHtml(prod.nome)}</h2>
+        <div style="width:50px;height:3px;background:${theme === 'dark' ? 'var(--brand-orange)' : 'var(--brand-blue)'};border-radius:2px;margin-bottom:24px"></div>
+        <p style="font-size:15px;line-height:1.8;color:${theme === 'dark' ? '#ccc' : '#444'};margin-bottom:16px">${escapeHtml(prod.descricao)}</p>
+        <div style="margin-bottom:16px"><span style="font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding:6px 14px;border-radius:20px;display:inline-block;background:rgba(0,136,204,0.12);color:var(--brand-blue)">${escapeHtml(prod.duracao)}</span></div>
+        <ul class="benefits-list" style="list-style:none;padding:0;margin:0">
+          ${prod.beneficios.map(b => `<li style="display:flex;align-items:flex-start;gap:10px;padding:6px 0;font-size:14px;border-bottom:1px solid ${theme === 'dark' ? '#2a2a2a' : '#f0f0f0'}"><span style="color:var(--brand-blue);font-weight:700;flex-shrink:0;margin-top:2px">&#10003;</span> ${escapeHtml(b)}</li>`).join('')}
+        </ul>
+      </div>`
+    });
+  }
+
+  // 6. Stack Offer
+  if (sections.stack && prod && prod.stackImage) {
+    slides.push({
+      title: 'Stack Offer',
+      html: `<div class="slide-content${darkClass}" style="text-align:center">
+        <h2 style="font-family:var(--font-display);font-size:28px;font-weight:700;margin:0 0 8px">O que você vai receber</h2>
+        <div style="width:50px;height:3px;background:${theme === 'dark' ? 'var(--brand-orange)' : 'var(--brand-blue)'};border-radius:2px;margin:0 auto 24px"></div>
+        <img src="${prod.stackImage}" alt="Stack Offer" style="display:block;max-width:100%;margin:0 auto;border-radius:12px;box-shadow:0 8px 32px rgba(0,0,0,0.12)">
+      </div>`
+    });
+  }
+
+  // 7. Cases
+  if (sections.cases && DATA.cases && DATA.cases.length > 0) {
+    slides.push({
+      title: 'Cases',
+      html: `<div class="slide-content${darkClass}">
+        <h2 style="font-family:var(--font-display);font-size:28px;font-weight:700;margin:0 0 8px">Cases de Sucesso</h2>
+        <div style="width:50px;height:3px;background:${theme === 'dark' ? 'var(--brand-orange)' : 'var(--brand-blue)'};border-radius:2px;margin-bottom:24px"></div>
+        <p style="margin-bottom:16px;color:${theme === 'dark' ? '#ccc' : '#444'}">Veja quem já transformou a carreira com o MAP®:</p>
+        <div class="cases-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          ${DATA.cases.map(c => `
+            <div class="case-card" style="padding:16px;background:${theme === 'dark' ? '#222' : '#f8f9fa'};border-radius:8px;border-left:3px solid var(--brand-blue)">
+              <h4 style="margin:0 0 4px;font-size:14px;font-weight:700;color:${theme === 'dark' ? '#f0f0f0' : '#1a1a1a'}">${escapeHtml(c.titulo)}</h4>
+              <p style="font-size:13px;color:${theme === 'dark' ? '#aaa' : '#666'};margin:0 0 6px;line-height:1.5">${escapeHtml(c.desc)}</p>
+              <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--brand-blue);letter-spacing:0.5px">${escapeHtml(c.resultado)}</div>
+            </div>
+          `).join('')}
+        </div>
+      </div>`
+    });
+  }
+
+  // 8. Investimento
+  if (sections.investimento && prod) {
+    const finalCash = prod.preco * factor;
+    const finalInstall = prod.parcelasValor * factor;
+    slides.push({
+      title: 'Investimento',
+      html: `<div class="slide-content${darkClass}">
+        <h2 style="font-family:var(--font-display);font-size:28px;font-weight:700;margin:0 0 8px">Investimento</h2>
+        <div style="width:50px;height:3px;background:${theme === 'dark' ? 'var(--brand-orange)' : 'var(--brand-blue)'};border-radius:2px;margin-bottom:24px"></div>
+        <div class="price-display" style="text-align:center;padding:40px;background:${theme === 'dark' ? 'linear-gradient(135deg,rgba(0,136,204,0.1),rgba(0,136,204,0.05))' : 'linear-gradient(135deg,rgba(0,136,204,0.05),rgba(235,129,5,0.05))'};border-radius:12px;${theme === 'dark' ? 'border:1px solid #2a2a2a;' : ''}">
+          <div class="installment" style="font-family:var(--font-display);font-size:44px;font-weight:800;color:var(--brand-blue)">${prod.parcelasQtd}x de <small style="font-size:22px;font-weight:600">R$</small> ${finalInstall.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>
+          ${propData.desconto > 0 ? `
+            <div class="original-price" style="text-decoration:line-through;color:${theme === 'dark' ? '#666' : '#999'};font-size:14px;margin-top:8px">De ${formatBRL(prod.preco)}</div>
+            <div class="cash-price" style="font-size:18px;color:${theme === 'dark' ? '#aaa' : '#666'};margin-top:4px">por ${formatBRL(finalCash)} à vista</div>
+            <div style="display:inline-block;background:var(--brand-orange);color:white;padding:6px 16px;border-radius:20px;font-size:14px;font-weight:700;margin-top:12px">Desconto de ${propData.desconto}%</div>
+          ` : `
+            <div class="cash-price" style="font-size:18px;color:${theme === 'dark' ? '#aaa' : '#666'};margin-top:8px">ou ${formatBRL(prod.preco)} à vista</div>
+          `}
+        </div>
+      </div>`
+    });
+  }
+
+  // 9. CTA
+  if (sections.cta) {
+    slides.push({
+      title: 'CTA',
+      html: `<div class="slide-content${darkClass}" style="text-align:center;padding:80px 60px">
+        <div style="font-size:22px;margin-bottom:28px;opacity:0.95">${escapeHtml(propData.ctaText || 'Vamos conversar? Me chame no WhatsApp!')}</div>
+        <a href="${escapeHtml(propData.ctaLink || '#')}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--brand-green);color:white;padding:16px 36px;border-radius:30px;font-size:18px;font-weight:700;text-decoration:none">&#9742; Chamar no WhatsApp</a>
+        <div style="font-family:var(--font-display);font-size:22px;font-style:italic;color:var(--brand-orange);margin-top:28px">#OVarejoVenceu</div>
+      </div>`
+    });
+  }
+
+  return slides;
+}
+
+function openSlidePresentation(propData) {
+  const slides = buildSlidesHTML(propData);
+  if (slides.length === 0) return;
+
+  let currentSlide = 0;
+
+  // Remove existing overlay if any
+  const existingOverlay = document.getElementById('slide-presentation-overlay');
+  if (existingOverlay) existingOverlay.remove();
+
+  // Create overlay
+  const overlay = document.createElement('div');
+  overlay.id = 'slide-presentation-overlay';
+  overlay.className = 'slide-overlay';
+
+  // Build slides HTML
+  let slidesMarkup = slides.map((s, i) => `
+    <div class="slide ${i === 0 ? 'active' : ''}" data-slide-idx="${i}">
+      ${s.html}
+    </div>
+  `).join('');
+
+  // Build dots
+  const dotsMarkup = slides.map((s, i) => `<div class="slide-dot ${i === 0 ? 'active' : ''}" data-dot="${i}" title="${escapeHtml(s.title)}"></div>`).join('');
+
+  overlay.innerHTML = `
+    <div class="slide-viewport">
+      <div class="slide-nav-area left" id="slide-nav-left"></div>
+      <div class="slide-container">${slidesMarkup}</div>
+      <div class="slide-nav-area right" id="slide-nav-right"></div>
+    </div>
+    <div class="slide-bottombar">
+      <button class="slide-btn" id="slide-prev-btn">&larr; Anterior</button>
+      <div class="slide-dots" id="slide-dots">${dotsMarkup}</div>
+      <span class="slide-counter" id="slide-counter">1 / ${slides.length}</span>
+      <button class="slide-btn" id="slide-next-btn">Próximo &rarr;</button>
+      <button class="slide-btn slide-btn-export" id="slide-export-btn">Exportar Slides (PDF)</button>
+      <span class="slide-esc-hint">Esc para sair</span>
+    </div>
+  `;
+
+  document.body.appendChild(overlay);
+
+  function goToSlide(idx) {
+    if (idx < 0 || idx >= slides.length) return;
+    const allSlides = overlay.querySelectorAll('.slide');
+    const prevIdx = currentSlide;
+    allSlides.forEach((sl, i) => {
+      sl.classList.remove('active', 'prev');
+      if (i === idx) sl.classList.add('active');
+      else if (i === prevIdx) sl.classList.add('prev');
+    });
+    currentSlide = idx;
+    overlay.querySelector('#slide-counter').textContent = (idx + 1) + ' / ' + slides.length;
+    overlay.querySelectorAll('.slide-dot').forEach((d, i) => d.classList.toggle('active', i === idx));
+  }
+
+  // Navigation events
+  overlay.querySelector('#slide-prev-btn').addEventListener('click', function() { goToSlide(currentSlide - 1); });
+  overlay.querySelector('#slide-next-btn').addEventListener('click', function() { goToSlide(currentSlide + 1); });
+  overlay.querySelector('#slide-nav-left').addEventListener('click', function() { goToSlide(currentSlide - 1); });
+  overlay.querySelector('#slide-nav-right').addEventListener('click', function() { goToSlide(currentSlide + 1); });
+  overlay.querySelectorAll('.slide-dot').forEach(dot => {
+    dot.addEventListener('click', function() { goToSlide(parseInt(this.dataset.dot)); });
+  });
+
+  // Keyboard navigation
+  function keyHandler(e) {
+    if (e.key === 'Escape') {
+      closeSlidePresentation();
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goToSlide(currentSlide - 1);
+    } else if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+      e.preventDefault();
+      goToSlide(currentSlide + 1);
+    }
+  }
+  document.addEventListener('keydown', keyHandler);
+
+  // Export slides PDF
+  overlay.querySelector('#slide-export-btn').addEventListener('click', function() {
+    exportSlidesPDF(slides, propData);
+  });
+
+  // Store cleanup function
+  overlay._cleanup = function() {
+    document.removeEventListener('keydown', keyHandler);
+  };
+}
+
+function closeSlidePresentation() {
+  const overlay = document.getElementById('slide-presentation-overlay');
+  if (overlay) {
+    if (overlay._cleanup) overlay._cleanup();
+    overlay.remove();
+  }
+}
+
+function openSlidePresentationFromSaved() {
+  if (!currentViewingProposalId) return;
+  const p = DATA.proposals.find(x => x.id === currentViewingProposalId);
+  if (!p) return;
+  closeViewProposalModal();
+  openSlidePresentation(p);
+}
+
+function exportSlidesPDF(slides, propData) {
+  const theme = propData.theme || 'light';
+  const printWin = window.open('', '_blank');
+  const slidesHTML = slides.map((s, i) => `
+    <div class="print-slide">${s.html}</div>
+  `).join('');
+
+  printWin.document.write(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Slides - ${escapeHtml(propData.prospect.nome)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --brand-blue: #0088cc;
+  --brand-orange: #eb8105;
+  --brand-green: #25d366;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
+.print-slide {
+  page-break-after: always;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 40px;
+  background: #0a0a0a;
+}
+.print-slide:last-child { page-break-after: avoid; }
+.slide-content {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 60px;
+  border-radius: 16px;
+  background: white;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  color: #1a1a1a;
+}
+.slide-content.dark {
+  background: #1a1a1a;
+  color: #f0f0f0;
+}
+.mentor-card-proposal { display: flex; gap: 20px; align-items: flex-start; padding: 20px; border-radius: 12px; }
+.mentor-card-proposal .mentor-photo { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 24px; font-family: var(--font-display); flex-shrink: 0; overflow: hidden; }
+.mentor-card-proposal .mentor-photo img { width: 100%; height: 100%; object-fit: cover; }
+.benefits-list { list-style: none; padding: 0; margin: 14px 0; }
+.benefits-list li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 14px; }
+.cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.case-card { padding: 16px; border-radius: 8px; border-left: 3px solid var(--brand-blue); }
+@media print {
+  body { margin: 0; }
+  .print-slide { page-break-after: always; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .print-slide:last-child { page-break-after: avoid; }
+}
+@page { size: landscape; margin: 0; }
+</style>
+</head>
+<body>
+${slidesHTML}
+<script>
+  setTimeout(function() { window.print(); }, 500);
+<\/script>
+</body>
+</html>`);
+  printWin.document.close();
 }
 
 // ============================================================
