@@ -3,18 +3,20 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Proposta Comercial — VocêBancário / Academia do Assessor</title>
+<title>Gerador de Propostas — VocêBancário / Academia do Assessor</title>
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
 
 <style>
+/* ============ DESIGN TOKENS ============ */
 :root {
   --brand-blue: #0088cc;
   --brand-red: #a12026;
   --brand-orange: #eb8105;
   --brand-yellow: #ebe310;
+  --brand-green: #25d366;
 
   --bg: #f7f5f0;
   --bg-card: #ffffff;
@@ -25,13 +27,12 @@
   --shadow: 0 2px 8px rgba(0,0,0,0.06);
   --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
 
-  --grade-a: #2d8c5c;
-  --grade-b: #d4951a;
-  --grade-c: #a12026;
-
   --font-display: 'Fraunces', Georgia, serif;
   --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  --radius: 8px;
+  --radius-lg: 12px;
 }
 
 body.dark {
@@ -45,7 +46,8 @@ body.dark {
   --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
 }
 
-* { box-sizing: border-box; }
+/* ============ RESET ============ */
+*, *::before, *::after { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -63,115 +65,186 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
+  padding: 14px 28px;
   background: var(--bg-card);
   border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 200;
 }
 .brand {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+}
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange));
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 14px;
+  font-family: var(--font-display);
 }
 .brand-text {
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 17px;
+  font-size: 16px;
   letter-spacing: -0.3px;
 }
-.brand-text span {
-  color: var(--brand-orange);
-  font-style: italic;
-  font-weight: 600;
+.brand-text span { color: var(--brand-orange); font-style: italic; font-weight: 600; }
+.topbar-actions { display: flex; gap: 8px; align-items: center; }
+
+/* Dark mode toggle */
+.dark-toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
+  padding: 0;
 }
-.topbar-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+.dark-toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--brand-blue);
+  top: 2px;
+  left: 2px;
+  transition: transform 0.3s;
+}
+body.dark .dark-toggle::after {
+  transform: translateX(20px);
+  background: var(--brand-orange);
 }
 
-/* ============ BOTÕES ============ */
-button {
+/* ============ TABS ============ */
+.tabs-bar {
+  display: flex;
+  gap: 0;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 0 28px;
+  position: sticky;
+  top: 53px;
+  z-index: 190;
+}
+.tab-btn {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 14px;
+  padding: 14px 20px;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 0;
+}
+.tab-btn:hover {
+  color: var(--text);
+  background: var(--bg-soft);
+}
+.tab-btn.active {
+  color: var(--brand-blue);
+  border-bottom-color: var(--brand-blue);
+  font-weight: 600;
+}
+
+/* ============ MAIN CONTENT ============ */
+.main-content {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 28px 24px 80px;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ============ BUTTONS ============ */
+button, .btn {
   font-family: var(--font-body);
   font-weight: 500;
   font-size: 14px;
   padding: 9px 16px;
-  border-radius: 6px;
+  border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--bg-card);
   color: var(--text);
   cursor: pointer;
   transition: all 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
-button:hover {
-  border-color: var(--brand-blue);
-  color: var(--brand-blue);
-}
-button.primary {
+button:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
+.btn-primary {
   background: var(--brand-blue);
-  color: white;
+  color: white !important;
   border-color: var(--brand-blue);
   font-weight: 600;
 }
-button.primary:hover {
+.btn-primary:hover {
   background: #006fa6;
-  color: white;
+  border-color: #006fa6;
+  color: white !important;
 }
-button.primary-lg {
-  background: var(--brand-blue);
-  color: white;
-  border-color: var(--brand-blue);
-  font-weight: 700;
-  font-size: 16px;
-  padding: 16px 32px;
-  border-radius: 10px;
-  width: 100%;
-  letter-spacing: -0.3px;
+.btn-danger {
+  color: var(--brand-red) !important;
+  border-color: var(--brand-red);
 }
-button.primary-lg:hover {
-  background: #006fa6;
-  color: white;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(0,136,204,0.3);
+.btn-danger:hover {
+  background: var(--brand-red);
+  color: white !important;
 }
-button.ghost {
+.btn-success {
+  background: var(--brand-green);
+  color: white !important;
+  border-color: var(--brand-green);
+  font-weight: 600;
+}
+.btn-success:hover {
+  background: #1fb855;
+  border-color: #1fb855;
+  color: white !important;
+}
+.btn-orange {
+  background: var(--brand-orange);
+  color: white !important;
+  border-color: var(--brand-orange);
+  font-weight: 600;
+}
+.btn-orange:hover {
+  background: #d07004;
+  border-color: #d07004;
+  color: white !important;
+}
+.btn-ghost {
   background: transparent;
   border-color: var(--border);
 }
-
-/* ============ CONTAINER ============ */
-.container {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 32px 24px;
-}
-
-/* ============ TELAS ============ */
-.tela { display: none; }
-.tela.ativo { display: block; }
-
-/* ============ FORM STYLES ============ */
-.form-section {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 28px 28px 24px;
-  margin-bottom: 20px;
-}
-.form-section-title {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0 0 4px;
-  letter-spacing: -0.3px;
-}
-.form-section-sub {
+.btn-sm {
   font-size: 13px;
-  color: var(--text-soft);
-  margin: 0 0 20px;
+  padding: 6px 12px;
 }
+.btn-lg {
+  font-size: 16px;
+  padding: 14px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.btn-block { width: 100%; justify-content: center; }
+
+/* ============ FORM ELEMENTS ============ */
 .form-label {
   display: block;
   font-size: 13px;
@@ -181,1320 +254,2624 @@ button.ghost {
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.form-input {
+.form-input, .form-select {
   font-family: var(--font-body);
   font-size: 14px;
   padding: 10px 14px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
   width: 100%;
   transition: border-color 0.2s;
 }
-.form-input:focus {
+.form-input:focus, .form-select:focus, .form-textarea:focus {
   outline: none;
   border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(0,136,204,0.1);
 }
 .form-textarea {
   font-family: var(--font-body);
   font-size: 14px;
   padding: 12px 14px;
   border: 1px solid var(--border);
-  border-radius: 6px;
+  border-radius: var(--radius);
   background: var(--bg);
   color: var(--text);
   width: 100%;
-  min-height: 140px;
+  min-height: 100px;
   resize: vertical;
   line-height: 1.6;
   transition: border-color 0.2s;
 }
-.form-textarea:focus {
-  outline: none;
-  border-color: var(--brand-blue);
+.form-select {
+  cursor: pointer;
+  appearance: auto;
 }
-.form-textarea-sm {
-  font-family: var(--font-body);
-  font-size: 14px;
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: var(--bg);
-  color: var(--text);
-  width: 100%;
-  min-height: 80px;
-  resize: vertical;
-  line-height: 1.5;
-  transition: border-color 0.2s;
-}
-.form-textarea-sm:focus {
-  outline: none;
-  border-color: var(--brand-blue);
-}
-.form-row {
-  margin-bottom: 16px;
-}
+.form-row { margin-bottom: 16px; }
 .form-row-inline {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin-bottom: 16px;
 }
-@media (max-width: 600px) {
-  .form-row-inline { grid-template-columns: 1fr; }
+.form-row-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
 }
-select.form-input {
-  cursor: pointer;
-  appearance: auto;
+@media (max-width: 700px) {
+  .form-row-inline, .form-row-3 { grid-template-columns: 1fr; }
 }
 
-/* Dynamic rows */
-.dynamic-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-bottom: 8px;
-}
-.dynamic-row .form-input {
-  flex: 1;
-}
-.dynamic-row-wide {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  margin-bottom: 10px;
-  position: relative;
-  background: var(--bg);
-}
-.dynamic-row-wide .btn-remove {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-}
-.btn-remove {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: 1px solid var(--border);
-  background: var(--bg-card);
-  color: var(--brand-red);
-  font-size: 18px;
-  line-height: 1;
+/* Toggle switch */
+.toggle-wrap {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 10px;
+}
+.toggle {
+  width: 44px;
+  height: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg-soft);
   cursor: pointer;
+  position: relative;
+  transition: all 0.3s;
   padding: 0;
   flex-shrink: 0;
 }
-.btn-remove:hover {
+.toggle::after {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #999;
+  top: 2px;
+  left: 2px;
+  transition: all 0.3s;
+}
+.toggle.on {
+  background: rgba(0,136,204,0.15);
+  border-color: var(--brand-blue);
+}
+.toggle.on::after {
+  transform: translateX(20px);
+  background: var(--brand-blue);
+}
+.toggle-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Checkbox custom */
+.check-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.check-wrap input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--brand-blue);
+  cursor: pointer;
+}
+.check-wrap label {
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* ============ CARDS ============ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+  transition: all 0.2s;
+}
+.card:hover {
+  box-shadow: var(--shadow-lg);
+}
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+.card-sub {
+  font-size: 13px;
+  color: var(--text-soft);
+  margin: 4px 0 0;
+}
+.card-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+.card-body {
+  font-size: 14px;
+  color: var(--text-soft);
+}
+
+/* Selectable card */
+.card-selectable {
+  cursor: pointer;
+  position: relative;
+}
+.card-selectable.selected {
+  border-color: var(--brand-blue);
+  box-shadow: 0 0 0 3px rgba(0,136,204,0.15), var(--shadow-lg);
+}
+.card-selectable .card-check {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: transparent;
+  transition: all 0.2s;
+}
+.card-selectable.selected .card-check {
+  border-color: var(--brand-blue);
+  background: var(--brand-blue);
+  color: white;
+}
+
+/* ============ BADGES ============ */
+.badge {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  display: inline-block;
+}
+.badge-blue { background: rgba(0,136,204,0.12); color: var(--brand-blue); }
+.badge-green { background: rgba(37,211,102,0.12); color: #1a9e4a; }
+.badge-orange { background: rgba(235,129,5,0.12); color: var(--brand-orange); }
+.badge-red { background: rgba(161,32,38,0.12); color: var(--brand-red); }
+.badge-gray { background: var(--bg-soft); color: var(--text-soft); }
+
+/* ============ SECTION HEADERS ============ */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  margin: 0;
+}
+.section-subtitle {
+  font-size: 14px;
+  color: var(--text-soft);
+  margin: 4px 0 0;
+}
+
+/* ============ MODAL ============ */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  z-index: 500;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+.modal-overlay.open {
+  display: flex;
+}
+.modal {
+  background: var(--bg-card);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 680px;
+  box-shadow: var(--shadow-lg);
+  animation: modalIn 0.2s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(-16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--border);
+}
+.modal-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+.modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-soft);
+  padding: 0;
+}
+.modal-close:hover {
   background: var(--brand-red);
   color: white;
   border-color: var(--brand-red);
 }
-.btn-add {
-  font-size: 13px;
-  padding: 8px 14px;
-  margin-top: 8px;
-  color: var(--brand-blue);
-  border-color: var(--brand-blue);
-  background: transparent;
-}
-.btn-add:hover {
-  background: var(--brand-blue);
-  color: white;
-}
-
-/* Pilares */
-.pilar-block {
-  border-left: 4px solid var(--grade-b);
-  padding: 16px 20px;
-  margin-bottom: 14px;
-  background: var(--bg);
-  border-radius: 0 8px 8px 0;
-  transition: border-color 0.2s;
-}
-.pilar-block-title {
-  font-weight: 600;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-.pilar-block .form-row-inline {
-  margin-bottom: 8px;
-}
-.pilar-block select {
-  max-width: 100px;
-}
-
-/* Testimonial rows */
-.card-mini {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-  margin-bottom: 12px;
-  background: var(--bg);
-  position: relative;
-}
-.card-mini .btn-remove {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-}
-.dep-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-@media (max-width: 600px) {
-  .dep-grid { grid-template-columns: 1fr; }
-}
-
-/* JSON section */
-.json-section {
-  margin-top: 8px;
-}
-.json-toggle {
-  font-size: 13px;
-  color: var(--text-soft);
-  cursor: pointer;
-  padding: 8px 0;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.json-toggle:hover { color: var(--brand-blue); }
-.json-body {
-  display: none;
-  margin-top: 12px;
-}
-.json-body.open { display: block; }
-.json-body textarea {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  min-height: 200px;
-}
-.json-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-/* About textarea */
-.about-hint {
-  font-size: 11px;
-  color: var(--text-soft);
-  margin-top: 4px;
-  font-style: italic;
-}
-
-/* ============ TELA 2: SLIDES ============ */
-.slides-container {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: var(--shadow-lg);
-}
-
-.slides-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-bottom: 14px;
-  flex-wrap: wrap;
-}
-
-/* Slide viewport */
-.slide-viewport {
-  aspect-ratio: 16 / 9;
-  position: relative;
-  background: #ffffff;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-body.dark .slide-viewport {
-  background: #14181f;
-}
-
-.slide {
-  display: none;
-  position: absolute;
-  inset: 0;
-  flex-direction: column;
-  padding: 48px 56px;
+.modal-body {
+  padding: 24px;
+  max-height: 65vh;
   overflow-y: auto;
-  animation: slideIn 0.3s ease;
 }
-.slide.active { display: flex; }
-@keyframes slideIn {
-  from { opacity: 0; transform: translateX(12px); }
-  to { opacity: 1; transform: translateX(0); }
-}
-
-.slide::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--brand-blue), var(--brand-orange));
-}
-
-.slide-num {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: #888;
-  letter-spacing: 1px;
-  margin-bottom: 8px;
-}
-
-.slide h2 {
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 700;
-  color: #1a1a1a;
-  margin: 0 0 12px;
-  letter-spacing: -0.5px;
-}
-body.dark .slide h2 { color: #f0f0f0; }
-
-.slide-divider {
-  width: 60px;
-  height: 3px;
-  background: var(--brand-blue);
-  margin-bottom: 24px;
-  border-radius: 2px;
-}
-
-.slide p, .slide li {
-  font-size: 15px;
-  line-height: 1.7;
-  color: #3a3a3a;
-}
-body.dark .slide p, body.dark .slide li { color: #c0c0c0; }
-
-/* Slide 1 — Capa */
-.slide-capa {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: linear-gradient(135deg, #ffffff 0%, rgba(0,136,204,0.06) 100%);
-}
-body.dark .slide-capa {
-  background: linear-gradient(135deg, #14181f 0%, rgba(0,136,204,0.12) 100%);
-}
-.capa-content {
+.modal-footer {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-.capa-logo {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: 36px;
-  color: var(--brand-blue);
-  letter-spacing: -1px;
-}
-.capa-eyebrow {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 3px;
-  color: var(--brand-orange);
-  font-weight: 600;
-}
-.capa-line {
-  width: 60px;
-  height: 2px;
-  background: var(--brand-blue);
-  margin: 8px 0;
-}
-.slide-capa h1 {
-  font-family: var(--font-display);
-  font-size: 42px;
-  font-weight: 800;
-  color: #1a1a1a;
-  margin: 8px 0 4px;
-  letter-spacing: -1px;
-}
-body.dark .slide-capa h1 { color: #f5f3ee; }
-.capa-date {
-  font-size: 14px;
-  color: #666;
-}
-body.dark .capa-date { color: #999; }
-.capa-author {
-  margin-top: 24px;
-}
-.capa-author p {
-  font-size: 14px;
-  color: #444;
-  margin: 0;
-}
-body.dark .capa-author p { color: #bbb; }
-.capa-social {
-  font-size: 12px !important;
-  color: #888 !important;
-  margin-top: 2px !important;
-}
-
-/* Slide 2 — Quote */
-.slide-quote {
-  justify-content: center;
-  padding: 48px 64px;
-}
-.quote-block {
-  border-left: 4px solid var(--brand-blue);
-  padding: 24px 32px;
-  position: relative;
-}
-.quote-mark {
-  font-family: var(--font-display);
-  font-size: 72px;
-  color: var(--brand-blue);
-  opacity: 0.3;
-  position: absolute;
-  top: -10px;
-  left: 12px;
-  line-height: 1;
-}
-.quote-text {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-style: italic;
-  line-height: 1.8;
-  color: #2a2a2a;
-  margin: 0 0 16px;
-}
-body.dark .quote-text { color: #d0d0d0; }
-.quote-author {
-  font-size: 14px;
-  font-weight: 600;
-  color: #555;
-  margin: 0;
-}
-body.dark .quote-author { color: #aaa; }
-
-/* Slide 3 — Goals */
-.goals-list {
-  display: flex;
-  flex-direction: column;
+  justify-content: flex-end;
   gap: 10px;
-}
-.goal-row {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px 18px;
-  background: rgba(0,136,204,0.04);
-  border-left: 3px solid var(--brand-blue);
-  border-radius: 0 8px 8px 0;
-  font-size: 15px;
-  color: #2a2a2a;
-}
-body.dark .goal-row {
-  background: rgba(0,136,204,0.08);
-  color: #d0d0d0;
-}
-.goal-check {
-  color: var(--brand-blue);
-  font-weight: 700;
-  font-size: 16px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--border);
 }
 
-/* Slide 4 — Feedback */
-.slide-feedback .feedback-block {
-  border-left: 4px solid var(--brand-orange);
-  padding: 20px 24px;
-  background: rgba(235,129,5,0.04);
-  border-radius: 0 8px 8px 0;
-}
-body.dark .slide-feedback .feedback-block {
-  background: rgba(235,129,5,0.08);
-}
-.feedback-block p {
-  margin: 0;
-  font-size: 15px;
-  line-height: 1.8;
-}
-
-/* Slide 5 — Pilares */
-.pilares-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-@media (max-width: 700px) {
-  .pilares-grid { grid-template-columns: 1fr; }
-}
-.pilar-card {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 20px;
-  text-align: center;
-  background: var(--bg-card);
-}
-body.dark .pilar-card {
-  background: #1e1e1e;
-  border-color: #333;
-}
-.pilar-card h3 {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: #666;
-  margin: 0 0 12px;
-}
-body.dark .pilar-card h3 { color: #999; }
-.pilar-grade {
-  font-family: var(--font-display);
-  font-size: 48px;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 12px;
-}
-.pilar-card p {
-  font-size: 13px;
-  color: #555;
-  margin: 0;
-  line-height: 1.5;
-}
-body.dark .pilar-card p { color: #aaa; }
-
-/* Slide 6 — Strengths */
-.strengths-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 20px;
-}
-.strength-chip {
-  padding: 6px 14px;
-  background: rgba(0,136,204,0.08);
-  border: 1px solid rgba(0,136,204,0.2);
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--brand-blue);
-}
-body.dark .strength-chip {
-  background: rgba(0,136,204,0.15);
-  border-color: rgba(0,136,204,0.3);
-}
-.strengths-details {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-@media (max-width: 700px) {
-  .strengths-details { grid-template-columns: 1fr; }
-}
-.strength-detail-card {
-  padding: 14px 18px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: var(--bg-card);
-}
-body.dark .strength-detail-card {
-  background: #1e1e1e;
-  border-color: #333;
-}
-.strength-detail-card strong {
-  font-size: 13px;
-  color: var(--brand-blue);
-  display: block;
-  margin-bottom: 6px;
-}
-.strength-detail-card p {
-  margin: 0;
-  font-size: 13px;
-  color: #555;
-  line-height: 1.5;
-}
-body.dark .strength-detail-card p { color: #aaa; }
-
-/* Slide 7 — Caminho */
-.slide-caminho {
-  position: relative;
-}
-.caminho-intro {
-  font-size: 16px;
-  font-weight: 500;
-  margin: 0 0 18px;
-  color: #2a2a2a;
-}
-body.dark .caminho-intro { color: #d0d0d0; }
-.caminho-lista {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 24px;
-}
-.caminho-lista li {
-  padding: 8px 0 8px 24px;
-  position: relative;
-  font-size: 15px;
-}
-.caminho-lista li::before {
-  content: "\2022";
-  position: absolute;
-  left: 8px;
-  color: var(--brand-blue);
-  font-weight: 700;
-}
-.caminho-turma {
-  padding: 14px 18px;
-  background: rgba(0,136,204,0.06);
-  border-radius: 8px;
-  font-size: 15px;
-  color: #333;
-  border-left: 3px solid var(--brand-blue);
-}
-body.dark .caminho-turma {
-  background: rgba(0,136,204,0.1);
-  color: #ccc;
-}
-
-/* Slide 8 — Testimonials */
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-}
-@media (max-width: 700px) {
-  .testimonials-grid { grid-template-columns: 1fr; }
-}
-.testimonial-card {
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  padding: 16px;
-  background: var(--bg-card);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
-}
-body.dark .testimonial-card {
-  background: #1e1e1e;
-  border-color: #333;
-}
-.dep-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-.dep-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.dep-avatar-placeholder {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--brand-blue);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 16px;
-}
-.dep-info strong {
-  display: block;
-  font-size: 14px;
-  color: #1a1a1a;
-}
-body.dark .dep-info strong { color: #eee; }
-.dep-info span {
-  font-size: 12px;
-  color: #777;
-}
-body.dark .dep-info span { color: #999; }
-.dep-quote {
-  font-size: 13px;
-  font-style: italic;
-  color: #444;
-  line-height: 1.6;
-  margin: 0;
-}
-body.dark .dep-quote { color: #bbb; }
-
-/* Slide 9 — Passos */
-.passos-lista {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  margin-bottom: 28px;
-}
-.passo {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  font-size: 16px;
-  color: #2a2a2a;
-}
-body.dark .passo { color: #d0d0d0; }
-.passo-num {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--brand-blue);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 16px;
-  flex-shrink: 0;
-}
-.passos-cta {
-  padding: 20px 24px;
-  background: rgba(0,136,204,0.04);
-  border-radius: 10px;
-  border: 1px dashed var(--brand-blue);
-  text-align: center;
-}
-.passos-cta p {
-  font-family: var(--font-display);
-  font-size: 17px;
-  font-style: italic;
-  color: #333;
-  margin: 0;
-}
-body.dark .passos-cta {
-  background: rgba(0,136,204,0.08);
-}
-body.dark .passos-cta p { color: #ccc; }
-
-/* Slide 10 — Final */
-.slide-final {
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background: linear-gradient(135deg, #faf9f7 0%, rgba(0,136,204,0.04) 50%, rgba(235,129,5,0.04) 100%);
-}
-body.dark .slide-final {
-  background: linear-gradient(135deg, #14181f 0%, rgba(0,136,204,0.1) 50%, rgba(235,129,5,0.08) 100%);
-}
-.final-content {
-  max-width: 560px;
-}
-.final-quote {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 600;
-  font-style: italic;
-  line-height: 1.6;
-  color: #1a1a1a;
-  margin: 0 0 20px;
-}
-body.dark .final-quote { color: #f0f0f0; }
-.final-author {
-  font-size: 15px;
-  font-weight: 600;
-  color: #555;
-  margin: 0 0 28px;
-}
-body.dark .final-author { color: #aaa; }
-.final-social p {
-  font-size: 14px;
-  color: var(--brand-blue);
-  margin: 4px 0;
-}
-
-/* Slides Nav */
-.slides-nav {
+/* ============ COLLAPSIBLE ============ */
+.collapse-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 16px 24px;
-  border-top: 1px solid var(--border);
+  padding: 14px 20px;
   background: var(--bg-card);
-}
-.slides-nav-dots {
-  display: flex;
-  gap: 6px;
-}
-.slide-dot {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   cursor: pointer;
+  margin-bottom: 8px;
   transition: all 0.2s;
-  border: none;
-  padding: 0;
 }
-.slide-dot:hover {
-  background: var(--brand-blue);
-  opacity: 0.6;
+.collapse-header:hover { border-color: var(--brand-blue); }
+.collapse-header .arrow {
+  transition: transform 0.2s;
+  font-size: 12px;
+  color: var(--text-soft);
 }
-.slide-dot.active {
-  background: var(--brand-blue);
-  width: 28px;
-  border-radius: 5px;
+.collapse-header.open .arrow { transform: rotate(180deg); }
+.collapse-header .collapse-title {
+  font-weight: 600;
+  font-size: 15px;
 }
-.slide-nav-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.slide-nav-btn {
-  padding: 6px 14px;
-  font-size: 13px;
-}
-.slide-counter {
+.collapse-header .collapse-badge {
   font-family: var(--font-mono);
   font-size: 12px;
   color: var(--text-soft);
-  min-width: 50px;
-  text-align: center;
+  margin-left: 8px;
 }
+.collapse-body {
+  display: none;
+  padding: 16px 20px;
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
+  margin-top: -8px;
+  margin-bottom: 12px;
+}
+.collapse-body.open { display: block; }
 
-/* ============ MODO APRESENTAÇÃO ============ */
-.slides-container.modo-apresentacao {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  border-radius: 0;
-  border: none;
+/* ============ WIZARD PROGRESS ============ */
+.wizard-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 32px;
+  padding: 20px 0;
+}
+.wizard-step {
+  flex: 1;
   display: flex;
   flex-direction: column;
-}
-.slides-container.modo-apresentacao .slide-viewport {
-  aspect-ratio: auto;
-  flex: 1;
-}
-.slides-container.modo-apresentacao .slide {
-  padding: 5vh 8vw;
-}
-.slides-container.modo-apresentacao .slide h2 { font-size: 3.2vw; }
-.slides-container.modo-apresentacao .slide-capa h1 { font-size: 5vw; }
-.slides-container.modo-apresentacao .slide p,
-.slides-container.modo-apresentacao .slide li { font-size: 1.6vw; }
-.slides-container.modo-apresentacao .quote-text { font-size: 2vw; }
-.slides-container.modo-apresentacao .final-quote { font-size: 2.5vw; }
-.slides-container.modo-apresentacao .pilar-grade { font-size: 5vw; }
-.slides-container.modo-apresentacao .slides-nav {
-  padding: 12px 32px;
-}
-
-.btn-sair-apresentacao {
-  display: none;
-  position: fixed;
-  top: 16px;
-  right: 20px;
-  z-index: 10001;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.3);
-  border-radius: 8px;
-  padding: 8px 16px;
-  font-size: 13px;
-  font-weight: 600;
+  align-items: center;
+  position: relative;
   cursor: pointer;
 }
-.btn-sair-apresentacao:hover {
-  background: rgba(0,0,0,0.85);
+.wizard-step-num {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-soft);
+  background: var(--bg-card);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s;
 }
-.btn-sair-apresentacao.visible {
+.wizard-step.done .wizard-step-num {
+  border-color: var(--brand-blue);
+  background: var(--brand-blue);
+  color: white;
+}
+.wizard-step.active .wizard-step-num {
+  border-color: var(--brand-orange);
+  background: var(--brand-orange);
+  color: white;
+  box-shadow: 0 0 0 4px rgba(235,129,5,0.2);
+}
+.wizard-step-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-soft);
+  margin-top: 8px;
+  text-align: center;
+}
+.wizard-step.active .wizard-step-label,
+.wizard-step.done .wizard-step-label {
+  color: var(--text);
+  font-weight: 600;
+}
+.wizard-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: calc(50% + 22px);
+  width: calc(100% - 44px);
+  height: 2px;
+  background: var(--border);
+  z-index: 1;
+}
+.wizard-step.done:not(:last-child)::after {
+  background: var(--brand-blue);
+}
+.wizard-panel { display: none; }
+.wizard-panel.active { display: block; }
+.wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+}
+
+/* ============ TIP BOX ============ */
+.tip-box {
+  background: rgba(0,136,204,0.06);
+  border: 1px solid rgba(0,136,204,0.2);
+  border-left: 4px solid var(--brand-blue);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 14px 18px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+.tip-box strong { color: var(--brand-blue); }
+
+/* ============ SPIN QUESTION ROWS ============ */
+.spin-question-row {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.spin-question-row .form-textarea {
+  min-height: 60px;
+}
+.spin-question-row .q-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+.spin-question-row .btn-remove-q {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--brand-red);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.spin-question-row .btn-remove-q:hover {
+  background: var(--brand-red);
+  color: white;
+  border-color: var(--brand-red);
+}
+
+/* Dynamic list item */
+.dyn-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.dyn-item .form-input { flex: 1; }
+.dyn-item .btn-remove-item {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--brand-red);
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+}
+.dyn-item .btn-remove-item:hover {
+  background: var(--brand-red); color: white; border-color: var(--brand-red);
+}
+
+/* ============ IMAGE UPLOAD ============ */
+.img-upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.img-upload-zone:hover { border-color: var(--brand-blue); }
+.img-upload-zone input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.img-upload-zone .placeholder {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+.img-upload-zone .preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: var(--radius);
+}
+.img-upload-zone .preview-circle {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 0 auto;
   display: block;
 }
 
-/* ============ PRINT ============ */
-@media print {
-  body { background: white !important; }
-  body.dark { --bg: #fff; --bg-card: #fff; --text: #1a1a1a; --text-soft: #555; --border: #ddd; }
-  .topbar, .slides-toolbar, .slides-nav, .btn-sair-apresentacao,
-  #tela-form { display: none !important; }
-  .tela { display: block !important; }
-  .container { max-width: none; padding: 0; }
-  .slides-container {
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
-  }
-  .slide-viewport {
-    aspect-ratio: auto;
-  }
-  .slide {
-    display: flex !important;
-    position: relative !important;
-    page-break-after: always;
-    break-after: page;
-    min-height: 100vh;
-    padding: 48px 56px;
-  }
-  .slide::after {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
-  @page {
-    size: landscape;
-    margin: 0;
-  }
+/* ============ SEARCH BAR ============ */
+.search-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.search-bar .form-input { flex: 1; min-width: 200px; }
+
+/* ============ EMPTY STATE ============ */
+.empty-state {
+  text-align: center;
+  padding: 48px 20px;
+  color: var(--text-soft);
+}
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+  opacity: 0.4;
+}
+.empty-state-text {
+  font-size: 15px;
+  margin-bottom: 16px;
 }
 
-/* ============ HERO ============ */
-.form-hero {
-  text-align: center;
-  margin-bottom: 32px;
+/* ============ PROPOSAL PREVIEW ============ */
+.proposal-preview {
+  background: #ffffff;
+  color: #1a1a1a;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-lg);
+  max-width: 800px;
+  margin: 0 auto;
 }
-.form-hero h1 {
+.proposal-section {
+  padding: 40px 48px;
+  border-bottom: 1px solid #eee;
+}
+.proposal-section:last-child { border-bottom: none; }
+
+.proposal-header {
+  background: linear-gradient(135deg, #003d5c 0%, #005f8a 50%, #0088cc 100%);
+  color: white;
+  padding: 48px;
+  text-align: center;
+}
+.proposal-header .ph-brand {
   font-family: var(--font-display);
-  font-size: 36px;
+  font-size: 14px;
+  opacity: 0.8;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.proposal-header h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
   font-weight: 800;
-  letter-spacing: -1px;
   margin: 0 0 8px;
 }
-.form-hero h1 em {
-  color: var(--brand-blue);
-  font-style: italic;
-  font-weight: 600;
+.proposal-header .ph-for {
+  font-size: 18px;
+  opacity: 0.9;
 }
-.form-hero p {
-  color: var(--text-soft);
+.proposal-header .ph-date {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-top: 16px;
+}
+
+.proposal-section h2 {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px;
+  letter-spacing: -0.3px;
+}
+.proposal-section .section-bar {
+  width: 50px;
+  height: 3px;
+  background: var(--brand-blue);
+  border-radius: 2px;
+  margin-bottom: 20px;
+}
+.proposal-section p {
   font-size: 15px;
-  margin: 0;
+  line-height: 1.8;
+  color: #444;
 }
+
+/* Callout box in proposal */
+.callout {
+  background: #fff8f0;
+  border-left: 4px solid var(--brand-orange);
+  padding: 16px 20px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #5a3e1a;
+}
+
+/* Mentor card in proposal */
+.mentor-card-proposal {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: var(--radius-lg);
+}
+.mentor-card-proposal .mentor-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 800;
+  font-size: 28px;
+  font-family: var(--font-display);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.mentor-card-proposal .mentor-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mentor-card-proposal .mentor-info h3 {
+  margin: 0 0 4px;
+  font-size: 18px;
+  font-weight: 700;
+}
+.mentor-card-proposal .mentor-info .creds {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--brand-blue);
+  margin-bottom: 8px;
+}
+.mentor-card-proposal .mentor-info .bio {
+  font-size: 14px;
+  color: #555;
+  line-height: 1.6;
+}
+.mentor-card-proposal .mentor-quote {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-style: italic;
+  color: var(--brand-orange);
+  margin-top: 10px;
+}
+
+/* Benefits list in proposal */
+.benefits-list {
+  list-style: none;
+  padding: 0;
+  margin: 16px 0;
+}
+.benefits-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 15px;
+  border-bottom: 1px solid #f0f0f0;
+}
+.benefits-list li:last-child { border-bottom: none; }
+.benefits-list .check-icon {
+  color: var(--brand-blue);
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Cases grid */
+.cases-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 600px) { .cases-grid { grid-template-columns: 1fr; } }
+.case-card {
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: var(--radius);
+  border-left: 3px solid var(--brand-blue);
+}
+.case-card h4 {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.case-card p { font-size: 13px; color: #666; margin: 0 0 8px; line-height: 1.5; }
+.case-card .result-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--brand-blue);
+  letter-spacing: 0.5px;
+}
+
+/* Price display in proposal */
+.price-display {
+  text-align: center;
+  padding: 32px;
+  background: linear-gradient(135deg, rgba(0,136,204,0.05), rgba(235,129,5,0.05));
+  border-radius: var(--radius-lg);
+}
+.price-display .installment {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 800;
+  color: var(--brand-blue);
+}
+.price-display .installment small { font-size: 20px; font-weight: 600; }
+.price-display .cash-price {
+  font-size: 16px;
+  color: #666;
+  margin-top: 8px;
+}
+.price-display .original-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 14px;
+}
+.price-display .discount-badge {
+  display: inline-block;
+  background: var(--brand-orange);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+/* CTA in proposal */
+.proposal-cta {
+  text-align: center;
+  padding: 40px 48px;
+  background: linear-gradient(135deg, #003d5c, #0088cc);
+  color: white;
+}
+.proposal-cta .cta-msg {
+  font-size: 18px;
+  margin-bottom: 20px;
+  opacity: 0.95;
+}
+.proposal-cta .whatsapp-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--brand-green);
+  color: white;
+  padding: 14px 32px;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 0.2s;
+}
+.proposal-cta .whatsapp-btn:hover { transform: scale(1.03); }
+.proposal-cta .tagline {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-style: italic;
+  color: var(--brand-orange);
+  margin-top: 20px;
+}
+.proposal-footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: #999;
+  background: #f8f9fa;
+}
+
+/* Stack offer image */
+.stack-offer-img {
+  display: block;
+  max-width: 100%;
+  margin: 0 auto;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+}
+
+/* ============ SETTINGS SECTIONS ============ */
+.settings-section {
+  margin-bottom: 40px;
+}
+.settings-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 32px 0;
+}
+
+/* ============ DATA ACTIONS ============ */
+.data-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 20px;
+  background: var(--bg-soft);
+  border-radius: var(--radius-lg);
+  margin-top: 32px;
+}
+
+/* ============ MENTOR CARD ============ */
+.mentor-photo-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-family: var(--font-display);
+  font-size: 18px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+.mentor-photo-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mentor-card-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ============ STATUS DROPDOWN ============ */
+.status-select {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  cursor: pointer;
+}
+
+/* ============ PRINT STYLES ============ */
+@media print {
+  body { background: white !important; }
+  .topbar, .tabs-bar, .main-content, .wizard-nav, .modal-overlay { display: none !important; }
+  .print-proposal { display: block !important; }
+  .proposal-preview { box-shadow: none; border-radius: 0; }
+  .proposal-section { page-break-inside: avoid; }
+  .proposal-header { page-break-after: avoid; }
+  .proposal-cta { page-break-before: avoid; }
+}
+.print-proposal { display: none; }
+
+/* Utility */
+.mt-8 { margin-top: 8px; }
+.mt-16 { margin-top: 16px; }
+.mt-24 { margin-top: 24px; }
+.mb-0 { margin-bottom: 0; }
+.mb-8 { margin-bottom: 8px; }
+.mb-16 { margin-bottom: 16px; }
+.text-center { text-align: center; }
+.text-soft { color: var(--text-soft); }
+.text-sm { font-size: 13px; }
+.flex-gap-8 { display: flex; gap: 8px; flex-wrap: wrap; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+.hidden { display: none !important; }
 </style>
 </head>
 <body>
 
-<!-- TOP BAR -->
+<!-- ============ TOP BAR ============ -->
 <div class="topbar">
   <div class="brand">
-    <span class="brand-text">Voc&ecirc;Banc&aacute;rio &middot; <span>Proposta Comercial</span></span>
+    <div class="brand-logo">VB</div>
+    <div class="brand-text">VocêBancário <span>· Gerador de Propostas</span></div>
   </div>
   <div class="topbar-actions">
-    <button id="btn-voltar-form" style="display:none;" onclick="mostrarTela('form')">&#8592; Editar dados</button>
-    <button id="btn-dark-toggle" onclick="toggleDarkMode()">&#9790; Modo escuro</button>
+    <button class="dark-toggle" onclick="toggleDark()" title="Alternar modo escuro"></button>
   </div>
 </div>
 
-<!-- TELA 1: FORMULÁRIO -->
-<div class="tela ativo" id="tela-form">
-<div class="container">
+<!-- ============ TABS BAR ============ -->
+<div class="tabs-bar">
+  <button class="tab-btn active" data-tab="tab-settings" onclick="switchTab('tab-settings', this)">Configurações</button>
+  <button class="tab-btn" data-tab="tab-wizard" onclick="switchTab('tab-wizard', this)">Nova Proposta</button>
+  <button class="tab-btn" data-tab="tab-saved" onclick="switchTab('tab-saved', this)">Propostas Salvas</button>
+</div>
 
-  <div class="form-hero">
-    <h1>Gerador de <em>Propostas</em></h1>
-    <p>Preencha os dados do prospect para gerar uma proposta personalizada.</p>
-  </div>
+<!-- ============ MAIN CONTENT ============ -->
+<div class="main-content">
 
-  <!-- Section 1: Dados do Prospect -->
-  <div class="form-section">
-    <h3 class="form-section-title">Dados do Prospect</h3>
-    <p class="form-section-sub">Informações básicas para personalizar a proposta.</p>
+  <!-- ======== TAB 1: CONFIGURAÇÕES ======== -->
+  <div id="tab-settings" class="tab-panel active">
 
-    <div class="form-row">
-      <label class="form-label" for="inp-nome">Nome do prospect</label>
-      <input type="text" id="inp-nome" class="form-input" placeholder="Ex: João Silva"/>
+    <!-- SECTION A: PRODUTOS -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Produtos</h2>
+          <p class="section-subtitle">Planos e programas disponíveis para propostas</p>
+        </div>
+        <button class="btn-primary" onclick="openProductModal()">+ Novo Produto</button>
+      </div>
+      <div id="products-list"></div>
     </div>
 
-    <div class="form-row-inline">
+    <div class="settings-divider"></div>
+
+    <!-- SECTION B: MENTORES -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Mentores</h2>
+          <p class="section-subtitle">Mentores vinculados aos programas</p>
+        </div>
+        <button class="btn-primary" onclick="openMentorModal()">+ Novo Mentor</button>
+      </div>
+      <div id="mentors-list"></div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- SECTION C: PERGUNTAS SPIN -->
+    <div class="settings-section">
+      <div class="section-header">
+        <div>
+          <h2 class="section-title">Perguntas SPIN</h2>
+          <p class="section-subtitle">Perguntas para diagnóstico de vendas consultivas</p>
+        </div>
+      </div>
+      <div id="spin-sections"></div>
+    </div>
+
+    <div class="settings-divider"></div>
+
+    <!-- DATA ACTIONS -->
+    <div class="data-actions">
+      <button onclick="exportAllData()">Exportar Dados (JSON)</button>
+      <button onclick="document.getElementById('importFile').click()">Importar Dados (JSON)</button>
+      <input type="file" id="importFile" accept=".json" style="display:none" onchange="importAllData(event)">
+      <button class="btn-danger" onclick="if(confirm('Resetar todos os dados para o padrão? Isso apagará tudo.')){localStorage.clear();location.reload();}">Resetar Dados</button>
+    </div>
+  </div>
+
+  <!-- ======== TAB 2: NOVA PROPOSTA (WIZARD) ======== -->
+  <div id="tab-wizard" class="tab-panel">
+
+    <!-- Wizard progress -->
+    <div class="wizard-progress" id="wizardProgress">
+      <div class="wizard-step active" data-step="0" onclick="goToWizardStep(0)">
+        <div class="wizard-step-num">1</div>
+        <div class="wizard-step-label">Prospect</div>
+      </div>
+      <div class="wizard-step" data-step="1" onclick="goToWizardStep(1)">
+        <div class="wizard-step-num">2</div>
+        <div class="wizard-step-label">SPIN</div>
+      </div>
+      <div class="wizard-step" data-step="2" onclick="goToWizardStep(2)">
+        <div class="wizard-step-num">3</div>
+        <div class="wizard-step-label">Produto</div>
+      </div>
+      <div class="wizard-step" data-step="3" onclick="goToWizardStep(3)">
+        <div class="wizard-step-num">4</div>
+        <div class="wizard-step-label">Personalizar</div>
+      </div>
+      <div class="wizard-step" data-step="4" onclick="goToWizardStep(4)">
+        <div class="wizard-step-num">5</div>
+        <div class="wizard-step-label">Exportar</div>
+      </div>
+    </div>
+
+    <!-- Step 1: Dados do Prospect -->
+    <div id="wiz-step-0" class="wizard-panel active">
+      <div class="card">
+        <h3 class="card-title mb-8">Dados do Prospect</h3>
+        <p class="text-soft text-sm mb-16">Informações básicas do potencial cliente</p>
+
+        <div class="form-row-inline">
+          <div class="form-row">
+            <label class="form-label">Nome Completo *</label>
+            <input type="text" class="form-input" id="wiz-nome" placeholder="Ex: João da Silva">
+          </div>
+          <div class="form-row">
+            <label class="form-label">Cargo Atual</label>
+            <input type="text" class="form-input" id="wiz-cargo" placeholder="Ex: Gerente de Relacionamento">
+          </div>
+        </div>
+        <div class="form-row-inline">
+          <div class="form-row">
+            <label class="form-label">Instituição</label>
+            <input type="text" class="form-input" id="wiz-instituicao" placeholder="Ex: Itaú, Bradesco, BB...">
+          </div>
+          <div class="form-row">
+            <label class="form-label">E-mail</label>
+            <input type="email" class="form-input" id="wiz-email" placeholder="joao@email.com">
+          </div>
+        </div>
+        <div class="form-row-inline">
+          <div class="form-row">
+            <label class="form-label">WhatsApp</label>
+            <input type="text" class="form-input" id="wiz-whatsapp" placeholder="(11) 99999-9999">
+          </div>
+          <div class="form-row">
+            <label class="form-label">Certificações</label>
+            <div class="flex-gap-8 mt-8">
+              <label class="check-wrap"><input type="checkbox" value="CPA-10" class="wiz-cert"> <span>CPA-10</span></label>
+              <label class="check-wrap"><input type="checkbox" value="CPA-20" class="wiz-cert"> <span>CPA-20</span></label>
+              <label class="check-wrap"><input type="checkbox" value="CEA" class="wiz-cert"> <span>CEA</span></label>
+              <label class="check-wrap"><input type="checkbox" value="CFP" class="wiz-cert"> <span>CFP</span></label>
+              <label class="check-wrap"><input type="checkbox" value="Nenhuma" class="wiz-cert"> <span>Nenhuma</span></label>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <label class="form-label">Observações</label>
+          <textarea class="form-textarea" id="wiz-obs" placeholder="Anotações adicionais sobre o prospect..." style="min-height:80px"></textarea>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <div></div>
+        <button class="btn-primary btn-lg" onclick="wizardNext()">Próximo: Diagnóstico SPIN &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 2: Diagnóstico SPIN -->
+    <div id="wiz-step-1" class="wizard-panel">
+      <div class="card">
+        <h3 class="card-title mb-8">Diagnóstico SPIN</h3>
+        <p class="text-soft text-sm mb-16">Registre as respostas do prospect para cada pergunta</p>
+        <div id="wiz-spin-questions"></div>
+        <div class="form-row mt-24">
+          <label class="form-label">Resumo do Diagnóstico</label>
+          <div class="tip-box">
+            <strong>Dica:</strong> Use as respostas acima para construir o diagnóstico personalizado. Destaque as dores e mostre como o programa resolve cada uma.
+          </div>
+          <textarea class="form-textarea" id="wiz-diagnostico" placeholder="Escreva aqui o diagnóstico personalizado baseado nas respostas do prospect..." style="min-height:140px"></textarea>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-ghost" onclick="wizardPrev()">&larr; Voltar</button>
+        <button class="btn-primary btn-lg" onclick="wizardNext()">Próximo: Produto &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 3: Selecionar Produto -->
+    <div id="wiz-step-2" class="wizard-panel">
+      <div class="card">
+        <h3 class="card-title mb-8">Selecionar Produto</h3>
+        <p class="text-soft text-sm mb-16">Escolha o programa ideal para o prospect</p>
+        <div id="wiz-products-grid" class="grid-2"></div>
+        <div class="form-row-inline mt-24">
+          <div class="form-row">
+            <label class="form-label">Desconto Especial (%)</label>
+            <input type="number" class="form-input" id="wiz-desconto" min="0" max="100" value="0" placeholder="0" onchange="updatePricePreview()" oninput="updatePricePreview()">
+          </div>
+          <div class="form-row">
+            <label class="form-label">Preço Final</label>
+            <div id="wiz-price-preview" style="padding:10px 0;font-size:18px;font-weight:700;color:var(--brand-blue);">Selecione um produto</div>
+          </div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-ghost" onclick="wizardPrev()">&larr; Voltar</button>
+        <button class="btn-primary btn-lg" onclick="wizardNext()">Próximo: Personalizar &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 4: Personalização -->
+    <div id="wiz-step-3" class="wizard-panel">
+      <div class="card">
+        <h3 class="card-title mb-8">Personalização</h3>
+        <p class="text-soft text-sm mb-16">Ajuste o conteúdo da proposta</p>
+
+        <div class="form-row">
+          <label class="form-label">Mensagem de Abertura</label>
+          <textarea class="form-textarea" id="wiz-abertura" style="min-height:100px"></textarea>
+        </div>
+
+        <div class="form-row">
+          <label class="form-label">Seções Incluídas</label>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px" class="mt-8">
+            <label class="check-wrap"><input type="checkbox" id="sec-diagnostico" checked> <span>Diagnóstico SPIN personalizado</span></label>
+            <label class="check-wrap"><input type="checkbox" id="sec-mentor" checked> <span>Apresentação do mentor</span></label>
+            <label class="check-wrap"><input type="checkbox" id="sec-beneficios" checked> <span>Benefícios do programa</span></label>
+            <label class="check-wrap"><input type="checkbox" id="sec-stack" checked> <span>Stack Offer (mockup)</span></label>
+            <label class="check-wrap"><input type="checkbox" id="sec-cases" checked> <span>Cases de sucesso</span></label>
+            <label class="check-wrap"><input type="checkbox" id="sec-investimento" checked> <span>Investimento</span></label>
+            <label class="check-wrap"><input type="checkbox" id="sec-cta" checked> <span>CTA (Call to Action)</span></label>
+          </div>
+        </div>
+
+        <div class="form-row-inline mt-16">
+          <div class="form-row">
+            <label class="form-label">Texto do CTA</label>
+            <input type="text" class="form-input" id="wiz-cta-text" value="Vamos conversar? Me chame no WhatsApp!">
+          </div>
+          <div class="form-row">
+            <label class="form-label">Link do CTA (WhatsApp)</label>
+            <input type="text" class="form-input" id="wiz-cta-link" value="https://wa.me/5511999999999" placeholder="https://wa.me/5511999999999">
+          </div>
+        </div>
+      </div>
+      <div class="wizard-nav">
+        <button class="btn-ghost" onclick="wizardPrev()">&larr; Voltar</button>
+        <button class="btn-primary btn-lg" onclick="wizardNext()">Próximo: Pré-visualização &rarr;</button>
+      </div>
+    </div>
+
+    <!-- Step 5: Preview & Export -->
+    <div id="wiz-step-4" class="wizard-panel">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+        <h3 class="card-title mb-0">Pré-visualização da Proposta</h3>
+        <div class="flex-gap-8">
+          <button class="btn-ghost" onclick="wizardPrev()">&larr; Voltar e Editar</button>
+          <button class="btn-orange" onclick="saveProposal()">Salvar Proposta</button>
+          <button class="btn-primary" onclick="generatePDF()">Gerar PDF</button>
+        </div>
+      </div>
+      <div id="proposal-render"></div>
+    </div>
+  </div>
+
+  <!-- ======== TAB 3: PROPOSTAS SALVAS ======== -->
+  <div id="tab-saved" class="tab-panel">
+    <div class="section-header">
       <div>
-        <label class="form-label" for="inp-data-envio">Data de envio</label>
-        <input type="date" id="inp-data-envio" class="form-input"/>
-      </div>
-      <div>
-        <label class="form-label" for="inp-data-inicio">Data de início da turma</label>
-        <input type="date" id="inp-data-inicio" class="form-input"/>
+        <h2 class="section-title">Propostas Salvas</h2>
+        <p class="section-subtitle">Gerencie todas as suas propostas</p>
       </div>
     </div>
-  </div>
-
-  <!-- Section 2: Metas -->
-  <div class="form-section">
-    <h3 class="form-section-title">Metas do Prospect</h3>
-    <p class="form-section-sub">O que o prospect deseja alcançar com a transição.</p>
-
-    <div id="metas-container">
-      <div class="dynamic-row">
-        <input type="text" class="meta-input form-input" placeholder="Ex: Sair do varejo bancário"/>
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
-      </div>
-      <div class="dynamic-row">
-        <input type="text" class="meta-input form-input" placeholder="Ex: Desenvolver repertório técnico"/>
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
-      </div>
-      <div class="dynamic-row">
-        <input type="text" class="meta-input form-input" placeholder="Ex: Conquistar a certificação CEA"/>
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
-      </div>
+    <div class="search-bar">
+      <input type="text" class="form-input" id="search-proposals" placeholder="Buscar por nome, produto..." oninput="renderSavedProposals()">
+      <select class="form-select" id="filter-status" style="width:180px" onchange="renderSavedProposals()">
+        <option value="">Todos os status</option>
+        <option value="Rascunho">Rascunho</option>
+        <option value="Enviada">Enviada</option>
+        <option value="Convertida">Convertida</option>
+        <option value="Perdida">Perdida</option>
+      </select>
     </div>
-    <button type="button" class="btn-add" onclick="Propostas.adicionarMeta(document.getElementById('metas-container'), '')">+ Adicionar meta</button>
+    <div id="saved-proposals-list"></div>
   </div>
 
-  <!-- Section 3: Avaliação Geral -->
-  <div class="form-section">
-    <h3 class="form-section-title">Avaliação Geral</h3>
-    <p class="form-section-sub">Seu parecer pessoal sobre o prospect. Escreva como se estivesse falando diretamente com ele.</p>
+</div>
 
-    <div class="form-row">
-      <label class="form-label" for="inp-feedback">Texto de feedback</label>
-      <textarea id="inp-feedback" class="form-textarea" placeholder="Ex: Cara, eu vi no seu perfil que você tem uma vivência comercial forte. Isso é ouro no mercado de assessoria. O que te falta não é talento — é método e direção. A Academia foi feita exatamente pra isso."></textarea>
+<!-- ============ PRODUCT MODAL ============ -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="product-modal-title">Novo Produto</h3>
+      <button class="modal-close" onclick="closeProductModal()">&times;</button>
     </div>
-  </div>
-
-  <!-- Section 4: Avaliação por Pilares -->
-  <div class="form-section">
-    <h3 class="form-section-title">Avaliação por Pilares</h3>
-    <p class="form-section-sub">Avalie o prospect em cada pilar (A = excelente, B = bom, C = precisa desenvolver).</p>
-
-    <div class="pilar-block" id="pilar-block-1" style="border-left-color: #d4951a;">
-      <div class="pilar-block-title">Ambiência / Comercial</div>
-      <div class="form-row-inline">
-        <div>
-          <label class="form-label" for="sel-pilar-1">Nota</label>
-          <select id="sel-pilar-1" class="form-input" onchange="Propostas.atualizarBordaPilar(1)">
-            <option value="A">A — Excelente</option>
-            <option value="B" selected>B — Bom</option>
-            <option value="C">C — Precisa desenvolver</option>
-          </select>
-        </div>
-        <div></div>
+    <div class="modal-body">
+      <input type="hidden" id="prod-edit-id">
+      <div class="form-row">
+        <label class="form-label">Nome do Produto *</label>
+        <input type="text" class="form-input" id="prod-nome" placeholder="Ex: MAP® HIGH">
       </div>
       <div class="form-row">
-        <label class="form-label" for="txt-pilar-1">Comentário</label>
-        <textarea id="txt-pilar-1" class="form-textarea-sm" placeholder="Ex: Boa desenvoltura comercial, experiência com atendimento a clientes de alta renda."></textarea>
-      </div>
-    </div>
-
-    <div class="pilar-block" id="pilar-block-2" style="border-left-color: #d4951a;">
-      <div class="pilar-block-title">Conhecimento Técnico / Macro</div>
-      <div class="form-row-inline">
-        <div>
-          <label class="form-label" for="sel-pilar-2">Nota</label>
-          <select id="sel-pilar-2" class="form-input" onchange="Propostas.atualizarBordaPilar(2)">
-            <option value="A">A — Excelente</option>
-            <option value="B" selected>B — Bom</option>
-            <option value="C">C — Precisa desenvolver</option>
-          </select>
-        </div>
-        <div></div>
+        <label class="form-label">Subtítulo</label>
+        <input type="text" class="form-input" id="prod-subtitulo" placeholder="Ex: Mentoria Advisor PRO">
       </div>
       <div class="form-row">
-        <label class="form-label" for="txt-pilar-2">Comentário</label>
-        <textarea id="txt-pilar-2" class="form-textarea-sm" placeholder="Ex: Conhece os principais indicadores macro, mas precisa aprofundar em renda variável."></textarea>
+        <label class="form-label">Descrição Curta</label>
+        <textarea class="form-textarea" id="prod-descricao" style="min-height:70px" placeholder="Breve descrição do produto..."></textarea>
+      </div>
+      <div class="form-row-3">
+        <div class="form-row">
+          <label class="form-label">Duração</label>
+          <input type="text" class="form-input" id="prod-duracao" placeholder="Ex: 12 meses">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Preço à Vista (R$)</label>
+          <input type="number" class="form-input" id="prod-preco" step="0.01" placeholder="17397">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Ativo</label>
+          <div class="toggle-wrap mt-8">
+            <button class="toggle on" id="prod-ativo" onclick="this.classList.toggle('on')"></button>
+            <span class="toggle-label" id="prod-ativo-label">Sim</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-row-inline">
+        <div class="form-row">
+          <label class="form-label">Parcelas (qtd)</label>
+          <input type="number" class="form-input" id="prod-parcelas-qtd" placeholder="12">
+        </div>
+        <div class="form-row">
+          <label class="form-label">Valor da Parcela (R$)</label>
+          <input type="number" class="form-input" id="prod-parcelas-valor" step="0.01" placeholder="1623.72">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="form-label">Benefícios</label>
+        <div id="prod-beneficios-list"></div>
+        <button class="btn-sm mt-8" onclick="addBeneficioField()">+ Adicionar Benefício</button>
+      </div>
+
+      <div class="form-row mt-16">
+        <label class="form-label">Stack Offer (Mockup)</label>
+        <div class="img-upload-zone" id="prod-stack-zone">
+          <input type="file" accept="image/*" onchange="handleStackUpload(event)">
+          <div class="placeholder" id="prod-stack-placeholder">Clique ou arraste uma imagem</div>
+          <img class="preview hidden" id="prod-stack-preview">
+        </div>
+      </div>
+
+      <div class="form-row mt-16">
+        <label class="form-label">Mentor Vinculado</label>
+        <select class="form-select" id="prod-mentor"></select>
       </div>
     </div>
+    <div class="modal-footer">
+      <button onclick="closeProductModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveProduct()">Salvar Produto</button>
+    </div>
+  </div>
+</div>
 
-    <div class="pilar-block" id="pilar-block-3" style="border-left-color: #d4951a;">
-      <div class="pilar-block-title">Produtos / Recomendação</div>
+<!-- ============ MENTOR MODAL ============ -->
+<div class="modal-overlay" id="mentor-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 class="modal-title" id="mentor-modal-title">Novo Mentor</h3>
+      <button class="modal-close" onclick="closeMentorModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ment-edit-id">
       <div class="form-row-inline">
-        <div>
-          <label class="form-label" for="sel-pilar-3">Nota</label>
-          <select id="sel-pilar-3" class="form-input" onchange="Propostas.atualizarBordaPilar(3)">
-            <option value="A">A — Excelente</option>
-            <option value="B" selected>B — Bom</option>
-            <option value="C">C — Precisa desenvolver</option>
-          </select>
+        <div class="form-row">
+          <label class="form-label">Nome *</label>
+          <input type="text" class="form-input" id="ment-nome" placeholder="Nome completo">
         </div>
-        <div></div>
+        <div class="form-row">
+          <label class="form-label">Título / Cargo</label>
+          <input type="text" class="form-input" id="ment-titulo" placeholder="Ex: Team Leader em WMS">
+        </div>
       </div>
       <div class="form-row">
-        <label class="form-label" for="txt-pilar-3">Comentário</label>
-        <textarea id="txt-pilar-3" class="form-textarea-sm" placeholder="Ex: Precisa desenvolver a visão de produto e construção de carteira diversificada."></textarea>
+        <label class="form-label">Credenciais</label>
+        <input type="text" class="form-input" id="ment-credenciais" placeholder="Ex: FAP®, CEA">
       </div>
-    </div>
-  </div>
-
-  <!-- Section 5: Pontos Fortes -->
-  <div class="form-section">
-    <h3 class="form-section-title">Pontos Fortes</h3>
-    <p class="form-section-sub">Destaque as qualidades do prospect em duas formas: lista rápida e detalhamento por pilar.</p>
-
-    <label class="form-label">Lista de pontos fortes</label>
-    <div id="strengths-list-container">
-      <div class="dynamic-row">
-        <input type="text" class="strength-input form-input" placeholder="Ex: Comunicação clara"/>
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      <div class="form-row">
+        <label class="form-label">Bio Curta</label>
+        <textarea class="form-textarea" id="ment-bio" style="min-height:80px" placeholder="Breve biografia..."></textarea>
       </div>
-      <div class="dynamic-row">
-        <input type="text" class="strength-input form-input" placeholder="Ex: Experiência com alta renda"/>
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
-      </div>
-      <div class="dynamic-row">
-        <input type="text" class="strength-input form-input" placeholder="Ex: Perfil empreendedor"/>
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
-      </div>
-    </div>
-    <button type="button" class="btn-add" onclick="Propostas.adicionarStrength(document.getElementById('strengths-list-container'), '')">+ Adicionar ponto forte</button>
-
-    <div style="margin-top: 24px;">
-      <label class="form-label">Detalhamento por pilar</label>
-      <div id="strengths-table-container">
-        <div class="strength-row dynamic-row-wide">
-          <input type="text" class="st-pilar form-input" placeholder="Pilar (ex: Comercial)"/>
-          <textarea class="st-comentario form-textarea-sm" placeholder="Comentário detalhado sobre este ponto forte"></textarea>
-          <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
-        </div>
-        <div class="strength-row dynamic-row-wide">
-          <input type="text" class="st-pilar form-input" placeholder="Pilar (ex: Técnico)"/>
-          <textarea class="st-comentario form-textarea-sm" placeholder="Comentário detalhado sobre este ponto forte"></textarea>
-          <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      <div class="form-row">
+        <label class="form-label">Foto</label>
+        <div class="img-upload-zone" id="ment-foto-zone">
+          <input type="file" accept="image/*" onchange="handleMentorPhotoUpload(event)">
+          <div class="placeholder" id="ment-foto-placeholder">Clique ou arraste uma foto</div>
+          <img class="preview-circle hidden" id="ment-foto-preview">
         </div>
       </div>
-      <button type="button" class="btn-add" onclick="Propostas.adicionarStrengthRow(document.getElementById('strengths-table-container'), '', '')">+ Adicionar detalhe</button>
-    </div>
-  </div>
-
-  <!-- Section 6: Depoimentos -->
-  <div class="form-section">
-    <h3 class="form-section-title">Depoimentos</h3>
-    <p class="form-section-sub">Depoimentos de alunos que já passaram pela Academia.</p>
-
-    <div id="testimonials-container">
-      <div class="testimonial-row card-mini">
-        <div class="dep-grid">
-          <input type="text" class="dep-nome form-input" placeholder="Nome" value=""/>
-          <input type="text" class="dep-cargo form-input" placeholder="Cargo" value=""/>
-          <input type="text" class="dep-empresa form-input" placeholder="Empresa" value=""/>
-          <input type="text" class="dep-foto form-input" placeholder="URL da foto (opcional)" value=""/>
-        </div>
-        <textarea class="dep-texto form-textarea-sm" placeholder="Depoimento do aluno"></textarea>
-        <button type="button" class="btn-remove" onclick="this.parentElement.remove()">&times;</button>
+      <div class="form-row">
+        <label class="form-label">Produtos Vinculados</label>
+        <div id="ment-produtos-checks" class="mt-8"></div>
       </div>
     </div>
-    <button type="button" class="btn-add" onclick="Propostas.adicionarDepoimento(document.getElementById('testimonials-container'), {})">+ Adicionar depoimento</button>
-  </div>
-
-  <!-- Section 7: About Text -->
-  <div class="form-section">
-    <h3 class="form-section-title">Texto "Quem Sou Eu"</h3>
-    <p class="form-section-sub">Texto que aparece no slide de apresentação pessoal. Já vem pré-preenchido.</p>
-
-    <div class="form-row">
-      <label class="form-label" for="inp-about">Sobre o Rodrigo</label>
-      <textarea id="inp-about" class="form-textarea" placeholder=""></textarea>
-      <p class="about-hint">Este texto vem pré-preenchido. Edite se quiser personalizar para este prospect.</p>
+    <div class="modal-footer">
+      <button onclick="closeMentorModal()">Cancelar</button>
+      <button class="btn-primary" onclick="saveMentor()">Salvar Mentor</button>
     </div>
   </div>
+</div>
 
-  <!-- Section 8: Importar JSON -->
-  <div class="form-section">
-    <div class="json-section">
-      <div class="json-toggle" onclick="toggleJson()">
-        <span id="json-arrow">&#9654;</span> Importar / Exportar JSON
-      </div>
-      <div class="json-body" id="json-body">
-        <textarea id="inp-json" class="form-textarea-sm" style="font-family: var(--font-mono); font-size: 12px; min-height: 180px;" placeholder='Cole aqui o JSON completo da proposta...'></textarea>
-        <div class="json-actions">
-          <button type="button" onclick="doImportarJson()">Importar</button>
-          <button type="button" onclick="doExportarJson()">Exportar JSON</button>
-        </div>
+<!-- ============ VIEW PROPOSAL MODAL ============ -->
+<div class="modal-overlay" id="view-proposal-modal">
+  <div class="modal" style="max-width:860px">
+    <div class="modal-header">
+      <h3 class="modal-title">Visualizar Proposta</h3>
+      <div class="flex-gap-8">
+        <button class="btn-primary btn-sm" onclick="generatePDFFromSaved()">Gerar PDF</button>
+        <button class="modal-close" onclick="closeViewProposalModal()">&times;</button>
       </div>
     </div>
-  </div>
-
-  <!-- CTA -->
-  <div style="margin-top: 24px;">
-    <button type="button" class="primary-lg" onclick="gerarEMostrar()">Gerar Proposta &#8594;</button>
-  </div>
-
-</div>
-</div>
-
-<!-- TELA 2: SLIDES -->
-<div class="tela" id="tela-slides">
-<div class="container" style="max-width: 960px;">
-
-  <div class="slides-toolbar">
-    <button onclick="entrarModoApresentacao()">&#9724; Modo apresentação</button>
-    <button onclick="imprimirProposta()">&#128424; Imprimir / PDF</button>
-    <button onclick="copiarTexto()">&#128203; Copiar texto</button>
-  </div>
-
-  <div class="slides-container" id="slides-container">
-    <div class="slide-viewport" id="slide-viewport">
-      <!-- slides injetados aqui -->
-    </div>
-    <div class="slides-nav">
-      <div class="slides-nav-dots" id="slides-dots"></div>
-      <div class="slide-nav-right">
-        <button class="slide-nav-btn" onclick="Propostas.slideAnterior()">&#8592; Anterior</button>
-        <span class="slide-counter" id="slide-counter">1 / 10</span>
-        <button class="slide-nav-btn" onclick="Propostas.slideProximo()">Próximo &#8594;</button>
-      </div>
+    <div class="modal-body" style="max-height:80vh;padding:0">
+      <div id="view-proposal-render"></div>
     </div>
   </div>
-
-</div>
 </div>
 
-<!-- Botão sair apresentação -->
-<button class="btn-sair-apresentacao" id="btn-sair-apresentacao" onclick="sairModoApresentacao()">Esc &middot; Sair</button>
-
-<script src="js/propostas.js"></script>
 <script>
-(function() {
-  'use strict';
+// ============================================================
+// DATA LAYER
+// ============================================================
 
-  /* ===== INICIALIZAÇÃO ===== */
-  document.addEventListener('DOMContentLoaded', function() {
-    // Defaults
-    document.getElementById('inp-data-envio').value = Propostas.hoje();
-    document.getElementById('inp-data-inicio').value = Propostas.proximaQuarta();
-    document.getElementById('inp-about').value = Propostas.ABOUT_TEXT_DEFAULT;
+const STORAGE_KEY = 'vb-propostas-data';
 
-    // Carregar estado salvo
-    Propostas.carregarEstado();
+function uid() { return Date.now().toString(36) + Math.random().toString(36).substr(2, 6); }
 
-    // Dark mode
-    if (localStorage.getItem('propostas_dark') === '1') {
-      document.body.classList.add('dark');
-      document.getElementById('btn-dark-toggle').innerHTML = '&#9788; Modo claro';
+function loadData() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return null;
+}
+
+function saveData(data) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function getDefaultData() {
+  const mentorId = uid();
+  const prod1Id = uid();
+  const prod2Id = uid();
+  const prod3Id = uid();
+
+  return {
+    products: [
+      {
+        id: prod1Id,
+        nome: 'MAP® HIGH',
+        subtitulo: 'Mentoria Advisor PRO',
+        descricao: 'O programa mais completo para transformar sua carreira. 12 meses de acompanhamento intensivo com encontros individuais e mentorias em grupo.',
+        duracao: '12 meses',
+        preco: 17397,
+        parcelasQtd: 12,
+        parcelasValor: 1623.72,
+        beneficios: [
+          'Nivelamento Essencial (FEA)',
+          'Diagnóstico Inicial + PDI',
+          '12 Encontros Individuais/mês',
+          '48 Mentorias em Grupo',
+          '6 SOS Entrevistas',
+          'Pós-Mentoria',
+          'Acelera iBankers',
+          'Grupo de Networking',
+          'WhatsApp do Mentor',
+          'Radar de Vagas',
+          'Cenário Macro',
+          'Suporte VIP',
+          'AI Bankers 2.0',
+          'MAP® PASS'
+        ],
+        stackImage: '',
+        mentorId: mentorId,
+        ativo: true
+      },
+      {
+        id: prod2Id,
+        nome: 'MAP® EXTREME',
+        subtitulo: 'Mentoria Advisor PRO',
+        descricao: 'Programa intensivo de 4 meses para quem precisa acelerar a transição de carreira com foco e objetividade.',
+        duracao: '4 meses',
+        preco: 10397,
+        parcelasQtd: 12,
+        parcelasValor: 970.39,
+        beneficios: [
+          'Nivelamento Essencial (FEA)',
+          'Diagnóstico Inicial + PDI',
+          '4 Encontros Individuais/mês',
+          '16 Mentorias em Grupo',
+          '2 SOS Entrevistas',
+          'Pós-Mentoria',
+          'Acelera iBankers',
+          'Grupo de Networking',
+          'WhatsApp do Mentor',
+          'Radar de Vagas',
+          'Cenário Macro',
+          'Suporte VIP',
+          'AI Bankers 2.0',
+          'MAP® PASS'
+        ],
+        stackImage: '',
+        mentorId: mentorId,
+        ativo: true
+      },
+      {
+        id: prod3Id,
+        nome: 'MAP® TRACKER',
+        subtitulo: 'Mentoria Advisor PRO',
+        descricao: 'O meio-termo perfeito: 6 meses de mentoria com equilíbrio entre acompanhamento individual e aprendizado em grupo.',
+        duracao: '6 meses',
+        preco: 14897,
+        parcelasQtd: 12,
+        parcelasValor: 1390.39,
+        beneficios: [
+          'Nivelamento Essencial (FEA)',
+          'Diagnóstico Inicial + PDI',
+          '6 Encontros Individuais/mês',
+          '24 Mentorias em Grupo',
+          '3 SOS Entrevistas',
+          'Pós-Mentoria',
+          'Acelera iBankers',
+          'Grupo de Networking',
+          'WhatsApp do Mentor',
+          'Radar de Vagas',
+          'Cenário Macro',
+          'Suporte VIP',
+          'AI Bankers 2.0',
+          'MAP® PASS'
+        ],
+        stackImage: '',
+        mentorId: mentorId,
+        ativo: true
+      }
+    ],
+    mentors: [
+      {
+        id: mentorId,
+        nome: 'Rodrigo Arboés',
+        titulo: 'Team Leader em Wealth Management Services',
+        credenciais: 'FAP®, CEA',
+        bio: 'Consultor de investimentos com trajetória do varejo bancário ao Private Banking. Fundador da VocêBancário e Academia do Assessor. Já impactou mais de 3 mil bancários.',
+        foto: '',
+        produtosIds: [prod1Id, prod2Id, prod3Id]
+      }
+    ],
+    spin: {
+      S: [
+        'Qual o seu cargo atual e há quanto tempo está nessa posição?',
+        'Em qual instituição financeira você trabalha?',
+        'Qual segmento de clientes você atende hoje?',
+        'Você possui alguma certificação ANBIMA (CPA-10, CPA-20, CEA)?',
+        'Já participou de algum processo seletivo para a área de investimentos?'
+      ],
+      P: [
+        'O que mais te incomoda no seu trabalho atual?',
+        'Você sente que está estagnado na carreira?',
+        'Qual a maior dificuldade que você enfrenta para migrar para a área de investimentos?',
+        'Sente que as metas do banco estão alinhadas com o que é melhor pro cliente?',
+        'Como está sua preparação técnica para entrevistas de especialista?'
+      ],
+      I: [
+        'Se continuar no cargo atual por mais 3-5 anos, onde você se vê?',
+        'Quanto você estima que está deixando de ganhar por não estar na área de investimentos?',
+        'Como a insatisfação profissional tem impactado sua vida pessoal?',
+        'Seus colegas que migraram — como está a carreira deles comparada à sua?',
+        'O que acontece se o banco fizer mais um corte de pessoal no varejo?'
+      ],
+      N: [
+        'Se pudesse migrar para a área de investimentos em 6 meses, o que mudaria na sua vida?',
+        'Quanto vale pra você ter um mentor que já fez essa transição?',
+        'Se tivesse acesso a um plano prático e comprovado, começaria quando?',
+        'O que significaria pra sua família essa mudança de carreira?',
+        'Ter acompanhamento direto com quem já está no mercado faria diferença?'
+      ]
+    },
+    cases: [
+      { titulo: 'Do Exclusive à Área de Investimentos', desc: 'Saiu do segmento Exclusive e em menos de 1 ano conquistou vaga de Especialista no ÍON.', resultado: 'Especialista ÍON' },
+      { titulo: 'Do call center a Especialista', desc: 'Começou como teleoperador e hoje é Especialista de Investimentos no Santander.', resultado: 'Especialista Santander' },
+      { titulo: '40 anos, zero experiência', desc: 'Sem experiência no mercado financeiro, conquistou vaga de Especialista no Bradesco.', resultado: 'Especialista BRA' },
+      { titulo: 'Desempregado a Especialista', desc: 'Estava desempregado e conquistou cargo premium no maior banco da América Latina.', resultado: 'Especialista Top Bank' },
+      { titulo: 'Do back office ao protagonismo', desc: 'Saiu do back office e em 2 meses já escolhia o emprego que queria.', resultado: 'Em 2 meses' },
+      { titulo: 'De AN a Especialista de Sucesso', desc: 'Era Agente Comercial/AN e hoje é Especialista reconhecido na instituição.', resultado: 'Especialista de Sucesso' }
+    ],
+    proposals: []
+  };
+}
+
+let DATA = loadData() || getDefaultData();
+if (!DATA.cases || DATA.cases.length === 0) {
+  DATA.cases = getDefaultData().cases;
+}
+saveData(DATA);
+
+// ============================================================
+// FORMAT HELPERS
+// ============================================================
+
+function formatBRL(v) {
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(v);
+}
+
+function formatDate(d) {
+  return new Date(d).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ============================================================
+// DARK MODE
+// ============================================================
+
+function toggleDark() {
+  document.body.classList.toggle('dark');
+  localStorage.setItem('vb-dark', document.body.classList.contains('dark'));
+}
+if (localStorage.getItem('vb-dark') === 'true') document.body.classList.add('dark');
+
+// ============================================================
+// TABS
+// ============================================================
+
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if (btn) btn.classList.add('active');
+
+  if (id === 'tab-wizard') {
+    renderWizardSpinQuestions();
+    renderWizardProducts();
+  }
+  if (id === 'tab-saved') {
+    renderSavedProposals();
+  }
+}
+
+// ============================================================
+// TAB 1: PRODUCTS
+// ============================================================
+
+function renderProducts() {
+  const el = document.getElementById('products-list');
+  if (DATA.products.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128230;</div><p class="empty-state-text">Nenhum produto cadastrado</p></div>';
+    return;
+  }
+  el.innerHTML = DATA.products.map(p => {
+    const mentor = DATA.mentors.find(m => m.id === p.mentorId);
+    return `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">${escapeHtml(p.nome)}</h3>
+          <p class="card-sub">${escapeHtml(p.subtitulo)} &middot; ${escapeHtml(p.duracao)} &middot; ${formatBRL(p.preco)} à vista</p>
+        </div>
+        <div class="card-actions">
+          <span class="badge ${p.ativo ? 'badge-green' : 'badge-gray'}">${p.ativo ? 'Ativo' : 'Inativo'}</span>
+          <button class="btn-sm" onclick="editProduct('${p.id}')">Editar</button>
+          <button class="btn-sm btn-danger" onclick="deleteProduct('${p.id}')">Excluir</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="flex-gap-8">
+          ${p.beneficios.slice(0, 5).map(b => `<span class="badge badge-blue">${escapeHtml(b)}</span>`).join('')}
+          ${p.beneficios.length > 5 ? `<span class="badge badge-gray">+${p.beneficios.length - 5}</span>` : ''}
+        </div>
+        ${mentor ? `<p class="text-sm text-soft mt-8">Mentor: ${escapeHtml(mentor.nome)}</p>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openProductModal(editId) {
+  document.getElementById('product-modal').classList.add('open');
+  document.getElementById('product-modal-title').textContent = editId ? 'Editar Produto' : 'Novo Produto';
+  document.getElementById('prod-edit-id').value = editId || '';
+
+  // Populate mentor dropdown
+  const mentorSel = document.getElementById('prod-mentor');
+  mentorSel.innerHTML = '<option value="">-- Nenhum --</option>' +
+    DATA.mentors.map(m => `<option value="${m.id}">${escapeHtml(m.nome)}</option>`).join('');
+
+  if (editId) {
+    const p = DATA.products.find(x => x.id === editId);
+    if (!p) return;
+    document.getElementById('prod-nome').value = p.nome;
+    document.getElementById('prod-subtitulo').value = p.subtitulo || '';
+    document.getElementById('prod-descricao').value = p.descricao || '';
+    document.getElementById('prod-duracao').value = p.duracao || '';
+    document.getElementById('prod-preco').value = p.preco || '';
+    document.getElementById('prod-parcelas-qtd').value = p.parcelasQtd || '';
+    document.getElementById('prod-parcelas-valor').value = p.parcelasValor || '';
+    document.getElementById('prod-ativo').classList.toggle('on', p.ativo);
+    document.getElementById('prod-ativo-label').textContent = p.ativo ? 'Sim' : 'Não';
+    mentorSel.value = p.mentorId || '';
+    renderBeneficiosList(p.beneficios || []);
+    if (p.stackImage) {
+      document.getElementById('prod-stack-preview').src = p.stackImage;
+      document.getElementById('prod-stack-preview').classList.remove('hidden');
+      document.getElementById('prod-stack-placeholder').classList.add('hidden');
+    } else {
+      document.getElementById('prod-stack-preview').classList.add('hidden');
+      document.getElementById('prod-stack-placeholder').classList.remove('hidden');
     }
+  } else {
+    document.getElementById('prod-nome').value = '';
+    document.getElementById('prod-subtitulo').value = '';
+    document.getElementById('prod-descricao').value = '';
+    document.getElementById('prod-duracao').value = '';
+    document.getElementById('prod-preco').value = '';
+    document.getElementById('prod-parcelas-qtd').value = '';
+    document.getElementById('prod-parcelas-valor').value = '';
+    document.getElementById('prod-ativo').classList.add('on');
+    document.getElementById('prod-ativo-label').textContent = 'Sim';
+    document.getElementById('prod-stack-preview').classList.add('hidden');
+    document.getElementById('prod-stack-placeholder').classList.remove('hidden');
+    document.getElementById('prod-stack-preview').src = '';
+    renderBeneficiosList([]);
+  }
+}
 
-    // Auto-save a cada mudança
-    document.getElementById('tela-form').addEventListener('input', function() {
-      Propostas.salvarEstado();
+function closeProductModal() {
+  document.getElementById('product-modal').classList.remove('open');
+}
+
+function renderBeneficiosList(items) {
+  const el = document.getElementById('prod-beneficios-list');
+  el.innerHTML = items.map((b, i) => `
+    <div class="dyn-item">
+      <input type="text" class="form-input prod-beneficio-input" value="${escapeHtml(b)}" placeholder="Benefício...">
+      <button class="btn-remove-item" onclick="this.parentElement.remove()">&times;</button>
+    </div>
+  `).join('');
+}
+
+function addBeneficioField() {
+  const el = document.getElementById('prod-beneficios-list');
+  const div = document.createElement('div');
+  div.className = 'dyn-item';
+  div.innerHTML = `
+    <input type="text" class="form-input prod-beneficio-input" placeholder="Benefício...">
+    <button class="btn-remove-item" onclick="this.parentElement.remove()">&times;</button>
+  `;
+  el.appendChild(div);
+  div.querySelector('input').focus();
+}
+
+function handleStackUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('prod-stack-preview').src = ev.target.result;
+    document.getElementById('prod-stack-preview').classList.remove('hidden');
+    document.getElementById('prod-stack-placeholder').classList.add('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveProduct() {
+  const nome = document.getElementById('prod-nome').value.trim();
+  if (!nome) { alert('Nome do produto é obrigatório.'); return; }
+
+  const beneficios = Array.from(document.querySelectorAll('.prod-beneficio-input'))
+    .map(inp => inp.value.trim())
+    .filter(Boolean);
+
+  const stackImg = document.getElementById('prod-stack-preview').src || '';
+  const isOn = document.getElementById('prod-ativo').classList.contains('on');
+  const editId = document.getElementById('prod-edit-id').value;
+
+  const prodData = {
+    nome,
+    subtitulo: document.getElementById('prod-subtitulo').value.trim(),
+    descricao: document.getElementById('prod-descricao').value.trim(),
+    duracao: document.getElementById('prod-duracao').value.trim(),
+    preco: parseFloat(document.getElementById('prod-preco').value) || 0,
+    parcelasQtd: parseInt(document.getElementById('prod-parcelas-qtd').value) || 0,
+    parcelasValor: parseFloat(document.getElementById('prod-parcelas-valor').value) || 0,
+    beneficios,
+    stackImage: stackImg.startsWith('data:') ? stackImg : '',
+    mentorId: document.getElementById('prod-mentor').value,
+    ativo: isOn
+  };
+
+  if (editId) {
+    const idx = DATA.products.findIndex(p => p.id === editId);
+    if (idx >= 0) { DATA.products[idx] = { ...DATA.products[idx], ...prodData }; }
+  } else {
+    prodData.id = uid();
+    DATA.products.push(prodData);
+  }
+
+  saveData(DATA);
+  renderProducts();
+  closeProductModal();
+}
+
+function editProduct(id) { openProductModal(id); }
+
+function deleteProduct(id) {
+  if (!confirm('Excluir este produto?')) return;
+  DATA.products = DATA.products.filter(p => p.id !== id);
+  saveData(DATA);
+  renderProducts();
+}
+
+// ============================================================
+// TAB 1: MENTORS
+// ============================================================
+
+function renderMentors() {
+  const el = document.getElementById('mentors-list');
+  if (DATA.mentors.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128100;</div><p class="empty-state-text">Nenhum mentor cadastrado</p></div>';
+    return;
+  }
+  el.innerHTML = DATA.mentors.map(m => {
+    const initials = m.nome.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    const linkedProds = DATA.products.filter(p => (m.produtosIds || []).includes(p.id)).map(p => p.nome);
+    return `
+    <div class="card">
+      <div class="card-header">
+        <div class="mentor-card-row">
+          <div class="mentor-photo-thumb">
+            ${m.foto ? `<img src="${m.foto}" alt="">` : initials}
+          </div>
+          <div>
+            <h3 class="card-title">${escapeHtml(m.nome)}</h3>
+            <p class="card-sub">${escapeHtml(m.titulo)} ${m.credenciais ? '&middot; ' + escapeHtml(m.credenciais) : ''}</p>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="btn-sm" onclick="editMentor('${m.id}')">Editar</button>
+          <button class="btn-sm btn-danger" onclick="deleteMentor('${m.id}')">Excluir</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <p class="text-sm">${escapeHtml(m.bio || '')}</p>
+        ${linkedProds.length ? `<div class="flex-gap-8 mt-8">${linkedProds.map(n => `<span class="badge badge-blue">${escapeHtml(n)}</span>`).join('')}</div>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function openMentorModal(editId) {
+  document.getElementById('mentor-modal').classList.add('open');
+  document.getElementById('mentor-modal-title').textContent = editId ? 'Editar Mentor' : 'Novo Mentor';
+  document.getElementById('ment-edit-id').value = editId || '';
+
+  // Product checkboxes
+  const checksEl = document.getElementById('ment-produtos-checks');
+  checksEl.innerHTML = DATA.products.map(p =>
+    `<label class="check-wrap"><input type="checkbox" value="${p.id}" class="ment-prod-check"> <span>${escapeHtml(p.nome)}</span></label>`
+  ).join('');
+
+  if (editId) {
+    const m = DATA.mentors.find(x => x.id === editId);
+    if (!m) return;
+    document.getElementById('ment-nome').value = m.nome;
+    document.getElementById('ment-titulo').value = m.titulo || '';
+    document.getElementById('ment-credenciais').value = m.credenciais || '';
+    document.getElementById('ment-bio').value = m.bio || '';
+    if (m.foto) {
+      document.getElementById('ment-foto-preview').src = m.foto;
+      document.getElementById('ment-foto-preview').classList.remove('hidden');
+      document.getElementById('ment-foto-placeholder').classList.add('hidden');
+    } else {
+      document.getElementById('ment-foto-preview').classList.add('hidden');
+      document.getElementById('ment-foto-placeholder').classList.remove('hidden');
+    }
+    (m.produtosIds || []).forEach(pid => {
+      const cb = checksEl.querySelector(`input[value="${pid}"]`);
+      if (cb) cb.checked = true;
     });
+  } else {
+    document.getElementById('ment-nome').value = '';
+    document.getElementById('ment-titulo').value = '';
+    document.getElementById('ment-credenciais').value = '';
+    document.getElementById('ment-bio').value = '';
+    document.getElementById('ment-foto-preview').classList.add('hidden');
+    document.getElementById('ment-foto-placeholder').classList.remove('hidden');
+    document.getElementById('ment-foto-preview').src = '';
+  }
+}
+
+function closeMentorModal() {
+  document.getElementById('mentor-modal').classList.remove('open');
+}
+
+function handleMentorPhotoUpload(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    document.getElementById('ment-foto-preview').src = ev.target.result;
+    document.getElementById('ment-foto-preview').classList.remove('hidden');
+    document.getElementById('ment-foto-placeholder').classList.add('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveMentor() {
+  const nome = document.getElementById('ment-nome').value.trim();
+  if (!nome) { alert('Nome do mentor é obrigatório.'); return; }
+
+  const prodIds = Array.from(document.querySelectorAll('.ment-prod-check:checked')).map(cb => cb.value);
+  const foto = document.getElementById('ment-foto-preview').src || '';
+  const editId = document.getElementById('ment-edit-id').value;
+
+  const mentData = {
+    nome,
+    titulo: document.getElementById('ment-titulo').value.trim(),
+    credenciais: document.getElementById('ment-credenciais').value.trim(),
+    bio: document.getElementById('ment-bio').value.trim(),
+    foto: foto.startsWith('data:') ? foto : '',
+    produtosIds: prodIds
+  };
+
+  if (editId) {
+    const idx = DATA.mentors.findIndex(m => m.id === editId);
+    if (idx >= 0) { DATA.mentors[idx] = { ...DATA.mentors[idx], ...mentData }; }
+  } else {
+    mentData.id = uid();
+    DATA.mentors.push(mentData);
+  }
+
+  saveData(DATA);
+  renderMentors();
+  closeMentorModal();
+}
+
+function editMentor(id) { openMentorModal(id); }
+
+function deleteMentor(id) {
+  if (!confirm('Excluir este mentor?')) return;
+  DATA.mentors = DATA.mentors.filter(m => m.id !== id);
+  saveData(DATA);
+  renderMentors();
+}
+
+// ============================================================
+// TAB 1: SPIN QUESTIONS
+// ============================================================
+
+const SPIN_LABELS = {
+  S: 'S — Situação',
+  P: 'P — Problema',
+  I: 'I — Implicação',
+  N: 'N — Necessidade/Solução'
+};
+const SPIN_COLORS = { S: '#0088cc', P: '#a12026', I: '#eb8105', N: '#25d366' };
+
+function renderSpinSections() {
+  const el = document.getElementById('spin-sections');
+  el.innerHTML = Object.keys(SPIN_LABELS).map(key => {
+    const questions = DATA.spin[key] || [];
+    return `
+    <div class="collapse-header" onclick="toggleCollapse(this)" id="spin-header-${key}">
+      <div>
+        <span class="collapse-title" style="color:${SPIN_COLORS[key]}">${SPIN_LABELS[key]}</span>
+        <span class="collapse-badge">${questions.length} perguntas</span>
+      </div>
+      <span class="arrow">&#9660;</span>
+    </div>
+    <div class="collapse-body" id="spin-body-${key}">
+      <div id="spin-items-${key}">
+        ${questions.map((q, i) => `
+          <div class="dyn-item">
+            <input type="text" class="form-input spin-q-input" data-key="${key}" value="${escapeHtml(q)}">
+            <button class="btn-remove-item" onclick="removeSpinQ('${key}', ${i})">&times;</button>
+          </div>
+        `).join('')}
+      </div>
+      <button class="btn-sm mt-8" onclick="addSpinQ('${key}')">+ Adicionar Pergunta</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleCollapse(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+function addSpinQ(key) {
+  DATA.spin[key].push('');
+  saveData(DATA);
+  renderSpinSections();
+  // Open the relevant section
+  const header = document.getElementById('spin-header-' + key);
+  const body = document.getElementById('spin-body-' + key);
+  header.classList.add('open');
+  body.classList.add('open');
+  // Focus last input
+  const inputs = body.querySelectorAll('.spin-q-input');
+  if (inputs.length) inputs[inputs.length - 1].focus();
+}
+
+function removeSpinQ(key, idx) {
+  DATA.spin[key].splice(idx, 1);
+  saveData(DATA);
+  renderSpinSections();
+  const header = document.getElementById('spin-header-' + key);
+  const body = document.getElementById('spin-body-' + key);
+  header.classList.add('open');
+  body.classList.add('open');
+}
+
+// Save SPIN on input change
+document.addEventListener('input', function(e) {
+  if (e.target.classList.contains('spin-q-input')) {
+    const key = e.target.dataset.key;
+    const items = document.getElementById('spin-items-' + key);
+    const inputs = items.querySelectorAll('.spin-q-input');
+    DATA.spin[key] = Array.from(inputs).map(inp => inp.value);
+    saveData(DATA);
+    // Update badge
+    const header = document.getElementById('spin-header-' + key);
+    header.querySelector('.collapse-badge').textContent = DATA.spin[key].filter(Boolean).length + ' perguntas';
+  }
+});
+
+// ============================================================
+// TAB 1: DATA IMPORT/EXPORT
+// ============================================================
+
+function exportAllData() {
+  const blob = new Blob([JSON.stringify(DATA, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'vb-propostas-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importAllData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const imported = JSON.parse(ev.target.result);
+      if (imported.products && imported.mentors && imported.spin) {
+        DATA = imported;
+        saveData(DATA);
+        renderAll();
+        alert('Dados importados com sucesso!');
+      } else {
+        alert('Arquivo inválido — estrutura não reconhecida.');
+      }
+    } catch(err) {
+      alert('Erro ao importar: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+}
+
+// ============================================================
+// TAB 2: WIZARD
+// ============================================================
+
+let wizardStep = 0;
+let selectedProductId = null;
+let editingProposalId = null;
+
+function goToWizardStep(step) {
+  // Only allow going to steps that are done or the current one
+  if (step > wizardStep) return;
+  wizardStep = step;
+  renderWizardState();
+}
+
+function wizardNext() {
+  if (wizardStep === 0) {
+    const nome = document.getElementById('wiz-nome').value.trim();
+    if (!nome) { alert('Nome do prospect é obrigatório.'); return; }
+  }
+  if (wizardStep === 2 && !selectedProductId) {
+    alert('Selecione um produto.'); return;
+  }
+  if (wizardStep === 3) {
+    // Before preview, prepare the opening message template
+    const nome = document.getElementById('wiz-nome').value.trim();
+    const prod = DATA.products.find(p => p.id === selectedProductId);
+    const abertura = document.getElementById('wiz-abertura');
+    if (!abertura.value.trim()) {
+      abertura.value = `Olá ${nome}, preparei esta proposta especialmente para você. Depois de entender sua situação atual e seus objetivos, tenho certeza de que o ${prod ? prod.nome : 'programa'} é o caminho ideal para transformar sua carreira.`;
+    }
+  }
+  if (wizardStep < 4) {
+    wizardStep++;
+    renderWizardState();
+    if (wizardStep === 4) renderProposalPreview();
+  }
+}
+
+function wizardPrev() {
+  if (wizardStep > 0) {
+    wizardStep--;
+    renderWizardState();
+  }
+}
+
+function renderWizardState() {
+  // Progress bar
+  document.querySelectorAll('.wizard-step').forEach((s, i) => {
+    s.classList.remove('active', 'done');
+    if (i < wizardStep) s.classList.add('done');
+    if (i === wizardStep) s.classList.add('active');
+  });
+  // Panels
+  for (let i = 0; i < 5; i++) {
+    document.getElementById('wiz-step-' + i).classList.toggle('active', i === wizardStep);
+  }
+  // Pre-fill abertura on step 3
+  if (wizardStep === 3) {
+    const abertura = document.getElementById('wiz-abertura');
+    if (!abertura.value.trim()) {
+      const nome = document.getElementById('wiz-nome').value.trim();
+      const prod = DATA.products.find(p => p.id === selectedProductId);
+      abertura.value = `Olá ${nome}, preparei esta proposta especialmente para você. Depois de entender sua situação atual e seus objetivos, tenho certeza de que o ${prod ? prod.nome : 'programa'} é o caminho ideal para transformar sua carreira.`;
+    }
+  }
+}
+
+function renderWizardSpinQuestions() {
+  const el = document.getElementById('wiz-spin-questions');
+  el.innerHTML = Object.keys(SPIN_LABELS).map(key => {
+    const questions = (DATA.spin[key] || []).filter(Boolean);
+    if (questions.length === 0) return '';
+    return `
+    <div style="margin-bottom:20px">
+      <h4 style="color:${SPIN_COLORS[key]};font-size:15px;font-weight:700;margin:0 0 12px;font-family:var(--font-display)">${SPIN_LABELS[key]}</h4>
+      ${questions.map((q, i) => `
+        <div class="spin-question-row" style="flex-direction:column">
+          <div class="q-label">${escapeHtml(q)}</div>
+          <textarea class="form-textarea wiz-spin-answer" data-spin-key="${key}" data-spin-idx="${i}" placeholder="Resposta do prospect..." style="min-height:60px"></textarea>
+        </div>
+      `).join('')}
+    </div>`;
+  }).join('');
+}
+
+function renderWizardProducts() {
+  const el = document.getElementById('wiz-products-grid');
+  const activeProducts = DATA.products.filter(p => p.ativo);
+  if (activeProducts.length === 0) {
+    el.innerHTML = '<div class="empty-state"><p class="empty-state-text">Nenhum produto ativo. Cadastre produtos nas Configurações.</p></div>';
+    return;
+  }
+  el.innerHTML = activeProducts.map(p => `
+    <div class="card card-selectable ${selectedProductId === p.id ? 'selected' : ''}" onclick="selectProduct('${p.id}')">
+      <div class="card-check">${selectedProductId === p.id ? '&#10003;' : ''}</div>
+      <h3 class="card-title" style="margin-bottom:4px">${escapeHtml(p.nome)}</h3>
+      <p class="card-sub mb-8">${escapeHtml(p.duracao)}</p>
+      <div style="font-size:20px;font-weight:800;color:var(--brand-blue);margin-bottom:8px">
+        ${p.parcelasQtd}x de ${formatBRL(p.parcelasValor)}
+      </div>
+      <div class="text-sm text-soft mb-8">ou ${formatBRL(p.preco)} à vista</div>
+      <ul style="list-style:none;padding:0;margin:0">
+        ${p.beneficios.slice(0, 4).map(b => `<li style="font-size:13px;padding:2px 0;color:var(--text-soft)">&#10003; ${escapeHtml(b)}</li>`).join('')}
+        ${p.beneficios.length > 4 ? `<li style="font-size:12px;color:var(--brand-blue);padding:2px 0">+${p.beneficios.length - 4} benefícios</li>` : ''}
+      </ul>
+      ${p.stackImage ? `<img src="${p.stackImage}" style="max-width:100%;max-height:80px;margin-top:8px;border-radius:6px;object-fit:contain">` : ''}
+    </div>
+  `).join('');
+}
+
+function selectProduct(id) {
+  selectedProductId = id;
+  renderWizardProducts();
+  updatePricePreview();
+}
+
+function updatePricePreview() {
+  const el = document.getElementById('wiz-price-preview');
+  if (!selectedProductId) {
+    el.innerHTML = 'Selecione um produto';
+    return;
+  }
+  const prod = DATA.products.find(p => p.id === selectedProductId);
+  if (!prod) return;
+  const desc = parseFloat(document.getElementById('wiz-desconto').value) || 0;
+  const factor = 1 - (desc / 100);
+  const finalCash = prod.preco * factor;
+  const finalInstall = prod.parcelasValor * factor;
+  if (desc > 0) {
+    el.innerHTML = `<span style="text-decoration:line-through;color:var(--text-soft);font-size:14px;font-weight:400">${formatBRL(prod.preco)}</span> ${formatBRL(finalCash)} à vista <br><span style="font-size:14px;font-weight:400">ou ${prod.parcelasQtd}x de ${formatBRL(finalInstall)}</span> <span class="badge badge-orange" style="margin-left:8px">-${desc}%</span>`;
+  } else {
+    el.innerHTML = `${formatBRL(prod.preco)} à vista <br><span style="font-size:14px;font-weight:400">ou ${prod.parcelasQtd}x de ${formatBRL(prod.parcelasValor)}</span>`;
+  }
+}
+
+// ============================================================
+// PROPOSAL RENDERING
+// ============================================================
+
+function gatherProposalData() {
+  const nome = document.getElementById('wiz-nome').value.trim();
+  const cargo = document.getElementById('wiz-cargo').value.trim();
+  const instituicao = document.getElementById('wiz-instituicao').value.trim();
+  const email = document.getElementById('wiz-email').value.trim();
+  const whatsapp = document.getElementById('wiz-whatsapp').value.trim();
+  const certs = Array.from(document.querySelectorAll('.wiz-cert:checked')).map(cb => cb.value);
+  const obs = document.getElementById('wiz-obs').value.trim();
+
+  // SPIN answers
+  const spinAnswers = {};
+  document.querySelectorAll('.wiz-spin-answer').forEach(ta => {
+    const key = ta.dataset.spinKey;
+    const idx = parseInt(ta.dataset.spinIdx);
+    if (!spinAnswers[key]) spinAnswers[key] = {};
+    if (ta.value.trim()) spinAnswers[key][idx] = ta.value.trim();
   });
 
-  /* ===== NAVEGAÇÃO ENTRE TELAS ===== */
-  window.mostrarTela = function(tela) {
-    document.getElementById('tela-form').classList.toggle('ativo', tela === 'form');
-    document.getElementById('tela-slides').classList.toggle('ativo', tela === 'slides');
-    document.getElementById('btn-voltar-form').style.display = (tela === 'slides') ? 'inline-block' : 'none';
-    if (tela === 'form') window.scrollTo(0, 0);
+  const diagnostico = document.getElementById('wiz-diagnostico').value.trim();
+  const desconto = parseFloat(document.getElementById('wiz-desconto').value) || 0;
+  const abertura = document.getElementById('wiz-abertura').value.trim();
+  const ctaText = document.getElementById('wiz-cta-text').value.trim();
+  const ctaLink = document.getElementById('wiz-cta-link').value.trim();
+
+  const sections = {
+    diagnostico: document.getElementById('sec-diagnostico').checked,
+    mentor: document.getElementById('sec-mentor').checked,
+    beneficios: document.getElementById('sec-beneficios').checked,
+    stack: document.getElementById('sec-stack').checked,
+    cases: document.getElementById('sec-cases').checked,
+    investimento: document.getElementById('sec-investimento').checked,
+    cta: document.getElementById('sec-cta').checked
   };
 
-  /* ===== DARK MODE ===== */
-  window.toggleDarkMode = function() {
-    document.body.classList.toggle('dark');
-    var isDark = document.body.classList.contains('dark');
-    localStorage.setItem('propostas_dark', isDark ? '1' : '0');
-    document.getElementById('btn-dark-toggle').innerHTML = isDark ? '&#9788; Modo claro' : '&#9790; Modo escuro';
+  return {
+    prospect: { nome, cargo, instituicao, email, whatsapp, certs, obs },
+    spinAnswers,
+    diagnostico,
+    productId: selectedProductId,
+    desconto,
+    abertura,
+    ctaText,
+    ctaLink,
+    sections,
+    date: new Date().toISOString()
+  };
+}
+
+function buildProposalHTML(propData) {
+  const prod = DATA.products.find(p => p.id === propData.productId);
+  const mentor = prod ? DATA.mentors.find(m => m.id === prod.mentorId) : null;
+  const sections = propData.sections || {};
+  const factor = 1 - ((propData.desconto || 0) / 100);
+
+  let html = '<div class="proposal-preview">';
+
+  // Header
+  html += `
+  <div class="proposal-header">
+    <div class="ph-brand">VocêBancário &middot; Academia do Assessor</div>
+    <h1>Proposta Exclusiva</h1>
+    <div class="ph-for">para ${escapeHtml(propData.prospect.nome)}</div>
+    <div class="ph-date">${formatDate(propData.date)}</div>
+  </div>`;
+
+  // Opening message
+  if (propData.abertura) {
+    html += `
+    <div class="proposal-section">
+      <p style="font-size:16px;line-height:1.8;color:#444;font-style:italic">${escapeHtml(propData.abertura)}</p>
+    </div>`;
+  }
+
+  // Diagnóstico
+  if (sections.diagnostico && propData.diagnostico) {
+    html += `
+    <div class="proposal-section">
+      <h2>Entendemos sua situação</h2>
+      <div class="section-bar"></div>
+      <p>${escapeHtml(propData.diagnostico).replace(/\n/g, '<br>')}</p>
+    </div>`;
+  }
+
+  // Mentor
+  if (sections.mentor && mentor) {
+    const initials = mentor.nome.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+    html += `
+    <div class="proposal-section">
+      <h2>Seu Mentor</h2>
+      <div class="section-bar"></div>
+      <div class="mentor-card-proposal">
+        <div class="mentor-photo">
+          ${mentor.foto ? `<img src="${mentor.foto}" alt="${escapeHtml(mentor.nome)}">` : initials}
+        </div>
+        <div class="mentor-info">
+          <h3>${escapeHtml(mentor.nome)}</h3>
+          <div class="creds">${escapeHtml(mentor.credenciais)}</div>
+          <div style="font-size:13px;color:#777;margin-bottom:6px">${escapeHtml(mentor.titulo)}</div>
+          <div class="bio">${escapeHtml(mentor.bio)}</div>
+          <div class="mentor-quote">#OVarejoVenceu</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  // O Programa + Benefícios
+  if (prod && sections.beneficios) {
+    html += `
+    <div class="proposal-section">
+      <h2>${escapeHtml(prod.nome)}</h2>
+      <div class="section-bar"></div>
+      <p>${escapeHtml(prod.descricao)}</p>
+      <div style="margin:16px 0"><span class="badge badge-blue" style="font-size:13px;padding:6px 14px">${escapeHtml(prod.duracao)}</span></div>
+      <ul class="benefits-list">
+        ${prod.beneficios.map(b => `<li><span class="check-icon">&#10003;</span> ${escapeHtml(b)}</li>`).join('')}
+      </ul>
+    </div>`;
+  }
+
+  // Stack Offer
+  if (sections.stack && prod && prod.stackImage) {
+    html += `
+    <div class="proposal-section" style="text-align:center">
+      <h2>O que você vai receber</h2>
+      <div class="section-bar" style="margin:0 auto 20px"></div>
+      <img src="${prod.stackImage}" alt="Stack Offer" class="stack-offer-img">
+    </div>`;
+  }
+
+  // Cases de Sucesso
+  if (sections.cases && DATA.cases && DATA.cases.length > 0) {
+    html += `
+    <div class="proposal-section">
+      <h2>Cases de Sucesso</h2>
+      <div class="section-bar"></div>
+      <p style="margin-bottom:16px">Veja quem já transformou a carreira com o MAP®:</p>
+      <div class="cases-grid">
+        ${DATA.cases.map(c => `
+          <div class="case-card">
+            <h4>${escapeHtml(c.titulo)}</h4>
+            <p>${escapeHtml(c.desc)}</p>
+            <div class="result-badge">${escapeHtml(c.resultado)}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>`;
+  }
+
+  // Investimento
+  if (sections.investimento && prod) {
+    const finalCash = prod.preco * factor;
+    const finalInstall = prod.parcelasValor * factor;
+    html += `
+    <div class="proposal-section">
+      <h2>Investimento</h2>
+      <div class="section-bar"></div>
+      <div class="price-display">
+        <div class="installment">${prod.parcelasQtd}x de <small>R$</small> ${finalInstall.toLocaleString('pt-BR', {minimumFractionDigits:2})}</div>
+        ${propData.desconto > 0 ? `
+          <div class="original-price">De ${formatBRL(prod.preco)}</div>
+          <div class="cash-price">por ${formatBRL(finalCash)} à vista</div>
+          <div class="discount-badge">Desconto de ${propData.desconto}%</div>
+        ` : `
+          <div class="cash-price">ou ${formatBRL(prod.preco)} à vista</div>
+        `}
+      </div>
+    </div>`;
+  }
+
+  // CTA
+  if (sections.cta) {
+    html += `
+    <div class="proposal-cta">
+      <div class="cta-msg">${escapeHtml(propData.ctaText || 'Vamos conversar? Me chame no WhatsApp!')}</div>
+      <a href="${escapeHtml(propData.ctaLink || '#')}" target="_blank" class="whatsapp-btn">&#9742; Chamar no WhatsApp</a>
+      <div class="tagline">#OVarejoVenceu</div>
+    </div>`;
+  }
+
+  // Footer
+  html += `
+  <div class="proposal-footer">
+    Proposta gerada em ${formatDate(propData.date)} | VocêBancário &middot; Academia do Assessor | www.academiadoassessor.com.br
+  </div>`;
+
+  html += '</div>';
+  return html;
+}
+
+function renderProposalPreview() {
+  const data = gatherProposalData();
+  document.getElementById('proposal-render').innerHTML = buildProposalHTML(data);
+}
+
+// ============================================================
+// PDF GENERATION
+// ============================================================
+
+function generatePDF() {
+  const data = gatherProposalData();
+  const proposalHTML = buildProposalHTML(data);
+  openPrintWindow(proposalHTML, data.prospect.nome);
+}
+
+function generatePDFFromSaved() {
+  const html = document.getElementById('view-proposal-render').innerHTML;
+  openPrintWindow(html, 'proposta');
+}
+
+function openPrintWindow(proposalHTML, title) {
+  const printWin = window.open('', '_blank');
+  printWin.document.write(`<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Proposta - ${escapeHtml(title)}</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --brand-blue: #0088cc;
+  --brand-red: #a12026;
+  --brand-orange: #eb8105;
+  --brand-green: #25d366;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
+.proposal-preview { max-width: 800px; margin: 0 auto; }
+.proposal-section { padding: 36px 44px; border-bottom: 1px solid #eee; }
+.proposal-section:last-child { border-bottom: none; }
+.proposal-header { background: linear-gradient(135deg, #003d5c 0%, #005f8a 50%, #0088cc 100%); color: white; padding: 44px; text-align: center; }
+.proposal-header .ph-brand { font-family: var(--font-display); font-size: 13px; opacity: 0.8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+.proposal-header h1 { font-family: var(--font-display); font-size: 28px; font-weight: 800; margin: 0 0 8px; }
+.proposal-header .ph-for { font-size: 16px; opacity: 0.9; }
+.proposal-header .ph-date { font-size: 12px; opacity: 0.6; margin-top: 14px; }
+.proposal-section h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+.proposal-section .section-bar { width: 50px; height: 3px; background: var(--brand-blue); border-radius: 2px; margin-bottom: 18px; }
+.proposal-section p { font-size: 14px; line-height: 1.8; color: #444; }
+.mentor-card-proposal { display: flex; gap: 20px; align-items: flex-start; padding: 20px; background: #f8f9fa; border-radius: var(--radius-lg); }
+.mentor-card-proposal .mentor-photo { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 24px; font-family: var(--font-display); flex-shrink: 0; overflow: hidden; }
+.mentor-card-proposal .mentor-photo img { width: 100%; height: 100%; object-fit: cover; }
+.mentor-card-proposal .mentor-info h3 { margin: 0 0 4px; font-size: 16px; }
+.mentor-card-proposal .mentor-info .creds { font-family: var(--font-mono); font-size: 11px; color: var(--brand-blue); margin-bottom: 6px; }
+.mentor-card-proposal .mentor-info .bio { font-size: 13px; color: #555; line-height: 1.6; }
+.mentor-card-proposal .mentor-quote { font-family: var(--font-display); font-size: 15px; font-style: italic; color: var(--brand-orange); margin-top: 8px; }
+.benefits-list { list-style: none; padding: 0; margin: 14px 0; }
+.benefits-list li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+.benefits-list li:last-child { border-bottom: none; }
+.benefits-list .check-icon { color: var(--brand-blue); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
+.badge { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 20px; display: inline-block; }
+.badge-blue { background: rgba(0,136,204,0.12); color: var(--brand-blue); }
+.cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.case-card { padding: 16px; background: #f8f9fa; border-radius: var(--radius); border-left: 3px solid var(--brand-blue); }
+.case-card h4 { margin: 0 0 4px; font-size: 13px; font-weight: 700; }
+.case-card p { font-size: 12px; color: #666; margin: 0 0 6px; line-height: 1.5; }
+.case-card .result-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--brand-blue); letter-spacing: 0.5px; }
+.price-display { text-align: center; padding: 28px; background: linear-gradient(135deg, rgba(0,136,204,0.05), rgba(235,129,5,0.05)); border-radius: var(--radius-lg); }
+.price-display .installment { font-family: var(--font-display); font-size: 36px; font-weight: 800; color: var(--brand-blue); }
+.price-display .installment small { font-size: 18px; font-weight: 600; }
+.price-display .cash-price { font-size: 15px; color: #666; margin-top: 6px; }
+.price-display .original-price { text-decoration: line-through; color: #999; font-size: 13px; }
+.price-display .discount-badge { display: inline-block; background: var(--brand-orange); color: white; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; margin-top: 6px; }
+.proposal-cta { text-align: center; padding: 36px 44px; background: linear-gradient(135deg, #003d5c, #0088cc); color: white; }
+.proposal-cta .cta-msg { font-size: 16px; margin-bottom: 16px; opacity: 0.95; }
+.proposal-cta .whatsapp-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--brand-green); color: white; padding: 12px 28px; border-radius: 30px; font-size: 15px; font-weight: 700; text-decoration: none; }
+.proposal-cta .tagline { font-family: var(--font-display); font-size: 18px; font-style: italic; color: var(--brand-orange); margin-top: 16px; }
+.proposal-footer { text-align: center; padding: 16px; font-size: 11px; color: #999; background: #f8f9fa; }
+.stack-offer-img { display: block; max-width: 100%; margin: 0 auto; border-radius: var(--radius-lg); box-shadow: 0 8px 32px rgba(0,0,0,0.12); }
+.callout { background: #fff8f0; border-left: 4px solid var(--brand-orange); padding: 14px 18px; border-radius: 0 var(--radius) var(--radius) 0; margin: 14px 0; font-size: 13px; color: #5a3e1a; }
+@media print {
+  body { margin: 0; }
+  .proposal-preview { max-width: none; }
+  .proposal-section { page-break-inside: avoid; }
+  .proposal-header { page-break-after: avoid; }
+  .proposal-cta { page-break-before: avoid; }
+}
+</style>
+</head>
+<body>
+${proposalHTML}
+<script>
+  setTimeout(function() { window.print(); }, 500);
+<\/script>
+</body>
+</html>`);
+  printWin.document.close();
+}
+
+// ============================================================
+// SAVE PROPOSAL
+// ============================================================
+
+function saveProposal() {
+  const data = gatherProposalData();
+  if (!data.prospect.nome) { alert('Nome do prospect é obrigatório.'); return; }
+
+  const prod = DATA.products.find(p => p.id === data.productId);
+  const proposal = {
+    id: editingProposalId || uid(),
+    ...data,
+    productName: prod ? prod.nome : 'N/A',
+    status: 'Rascunho',
+    savedAt: new Date().toISOString()
   };
 
-  /* ===== GERAR E MOSTRAR ===== */
-  window.gerarEMostrar = function() {
-    Propostas.salvarEstado();
-    var dados = Propostas.lerFormulario();
-
-    if (!dados.prospectName) {
-      alert('Por favor, preencha o nome do prospect.');
-      document.getElementById('inp-nome').focus();
-      return;
+  if (editingProposalId) {
+    const idx = DATA.proposals.findIndex(p => p.id === editingProposalId);
+    if (idx >= 0) {
+      proposal.status = DATA.proposals[idx].status;
+      DATA.proposals[idx] = proposal;
     }
+    editingProposalId = null;
+  } else {
+    DATA.proposals.push(proposal);
+  }
 
-    Propostas.renderizarSlides(dados);
-    mostrarTela('slides');
-    window.scrollTo(0, 0);
-  };
+  saveData(DATA);
+  alert('Proposta salva com sucesso!');
+  switchTab('tab-saved', document.querySelector('[data-tab="tab-saved"]'));
+}
 
-  /* ===== JSON ===== */
-  window.toggleJson = function() {
-    var body = document.getElementById('json-body');
-    var arrow = document.getElementById('json-arrow');
-    body.classList.toggle('open');
-    arrow.innerHTML = body.classList.contains('open') ? '&#9660;' : '&#9654;';
-  };
+// ============================================================
+// TAB 3: SAVED PROPOSALS
+// ============================================================
 
-  window.doImportarJson = function() {
-    var raw = document.getElementById('inp-json').value.trim();
-    if (!raw) { alert('Cole o JSON antes de importar.'); return; }
-    var ok = Propostas.importarJSON(raw);
-    if (ok) alert('Dados importados com sucesso!');
-  };
+function renderSavedProposals() {
+  const el = document.getElementById('saved-proposals-list');
+  const search = (document.getElementById('search-proposals').value || '').toLowerCase().trim();
+  const filterStatus = document.getElementById('filter-status').value;
 
-  window.doExportarJson = function() {
-    var json = Propostas.exportarJSON();
-    document.getElementById('inp-json').value = json;
+  let proposals = [...(DATA.proposals || [])].sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
 
-    // Copy to clipboard
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(json).then(function() {
-        alert('JSON copiado para a área de transferência!');
-      });
-    } else {
-      var textarea = document.getElementById('inp-json');
-      textarea.select();
-      document.execCommand('copy');
-      alert('JSON copiado!');
-    }
-  };
+  if (search) {
+    proposals = proposals.filter(p =>
+      (p.prospect.nome || '').toLowerCase().includes(search) ||
+      (p.productName || '').toLowerCase().includes(search)
+    );
+  }
+  if (filterStatus) {
+    proposals = proposals.filter(p => p.status === filterStatus);
+  }
 
-  /* ===== MODO APRESENTAÇÃO ===== */
-  window.entrarModoApresentacao = function() {
-    document.getElementById('slides-container').classList.add('modo-apresentacao');
-    document.getElementById('btn-sair-apresentacao').classList.add('visible');
+  if (proposals.length === 0) {
+    el.innerHTML = '<div class="empty-state"><div class="empty-state-icon">&#128196;</div><p class="empty-state-text">Nenhuma proposta encontrada</p></div>';
+    return;
+  }
 
-    if (document.documentElement.requestFullscreen) {
-      document.documentElement.requestFullscreen().catch(function() {});
-    }
-  };
+  const statusColors = { Rascunho: 'badge-gray', Enviada: 'badge-blue', Convertida: 'badge-green', Perdida: 'badge-red' };
 
-  window.sairModoApresentacao = function() {
-    document.getElementById('slides-container').classList.remove('modo-apresentacao');
-    document.getElementById('btn-sair-apresentacao').classList.remove('visible');
+  el.innerHTML = proposals.map(p => `
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h3 class="card-title">${escapeHtml(p.prospect.nome)}</h3>
+          <p class="card-sub">${escapeHtml(p.productName)} &middot; ${formatDate(p.savedAt)}</p>
+        </div>
+        <div class="card-actions" style="align-items:center">
+          <select class="status-select" onchange="changeProposalStatus('${p.id}', this.value)">
+            ${['Rascunho','Enviada','Convertida','Perdida'].map(s => `<option value="${s}" ${p.status === s ? 'selected' : ''}>${s}</option>`).join('')}
+          </select>
+          <button class="btn-sm" onclick="viewProposal('${p.id}')">Visualizar</button>
+          <button class="btn-sm" onclick="editProposal('${p.id}')">Editar</button>
+          <button class="btn-sm" onclick="duplicateProposal('${p.id}')">Duplicar</button>
+          <button class="btn-sm btn-danger" onclick="deleteProposal('${p.id}')">Excluir</button>
+        </div>
+      </div>
+      <div class="card-body">
+        <span class="badge ${statusColors[p.status] || 'badge-gray'}">${p.status || 'Rascunho'}</span>
+        ${p.prospect.cargo ? ` &middot; <span class="text-sm">${escapeHtml(p.prospect.cargo)}</span>` : ''}
+        ${p.prospect.instituicao ? ` &middot; <span class="text-sm">${escapeHtml(p.prospect.instituicao)}</span>` : ''}
+        ${p.desconto > 0 ? ` &middot; <span class="badge badge-orange">-${p.desconto}%</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+}
 
-    if (document.fullscreenElement) {
-      document.exitFullscreen().catch(function() {});
-    }
-  };
+function changeProposalStatus(id, status) {
+  const p = DATA.proposals.find(x => x.id === id);
+  if (p) { p.status = status; saveData(DATA); }
+}
 
-  /* ===== IMPRIMIR ===== */
-  window.imprimirProposta = function() {
-    window.print();
-  };
+function viewProposal(id) {
+  const p = DATA.proposals.find(x => x.id === id);
+  if (!p) return;
+  document.getElementById('view-proposal-render').innerHTML = buildProposalHTML(p);
+  document.getElementById('view-proposal-modal').classList.add('open');
+}
 
-  /* ===== COPIAR TEXTO ===== */
-  window.copiarTexto = function() {
-    var viewport = document.getElementById('slide-viewport');
-    var text = viewport.innerText || viewport.textContent;
-    if (navigator.clipboard) {
-      navigator.clipboard.writeText(text).then(function() {
-        alert('Texto copiado!');
-      });
-    } else {
-      // Fallback
-      var ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      document.execCommand('copy');
-      document.body.removeChild(ta);
-      alert('Texto copiado!');
-    }
-  };
+function closeViewProposalModal() {
+  document.getElementById('view-proposal-modal').classList.remove('open');
+}
 
-  /* ===== KEYBOARD NAV ===== */
-  document.addEventListener('keydown', function(e) {
-    // Only when slides are visible
-    if (!document.getElementById('tela-slides').classList.contains('ativo')) return;
+function editProposal(id) {
+  const p = DATA.proposals.find(x => x.id === id);
+  if (!p) return;
+  editingProposalId = id;
 
-    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      Propostas.slideProximo();
-    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      Propostas.slideAnterior();
-    } else if (e.key === 'Escape') {
-      sairModoApresentacao();
-    }
+  // Switch to wizard tab
+  switchTab('tab-wizard', document.querySelector('[data-tab="tab-wizard"]'));
+
+  // Populate step 1
+  document.getElementById('wiz-nome').value = p.prospect.nome || '';
+  document.getElementById('wiz-cargo').value = p.prospect.cargo || '';
+  document.getElementById('wiz-instituicao').value = p.prospect.instituicao || '';
+  document.getElementById('wiz-email').value = p.prospect.email || '';
+  document.getElementById('wiz-whatsapp').value = p.prospect.whatsapp || '';
+  document.getElementById('wiz-obs').value = p.prospect.obs || '';
+
+  // Certs
+  document.querySelectorAll('.wiz-cert').forEach(cb => {
+    cb.checked = (p.prospect.certs || []).includes(cb.value);
   });
 
-  /* ===== FULLSCREEN CHANGE ===== */
-  document.addEventListener('fullscreenchange', function() {
-    if (!document.fullscreenElement) {
-      sairModoApresentacao();
-    }
-  });
+  // SPIN answers
+  renderWizardSpinQuestions();
+  setTimeout(() => {
+    document.querySelectorAll('.wiz-spin-answer').forEach(ta => {
+      const key = ta.dataset.spinKey;
+      const idx = ta.dataset.spinIdx;
+      if (p.spinAnswers && p.spinAnswers[key] && p.spinAnswers[key][idx]) {
+        ta.value = p.spinAnswers[key][idx];
+      }
+    });
+  }, 50);
 
-})();
+  document.getElementById('wiz-diagnostico').value = p.diagnostico || '';
+  selectedProductId = p.productId || null;
+  document.getElementById('wiz-desconto').value = p.desconto || 0;
+  document.getElementById('wiz-abertura').value = p.abertura || '';
+  document.getElementById('wiz-cta-text').value = p.ctaText || 'Vamos conversar? Me chame no WhatsApp!';
+  document.getElementById('wiz-cta-link').value = p.ctaLink || 'https://wa.me/5511999999999';
+
+  // Sections
+  if (p.sections) {
+    Object.keys(p.sections).forEach(k => {
+      const cb = document.getElementById('sec-' + k);
+      if (cb) cb.checked = p.sections[k];
+    });
+  }
+
+  renderWizardProducts();
+  updatePricePreview();
+
+  // Go to step 0
+  wizardStep = 0;
+  renderWizardState();
+}
+
+function duplicateProposal(id) {
+  const p = DATA.proposals.find(x => x.id === id);
+  if (!p) return;
+  const dup = JSON.parse(JSON.stringify(p));
+  dup.id = uid();
+  dup.prospect.nome = p.prospect.nome + ' (cópia)';
+  dup.status = 'Rascunho';
+  dup.savedAt = new Date().toISOString();
+  DATA.proposals.push(dup);
+  saveData(DATA);
+  renderSavedProposals();
+}
+
+function deleteProposal(id) {
+  if (!confirm('Excluir esta proposta?')) return;
+  DATA.proposals = DATA.proposals.filter(p => p.id !== id);
+  saveData(DATA);
+  renderSavedProposals();
+}
+
+// ============================================================
+// TOGGLE OBSERVER (for product modal toggle)
+// ============================================================
+
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'prod-ativo') {
+    setTimeout(() => {
+      document.getElementById('prod-ativo-label').textContent =
+        document.getElementById('prod-ativo').classList.contains('on') ? 'Sim' : 'Não';
+    }, 10);
+  }
+});
+
+// Close modals on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+// ============================================================
+// RENDER ALL
+// ============================================================
+
+function renderAll() {
+  renderProducts();
+  renderMentors();
+  renderSpinSections();
+}
+
+// Init
+renderAll();
 </script>
 
 </body>
