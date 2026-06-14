@@ -4513,7 +4513,75 @@ function renderLinhasAlocacao() {
           var eqText = ucits.eq ? ' (≈ ' + ucits.eq + ')' : '';
           tickersExtras.push({ ticker: t, desc: 'UCITS ' + ucits.sub + eqText, classe: 'UCITS', custodia: 'OFFSHORE' });
         } else {
-          tickersExtras.push({ ticker: t, desc: 'ETF US-listed', classe: 'Offshore US', custodia: 'OFFSHORE' });
+          // Classificar offshore US por categoria
+          var offMap = {
+            // Ações EUA - Broad
+            VOO:"Ações EUA",VTI:"Ações EUA",SPY:"Ações EUA",IVV:"Ações EUA",QQQ:"Ações EUA (Nasdaq)",QQQM:"Ações EUA (Nasdaq)",RSP:"Ações EUA (Equal Weight)",
+            SCHD:"Dividendos EUA",SCHX:"Ações EUA",SCHB:"Ações EUA",SCHF:"Ações Internacionais",SCHE:"Emergentes",SCHZ:"RF EUA",
+            // Ações EUA - Fatores
+            IWM:"Small Caps EUA",IWF:"Growth EUA",IWD:"Value EUA",IWB:"Ações EUA",IWN:"Small Value EUA",IWO:"Small Growth EUA",IWS:"Mid Value EUA",IWP:"Mid Growth EUA",
+            VIG:"Dividendos EUA",VYM:"Dividendos EUA",VUG:"Growth EUA",VTV:"Value EUA",VO:"Mid Caps EUA",VB:"Small Caps EUA",
+            HDV:"Dividendos EUA",DVY:"Dividendos EUA",DGRO:"Dividendos Growth EUA",DGRW:"Dividendos Growth EUA",
+            QUAL:"Quality EUA",USMV:"Min Vol EUA",MTUM:"Momentum EUA",VLUE:"Value EUA",SIZE:"Size EUA",MOAT:"Wide Moat EUA",COWZ:"Cash Flow EUA",NOBL:"Dividendos Aristocratas",
+            JEPI:"Income EUA",JEPQ:"Income Nasdaq",JPST:"RF Ultra Curta USD",
+            SPLV:"Low Vol EUA",SPHD:"High Div Low Vol",SPHQ:"Quality EUA",KBWB:"Bancos EUA",KBWY:"REITs Yield",PGX:"Preferreds",
+            // Setores EUA
+            XLK:"Tecnologia EUA",XLF:"Financeiro EUA",XLE:"Energia EUA",XLV:"Saúde EUA",XLI:"Indústria EUA",XLC:"Comunicação EUA",
+            XLRE:"Imobiliário EUA",XLU:"Utilities EUA",XLP:"Consumo Básico EUA",XLB:"Materiais EUA",XLY:"Consumo Discricionário",
+            // Ações Internacionais
+            EFA:"Desenvolvidos ex-EUA",EEM:"Emergentes",IEMG:"Emergentes",ACWI:"Global",IEFA:"Desenvolvidos ex-EUA",
+            VEA:"Desenvolvidos ex-EUA",VGK:"Europa",VPL:"Pacífico",VXUS:"Global ex-EUA",VSS:"Small Caps Internacional",
+            SCZ:"Small Caps Internacional",FXI:"China",MCHI:"China",INDA:"Índia",EWZ:"Brasil",
+            SPDW:"Desenvolvidos ex-EUA",SPEM:"Emergentes",DGS:"Dividendos Emergentes",DEM:"Dividendos Emergentes",DLS:"Small Dividendos Intl",EPI:"Índia",
+            // Países
+            EWJ:"Japão",KSA:"Arábia Saudita",BBCA:"Canadá",EWW:"México",EWQ:"França",EWG:"Alemanha",EWU:"Reino Unido",EZA:"África do Sul",ARGT:"Argentina",
+            // Renda Fixa
+            AGG:"RF Aggregate EUA",BND:"RF Aggregate EUA",TLT:"Treasuries Longos",IEF:"Treasuries Médios",SHV:"Treasuries Curtos",TIP:"TIPS (Inflação)",
+            LQD:"Corporativo IG",HYG:"High Yield",EMB:"RF Emergentes",MBB:"Mortgage-Backed",
+            BIL:"T-Bills",GOVT:"Treasuries",USFR:"Floating Rate",TFLO:"Floating Rate",
+            IGIB:"Corporativo IG Médio",IGSB:"Corporativo IG Curto",USIG:"Corporativo IG",FLOT:"Floating Rate",NEAR:"Ultra Curta",
+            VCIT:"Corporativo IG Médio",VCSH:"Corporativo IG Curto",VTIP:"TIPS Curto",VMBS:"Mortgage-Backed",
+            BSV:"RF Curta",BIV:"RF Média",BLV:"RF Longa",SPTL:"Treasuries Longos",SPTS:"Treasuries Curtos",SPAB:"RF Aggregate",
+            SDY:"Dividendos Aristocratas",SPYD:"High Div EUA",
+            // Temáticos
+            ARKK:"Inovação (ARK)",ARKW:"Internet (ARK)",ARKG:"Genômica (ARK)",ARKF:"Fintech (ARK)",ARKQ:"Robótica (ARK)",ARKX:"Espaço (ARK)",ARKB:"Bitcoin (ARK)",PRNT:"3D Printing (ARK)",
+            BOTZ:"Robótica & IA",AIQ:"IA & Tecnologia",QYLD:"Covered Call Nasdaq",XYLD:"Covered Call S&P",RYLD:"Covered Call Russell",
+            COPX:"Mineração Cobre",URA:"Urânio",SIL:"Mineração Prata",LIT:"Lítio & Baterias",
+            BUG:"Cibersegurança",DRIV:"Veículos Autônomos",CLOU:"Cloud Computing",SNSR:"IoT",FINX:"Fintech",SOCL:"Mídias Sociais",HERO:"Jogos & eSports",GNOM:"Genômica",CTEC:"CleanTech",
+            PFFD:"Preferreds",SRET:"REITs Global",MLPA:"MLP Energia",MLPX:"MLP & Infraestrutura",MLP:"MLP",POTX:"Cannabis",BKCH:"Blockchain",
+            PAVE:"Infraestrutura EUA",SDIV:"Super Dividendos Global",DIV:"Dividendos US",
+            // Defesa & Espaço
+            ITA:"Defesa & Aeroespacial",PPA:"Defesa & Aeroespacial",XAR:"Defesa & Aeroespacial",IDEF:"Defesa",UFO:"Espaço",EUAD:"Defesa Europa",MISL:"Defesa",JEDI:"Drones & Defesa",FITE:"Segurança",
+            // Biotech & Saúde
+            XBI:"Biotech",IBB:"Biotech",FBT:"Biotech",BBH:"Biotech",PBE:"Biotech & Genômica",CANC:"Oncologia",IDNA:"Genômica & Saúde",SBIO:"Biotech Breakthroughs",
+            // IA & Big Data
+            IYW:"Tecnologia EUA",FTEC:"Tecnologia EUA",IGM:"Tech & Mídia",IXN:"Tech Global",QTUM:"Computação Quântica",FDN:"Internet",XT:"Tecnologias Exponenciais",KOMP:"New Economies",CHAT:"IA Generativa",
+            // Cannabis
+            MSOS:"Cannabis EUA",MJ:"Cannabis Global",
+            // Cibersegurança
+            CIBR:"Cibersegurança",HACK:"Cibersegurança",IHAK:"Cibersegurança",
+            // Fintech acoes
+            SHOP:"E-commerce (Ação)",HOOD:"Fintech (Ação)",COIN:"Crypto Exchange (Ação)",PYPL:"Pagamentos (Ação)",PLTR:"IA & Data (Ação)",FISV:"Fintech (Ação)",TOST:"Fintech (Ação)",INTU:"Fintech (Ação)",
+            // Energias Limpas
+            ICLN:"Energia Limpa Global",QCLN:"Energia Limpa",PBW:"Energia Limpa",CNRG:"Energia Limpa",LCTD:"Transição Carbono",PBD:"Energia Limpa Global",NZAC:"Clima Paris",FRNW:"Energia Limpa",HYDR:"Hidrogênio",ACES:"Energia Limpa",SMOG:"Low Carbon",BE:"Energia (Ação)",
+            // Jogos
+            ESPO:"Gaming & eSports",NTES:"Gaming (Ação)",U:"Gaming Engine (Ação)",EA:"Gaming (Ação)",TTWO:"Gaming (Ação)",RBLX:"Metaverso (Ação)",GME:"Gaming Retail (Ação)",
+            // Big Tech ações
+            NVDA:"Semicondutores (Ação)",AAPL:"Big Tech (Ação)",MSFT:"Big Tech (Ação)",AMZN:"Big Tech (Ação)",GOOGL:"Big Tech (Ação)",AVGO:"Semicondutores (Ação)",META:"Big Tech (Ação)",TSLA:"EV & Energia (Ação)",BRKB:"Conglomerado (Ação)",
+            RVMD:"Biotech (Ação)",AMGN:"Biotech (Ação)",CORT:"Biotech (Ação)",
+            CRWD:"Cibersegurança (Ação)",FTNT:"Cibersegurança (Ação)",BB:"Cibersegurança (Ação)",PANW:"Cibersegurança (Ação)",CSCO:"Networking (Ação)",OKTA:"Identity (Ação)",AKAM:"CDN (Ação)",
+            VFF:"Cannabis (Ação)",TLRY:"Cannabis (Ação)",CRON:"Cannabis (Ação)",SNDL:"Cannabis (Ação)",ACB:"Cannabis (Ação)",HITI:"Cannabis (Ação)",OGI:"Cannabis (Ação)",
+            // Commodities
+            GLD:"Ouro",IAU:"Ouro",SLV:"Prata",SGOL:"Ouro Físico",SIVR:"Prata Física",GLTR:"Metais Preciosos",DBC:"Commodities Broad",DBA:"Agro Commodities",USO:"Petróleo",UNG:"Gás Natural",PDBC:"Commodities Broad",GSG:"Commodities Broad",CPER:"Cobre",COMT:"Commodities Broad",DJP:"Commodities Broad",KRBN:"Crédito de Carbono",
+            // REITs
+            VNQ:"REITs EUA",RWR:"REITs EUA",IYR:"Imobiliário EUA",REET:"REITs Global",REM:"Mortgage REITs",
+            // Crypto
+            IBIT:"Bitcoin",FBTC:"Bitcoin",GBTC:"Bitcoin",ETHA:"Ethereum",BITO:"Bitcoin Futures",BITB:"Bitcoin",ETH:"Ethereum",
+            // Dimensional
+            DFAC:"Core EUA (Dimensional)",DFAI:"Core Intl (Dimensional)",DFAT:"Core EUA Total (Dimensional)",DFAX:"Core Emergentes (Dimensional)",DFUS:"Equity EUA (Dimensional)",DFLV:"Value EUA (Dimensional)",
+          };
+          var sub = offMap[t] || "Offshore US";
+          tickersExtras.push({ ticker: t, desc: sub, classe: 'Offshore US', custodia: 'OFFSHORE' });
         }
       });
     }
