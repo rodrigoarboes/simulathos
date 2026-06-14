@@ -168,8 +168,17 @@ function bcbDateToYearMonth(dateStr) {
     return `${yyyy}-${mm}`;
 }
 
+/** Today as "dd/MM/yyyy" for BCB queries (so series always reach the present). */
+function hojeBCB() {
+    const d = new Date();
+    const dd = String(d.getDate()).padStart(2, "0");
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const yyyy = d.getFullYear();
+    return `${dd}/${mm}/${yyyy}`;
+}
+
 async function fetchCDI() {
-    const url = bcbUrl(12, "01/01/2020", "31/12/2025");
+    const url = bcbUrl(12, "01/01/2020", hojeBCB());
     const raw = await fetchUrl(url);
     const json = JSON.parse(raw);
 
@@ -180,7 +189,7 @@ async function fetchCDI() {
 }
 
 async function fetchIPCA() {
-    const url = bcbUrl(433, "01/01/2020", "31/12/2025");
+    const url = bcbUrl(433, "01/01/2020", hojeBCB());
     const raw = await fetchUrl(url);
     const json = JSON.parse(raw);
 

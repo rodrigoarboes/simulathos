@@ -254,13 +254,15 @@ var Backtest = (function () {
     // -------------------------------------------------------------------
     // Step 2: Align by common trading dates (intersection of all series)
     // -------------------------------------------------------------------
-    // Combine all series into one map for alignment
+    // IMPORTANT: only the PORTFOLIO assets define the trading dates. The
+    // benchmarks (CDI/IBOV) are intentionally NOT part of the intersection —
+    // their values are looked up per-date later (cdiPorData / ibovPorData), so
+    // including them here would wrongly truncate the backtest whenever a
+    // benchmark series is shorter/stale (e.g. CDI not yet updated to today).
     var todasSeries = {};
     for (var t = 0; t < tickers.length; t++) {
       todasSeries[tickers[t]] = dadosFiltrados[tickers[t]];
     }
-    todasSeries['__cdi__']  = cdiFiltrado;
-    todasSeries['__ibov__'] = ibovFiltrado;
 
     var datasComuns = alinharDatas(todasSeries);
     if (datasComuns.length < 2) {
