@@ -3184,8 +3184,22 @@ const ETFs = [
       jaTem[tk] = true;
     }
   }
-  add(FIIS, "FIIs", "Fundo Imobiliário");
-  add(ACOES, "Ações BR", "Ação B3");
+  // FIIs Tijolo
+  add(["KNRI11","HGLG11","XPLG11","HGRU11","VISC11","XPML11","HGBS11","VILG11","BTLG11","HGRE11","ALZR11","BRCR11","JSRE11","PVBI11","RBRP11","RECT11","TEPP11","TRXF11","VINO11","HSML11","GGRC11"], "FIIs Tijolo", "FII Tijolo");
+  // FIIs Papel / Recebíveis
+  add(["KNCR11","KNIP11","IRDM11","MXRF11","RECR11","CPTS11","HGCR11","RBRR11","VGHF11","MCHF11","KNHF11","DEVA11","VRTA11","HCTR11","KNSC11","MCCI11","VGIR11","VSLH11","BCFF11","RBRF11"], "FIIs Papel", "FII Papel/CRI");
+  // FIAgros
+  add(["VGIA11","SNAG11","RZAG11","KNCA11","CPTR11","EGAF11","FGAA11","GCRA11","JGPX11","RURA11","TGAR11","MFII11","RZTR11"], "FIAgros", "FIAgro");
+  // Ações Dividendos/Utilities
+  add(["TAEE11","EGIE3","CPFE3","BBSE3","CXSE3","SANB11","SAPR4","CSMG3","CGAS5","ALUP11","VIVT3","TIMS3","KLBN11","CMIG4","CPLE6","SBSP3"], "Dividendos/Utilities", "Dividendos");
+  // Ações Blue Chips
+  add(["PETR4","PETR3","VALE3","ITUB4","BBDC4","BBDC3","BBAS3","ABEV3","WEGE3","ELET3","ELET6","B3SA3","RENT3","SUZB3","BPAC11","ITSA4","EQTL3","RADL3","RDOR3","PRIO3","GGBR4","VBBR3","RAIL3","CSAN3","UGPA3","EMBR3"], "Ações BR", "Blue Chip");
+  // Ações Mid/Small Caps
+  add(["COGN3","CVCB3","CYRE3","DXCO3","EZTC3","FLRY3","GFSA3","JHSF3","LWSA3","MGLU3","MRVE3","HAPV3","TOTS3","LREN3","YDUQ3","SMTO3","TEND3","VAMO3","INTB3","NTCO3","ASAI3","CMIN3","ENEV3","CASH3"], "Mid/Small Caps", "Mid/Small Cap");
+  // BDRs
+  add(["AAPL34","MSFT34","AMZO34","GOGL34","M1TA34","TSLA34","NFLX34","MELI34","DISB34","NVDC34","COCA34","JPMC34","WMBY34","VISA34","JNJB34","WALM34"], "BDRs", "BDR Big Tech");
+  // ETFs extras
+  add(["PIBB11","GOVE11","SPXI11","XINA11","GOLD11","QBTC11","SMLL","IDIV","RRRP3"], "ETFs", "ETF");
 })();
 
 
