@@ -2258,7 +2258,7 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
   /* Esconde tudo que não é a apresentação */
   .topbar, .site-footer, .modo-switch, .modo-banner,
   .fab-case, .fab-ajuda, .fab-graficos, .slides-nav, .pitch-actions, .acoes-tela,
-  .identidade-form, .cronometro-box, .modo-banner,
+  .identidade-form, .cronometro-box, .apresentacao-controles, .btn-sair-apresentacao,
   .drawer, .drawer-overlay, .hero { display: none !important; }
 
   /* Só a Tela 6 deve aparecer ao imprimir */
@@ -2280,6 +2280,7 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
     height: auto !important;
     padding: 0 !important;
     background: #ffffff !important;
+    overflow: visible !important;
   }
   .slide {
     display: flex !important;
@@ -2291,6 +2292,7 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
     padding: 48px 64px !important;
     justify-content: center;
     background: #ffffff !important;
+    animation: none !important;
   }
   .slide:last-child {
     page-break-after: auto;
@@ -2305,6 +2307,32 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
     color: #1a1a1a !important;
   }
   .slide h3 { color: #0088cc !important; }
+
+  /* Override dark slide theme for print */
+  .slides-container[data-tema-slide="escuro"] .slide-viewport,
+  .slides-container[data-tema-slide="escuro"] .slide {
+    background: #ffffff !important;
+  }
+  .slides-container[data-tema-slide="escuro"] .slide h1,
+  .slides-container[data-tema-slide="escuro"] .slide h2,
+  .slides-container[data-tema-slide="escuro"] .slide h3,
+  .slides-container[data-tema-slide="escuro"] .slide p,
+  .slides-container[data-tema-slide="escuro"] .slide li,
+  .slides-container[data-tema-slide="escuro"] .slide span,
+  .slides-container[data-tema-slide="escuro"] .slide td,
+  .slides-container[data-tema-slide="escuro"] .slide th {
+    color: #1a1a1a !important;
+  }
+  .slides-container[data-tema-slide="escuro"] .slide h3 {
+    color: #0088cc !important;
+  }
+  .slides-container[data-tema-slide="escuro"] .capa-eyebrow {
+    color: #eb8105 !important;
+  }
+
+  /* Chart.js canvas replaced by images for print */
+  canvas { display: none !important; }
+  .print-chart-img { display: block !important; }
 }
 </style>
 </head>
@@ -6053,6 +6081,34 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
     slidePrev();
   }
+});
+
+// Re-render charts as images for print quality
+window.addEventListener('beforeprint', function() {
+  document.querySelectorAll('.slide canvas').forEach(function(canvas) {
+    if (canvas.width > 0 && canvas.height > 0) {
+      try {
+        var img = document.createElement('img');
+        img.src = canvas.toDataURL('image/png', 1.0);
+        img.style.width = '100%';
+        img.style.height = 'auto';
+        img.style.maxHeight = canvas.style.maxHeight || '300px';
+        img.className = 'print-chart-img';
+        canvas.style.display = 'none';
+        canvas.parentNode.insertBefore(img, canvas.nextSibling);
+      } catch(e) {}
+    }
+  });
+});
+
+window.addEventListener('afterprint', function() {
+  document.querySelectorAll('.print-chart-img').forEach(function(img) {
+    var canvas = img.previousElementSibling;
+    if (canvas && canvas.tagName === 'CANVAS') {
+      canvas.style.display = '';
+    }
+    img.remove();
+  });
 });
 </script>
 
