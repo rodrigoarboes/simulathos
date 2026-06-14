@@ -2353,6 +2353,7 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
     </div>
     <button class="icon" onclick="voltarTela1()">📚 Ver Cases</button>
     <button class="icon" onclick="toggleTheme()">🌓 Tema</button>
+    <button class="icon" id="btn-atualizar-dados" onclick="atualizarDadosBCB()" title="Atualizar CDI e IPCA via BCB">🔄 Atualizar dados</button>
   </div>
 </div>
 
@@ -5993,6 +5994,66 @@ function aplicarLogo() {
   const logo = document.getElementById("logo-acad");
   if (!logo) return;
   logo.src = document.body.classList.contains("dark") ? LOGO_ACAD_ESCURO : LOGO_ACAD_CLARO;
+}
+
+async function atualizarDadosBCB() {
+  const btn = document.getElementById('btn-atualizar-dados');
+  if (!btn) return;
+  const originalText = btn.innerHTML;
+  btn.innerHTML = '⏳ Atualizando...';
+  btn.disabled = true;
+
+  try {
+    const hoje = new Date();
+    const dd = String(hoje.getDate()).padStart(2, '0');
+    const mm = String(hoje.getMonth() + 1).padStart(2, '0');
+    const yyyy = hoje.getFullYear();
+    const dataFim = dd + '/' + mm + '/' + yyyy;
+
+    const toISO = (s) => { const p = s.split('/'); return p[2] + '-' + p[1] + '-' + p[0]; };
+    const toYM = (s) => { const p = s.split('/'); return p[2] + '-' + p[1]; };
+
+    // Fetch CDI
+    const cdiResp = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados?formato=json&dataInicial=01/01/2020&dataFinal=' + dataFim);
+    const cdiJson = await cdiResp.json();
+    const cdi = cdiJson.map(item => ({
+      data: toISO(item.data),
+      valor: parseFloat(item.valor) / 100
+    }));
+
+    // Fetch IPCA
+    const ipcaResp = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=01/01/2020&dataFinal=' + dataFim);
+    const ipcaJson = await ipcaResp.json();
+    const ipca = ipcaJson.map(item => ({
+      data: toYM(item.data),
+      valor: parseFloat(item.valor)
+    }));
+
+    // Update in-memory data
+    if (window.DADOS) {
+      window.DADOS.cdi = cdi;
+      window.DADOS.ipca = ipca;
+    }
+
+    const ultCDI = cdi.length > 0 ? cdi[cdi.length - 1].data : '?';
+    const ultIPCA = ipca.length > 0 ? ipca[ipca.length - 1].data : '?';
+
+    btn.innerHTML = '✅ Atualizado!';
+    btn.title = 'CDI até ' + ultCDI + ' · IPCA até ' + ultIPCA;
+
+    setTimeout(() => {
+      btn.innerHTML = '🔄 Atualizar dados';
+      btn.disabled = false;
+    }, 3000);
+
+  } catch (err) {
+    btn.innerHTML = '❌ Erro';
+    btn.title = 'Erro: ' + err.message;
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.disabled = false;
+    }, 3000);
+  }
 }
 
 function toggleTheme() {
