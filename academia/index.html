@@ -4613,22 +4613,24 @@ function limparMontagem() {
 function filtrarDropdowns(query) {
   query = query.toLowerCase().trim();
   document.querySelectorAll('.etf-select').forEach(function(sel) {
+    var selected = sel.value;
     var options = sel.querySelectorAll('option');
     options.forEach(function(opt) {
-      if (!opt.value || opt.value === '__custom__') { opt.style.display = ''; return; }
+      if (!opt.value || opt.value === '__custom__') { opt.hidden = false; opt.disabled = false; return; }
       var text = (opt.textContent + ' ' + opt.value + ' ' + (opt.getAttribute('data-classe') || '')).toLowerCase();
-      opt.style.display = (!query || text.indexOf(query) > -1) ? '' : 'none';
+      var show = !query || text.indexOf(query) > -1;
+      opt.hidden = !show;
+      opt.disabled = !show;
     });
-    // Also show/hide optgroups if all children hidden
     sel.querySelectorAll('optgroup').forEach(function(og) {
       var visivel = false;
       og.querySelectorAll('option').forEach(function(o) {
-        if (o.style.display !== 'none') visivel = true;
+        if (!o.hidden) visivel = true;
       });
-      og.style.display = visivel ? '' : 'none';
+      og.hidden = !visivel;
     });
+    sel.value = selected;
   });
-  // Reset category pills to "Todos"
   document.querySelectorAll('.cat-pill').forEach(function(p) { p.classList.remove('active'); });
   var todosBtn = document.querySelector('.cat-pill');
   if (todosBtn && !query) todosBtn.classList.add('active');
@@ -4638,9 +4640,10 @@ function filtrarCategoria(cat) {
   document.querySelectorAll('.cat-pill').forEach(function(p) { p.classList.remove('active'); });
   if (event && event.target) event.target.classList.add('active');
   document.querySelectorAll('.etf-select').forEach(function(sel) {
+    var selected = sel.value;
     sel.querySelectorAll('option').forEach(function(opt) {
-      if (!opt.value || opt.value === '__custom__') { opt.style.display = ''; return; }
-      if (!cat) { opt.style.display = ''; return; }
+      if (!opt.value || opt.value === '__custom__') { opt.hidden = false; opt.disabled = false; return; }
+      if (!cat) { opt.hidden = false; opt.disabled = false; return; }
       var optClasse = (opt.getAttribute('data-classe') || '').toLowerCase();
       var optCustodia = (opt.getAttribute('data-custodia') || '').toLowerCase();
       var match = false;
@@ -4651,16 +4654,17 @@ function filtrarCategoria(cat) {
       } else {
         match = optClasse.toLowerCase().indexOf(cat.toLowerCase()) > -1;
       }
-      opt.style.display = match ? '' : 'none';
+      opt.hidden = !match;
+      opt.disabled = !match;
     });
-    // Show/hide optgroups
     sel.querySelectorAll('optgroup').forEach(function(og) {
       var visivel = false;
       og.querySelectorAll('option').forEach(function(o) {
-        if (o.style.display !== 'none') visivel = true;
+        if (!o.hidden) visivel = true;
       });
-      og.style.display = visivel ? '' : 'none';
+      og.hidden = !visivel;
     });
+    sel.value = selected;
   });
   document.getElementById('filtro-ticker').value = '';
 }
