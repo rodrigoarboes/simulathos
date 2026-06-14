@@ -1136,6 +1136,7 @@ button:hover { border-color: var(--brand-blue); color: var(--brand-blue); }
 
 /* ============ PRINT STYLES ============ */
 @media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
   body { background: white !important; }
   .topbar, .tabs-bar, .main-content, .wizard-nav, .modal-overlay { display: none !important; }
   .print-proposal { display: block !important; }
@@ -2867,28 +2868,28 @@ function openPrintWindow(proposalHTML, title) {
   --radius: 8px;
   --radius-lg: 12px;
 }
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
 body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a1a; font-size: 14px; line-height: 1.5; }
 .proposal-preview { max-width: 800px; margin: 0 auto; }
-.proposal-section { padding: 36px 44px; border-bottom: 1px solid #eee; }
+.proposal-section { padding: 40px 48px; border-bottom: 1px solid #eee; }
 .proposal-section:last-child { border-bottom: none; }
-.proposal-header { background: linear-gradient(135deg, #003d5c 0%, #005f8a 50%, #0088cc 100%); color: white; padding: 44px; text-align: center; }
-.proposal-header .ph-brand { font-family: var(--font-display); font-size: 13px; opacity: 0.8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
-.proposal-header h1 { font-family: var(--font-display); font-size: 28px; font-weight: 800; margin: 0 0 8px; }
-.proposal-header .ph-for { font-size: 16px; opacity: 0.9; }
+.proposal-header { background: linear-gradient(135deg, #003d5c 0%, #005f8a 50%, #0088cc 100%); color: white; padding: 48px; text-align: center; }
+.proposal-header .ph-brand { font-family: var(--font-display); font-size: 14px; opacity: 0.8; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 20px; }
+.proposal-header h1 { font-family: var(--font-display); font-size: 32px; font-weight: 800; margin: 0 0 8px; }
+.proposal-header .ph-for { font-size: 18px; opacity: 0.9; }
 .proposal-header .ph-date { font-size: 12px; opacity: 0.6; margin-top: 14px; }
-.proposal-section h2 { font-family: var(--font-display); font-size: 22px; font-weight: 700; margin: 0 0 8px; }
+.proposal-section h2 { font-family: var(--font-display); font-size: 24px; font-weight: 700; margin: 0 0 8px; }
 .proposal-section .section-bar { width: 50px; height: 3px; background: var(--brand-blue); border-radius: 2px; margin-bottom: 18px; }
-.proposal-section p { font-size: 14px; line-height: 1.8; color: #444; }
+.proposal-section p { font-size: 15px; line-height: 1.8; color: #444; }
 .mentor-card-proposal { display: flex; gap: 20px; align-items: flex-start; padding: 20px; background: #f8f9fa; border-radius: var(--radius-lg); }
 .mentor-card-proposal .mentor-photo { width: 70px; height: 70px; border-radius: 50%; background: linear-gradient(135deg, var(--brand-blue), var(--brand-orange)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 800; font-size: 24px; font-family: var(--font-display); flex-shrink: 0; overflow: hidden; }
 .mentor-card-proposal .mentor-photo img { width: 100%; height: 100%; object-fit: cover; }
-.mentor-card-proposal .mentor-info h3 { margin: 0 0 4px; font-size: 16px; }
+.mentor-card-proposal .mentor-info h3 { margin: 0 0 4px; font-size: 18px; }
 .mentor-card-proposal .mentor-info .creds { font-family: var(--font-mono); font-size: 11px; color: var(--brand-blue); margin-bottom: 6px; }
 .mentor-card-proposal .mentor-info .bio { font-size: 13px; color: #555; line-height: 1.6; }
 .mentor-card-proposal .mentor-quote { font-family: var(--font-display); font-size: 15px; font-style: italic; color: var(--brand-orange); margin-top: 8px; }
 .benefits-list { list-style: none; padding: 0; margin: 14px 0; }
-.benefits-list li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 14px; border-bottom: 1px solid #f0f0f0; }
+.benefits-list li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 15px; border-bottom: 1px solid #f0f0f0; }
 .benefits-list li:last-child { border-bottom: none; }
 .benefits-list .check-icon { color: var(--brand-blue); font-weight: 700; flex-shrink: 0; margin-top: 2px; }
 .badge { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 10px; border-radius: 20px; display: inline-block; }
@@ -2899,7 +2900,7 @@ body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a
 .case-card p { font-size: 12px; color: #666; margin: 0 0 6px; line-height: 1.5; }
 .case-card .result-badge { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--brand-blue); letter-spacing: 0.5px; }
 .price-display { text-align: center; padding: 28px; background: linear-gradient(135deg, rgba(0,136,204,0.05), rgba(235,129,5,0.05)); border-radius: var(--radius-lg); }
-.price-display .installment { font-family: var(--font-display); font-size: 36px; font-weight: 800; color: var(--brand-blue); }
+.price-display .installment { font-family: var(--font-display); font-size: 40px; font-weight: 800; color: var(--brand-blue); }
 .price-display .installment small { font-size: 18px; font-weight: 600; }
 .price-display .cash-price { font-size: 15px; color: #666; margin-top: 6px; }
 .price-display .original-price { text-decoration: line-through; color: #999; font-size: 13px; }
@@ -2934,6 +2935,7 @@ body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a
 .proposal-theme-dark .callout { background: #1e1e1e; color: #ccc; }
 .proposal-theme-dark .badge-blue { background: rgba(0,136,204,0.2); }
 
+@page { margin: 10mm; }
 @media print {
   body { margin: 0; }
   .proposal-preview { max-width: none; }
@@ -2947,7 +2949,7 @@ body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a
 <body>
 ${proposalHTML}
 <script>
-  setTimeout(function() { window.print(); }, 500);
+  setTimeout(function() { window.print(); }, 1500);
 <\/script>
 </body>
 </html>`);
@@ -3465,10 +3467,31 @@ body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a
 .benefits-list li { display: flex; align-items: flex-start; gap: 8px; padding: 6px 0; font-size: 14px; }
 .cases-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .case-card { padding: 16px; border-radius: 8px; border-left: 3px solid var(--brand-blue); }
+.price-display { text-align: center; padding: 32px; background: linear-gradient(135deg, rgba(0,136,204,0.05), rgba(0,136,204,0.1)); border-radius: 12px; margin: 16px 0; }
+.price-display .installment { font-family: var(--font-display); font-size: 40px; font-weight: 800; color: var(--brand-blue); }
+.price-display .installment small { font-size: 20px; }
+.price-display .cash-price { font-size: 16px; color: #555; margin-top: 8px; }
+.price-display .original-price { font-size: 14px; color: #999; text-decoration: line-through; margin-top: 8px; }
+.price-display .discount-badge { display: inline-block; background: var(--brand-orange); color: white; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-top: 8px; }
+.proposal-cta { text-align: center; padding: 40px; }
+.proposal-cta .cta-msg { font-size: 18px; color: #444; margin-bottom: 20px; }
+.whatsapp-btn { display: inline-block; background: #25d366; color: white; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 16px; }
+.proposal-cta .tagline { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--brand-orange); margin-top: 20px; }
+.proposal-footer { text-align: center; padding: 20px; font-size: 12px; color: #999; border-top: 1px solid #eee; }
+.badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+.badge-blue { background: rgba(0,136,204,0.1); color: var(--brand-blue); }
+.callout { padding: 16px 20px; background: #fff8f0; border-left: 3px solid var(--brand-orange); border-radius: 0 8px 8px 0; margin: 16px 0; font-size: 14px; }
+.stack-offer-img { max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+.slide-content.dark .price-display { background: linear-gradient(135deg, rgba(0,136,204,0.15), rgba(0,136,204,0.25)); }
+.slide-content.dark .price-display .cash-price, .slide-content.dark .price-display .original-price { color: #aaa; }
+.slide-content.dark .proposal-cta .cta-msg { color: #ccc; }
+.slide-content.dark .proposal-footer { color: #666; border-color: #333; }
+.slide-content.dark .callout { background: #1e1a14; border-color: var(--brand-orange); color: #ddd; }
 @media print {
   body { margin: 0; }
   .print-slide { page-break-after: always; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   .print-slide:last-child { page-break-after: avoid; }
+  .slide-content { box-shadow: none; }
 }
 @page { size: landscape; margin: 0; }
 </style>
@@ -3476,7 +3499,7 @@ body { margin: 0; font-family: var(--font-body); background: white; color: #1a1a
 <body>
 ${slidesHTML}
 <script>
-  setTimeout(function() { window.print(); }, 500);
+  setTimeout(function() { window.print(); }, 1500);
 <\/script>
 </body>
 </html>`);
