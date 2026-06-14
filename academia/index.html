@@ -2514,7 +2514,19 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
     <h2 id="montagem-titulo"></h2>
     <p id="montagem-subtitulo" style="font-size:14px;">Selecione os ETFs e defina os percentuais. A lista é fechada por ETFs adequados ao mercado brasileiro e/ou offshore.</p>
     <div id="modo-livre-info" style="display:none; background:rgba(0,136,204,0.06); border-left:3px solid var(--brand-blue); padding:12px 16px; border-radius:0 8px 8px 0; margin-top:8px; font-size:12px; line-height:1.5;">
-      <strong style="color:var(--brand-blue);">🧪 Modo Livre</strong> — Escolha ETFs da lista ou selecione "Digitar ticker..." para inserir qualquer código. O backtest roda com dados reais dos ativos disponíveis na base (16 ETFs B3 + 13 offshore). Tickers sem dados serão ignorados na simulação.
+      <strong style="color:var(--brand-blue);">🧪 Modo Livre</strong> — Escolha ETFs da lista, digite qualquer ticker no campo abaixo, ou selecione "Digitar ticker..." nos dropdowns. O backtest roda com dados reais buscados ao vivo via BRAPI. Ações, ETFs, FIIs — qualquer ativo B3.
+    </div>
+    <div id="ticker-busca-area" style="display:none; margin-top:12px;">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="ticker-busca" placeholder="Buscar ticker (ex: PETR4, VALE3, KNRI11, HASH11...)"
+          style="flex:1;padding:10px 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);font-family:var(--font-mono);font-size:14px;text-transform:uppercase;"
+          onkeydown="if(event.key==='Enter')buscarTickerBRAPI()">
+        <button onclick="buscarTickerBRAPI()" style="padding:10px 18px;border-radius:8px;background:var(--brand-blue);color:white;border:none;cursor:pointer;font-weight:600;white-space:nowrap;font-family:var(--font-body);">+ Buscar</button>
+      </div>
+      <div id="ticker-busca-status" style="font-size:12px;margin-top:6px;min-height:18px;"></div>
+      <div id="tickers-buscados-lista" style="display:none;margin-top:8px;padding:8px 12px;background:var(--bg-soft);border-radius:6px;font-size:12px;">
+        <strong>Tickers buscados nesta sessão:</strong> <span id="tickers-buscados-tags"></span>
+      </div>
     </div>
   </div>
 
@@ -4318,8 +4330,10 @@ function iniciarModoLivre() {
   document.getElementById("montagem-titulo").textContent = "Modo Livre — Monte sua carteira";
   document.getElementById("montagem-subtitulo").textContent = "Escolha ETFs da lista ou digite qualquer ticker. A simulação roda com dados históricos reais.";
   document.getElementById("modo-livre-info").style.display = "";
+  document.getElementById("ticker-busca-area").style.display = "";
   document.getElementById("btn-voltar-briefing").style.display = "none";
   document.getElementById("btn-submeter").textContent = "Simular →";
+  atualizarListaTickersBuscados();
   renderLinhasAlocacao();
   calcularMontagem();
   trocarTela("tela3");
@@ -4332,6 +4346,7 @@ function abrirCase(id) {
   document.getElementById("btn-voltar-briefing").style.display = "";
   document.getElementById("btn-submeter").textContent = "Submeter proposta para avaliação →";
   document.getElementById("modo-livre-info").style.display = "none";
+  document.getElementById("ticker-busca-area").style.display = "none";
   document.getElementById("montagem-subtitulo").textContent = "Selecione os ETFs e defina os percentuais. A lista é fechada por ETFs adequados ao mercado brasileiro e/ou offshore.";
   registrarTentativa(id);
 
@@ -4393,7 +4408,12 @@ function renderLinhasAlocacao() {
   const tickersDisponiveisSet = new Set(etfsRelevantes.map(e => e.ticker));
   const tickersExtras = [];
   if (window.DADOS) {
-    if (window.DADOS.etfs) Object.keys(window.DADOS.etfs).forEach(t => { if (!tickersDisponiveisSet.has(t)) tickersExtras.push({ ticker: t, desc: "ETF B3 (dados disponíveis)", classe: "Outros", custodia: "BR" }); });
+    if (window.DADOS.etfs) Object.keys(window.DADOS.etfs).forEach(t => {
+      if (!tickersDisponiveisSet.has(t)) {
+        var isBrapi = typeof tickerCache !== 'undefined' && tickerCache && tickerCache[t];
+        tickersExtras.push({ ticker: t, desc: isBrapi ? "Buscado via BRAPI" : "B3 (dados disponíveis)", classe: isBrapi ? "Buscados via BRAPI" : "Outros", custodia: "BR" });
+      }
+    });
     if (window.DADOS.offshore) Object.keys(window.DADOS.offshore).forEach(t => { if (!tickersDisponiveisSet.has(t)) tickersExtras.push({ ticker: t, desc: "Offshore (dados disponíveis)", classe: "Outros", custodia: "OFFSHORE" }); });
   }
 
@@ -4494,6 +4514,170 @@ function limparMontagem() {
   montagemAtual = [{ ticker: "", pct: 0 }, { ticker: "", pct: 0 }, { ticker: "", pct: 0 }];
   renderLinhasAlocacao();
   calcularMontagem();
+}
+
+/* =================================================================================
+   BUSCA DINÂMICA DE TICKERS VIA BRAPI (brapi.dev)
+   Permite buscar qualquer ativo B3 (ações, ETFs, FIIs) ao vivo no Modo Livre.
+   ================================================================================= */
+var tickerCache = {};
+
+async function buscarTickerBRAPI() {
+  var input = document.getElementById('ticker-busca');
+  var status = document.getElementById('ticker-busca-status');
+  if (!input || !status) return;
+
+  var ticker = input.value.trim().toUpperCase();
+  if (!ticker) return;
+
+  // Remove .SA suffix if user typed it
+  ticker = ticker.replace(/\.SA$/i, '');
+
+  // Check if already in DADOS
+  if (window.DADOS && window.DADOS.etfs && window.DADOS.etfs[ticker]) {
+    status.innerHTML = '<span style="color:var(--ok)">&#10003; ' + ticker + ' já está na base (pré-carregado, ' + window.DADOS.etfs[ticker].length + ' dias)</span>';
+    input.value = '';
+    adicionarTickerAoPortfolio(ticker);
+    return;
+  }
+
+  // Check cache
+  if (tickerCache[ticker]) {
+    if (window.DADOS && window.DADOS.etfs) {
+      window.DADOS.etfs[ticker] = tickerCache[ticker];
+    }
+    if (window.AIDASim && window.AIDASim.resetCache) window.AIDASim.resetCache();
+    status.innerHTML = '<span style="color:var(--ok)">&#10003; ' + ticker + ' carregado do cache (' + tickerCache[ticker].length + ' dias)</span>';
+    input.value = '';
+    atualizarListaTickersBuscados();
+    adicionarTickerAoPortfolio(ticker);
+    renderLinhasAlocacao();
+    return;
+  }
+
+  // Fetch from BRAPI
+  status.innerHTML = '<span style="color:var(--brand-blue)">&#9203; Buscando ' + ticker + ' na BRAPI...</span>';
+  var btn = input.parentElement.querySelector('button');
+  if (btn) { btn.disabled = true; btn.textContent = 'Buscando...'; }
+
+  try {
+    var resp = await fetch('https://brapi.dev/api/quote/' + encodeURIComponent(ticker) + '?range=5y&interval=1d');
+    if (!resp.ok) {
+      if (resp.status === 404) throw new Error('Ticker não encontrado na B3');
+      if (resp.status === 429) throw new Error('Limite de requisições atingido. Aguarde alguns segundos.');
+      throw new Error('Erro HTTP ' + resp.status);
+    }
+    var json = await resp.json();
+
+    if (!json.results || json.results.length === 0) {
+      throw new Error('Ticker não encontrado');
+    }
+
+    var result = json.results[0];
+    if (!result.historicalDataPrice || result.historicalDataPrice.length === 0) {
+      throw new Error('Sem dados históricos para ' + ticker);
+    }
+
+    var hist = result.historicalDataPrice;
+    var series = [];
+    for (var i = 0; i < hist.length; i++) {
+      var item = hist[i];
+      if (!item.date) continue;
+      var preco = (item.adjustedClose != null) ? item.adjustedClose : item.close;
+      if (preco == null || preco <= 0) continue;
+      var d = new Date(item.date * 1000);
+      var yyyy = d.getUTCFullYear();
+      var mm = String(d.getUTCMonth() + 1).padStart(2, '0');
+      var dd = String(d.getUTCDate()).padStart(2, '0');
+      series.push({
+        data: yyyy + '-' + mm + '-' + dd,
+        close: Math.round(preco * 100) / 100
+      });
+    }
+
+    // Sort by date
+    series.sort(function(a, b) { return a.data < b.data ? -1 : a.data > b.data ? 1 : 0; });
+
+    // Remove duplicates (same date)
+    var deduped = [];
+    var lastDate = '';
+    for (var j = 0; j < series.length; j++) {
+      if (series[j].data !== lastDate) {
+        deduped.push(series[j]);
+        lastDate = series[j].data;
+      }
+    }
+    series = deduped;
+
+    if (series.length < 10) {
+      throw new Error('Dados insuficientes (' + series.length + ' pontos). Mínimo: 10 dias.');
+    }
+
+    // Store in DADOS and cache
+    if (window.DADOS && window.DADOS.etfs) {
+      window.DADOS.etfs[ticker] = series;
+    }
+    tickerCache[ticker] = series;
+
+    // Invalidate AIDASim universe cache so new ticker is picked up in backtest
+    if (window.AIDASim && window.AIDASim.resetCache) window.AIDASim.resetCache();
+
+    var primeiro = series[0].data;
+    var ultimo = series[series.length - 1].data;
+    status.innerHTML = '<span style="color:var(--ok)">&#10003; <strong>' + ticker + '</strong> carregado — ' + series.length + ' dias (' + primeiro + ' a ' + ultimo + ')</span>';
+    input.value = '';
+
+    atualizarListaTickersBuscados();
+    adicionarTickerAoPortfolio(ticker);
+    renderLinhasAlocacao();
+
+  } catch (err) {
+    status.innerHTML = '<span style="color:var(--bad)">&#10007; ' + ticker + ': ' + (err.message || 'Erro desconhecido') + '</span>';
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '+ Buscar'; }
+  }
+}
+
+function adicionarTickerAoPortfolio(ticker) {
+  if (!ticker) return;
+  // Check if ticker is already in a row
+  for (var i = 0; i < montagemAtual.length; i++) {
+    if (montagemAtual[i].ticker === ticker) return; // already present
+  }
+  // Find an empty row to fill
+  for (var j = 0; j < montagemAtual.length; j++) {
+    if (!montagemAtual[j].ticker) {
+      montagemAtual[j].ticker = ticker;
+      renderLinhasAlocacao();
+      calcularMontagem();
+      return;
+    }
+  }
+  // No empty row — add a new one
+  montagemAtual.push({ ticker: ticker, pct: 0 });
+  renderLinhasAlocacao();
+  calcularMontagem();
+}
+
+function atualizarListaTickersBuscados() {
+  var area = document.getElementById('tickers-buscados-lista');
+  var tags = document.getElementById('tickers-buscados-tags');
+  if (!area || !tags) return;
+
+  var buscados = Object.keys(tickerCache);
+  if (buscados.length === 0) {
+    area.style.display = 'none';
+    return;
+  }
+
+  area.style.display = '';
+  var html = '';
+  for (var i = 0; i < buscados.length; i++) {
+    var t = buscados[i];
+    var dias = tickerCache[t] ? tickerCache[t].length : 0;
+    html += '<span style="display:inline-block;background:var(--brand-blue);color:white;padding:2px 8px;border-radius:4px;margin:2px 4px 2px 0;font-family:var(--font-mono);font-size:11px;font-weight:600;">' + t + ' <span style="opacity:0.7;font-weight:400;">(' + dias + 'd)</span></span>';
+  }
+  tags.innerHTML = html;
 }
 
 function calcularMontagem() {

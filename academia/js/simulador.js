@@ -700,7 +700,8 @@ var AIDASim = (function () {
   return {
     render: render,
     buscar: buscarTicker,
-    setProxy: function(url) { PROXY_URL = url; }
+    setProxy: function(url) { PROXY_URL = url; },
+    resetCache: function() { universoCache = null; }
   };
 
 })();
