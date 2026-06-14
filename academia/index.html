@@ -2586,7 +2586,8 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
         <button class="cat-pill" onclick="filtrarCategoria('BDR')">BDRs</button>
         <button class="cat-pill" onclick="filtrarCategoria('Cripto')">Cripto</button>
         <button class="cat-pill" onclick="filtrarCategoria('Alternativos')">Alternativos</button>
-        <button class="cat-pill" onclick="filtrarCategoria('OFFSHORE')" title="ETFs listados diretamente nas bolsas americanas/europeias (ex: VOO, QQQ, ARKK) — requer conta no exterior">Offshore ℹ️</button>
+        <button class="cat-pill" onclick="filtrarCategoria('OFFSHORE')" title="ETFs listados nas bolsas americanas (ex: VOO, QQQ, ARKK, SCHD) — requer conta no exterior">Offshore US ℹ️</button>
+        <button class="cat-pill" onclick="filtrarCategoria('UCITS')" title="ETFs UCITS listados na Europa/Irlanda (ex: VUAA, CNDX, VWRA, CSPX) — sem estate tax, eficiente pra brasileiro">UCITS ℹ️</button>
       </div>
 
       <div id="linhas-alocacao"></div>
@@ -4505,7 +4506,14 @@ function renderLinhasAlocacao() {
         tickersExtras.push({ ticker: t, desc: isBrapi ? "Buscado via BRAPI" : "B3 (dados disponíveis)", classe: isBrapi ? "Buscados via BRAPI" : "Outros", custodia: "BR" });
       }
     });
-    if (window.DADOS.offshore) Object.keys(window.DADOS.offshore).forEach(t => { if (!tickersDisponiveisSet.has(t)) tickersExtras.push({ ticker: t, desc: "Offshore (dados disponíveis)", classe: "Outros", custodia: "OFFSHORE" }); });
+    if (window.DADOS.offshore) {
+      var ucitsTickers = new Set(["VUAA","CNDX","VWRA","ISAC","IB01","FLOA","CSPX","IWDA","EIMI","SWRD","BBTR","IJPA","IEMA","CPXJ","NDIA","WSML","DPYA","VHYA","SPMV","IUVL","HEDK","XMED","XEOU","ISFD","SAEM","CNYA","VJPA","ACWD","U03A","VDPA","SPXS","SPYL","SASU","XDEW","SPY4","R2US","CSUS","EMUU"]);
+      Object.keys(window.DADOS.offshore).forEach(t => {
+        if (tickersDisponiveisSet.has(t)) return;
+        var isUcits = ucitsTickers.has(t);
+        tickersExtras.push({ ticker: t, desc: isUcits ? "UCITS ETF (Europa/Irlanda)" : "ETF US-listed", classe: isUcits ? "UCITS" : "Offshore US", custodia: "OFFSHORE" });
+      });
+    }
   }
 
   const todosETFs = etfsRelevantes.concat(tickersExtras);
@@ -4648,7 +4656,9 @@ function filtrarCategoria(cat) {
       var optCustodia = (opt.getAttribute('data-custodia') || '').toLowerCase();
       var match = false;
       if (cat === 'OFFSHORE') {
-        match = optCustodia === 'offshore';
+        match = optCustodia === 'offshore' && optClasse.indexOf('ucits') === -1;
+      } else if (cat === 'UCITS') {
+        match = optClasse.indexOf('ucits') > -1;
       } else if (cat === 'Cripto') {
         match = optClasse.indexOf('cripto') > -1 || opt.value === 'QBTC11' || opt.textContent.toLowerCase().indexOf('cripto') > -1 || opt.textContent.toLowerCase().indexOf('bitcoin') > -1;
       } else {
