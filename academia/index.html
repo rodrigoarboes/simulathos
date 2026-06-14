@@ -3167,6 +3167,28 @@ const ETFs = [
   { ticker: "VNQ", nome: "Vanguard REITs (US)", classe: "Alternativos", custodia: "OFFSHORE", desc: "REITs US" },
 ];
 
+/* === Ativos B3 pré-embutidos (FIIs + ações, 5 anos via Yahoo) ===
+   Adicionados ao catálogo automaticamente para aparecerem no dropdown
+   com nome e classe corretos. Histórico completo, sem limite de API. */
+(function () {
+  var FIIS = ["KNRI11","HGLG11","MXRF11","XPLG11","HGRE11","KNCR11","BCFF11","XPML11","VISC11","HGBS11","KNIP11","IRDM11","RECR11","HGRU11","VILG11","BTLG11","RBRR11","VGHF11","MCHF11","HSML11","GGRC11","RBRF11","KNHF11","CPTS11","TGAR11","MFII11","DEVA11","HGCR11","RZTR11","VINO11"];
+  var ACOES = ["PETR4","PETR3","VALE3","ITUB4","BBDC4","BBAS3","ABEV3","WEGE3","B3SA3","ITSA4","BPAC11","SUZB3","RENT3","RDOR3","RADL3","PRIO3","EQTL3","ELET3","ELET6","GGBR4","VBBR3","RAIL3","CSAN3","UGPA3","HAPV3","TOTS3","LREN3","MGLU3","CMIG4","SBSP3","VIVT3","TIMS3","KLBN11","CPLE6","ENEV3","CMIN3","ASAI3","NTCO3","CYRE3","EMBR3"];
+  var jaTem = {};
+  for (var i = 0; i < ETFs.length; i++) jaTem[ETFs[i].ticker] = true;
+  function add(lista, classe, label) {
+    for (var k = 0; k < lista.length; k++) {
+      var tk = lista[k];
+      if (jaTem[tk]) continue;
+      if (!window.DADOS || !window.DADOS.etfs || !window.DADOS.etfs[tk]) continue; // só se tiver dados
+      ETFs.push({ ticker: tk, nome: tk + " — " + label, classe: classe, custodia: "BR", desc: label + " (B3)" });
+      jaTem[tk] = true;
+    }
+  }
+  add(FIIS, "FIIs", "Fundo Imobiliário");
+  add(ACOES, "Ações BR", "Ação B3");
+})();
+
+
 /* === DADOS REAIS (Banco Central do Brasil / SGS) — congelados em 14/05/2026 === */
 /* Atualizável: trocar estes arrays ou, no AdvisorPro, puxar via API com job agendado */
 const DADOS_MERCADO = {
