@@ -4605,9 +4605,8 @@ async function buscarTickerBRAPI() {
       if (resp.status === 429) throw new Error('Limite de requisições atingido. Aguarde alguns segundos.');
       throw new Error('Erro HTTP ' + resp.status);
     }
-    var json = await resp.json();
 
-    if (!json.results || json.results.length === 0) {
+    if (!json || !json.results || json.results.length === 0) {
       throw new Error('Ticker não encontrado');
     }
 
