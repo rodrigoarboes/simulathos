@@ -2523,6 +2523,15 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
           onkeydown="if(event.key==='Enter')buscarTickerBRAPI()">
         <button onclick="buscarTickerBRAPI()" style="padding:10px 18px;border-radius:8px;background:var(--brand-blue);color:white;border:none;cursor:pointer;font-weight:600;white-space:nowrap;font-family:var(--font-body);">+ Buscar</button>
       </div>
+      <details style="margin-top:6px;font-size:11px;color:var(--text-soft);">
+        <summary style="cursor:pointer;">🔑 Token BRAPI (opcional — desbloqueia FIIs e todos os ativos)</summary>
+        <div style="display:flex;gap:6px;align-items:center;margin-top:6px;">
+          <input type="text" id="brapi-token" placeholder="Cole seu token aqui (cadastro grátis em brapi.dev)"
+            style="flex:1;padding:6px 10px;border-radius:6px;border:1px solid var(--border);background:var(--bg-soft);color:var(--text);font-family:var(--font-mono);font-size:11px;"
+            oninput="localStorage.setItem('brapiToken',this.value.trim())">
+          <a href="https://brapi.dev" target="_blank" style="color:var(--brand-blue);font-size:11px;white-space:nowrap;">Criar conta grátis →</a>
+        </div>
+      </details>
       <div id="ticker-busca-status" style="font-size:12px;margin-top:6px;min-height:18px;"></div>
       <div id="tickers-buscados-lista" style="display:none;margin-top:8px;padding:8px 12px;background:var(--bg-soft);border-radius:6px;font-size:12px;">
         <strong>Tickers buscados nesta sessão:</strong> <span id="tickers-buscados-tags"></span>
@@ -4331,6 +4340,8 @@ function iniciarModoLivre() {
   document.getElementById("montagem-subtitulo").textContent = "Escolha ETFs da lista ou digite qualquer ticker. A simulação roda com dados históricos reais.";
   document.getElementById("modo-livre-info").style.display = "";
   document.getElementById("ticker-busca-area").style.display = "";
+  var savedToken = localStorage.getItem('brapiToken');
+  if (savedToken) { var ti = document.getElementById('brapi-token'); if (ti) ti.value = savedToken; }
   document.getElementById("btn-voltar-briefing").style.display = "none";
   document.getElementById("btn-submeter").textContent = "Simular →";
   atualizarListaTickersBuscados();
@@ -4561,8 +4572,12 @@ async function buscarTickerBRAPI() {
   if (btn) { btn.disabled = true; btn.textContent = 'Buscando...'; }
 
   try {
-    var resp = await fetch('https://brapi.dev/api/quote/' + encodeURIComponent(ticker) + '?range=5y&interval=1d');
+    var brapiToken = localStorage.getItem('brapiToken') || '';
+    var url = 'https://brapi.dev/api/quote/' + encodeURIComponent(ticker) + '?range=5y&interval=1d';
+    if (brapiToken) url += '&token=' + encodeURIComponent(brapiToken);
+    var resp = await fetch(url);
     if (!resp.ok) {
+      if (resp.status === 401) throw new Error('Token necessário para ' + ticker + '. Cadastre-se grátis em brapi.dev e cole o token abaixo.');
       if (resp.status === 404) throw new Error('Ticker não encontrado na B3');
       if (resp.status === 429) throw new Error('Limite de requisições atingido. Aguarde alguns segundos.');
       throw new Error('Erro HTTP ' + resp.status);
