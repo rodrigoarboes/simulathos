@@ -4573,11 +4573,34 @@ async function buscarTickerBRAPI() {
 
   try {
     var brapiToken = localStorage.getItem('brapiToken') || '';
-    var url = 'https://brapi.dev/api/quote/' + encodeURIComponent(ticker) + '?range=5y&interval=1d';
-    if (brapiToken) url += '&token=' + encodeURIComponent(brapiToken);
-    var resp = await fetch(url);
-    if (!resp.ok) {
-      if (resp.status === 401) throw new Error('Token necessário para ' + ticker + '. Cadastre-se grátis em brapi.dev e cole o token abaixo.');
+    var json = null;
+    var rangeUsado = '5y';
+
+    // Strategy: try without token (5y) first, then with token (fallback ranges)
+    var baseUrl = 'https://brapi.dev/api/quote/' + encodeURIComponent(ticker);
+
+    // Attempt 1: 5y without token (works for ~60 major stocks)
+    var resp = await fetch(baseUrl + '?range=5y&interval=1d');
+    if (resp.ok) {
+      json = await resp.json();
+    } else if (resp.status === 401 && brapiToken) {
+      // Attempt 2: 5y with token
+      resp = await fetch(baseUrl + '?range=5y&interval=1d&token=' + encodeURIComponent(brapiToken));
+      if (resp.ok) {
+        json = await resp.json();
+      } else if (resp.status === 400) {
+        // Attempt 3: 3mo with token (free plan range limit)
+        resp = await fetch(baseUrl + '?range=3mo&interval=1d&token=' + encodeURIComponent(brapiToken));
+        rangeUsado = '3mo';
+        if (resp.ok) {
+          json = await resp.json();
+        }
+      }
+    } else if (resp.status === 401) {
+      throw new Error('Token necessário para ' + ticker + '. Clique em "🔑 Token BRAPI" abaixo, cadastre-se grátis em brapi.dev e cole o token.');
+    }
+
+    if (!resp.ok && !json) {
       if (resp.status === 404) throw new Error('Ticker não encontrado na B3');
       if (resp.status === 429) throw new Error('Limite de requisições atingido. Aguarde alguns segundos.');
       throw new Error('Erro HTTP ' + resp.status);
@@ -4639,7 +4662,8 @@ async function buscarTickerBRAPI() {
 
     var primeiro = series[0].data;
     var ultimo = series[series.length - 1].data;
-    status.innerHTML = '<span style="color:var(--ok)">&#10003; <strong>' + ticker + '</strong> carregado — ' + series.length + ' dias (' + primeiro + ' a ' + ultimo + ')</span>';
+    var aviso = (rangeUsado !== '5y') ? ' <span style="color:var(--warn)">(⚠ plano grátis: apenas ' + rangeUsado + ' de dados)</span>' : '';
+    status.innerHTML = '<span style="color:var(--ok)">&#10003; <strong>' + ticker + '</strong> carregado — ' + series.length + ' dias (' + primeiro + ' a ' + ultimo + ')' + aviso + '</span>';
     input.value = '';
 
     atualizarListaTickersBuscados();
