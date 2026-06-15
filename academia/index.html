@@ -2645,12 +2645,12 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
         <button class="cat-pill" onclick="filtrarCategoria('Ações BR')">Ações BR</button>
         <button class="cat-pill" onclick="filtrarCategoria('FII')">FIIs</button>
         <button class="cat-pill" onclick="filtrarCategoria('Dividendos')">Dividendos</button>
-        <button class="cat-pill" onclick="filtrarCategoria('Internacional')" title="ETFs listados na B3 que investem no exterior (ex: IVVB11, NASD11)">Internacional</button>
-        <button class="cat-pill" onclick="filtrarCategoria('BDR')">BDRs</button>
+        <button class="cat-pill" onclick="filtrarCategoria('Internacional')" title="ETFs listados na B3 que investem no exterior (ex: IVVB11, NASD11)">Internacional ℹ️</button>
+        <button class="cat-pill" onclick="filtrarCategoria('BDR')" title="BDRs de ETFs e ações estrangeiras listados na B3 (ex: BOTZ39, BAIQ39, AAPL34)">BDRs ℹ️</button>
         <button class="cat-pill" onclick="filtrarCategoria('Cripto')">Cripto</button>
         <button class="cat-pill" onclick="filtrarCategoria('Alternativos')">Alternativos</button>
-        <button class="cat-pill" onclick="filtrarCategoria('OFFSHORE')" title="ETFs listados nas bolsas americanas (ex: VOO, QQQ, ARKK, SCHD) — requer conta no exterior">Offshore US</button>
-        <button class="cat-pill" onclick="filtrarCategoria('UCITS')" title="ETFs UCITS listados na Europa/Irlanda (ex: VUAA, CNDX, VWRA, CSPX) — sem estate tax, eficiente pra brasileiro">UCITS</button>
+        <button class="cat-pill" onclick="filtrarCategoria('OFFSHORE')" title="ETFs listados nas bolsas americanas (ex: VOO, QQQ, ARKK, SCHD) — requer conta no exterior">Offshore US ℹ️</button>
+        <button class="cat-pill" onclick="filtrarCategoria('UCITS')" title="ETFs UCITS listados na Europa/Irlanda (ex: VUAA, CNDX, VWRA, CSPX) — sem estate tax, eficiente pra brasileiro">UCITS ℹ️</button>
       </div>
 
       <div id="linhas-alocacao"></div>
@@ -4550,16 +4550,75 @@ function renderLinhasAlocacao() {
   const cont = document.getElementById("linhas-alocacao");
   cont.innerHTML = "";
 
-  // Filtrar ETFs por custódia do case (mostra todos se case for BR, mas marca offshore como "se tem conta")
-  const etfsRelevantes = ETFs; // todos disponíveis — assessor decide
+  // Mapa de equivalências cruzadas BR ↔ US ↔ UCITS
+  var eqMap = {
+    // S&P 500
+    "IVVB11":["VOO","IVV","SPY","VUAA","CSPX"], "VOO":["IVVB11","VUAA","CSPX","IVV"], "IVV":["IVVB11","VOO","CSPX"], "SPY":["IVVB11","VOO","CSPX"],
+    "VUAA":["VOO","IVVB11","CSPX"], "CSPX":["IVV","IVVB11","VUAA"],
+    // Nasdaq
+    "NASD11":["QQQ","CNDX"], "QQQ":["NASD11","CNDX"], "CNDX":["QQQ","NASD11"],
+    // Global/ACWI
+    "ACWI11":["ACWI","VWRA","ISAC"], "ACWI":["ACWI11","VWRA","ISAC"], "VWRA":["ACWI11","ACWI","ISAC"], "ISAC":["ACWI11","ACWI","VWRA"],
+    // Emergentes
+    "VWO":["EIMI","IEMA"], "EIMI":["VWO","EEM"], "EEM":["EIMI","VWO"], "IEMG":["EIMI","VWO"],
+    // Ouro
+    "GOLD11":["GLD","IAU","SGOL"], "GLD":["GOLD11","IAU","SGOL"], "IAU":["GOLD11","GLD"], "SGOL":["GOLD11","GLD"],
+    // Prata
+    "SLV":["SIVR"], "SIVR":["SLV"],
+    // RF Aggregate
+    "AGG":["BND","VDPA"], "BND":["AGG","VDPA"], "VDPA":["AGG","BND"],
+    // Treasuries
+    "TLT":["BBTR"], "IEF":["BBTR"], "BBTR":["TLT","IEF","GOVT"],
+    // T-Bills / Curto
+    "SHV":["IB01","BIL"], "BIL":["SHV","IB01","U03A"], "IB01":["SHV","BIL"], "U03A":["BIL","SHV"],
+    // Floating Rate
+    "FLOT":["FLOA","USFR","TFLO"], "FLOA":["FLOT","USFR"], "USFR":["FLOT","FLOA"],
+    // Small Caps EUA
+    "SMAL11":["IWM","R2US"], "IWM":["SMAL11","R2US"], "R2US":["IWM","SMAL11"],
+    // Dividendos
+    "DIVO11":["VYM","VHYA","SCHD"], "VYM":["DIVO11","VHYA","SCHD"], "SCHD":["DIVO11","VYM"], "VHYA":["VYM","DIVO11"],
+    // REITs
+    "XFIX11":["VNQ","DPYA"], "VNQ":["XFIX11","DPYA"], "DPYA":["VNQ","XFIX11"],
+    // Europa
+    "EURP11":["VGK","ISFD","XMED"], "VGK":["EURP11","ISFD"], "ISFD":["VGK","EURP11"],
+    // Value
+    "VLUE":["IUVL"], "IUVL":["VLUE"],
+    // Min Vol
+    "USMV":["SPMV"], "SPMV":["USMV"],
+    // Japão
+    "EWJ":["IJPA","VJPA"], "IJPA":["EWJ"], "VJPA":["EWJ"],
+    // India
+    "INDA":["NDIA"], "NDIA":["INDA"],
+    // China
+    "FXI":["CNYA","MCHI"], "MCHI":["FXI","CNYA"], "CNYA":["FXI","MCHI"],
+    // Global ex-US
+    "IWDA":["VXUS","VEA","SWRD"], "SWRD":["IWDA","VXUS"],
+    // Robótica/IA
+    "BOTZ39":["BOTZ"], "BOTZ":["BOTZ39"],
+    // Cyber
+    "BBUG39":["BUG"], "BUG":["BBUG39"],
+    // IA
+    "BAIQ39":["AIQ"], "AIQ":["BAIQ39"],
+    // Bitcoin
+    "QBTC11":["IBIT","FBTC","GBTC","BITH11"], "BITH11":["IBIT","QBTC11"], "IBIT":["QBTC11","BITH11","FBTC"],
+    "HASH11":["IBIT","FBTC"],
+    // Equal Weight
+    "RSP":["XDEW"], "XDEW":["RSP"],
+  };
+  function getEqText(ticker) {
+    var eqs = eqMap[ticker];
+    if (!eqs || eqs.length === 0) return "";
+    return " (≈ " + eqs.slice(0, 3).join(" · ") + ")";
+  }
 
-  // Em modo livre, também listar tickers do DADOS que não estão nos ETFs formais
+  const etfsRelevantes = ETFs;
+
   const tickersDisponiveisSet = new Set(etfsRelevantes.map(e => e.ticker));
   const tickersExtras = [];
   if (window.DADOS) {
     if (window.DADOS.etfs) Object.keys(window.DADOS.etfs).forEach(t => {
       if (!tickersDisponiveisSet.has(t)) {
-        tickersExtras.push({ ticker: t, desc: "B3 (dados disponíveis)", classe: "Outros", custodia: "BR" });
+        tickersExtras.push({ ticker: t, desc: "B3" + getEqText(t), classe: "Outros", custodia: "BR" });
       }
     });
     if (window.DADOS.offshore) {
@@ -4592,7 +4651,8 @@ function renderLinhasAlocacao() {
         var ucits = ucitsMap[t];
         if (ucits) {
           var eqText = ucits.eq ? ' (≈ ' + ucits.eq + ')' : '';
-          tickersExtras.push({ ticker: t, desc: 'UCITS ' + ucits.sub + eqText, classe: 'UCITS', custodia: 'OFFSHORE' });
+          var fullEq = getEqText(t) || eqText;
+          tickersExtras.push({ ticker: t, desc: 'UCITS ' + ucits.sub + fullEq, classe: 'UCITS', custodia: 'OFFSHORE' });
         } else {
           var offMap = {
             VOO:"Ações EUA",VTI:"Ações EUA",SPY:"Ações EUA",IVV:"Ações EUA",QQQ:"Ações EUA (Nasdaq)",QQQM:"Ações EUA (Nasdaq)",RSP:"Ações EUA (Equal Weight)",
@@ -4641,13 +4701,21 @@ function renderLinhasAlocacao() {
             DFAC:"Core EUA (Dimensional)",DFAI:"Core Intl (Dimensional)",DFAT:"Core EUA Total (Dimensional)",DFAX:"Core Emergentes (Dimensional)",DFUS:"Equity EUA (Dimensional)",DFLV:"Value EUA (Dimensional)",
           };
           var sub = offMap[t] || "Offshore US";
-          tickersExtras.push({ ticker: t, desc: sub, classe: 'Offshore US', custodia: 'OFFSHORE' });
+          tickersExtras.push({ ticker: t, desc: sub + getEqText(t), classe: 'Offshore US', custodia: 'OFFSHORE' });
         }
       });
     }
   }
 
-  const todosETFs = etfsRelevantes.concat(tickersExtras);
+  // Enriquecer ETFs do catálogo principal com equivalências cruzadas
+  var etfsEnriquecidos = etfsRelevantes.map(function(e) {
+    var eq = getEqText(e.ticker);
+    if (eq && e.desc.indexOf('≈') === -1) {
+      return Object.assign({}, e, { desc: e.desc + ' ' + eq });
+    }
+    return e;
+  });
+  const todosETFs = etfsEnriquecidos.concat(tickersExtras);
   window._allETFs = todosETFs;
 
   montagemAtual.forEach((linha, idx) => {
