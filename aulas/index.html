@@ -1564,5 +1564,20 @@ init();
 // Initial fit
 setTimeout(fitAll, 100);
 </script>
+<script>
+(function(){
+  document.addEventListener('contextmenu',function(e){e.preventDefault();});
+  document.addEventListener('selectstart',function(e){if(!e.target.closest('input,textarea,[contenteditable]'))e.preventDefault();});
+  document.addEventListener('dragstart',function(e){e.preventDefault();});
+  document.addEventListener('keydown',function(e){
+    if((e.ctrlKey||e.metaKey)&&['u','s','c','a'].indexOf(e.key.toLowerCase())>-1){
+      if(e.key.toLowerCase()==='c'&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;
+      e.preventDefault();
+    }
+    if(e.key==='F12')e.preventDefault();
+  });
+  document.addEventListener('copy',function(e){if(!e.target.closest('input,textarea'))e.preventDefault();});
+})();
+</script>
 </body>
 </html>
