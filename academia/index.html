@@ -890,6 +890,19 @@ body.dark .feedback-lista li.bad { background: #3a1a1a; }
   color: var(--text-soft);
   margin-left: 8px;
 }
+.ac-info-btn {
+  cursor: pointer;
+  font-size: 14px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  opacity: 0.5;
+  transition: opacity 0.15s;
+  flex-shrink: 0;
+}
+.ac-info-btn:hover {
+  opacity: 1;
+  background: rgba(0,136,204,0.1);
+}
 .ticker-selected-badge {
   display: inline-flex;
   align-items: center;
@@ -4547,6 +4560,121 @@ function irTela3() {
   trocarTela("tela3");
 }
 
+// ==================== ETF INFO CARDS (FICHAS) ====================
+var ETF_INFO = {
+  // === ETFs BR - Renda Fixa ===
+  "LFTS11": { nome: "It Now Tesouro Selic", gestora: "Itau Asset", tipo: "ETF", categoria: "RF Pos-Fixado", benchmark: "Tesouro Selic", taxa: "0,19%", custodia: "B3" },
+  "IMAB11": { nome: "It Now IMA-B", gestora: "Itau Asset", tipo: "ETF", categoria: "RF Inflacao", benchmark: "IMA-B", taxa: "0,25%", custodia: "B3" },
+  "IB5M11": { nome: "It Now IMA-B 5+", gestora: "Itau Asset", tipo: "ETF", categoria: "RF Inflacao Longa", benchmark: "IMA-B 5+", taxa: "0,25%", custodia: "B3" },
+  "B5P211": { nome: "It Now IMA-B 5 P2", gestora: "Itau Asset", tipo: "ETF", categoria: "RF Inflacao Curta", benchmark: "IMA-B 5 P2", taxa: "0,20%", custodia: "B3" },
+  "IRFM11": { nome: "It Now IRF-M P2", gestora: "Itau Asset", tipo: "ETF", categoria: "RF Prefixado", benchmark: "IRF-M P2", taxa: "0,20%", custodia: "B3" },
+  "FIXA11": { nome: "Mirae RF Pre", gestora: "Mirae Asset", tipo: "ETF", categoria: "RF Prefixado", benchmark: "S&P/B3 Prefixados", taxa: "0,30%", custodia: "B3" },
+  "IDKA11": { nome: "It Now IRF-M P3", gestora: "Itau Asset", tipo: "ETF", categoria: "RF Prefixado", benchmark: "IRF-M P3", taxa: "0,25%", custodia: "B3" },
+  "DEBB11": { nome: "BTG Debentures DI", gestora: "BTG Pactual", tipo: "ETF", categoria: "RF Credito", benchmark: "Teva Debentures DI", taxa: "0,60%", custodia: "B3" },
+  "LFTB11": { nome: "Investo Tesouro Selic", gestora: "Investo", tipo: "ETF", categoria: "RF Pos-Fixado", benchmark: "Tesouro Selic Target 760", taxa: "0,19%", custodia: "B3" },
+  // === ETFs BR - Acoes ===
+  "BOVA11": { nome: "iShares Ibovespa", gestora: "BlackRock", tipo: "ETF", categoria: "Acoes BR", benchmark: "Ibovespa", taxa: "0,10%", custodia: "B3" },
+  "BOVV11": { nome: "It Now Ibovespa", gestora: "Itau Asset", tipo: "ETF", categoria: "Acoes BR", benchmark: "Ibovespa", taxa: "0,10%", custodia: "B3" },
+  "SMAL11": { nome: "iShares Small Cap", gestora: "BlackRock", tipo: "ETF", categoria: "Small Caps BR", benchmark: "SMLL", taxa: "0,50%", custodia: "B3" },
+  "DIVO11": { nome: "It Now Dividendos", gestora: "Itau Asset", tipo: "ETF", categoria: "Dividendos BR", benchmark: "IDIV", taxa: "0,50%", custodia: "B3" },
+  "IVVB11": { nome: "iShares S&P 500 BRL", gestora: "BlackRock", tipo: "ETF", categoria: "Acoes Internacionais", benchmark: "S&P 500", taxa: "0,23%", custodia: "B3" },
+  "NASD11": { nome: "It Now Nasdaq 100", gestora: "Itau Asset", tipo: "ETF", categoria: "Acoes Internacionais", benchmark: "Nasdaq 100", taxa: "0,30%", custodia: "B3" },
+  "ACWI11": { nome: "iShares MSCI ACWI", gestora: "BlackRock", tipo: "ETF", categoria: "Acoes Globais", benchmark: "MSCI ACWI", taxa: "0,30%", custodia: "B3" },
+  "XFIX11": { nome: "iShares IFIX", gestora: "BlackRock", tipo: "ETF", categoria: "FIIs", benchmark: "IFIX", taxa: "0,29%", custodia: "B3" },
+  "HASH11": { nome: "Hashdex Crypto", gestora: "Hashdex", tipo: "ETF", categoria: "Criptoativos", benchmark: "NCI Top 10", taxa: "1,30%", custodia: "B3" },
+  "GOLD11": { nome: "Trend Ouro", gestora: "XP Asset", tipo: "ETF", categoria: "Commodities", benchmark: "LBMA Gold Price", taxa: "0,30%", custodia: "B3" },
+  "EURP11": { nome: "It Now Europa", gestora: "Itau Asset", tipo: "ETF", categoria: "Acoes Internacionais", benchmark: "Stoxx Europe 600", taxa: "0,30%", custodia: "B3" },
+  "MATB11": { nome: "It Now Materiais", gestora: "Itau Asset", tipo: "ETF", categoria: "Setorial", benchmark: "Materiais Basicos", taxa: "0,50%", custodia: "B3" },
+  "PIBB11": { nome: "It Now IBrX-50", gestora: "Itau Asset", tipo: "ETF", categoria: "Acoes BR", benchmark: "IBrX-50", taxa: "0,06%", custodia: "B3" },
+  "FIND11": { nome: "It Now Financeiro", gestora: "Itau Asset", tipo: "ETF", categoria: "Setorial", benchmark: "IFNC", taxa: "0,60%", custodia: "B3" },
+  "GOVE11": { nome: "It Now Governanca", gestora: "Itau Asset", tipo: "ETF", categoria: "Governanca", benchmark: "IGC-NM", taxa: "0,50%", custodia: "B3" },
+  "ISUS11": { nome: "It Now Sustentabilidade", gestora: "Itau Asset", tipo: "ETF", categoria: "ESG", benchmark: "ISE", taxa: "0,40%", custodia: "B3" },
+  "DIVD11": { nome: "It Now Dividendos Dist", gestora: "Itau Asset", tipo: "ETF", categoria: "Dividendos BR", benchmark: "IDIV", taxa: "0,50%", custodia: "B3" },
+  "TECK11": { nome: "It Now Top 10 Tech", gestora: "Itau Asset", tipo: "ETF", categoria: "Tecnologia", benchmark: "Top 10 Tech", taxa: "0,25%", custodia: "B3" },
+  "WRLD11": { nome: "Investo FTSE Global", gestora: "Investo", tipo: "ETF", categoria: "Acoes Globais", benchmark: "FTSE All-World", taxa: "0,30%", custodia: "B3" },
+  "SPXI11": { nome: "It Now S&P 500", gestora: "Itau Asset", tipo: "ETF", categoria: "Acoes Internacionais", benchmark: "S&P 500", taxa: "0,21%", custodia: "B3" },
+  "QBTC11": { nome: "QR Bitcoin", gestora: "QR Asset", tipo: "ETF", categoria: "Bitcoin", benchmark: "CME CF Bitcoin", taxa: "0,70%", custodia: "B3" },
+  "BITH11": { nome: "Hashdex Bitcoin", gestora: "Hashdex", tipo: "ETF", categoria: "Bitcoin", benchmark: "Nasdaq Bitcoin", taxa: "0,70%", custodia: "B3" },
+  // === ETFs US - Vanguard ===
+  "VOO": { nome: "Vanguard S&P 500", gestora: "Vanguard", tipo: "ETF", categoria: "Acoes EUA", benchmark: "S&P 500", taxa: "0,03%", custodia: "US" },
+  "VTI": { nome: "Vanguard Total Market", gestora: "Vanguard", tipo: "ETF", categoria: "Acoes EUA Total", benchmark: "CRSP US Total", taxa: "0,03%", custodia: "US" },
+  "VWO": { nome: "Vanguard Emerging Markets", gestora: "Vanguard", tipo: "ETF", categoria: "Emergentes", benchmark: "FTSE Emerging", taxa: "0,08%", custodia: "US" },
+  "VIG": { nome: "Vanguard Dividend Appreciation", gestora: "Vanguard", tipo: "ETF", categoria: "Dividendos EUA", benchmark: "S&P Dividend Growers", taxa: "0,06%", custodia: "US" },
+  "VYM": { nome: "Vanguard High Dividend", gestora: "Vanguard", tipo: "ETF", categoria: "Dividendos EUA", benchmark: "FTSE High Dividend", taxa: "0,06%", custodia: "US" },
+  "VUG": { nome: "Vanguard Growth", gestora: "Vanguard", tipo: "ETF", categoria: "Growth EUA", benchmark: "CRSP US Large Growth", taxa: "0,04%", custodia: "US" },
+  "VTV": { nome: "Vanguard Value", gestora: "Vanguard", tipo: "ETF", categoria: "Value EUA", benchmark: "CRSP US Large Value", taxa: "0,04%", custodia: "US" },
+  "VEA": { nome: "Vanguard FTSE Developed", gestora: "Vanguard", tipo: "ETF", categoria: "Desenvolvidos ex-EUA", benchmark: "FTSE Developed ex-US", taxa: "0,05%", custodia: "US" },
+  "VGK": { nome: "Vanguard FTSE Europe", gestora: "Vanguard", tipo: "ETF", categoria: "Europa", benchmark: "FTSE Developed Europe", taxa: "0,06%", custodia: "US" },
+  "VNQ": { nome: "Vanguard Real Estate", gestora: "Vanguard", tipo: "ETF", categoria: "REITs EUA", benchmark: "MSCI US REIT", taxa: "0,12%", custodia: "US" },
+  "VO": { nome: "Vanguard Mid-Cap", gestora: "Vanguard", tipo: "ETF", categoria: "Mid Caps EUA", benchmark: "CRSP US Mid Cap", taxa: "0,04%", custodia: "US" },
+  "VB": { nome: "Vanguard Small-Cap", gestora: "Vanguard", tipo: "ETF", categoria: "Small Caps EUA", benchmark: "CRSP US Small Cap", taxa: "0,05%", custodia: "US" },
+  // === ETFs US - iShares/BlackRock ===
+  "IVV": { nome: "iShares Core S&P 500", gestora: "BlackRock", tipo: "ETF", categoria: "Acoes EUA", benchmark: "S&P 500", taxa: "0,03%", custodia: "US" },
+  "IWM": { nome: "iShares Russell 2000", gestora: "BlackRock", tipo: "ETF", categoria: "Small Caps EUA", benchmark: "Russell 2000", taxa: "0,19%", custodia: "US" },
+  "EFA": { nome: "iShares MSCI EAFE", gestora: "BlackRock", tipo: "ETF", categoria: "Desenvolvidos ex-EUA", benchmark: "MSCI EAFE", taxa: "0,32%", custodia: "US" },
+  "EEM": { nome: "iShares MSCI Emerging", gestora: "BlackRock", tipo: "ETF", categoria: "Emergentes", benchmark: "MSCI Emerging", taxa: "0,68%", custodia: "US" },
+  "ACWI": { nome: "iShares MSCI ACWI", gestora: "BlackRock", tipo: "ETF", categoria: "Acoes Globais", benchmark: "MSCI ACWI", taxa: "0,32%", custodia: "US" },
+  "AGG": { nome: "iShares Core Aggregate Bond", gestora: "BlackRock", tipo: "ETF", categoria: "RF Aggregate EUA", benchmark: "Bloomberg Aggregate", taxa: "0,03%", custodia: "US" },
+  "TLT": { nome: "iShares 20+ Year Treasury", gestora: "BlackRock", tipo: "ETF", categoria: "Treasuries Longos", benchmark: "ICE 20+ Year Treasury", taxa: "0,15%", custodia: "US" },
+  "IEF": { nome: "iShares 7-10 Year Treasury", gestora: "BlackRock", tipo: "ETF", categoria: "Treasuries Medios", benchmark: "ICE 7-10 Year Treasury", taxa: "0,15%", custodia: "US" },
+  "SHV": { nome: "iShares Short Treasury", gestora: "BlackRock", tipo: "ETF", categoria: "T-Bills", benchmark: "ICE Short Treasury", taxa: "0,15%", custodia: "US" },
+  "TIP": { nome: "iShares TIPS Bond", gestora: "BlackRock", tipo: "ETF", categoria: "TIPS Inflacao", benchmark: "Bloomberg TIPS", taxa: "0,19%", custodia: "US" },
+  "LQD": { nome: "iShares Investment Grade Bond", gestora: "BlackRock", tipo: "ETF", categoria: "Corporativo IG", benchmark: "Markit iBoxx IG", taxa: "0,14%", custodia: "US" },
+  "HYG": { nome: "iShares High Yield Bond", gestora: "BlackRock", tipo: "ETF", categoria: "High Yield", benchmark: "Markit iBoxx HY", taxa: "0,49%", custodia: "US" },
+  "EMB": { nome: "iShares EM Bond", gestora: "BlackRock", tipo: "ETF", categoria: "RF Emergentes", benchmark: "JPM EMBI Global", taxa: "0,39%", custodia: "US" },
+  "GLD": { nome: "SPDR Gold Trust", gestora: "State Street", tipo: "ETF", categoria: "Ouro", benchmark: "LBMA Gold Price", taxa: "0,40%", custodia: "US" },
+  "IAU": { nome: "iShares Gold Trust", gestora: "BlackRock", tipo: "ETF", categoria: "Ouro", benchmark: "LBMA Gold Price", taxa: "0,25%", custodia: "US" },
+  "SLV": { nome: "iShares Silver Trust", gestora: "BlackRock", tipo: "ETF", categoria: "Prata", benchmark: "LBMA Silver Price", taxa: "0,50%", custodia: "US" },
+  "HDV": { nome: "iShares Core High Dividend", gestora: "BlackRock", tipo: "ETF", categoria: "Dividendos EUA", benchmark: "Morningstar Dividend Yield", taxa: "0,08%", custodia: "US" },
+  "DGRO": { nome: "iShares Core Dividend Growth", gestora: "BlackRock", tipo: "ETF", categoria: "Dividendos Growth", benchmark: "Morningstar Dividend Growth", taxa: "0,08%", custodia: "US" },
+  "QUAL": { nome: "iShares MSCI USA Quality", gestora: "BlackRock", tipo: "ETF", categoria: "Quality EUA", benchmark: "MSCI USA Quality", taxa: "0,15%", custodia: "US" },
+  "USMV": { nome: "iShares MSCI Min Vol USA", gestora: "BlackRock", tipo: "ETF", categoria: "Min Vol EUA", benchmark: "MSCI USA Min Vol", taxa: "0,15%", custodia: "US" },
+  "MTUM": { nome: "iShares MSCI Momentum", gestora: "BlackRock", tipo: "ETF", categoria: "Momentum EUA", benchmark: "MSCI USA Momentum", taxa: "0,15%", custodia: "US" },
+  "IBIT": { nome: "iShares Bitcoin Trust", gestora: "BlackRock", tipo: "ETF", categoria: "Bitcoin", benchmark: "CME CF Bitcoin", taxa: "0,25%", custodia: "US" },
+  "MCHI": { nome: "iShares MSCI China", gestora: "BlackRock", tipo: "ETF", categoria: "China", benchmark: "MSCI China", taxa: "0,59%", custodia: "US" },
+  "FXI": { nome: "iShares China Large-Cap", gestora: "BlackRock", tipo: "ETF", categoria: "China", benchmark: "FTSE China 50", taxa: "0,74%", custodia: "US" },
+  "INDA": { nome: "iShares MSCI India", gestora: "BlackRock", tipo: "ETF", categoria: "India", benchmark: "MSCI India", taxa: "0,65%", custodia: "US" },
+  "EWZ": { nome: "iShares MSCI Brazil", gestora: "BlackRock", tipo: "ETF", categoria: "Brasil (USD)", benchmark: "MSCI Brazil", taxa: "0,58%", custodia: "US" },
+  "EWJ": { nome: "iShares MSCI Japan", gestora: "BlackRock", tipo: "ETF", categoria: "Japao", benchmark: "MSCI Japan", taxa: "0,50%", custodia: "US" },
+  // === ETFs US - SPDR/State Street ===
+  "SPY": { nome: "SPDR S&P 500", gestora: "State Street", tipo: "ETF", categoria: "Acoes EUA", benchmark: "S&P 500", taxa: "0,09%", custodia: "US" },
+  "XLK": { nome: "SPDR Technology Select", gestora: "State Street", tipo: "ETF", categoria: "Tecnologia EUA", benchmark: "S&P Technology Select", taxa: "0,09%", custodia: "US" },
+  "XLF": { nome: "SPDR Financial Select", gestora: "State Street", tipo: "ETF", categoria: "Financeiro EUA", benchmark: "S&P Financial Select", taxa: "0,09%", custodia: "US" },
+  "XLE": { nome: "SPDR Energy Select", gestora: "State Street", tipo: "ETF", categoria: "Energia EUA", benchmark: "S&P Energy Select", taxa: "0,09%", custodia: "US" },
+  "XLV": { nome: "SPDR Health Care Select", gestora: "State Street", tipo: "ETF", categoria: "Saude EUA", benchmark: "S&P Health Care Select", taxa: "0,09%", custodia: "US" },
+  // === ETFs US - Invesco ===
+  "QQQ": { nome: "Invesco QQQ Trust", gestora: "Invesco", tipo: "ETF", categoria: "Acoes EUA (Nasdaq)", benchmark: "Nasdaq 100", taxa: "0,20%", custodia: "US" },
+  "RSP": { nome: "Invesco S&P 500 Equal Weight", gestora: "Invesco", tipo: "ETF", categoria: "Acoes EUA Equal Weight", benchmark: "S&P 500 Equal Weight", taxa: "0,20%", custodia: "US" },
+  // === ETFs US - Schwab ===
+  "SCHD": { nome: "Schwab US Dividend Equity", gestora: "Schwab", tipo: "ETF", categoria: "Dividendos EUA", benchmark: "Dow Jones US Dividend 100", taxa: "0,06%", custodia: "US" },
+  // === ETFs US - ARK ===
+  "ARKK": { nome: "ARK Innovation", gestora: "ARK Invest", tipo: "ETF", categoria: "Inovacao Disruptiva", benchmark: "Gestao Ativa", taxa: "0,75%", custodia: "US" },
+  "ARKW": { nome: "ARK Next Gen Internet", gestora: "ARK Invest", tipo: "ETF", categoria: "Internet & Fintech", benchmark: "Gestao Ativa", taxa: "0,87%", custodia: "US" },
+  "ARKG": { nome: "ARK Genomic Revolution", gestora: "ARK Invest", tipo: "ETF", categoria: "Genomica", benchmark: "Gestao Ativa", taxa: "0,75%", custodia: "US" },
+  // === ETFs US - Global X ===
+  "BOTZ": { nome: "Global X Robotics & AI", gestora: "Global X", tipo: "ETF", categoria: "Robotica & IA", benchmark: "Indxx Global Robotics", taxa: "0,68%", custodia: "US" },
+  "AIQ": { nome: "Global X AI & Technology", gestora: "Global X", tipo: "ETF", categoria: "IA & Tecnologia", benchmark: "Indxx AI & Big Data", taxa: "0,68%", custodia: "US" },
+  "URA": { nome: "Global X Uranium", gestora: "Global X", tipo: "ETF", categoria: "Uranio", benchmark: "Solactive Global Uranium", taxa: "0,69%", custodia: "US" },
+  "LIT": { nome: "Global X Lithium & Battery", gestora: "Global X", tipo: "ETF", categoria: "Litio & Baterias", benchmark: "Solactive Global Lithium", taxa: "0,75%", custodia: "US" },
+  "QYLD": { nome: "Global X Nasdaq Covered Call", gestora: "Global X", tipo: "ETF", categoria: "Covered Call", benchmark: "CBOE Nasdaq BuyWrite", taxa: "0,60%", custodia: "US" },
+  "BUG": { nome: "Global X Cybersecurity", gestora: "Global X", tipo: "ETF", categoria: "Ciberseguranca", benchmark: "Indxx Cybersecurity", taxa: "0,50%", custodia: "US" },
+  "COPX": { nome: "Global X Copper Miners", gestora: "Global X", tipo: "ETF", categoria: "Mineracao Cobre", benchmark: "Solactive Global Copper Miners", taxa: "0,65%", custodia: "US" },
+  "PAVE": { nome: "Global X US Infrastructure", gestora: "Global X", tipo: "ETF", categoria: "Infraestrutura EUA", benchmark: "Indxx US Infrastructure", taxa: "0,47%", custodia: "US" },
+  // === ETFs US - JPMorgan ===
+  "JEPI": { nome: "JPMorgan Equity Premium Income", gestora: "JPMorgan", tipo: "ETF", categoria: "Income EUA", benchmark: "S&P 500 + covered calls", taxa: "0,35%", custodia: "US" },
+  "JEPQ": { nome: "JPMorgan Nasdaq Premium Income", gestora: "JPMorgan", tipo: "ETF", categoria: "Income Nasdaq", benchmark: "Nasdaq 100 + covered calls", taxa: "0,35%", custodia: "US" },
+  // === UCITS ===
+  "VUAA": { nome: "Vanguard S&P 500 UCITS", gestora: "Vanguard", tipo: "UCITS", categoria: "Acoes EUA", benchmark: "S&P 500", taxa: "0,07%", custodia: "Irlanda" },
+  "CSPX": { nome: "iShares Core S&P 500 UCITS", gestora: "BlackRock", tipo: "UCITS", categoria: "Acoes EUA", benchmark: "S&P 500", taxa: "0,07%", custodia: "Irlanda" },
+  "CNDX": { nome: "iShares Nasdaq 100 UCITS", gestora: "BlackRock", tipo: "UCITS", categoria: "Acoes EUA (Nasdaq)", benchmark: "Nasdaq 100", taxa: "0,30%", custodia: "Irlanda" },
+  "VWRA": { nome: "Vanguard FTSE All-World UCITS", gestora: "Vanguard", tipo: "UCITS", categoria: "Acoes Globais", benchmark: "FTSE All-World", taxa: "0,22%", custodia: "Irlanda" },
+  "IWDA": { nome: "iShares Core MSCI World UCITS", gestora: "BlackRock", tipo: "UCITS", categoria: "Acoes Globais", benchmark: "MSCI World", taxa: "0,20%", custodia: "Irlanda" },
+  "EIMI": { nome: "iShares Core MSCI EM UCITS", gestora: "BlackRock", tipo: "UCITS", categoria: "Emergentes", benchmark: "MSCI EM IMI", taxa: "0,18%", custodia: "Irlanda" },
+  "IB01": { nome: "iShares $ Treasury Bond 0-1yr UCITS", gestora: "BlackRock", tipo: "UCITS", categoria: "T-Bills", benchmark: "ICE US Treasury Short", taxa: "0,07%", custodia: "Irlanda" },
+  "FLOA": { nome: "iShares $ Floating Rate Bond UCITS", gestora: "BlackRock", tipo: "UCITS", categoria: "RF Floating Rate", benchmark: "Bloomberg US Floating Rate", taxa: "0,10%", custodia: "Irlanda" },
+  "SWRD": { nome: "SPDR MSCI World UCITS", gestora: "State Street", tipo: "UCITS", categoria: "Acoes Globais", benchmark: "MSCI World", taxa: "0,12%", custodia: "Irlanda" },
+};
+
 function renderLinhasAlocacao() {
   const cont = document.getElementById("linhas-alocacao");
   cont.innerHTML = "";
@@ -4606,6 +4734,7 @@ function renderLinhasAlocacao() {
     // Equal Weight
     "RSP":["XDEW"], "XDEW":["RSP"],
   };
+  window._eqMap = eqMap;
   function getEqText(ticker) {
     var eqs = eqMap[ticker];
     if (!eqs || eqs.length === 0) return "";
@@ -4902,14 +5031,80 @@ function showAutocompleteResults(idx, results) {
     html += '<div class="ac-group-label">' + g + '</div>';
     grupos[g].forEach(function(e) {
       var safeDesc = (e.desc || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
-      html += '<div class="ac-item" onclick="selectAutocomplete(' + idx + ',\'' + e.ticker + '\')">';
-      html += '<span><span class="ac-ticker">' + e.ticker + '</span><span class="ac-desc">' + safeDesc + '</span></span>';
+      var hasInfo = ETF_INFO[e.ticker] ? true : false;
+      html += '<div class="ac-item">';
+      html += '<span onclick="selectAutocomplete(' + idx + ',\'' + e.ticker + '\')" style="flex:1;cursor:pointer;">';
+      html += '<span class="ac-ticker">' + e.ticker + '</span>';
+      html += '<span class="ac-desc">' + safeDesc + '</span>';
+      html += '</span>';
+      if (hasInfo) {
+        html += '<span class="ac-info-btn" onclick="event.stopPropagation();mostrarFichaETF(\'' + e.ticker + '\')" title="Ver ficha do ETF">ℹ️</span>';
+      }
       html += '</div>';
     });
   });
 
   drop.innerHTML = html;
   drop.classList.add('open');
+}
+
+function mostrarFichaETF(ticker) {
+  var info = ETF_INFO[ticker];
+  if (!info) return;
+
+  // Get equivalences
+  var eqMap = window._eqMap || {};
+  var eqs = eqMap[ticker] ? eqMap[ticker] : [];
+  var eqHtml = eqs.length > 0 ? '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);"><span style="font-size:11px;color:var(--text-soft);">Equivalentes:</span> ' + eqs.map(function(t) {
+    var ti = ETF_INFO[t];
+    var flag = ti ? (ti.custodia === 'B3' ? '🇧🇷' : ti.custodia === 'Irlanda' ? '🇮🇪' : '🇺🇸') : '🌎';
+    return '<span style="display:inline-block;padding:2px 8px;background:rgba(0,136,204,0.08);border-radius:4px;font-size:12px;margin:2px;font-family:var(--font-mono);">' + flag + ' ' + t + '</span>';
+  }).join('') + '</div>' : '';
+
+  // Data coverage
+  var dataInfo = '';
+  var series = (window.DADOS && window.DADOS.etfs && window.DADOS.etfs[ticker]) || (window.DADOS && window.DADOS.offshore && window.DADOS.offshore[ticker]);
+  if (series && series.length > 0) {
+    dataInfo = '<div style="margin-top:8px;font-size:11px;color:var(--text-soft);">📊 ' + series.length + ' dias de dados (' + series[0].data + ' → ' + series[series.length-1].data + ')</div>';
+  }
+
+  var custFlag = info.custodia === 'B3' ? '🇧🇷 B3' : info.custodia === 'Irlanda' ? '🇮🇪 UCITS' : '🇺🇸 US';
+
+  var html = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.remove()">';
+  html += '<div style="background:var(--bg-card);border-radius:16px;max-width:420px;width:100%;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3);">';
+
+  // Header
+  html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
+  html += '<div>';
+  html += '<div style="font-family:var(--font-mono);font-size:24px;font-weight:800;color:var(--brand-blue);">' + ticker + '</div>';
+  html += '<div style="font-size:14px;color:var(--text);margin-top:2px;">' + info.nome + '</div>';
+  html += '</div>';
+  html += '<span style="font-size:12px;padding:4px 10px;border-radius:20px;background:rgba(0,136,204,0.1);color:var(--brand-blue);white-space:nowrap;">' + custFlag + '</span>';
+  html += '</div>';
+
+  // Details grid
+  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">';
+  html += '<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);margin-bottom:2px;">Gestora</div><div style="font-size:13px;font-weight:600;">' + info.gestora + '</div></div>';
+  html += '<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);margin-bottom:2px;">Taxa Adm.</div><div style="font-size:13px;font-weight:600;">' + info.taxa + '</div></div>';
+  html += '<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);margin-bottom:2px;">Categoria</div><div style="font-size:13px;font-weight:600;">' + info.categoria + '</div></div>';
+  html += '<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);margin-bottom:2px;">Benchmark</div><div style="font-size:13px;font-weight:600;">' + info.benchmark + '</div></div>';
+  html += '</div>';
+
+  html += eqHtml;
+  html += dataInfo;
+
+  // Add to portfolio button
+  html += '<button onclick="this.closest(\'div[style*=fixed]\').remove();adicionarDaLista(\'' + ticker + '\')" style="margin-top:16px;width:100%;padding:10px;border:none;border-radius:8px;background:var(--brand-blue);color:white;font-weight:600;cursor:pointer;font-size:14px;">+ Adicionar à carteira</button>';
+
+  html += '</div></div>';
+
+  // Remove existing fichas
+  document.querySelectorAll('[data-ficha-etf]').forEach(function(el) { el.remove(); });
+
+  var div = document.createElement('div');
+  div.setAttribute('data-ficha-etf', 'true');
+  div.innerHTML = html;
+  document.body.appendChild(div.firstChild);
 }
 
 function selectAutocomplete(idx, ticker) {
@@ -4974,9 +5169,15 @@ function abrirListaCompleta() {
     html += '<div class="lista-grupo" data-grupo="' + g + '">';
     html += '<div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);padding:8px 0 4px;border-bottom:1px solid var(--border);margin-top:12px;">' + g + ' <span style="opacity:0.5">(' + grupos[g].length + ')</span></div>';
     grupos[g].forEach(function(e) {
-      html += '<div class="lista-item" style="padding:6px 8px;cursor:pointer;font-size:13px;border-radius:4px;display:flex;justify-content:space-between;align-items:center;" onmouseover="this.style.background=\'rgba(0,136,204,0.08)\'" onmouseout="this.style.background=\'\'" onclick="adicionarDaLista(\'' + e.ticker + '\');this.style.background=\'rgba(45,140,92,0.15)\';this.innerHTML=\'<span style=color:var(--ok)>✓ ' + e.ticker + ' adicionado</span>\'">';
-      html += '<span><strong style="color:var(--brand-blue);font-family:var(--font-mono);">' + e.ticker + '</strong> <span style="color:var(--text-soft);font-size:11px;">' + e.desc + '</span></span>';
-      html += '<span style="font-size:10px;color:var(--text-soft);opacity:0.5;">' + (e.custodia === 'OFFSHORE' ? '🌎' : '🇧🇷') + '</span>';
+      var hasInfo = ETF_INFO[e.ticker] ? true : false;
+      html += '<div class="lista-item" style="padding:6px 8px;font-size:13px;border-radius:4px;display:flex;align-items:center;gap:6px;" onmouseover="this.style.background=\'rgba(0,136,204,0.08)\'" onmouseout="this.style.background=\'\'">';
+      html += '<span style="flex:1;cursor:pointer;" onclick="adicionarDaLista(\'' + e.ticker + '\');var p=this.parentElement;p.style.background=\'rgba(45,140,92,0.15)\';p.innerHTML=\'<span style=color:var(--ok)>✓ ' + e.ticker + ' adicionado</span>\'">';
+      html += '<strong style="color:var(--brand-blue);font-family:var(--font-mono);">' + e.ticker + '</strong> <span style="color:var(--text-soft);font-size:11px;">' + e.desc + '</span>';
+      html += '</span>';
+      if (hasInfo) {
+        html += '<span class="ac-info-btn" onclick="event.stopPropagation();mostrarFichaETF(\'' + e.ticker + '\')" title="Ver ficha do ETF" style="flex-shrink:0;">ℹ️</span>';
+      }
+      html += '<span style="font-size:10px;color:var(--text-soft);opacity:0.5;flex-shrink:0;">' + (e.custodia === 'OFFSHORE' ? '🌎' : '🇧🇷') + '</span>';
       html += '</div>';
     });
     html += '</div>';
