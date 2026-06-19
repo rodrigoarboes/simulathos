@@ -224,12 +224,44 @@ var Metricas = (function () {
     return resultado;
   }
 
+  function sortino(retornosDiarios, retornosDiariosRiskFree) {
+    if (!retornosDiarios || retornosDiarios.length < 2) return 0;
+    if (!retornosDiariosRiskFree) retornosDiariosRiskFree = [];
+    var n = retornosDiarios.length;
+    var excess = [];
+    for (var i = 0; i < n; i++) {
+      var rf = i < retornosDiariosRiskFree.length ? retornosDiariosRiskFree[i] : 0;
+      excess.push(retornosDiarios[i] - rf);
+    }
+    var negatives = excess.filter(function(v) { return v < 0; });
+    if (negatives.length < 2) return _mean(excess) > 0 ? 99 : 0;
+    var downDev = Math.sqrt(negatives.reduce(function(s, v) { return s + v * v; }, 0) / negatives.length);
+    if (downDev === 0) return 0;
+    return (_mean(excess) / downDev) * Math.sqrt(252);
+  }
+
+  function ulcerIndex(retornosDiarios) {
+    if (!retornosDiarios || retornosDiarios.length < 2) return 0;
+    var equity = 1;
+    var peak = 1;
+    var sumSqDD = 0;
+    for (var i = 0; i < retornosDiarios.length; i++) {
+      equity *= (1 + retornosDiarios[i]);
+      if (equity > peak) peak = equity;
+      var dd = ((equity - peak) / peak) * 100;
+      sumSqDD += dd * dd;
+    }
+    return Math.sqrt(sumSqDD / retornosDiarios.length);
+  }
+
   return {
     retornoAcumulado: retornoAcumulado,
     retornoAnualizado: retornoAnualizado,
     volatilidadeAnualizada: volatilidadeAnualizada,
     drawdownMaximo: drawdownMaximo,
     sharpe: sharpe,
+    sortino: sortino,
+    ulcerIndex: ulcerIndex,
     beta: beta,
     correlacao: correlacao,
     matrizCorrelacao: matrizCorrelacao,

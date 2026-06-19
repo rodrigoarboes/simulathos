@@ -398,6 +398,8 @@ var Backtest = (function () {
     var vol         = Metricas.volatilidadeAnualizada(retornosCarteira);
     var maxDD       = Metricas.drawdownMaximo(retornosCarteira);
     var sharpeVal   = Metricas.sharpe(retornosCarteira, cdiRetornos);
+    var sortinoVal  = Metricas.sortino(retornosCarteira, cdiRetornos);
+    var ulcerVal    = Metricas.ulcerIndex(retornosCarteira);
     var betaVal     = Metricas.beta(retornosCarteira, ibovRetornos);
     var cdiAcum     = Metricas.retornoAcumulado(cdiRetornos);
     var pctCDI      = Metricas.percentualDoCDI(retAcum, cdiAcum);
@@ -435,6 +437,8 @@ var Backtest = (function () {
         retornoAnualizado: retAnual,
         volatilidade:      vol,
         sharpe:            sharpeVal,
+        sortino:           sortinoVal,
+        ulcerIndex:        ulcerVal,
         drawdownMaximo:    maxDD,
         beta:              betaVal,
         percentualCDI:     pctCDI,
