@@ -397,6 +397,9 @@ var AIDASim = (function () {
     }
 
     // (e) Render
+    // Save for toggleRetornoReal() to access
+    window._lastBacktestResult = res;
+
     var resumo = res.resumo;
     var curvas = res.curvas;
 
@@ -443,12 +446,15 @@ var AIDASim = (function () {
       { icon: '⚡',       label: 'Volatilidade',       valor: fmtPct(resumo.volatilidade, 1),        cor: corVol },
       { icon: '⚖️', label: 'Sharpe',             valor: fmtNum(resumo.sharpe, 2),              cor: corSharpe },
       { icon: '📉', label: 'Drawdown máximo', valor: fmtPct(resumo.drawdownMaximo, 1),    cor: corDD },
-      { icon: '📊', label: 'Beta (vs Ibov)',     valor: fmtNum(resumo.beta, 2),                cor: corBeta }
+      { icon: '📊', label: 'Beta (vs Ibov)',     valor: fmtNum(resumo.beta, 2),                cor: corBeta },
+      { icon: '🛡️', label: 'Sortino',            valor: fmtNum(resumo.sortino, 2),             cor: corSharpe, tip: 'Sharpe ajustado pela volatilidade negativa (downside risk)' },
+      { icon: '🩺', label: 'Ulcer Index',         valor: fmtNum(resumo.ulcerIndex, 2),          cor: corVol,    tip: 'Mede a profundidade e duração dos drawdowns — quanto menor, melhor' }
     ];
     html += '<div class="score-dimensoes" style="margin-bottom:20px;">';
     for (var m = 0; m < metricas.length; m++) {
+      var tipAttr = metricas[m].tip ? ' title="' + escapeHtml(metricas[m].tip) + '"' : '';
       html +=
-        '<div class="dim-card" style="border-left:3px solid ' + metricas[m].cor + ';">' +
+        '<div class="dim-card" style="border-left:3px solid ' + metricas[m].cor + ';"' + tipAttr + '>' +
         '<h5 style="display:flex; align-items:center; gap:4px;">' +
         '<span style="font-size:14px;">' + metricas[m].icon + '</span> ' +
         metricas[m].label + '</h5>' +
@@ -457,6 +463,44 @@ var AIDASim = (function () {
         '</div>';
     }
     html += '</div>';
+
+    // --- IPCA toggle (Feature 2) ---
+    html +=
+      '<div class="toggle-real" style="margin:12px 0;padding:10px 14px;background:rgba(0,136,204,0.06);border-radius:8px;font-size:13px;">' +
+        '<label style="display:flex;align-items:center;gap:8px;cursor:pointer;">' +
+          '<input type="checkbox" id="toggle-ipca" onchange="toggleRetornoReal()"> ' +
+          '<span>Ajustar pela inflação (IPCA)</span>' +
+        '</label>' +
+        '<div id="retorno-real-info" style="display:none;margin-top:8px;font-size:12px;color:var(--text-soft);"></div>' +
+      '</div>';
+
+    // --- Come-cotas info box (Feature 3) ---
+    var retAcum = resumo.retornoAcumulado;
+    var numSemestres = Math.floor(resumo.diasUteis / 126);
+    var retComComeCotas = retAcum;
+    if (numSemestres > 0) {
+      var valorCC = 1;
+      var retDiario = Math.pow(1 + retAcum, 1 / resumo.diasUteis) - 1;
+      for (var dia = 0; dia < resumo.diasUteis; dia++) {
+        valorCC *= (1 + retDiario);
+        if ((dia + 1) % 126 === 0 && valorCC > 1) {
+          var ganho = valorCC - 1;
+          valorCC -= ganho * 0.15;
+        }
+      }
+      retComComeCotas = valorCC - 1;
+    }
+    var perdaComeCotas = retAcum - retComComeCotas;
+
+    html +=
+      '<div class="comecotas-info" style="margin:16px 0;padding:14px 18px;background:rgba(235,129,5,0.06);border-left:3px solid var(--brand-orange);border-radius:0 8px 8px 0;font-size:13px;line-height:1.6;">' +
+        '<div style="font-weight:700;color:var(--brand-orange);margin-bottom:4px;">💡 ETF vs Fundo — vantagem do come-cotas</div>' +
+        '<div id="comecotas-text" style="color:var(--text-soft);">' +
+          'Se esta carteira fosse um <strong>fundo de investimento</strong> (em vez de ETFs), o come-cotas consumiria aproximadamente <strong style="color:var(--brand-orange);">' +
+          (perdaComeCotas * 100).toFixed(1) + ' p.p.</strong> do retorno no período (' + numSemestres + ' semestres). ' +
+          'Retorno com come-cotas: <strong>' + (retComComeCotas * 100).toFixed(1) + '%</strong> vs ETF: <strong>' + (retAcum * 100).toFixed(1) + '%</strong>.' +
+        '</div>' +
+      '</div>';
 
     // --- Separator ---
     html += '<hr style="border:none; border-top:1px solid var(--border); margin:20px 0;">';
@@ -705,3 +749,37 @@ var AIDASim = (function () {
   };
 
 })();
+
+// --------------------------------------------------------------------- //
+// toggleRetornoReal — global, chamado pelo checkbox #toggle-ipca
+// --------------------------------------------------------------------- //
+function toggleRetornoReal() {
+  var cb = document.getElementById('toggle-ipca');
+  var info = document.getElementById('retorno-real-info');
+  if (!cb || !info || !window._lastBacktestResult) return;
+
+  if (cb.checked) {
+    var r = window._lastBacktestResult;
+    var datas = r.curvas.datas;
+    if (!datas || datas.length < 2) { info.style.display = 'none'; return; }
+
+    var inicio = datas[0].substring(0, 7);
+    var fim = datas[datas.length - 1].substring(0, 7);
+    var ipcaData = (window.DADOS && window.DADOS.ipca) || [];
+    var ipcaAcum = 1;
+    ipcaData.forEach(function(item) {
+      if (item.data >= inicio && item.data <= fim) {
+        ipcaAcum *= (1 + item.valor / 100);
+      }
+    });
+    var inflacao = ipcaAcum - 1;
+    var nominal = r.resumo.retornoAcumulado;
+    var real = (1 + nominal) / (1 + inflacao) - 1;
+
+    info.innerHTML = '📊 <strong>Retorno real: ' + (real * 100).toFixed(1) + '%</strong> ' +
+      '<span style="opacity:0.7">(nominal ' + (nominal * 100).toFixed(1) + '% − inflação ' + (inflacao * 100).toFixed(1) + '%)</span>';
+    info.style.display = '';
+  } else {
+    info.style.display = 'none';
+  }
+}
