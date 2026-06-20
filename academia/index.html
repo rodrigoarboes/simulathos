@@ -2663,6 +2663,7 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
         <button class="cat-pill" onclick="filtrarCategoria('BDR')" title="BDRs de ETFs e ações estrangeiras listados na B3 (ex: BOTZ39, BAIQ39, AAPL34)">BDRs ℹ️</button>
         <button class="cat-pill" onclick="filtrarCategoria('Cripto')">Cripto</button>
         <button class="cat-pill" onclick="filtrarCategoria('Alternativos')">Alternativos</button>
+        <button class="cat-pill" onclick="filtrarCategoria('Fundos')" title="Fundos abertos brasileiros — dados oficiais da CVM com come-cotas">Fundos ℹ️</button>
         <button class="cat-pill" onclick="filtrarCategoria('OFFSHORE')" title="ETFs listados nas bolsas americanas (ex: VOO, QQQ, ARKK, SCHD) — requer conta no exterior">Offshore US ℹ️</button>
         <button class="cat-pill" onclick="filtrarCategoria('UCITS')" title="ETFs UCITS listados na Europa/Irlanda (ex: VUAA, CNDX, VWRA, CSPX) — sem estate tax, eficiente pra brasileiro">UCITS ℹ️</button>
         <button class="cat-pill" onclick="abrirListaCompleta()" style="background:var(--brand-orange);color:white;border-color:var(--brand-orange);">📋 Ver lista</button>
@@ -4846,6 +4847,25 @@ function renderLinhasAlocacao() {
     }
     return e;
   });
+
+  // Registrar fundos abertos (CVM) no catálogo
+  if (window.DADOS && window.DADOS.fundos) {
+    var fundoClasses = {
+      "JGP Strategy":"Macro","Kapitalo K10":"Macro","Kapitalo Kappa":"Macro","Kapitalo Zeta":"Macro",
+      "Absolute Vertex":"Macro","Ibiuna Hedge STH":"Macro","Genoa Radar":"Macro","Itau Artax":"Macro",
+      "ARX Vinson":"Crédito HG","Augme 45":"Crédito HG","Sparta Top":"Crédito HG","SPX Seahawk":"Crédito HG",
+      "JGP Corporate":"Crédito HG","Capitania Premium":"Crédito Multi","Ibiuna Credit":"Crédito Multi",
+      "Augme 180":"Crédito Multi","JGP Select":"Crédito Multi","Root High Yield":"Crédito HY",
+      "Sparta Top Inflacao":"RF Inflação","Kinea IPCA Dinamico":"RF Inflação","Kinea Dakar":"RF Ativa",
+      "Quantitas Galapagos":"RF Ativa","Itau Global Dinamico RF":"RF Ativa",
+      "Trend DI Simples":"DI Simples","Melhores Fundos Multi":"FoF Multi",
+    };
+    Object.keys(window.DADOS.fundos).forEach(function(nome) {
+      var cls = fundoClasses[nome] || "Fundo Aberto";
+      tickersExtras.push({ ticker: nome, desc: cls + " (CVM, come-cotas)", classe: "Fundos Abertos", custodia: "BR" });
+    });
+  }
+
   const todosETFs = etfsEnriquecidos.concat(tickersExtras);
   window._allETFs = todosETFs;
 
@@ -4945,6 +4965,7 @@ function _matchesCategory(e, cat) {
   if (cat === 'Internacional') return cl.indexOf('internacional') > -1 || cl.indexOf('internacionais') > -1;
   if (cat === 'BDR') return cl.indexOf('bdr') > -1 || e.ticker.indexOf('34') > -1 || e.ticker.indexOf('39') > -1;
   if (cat === 'Alternativos') return cl.indexOf('alternativ') > -1 || cl.indexOf('setorial') > -1 || desc.indexOf('ouro') > -1 || desc.indexOf('gold') > -1 || desc.indexOf('commodit') > -1;
+  if (cat === 'Fundos') return cl.indexOf('fundos') > -1 || desc.indexOf('cvm') > -1 || desc.indexOf('come-cotas') > -1;
   return cl.indexOf(cat.toLowerCase()) > -1;
 }
 

@@ -62,6 +62,13 @@ var AIDASim = (function () {
       }
     }
 
+    // Fundos abertos (CVM) — já em BRL
+    if (D.fundos) {
+      for (var f in D.fundos) {
+        if (D.fundos.hasOwnProperty(f)) uni[f] = D.fundos[f];
+      }
+    }
+
     universoCache = uni;
     return uni;
   }
