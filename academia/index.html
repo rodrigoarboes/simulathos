@@ -6148,28 +6148,65 @@ function renderGraficoImab() {
    IMAB11 (data/dados.js) na janela 2021→2026 e só aceita quem bate em
    correlação, erro médio E volatilidade. Sem aprovação → sem gráfico. */
 
-const SGS_IMAB_CANDIDATOS = [12466, 12468, 12462, 12467, 12469, 12471, 12472, 12459, 12460, 12461, 12463, 12464, 12465, 12470];
+/* Códigos confirmados do bloco ANBIMA no SGS: 12466 = IMA-B (diário),
+   12467 = IMA-B 5, 12468 = IMA-B 5+. A validação contra o IMAB11 continua
+   decidindo — os códigos só ordenam a fila. */
+const SGS_IMAB_CANDIDATOS = [12466, 12467, 12468, 12462];
 const SGS_CDI_MENSAL = 4391;
 const SGS_IPCA_MENSAL = 433;
-const IMABLONGO_CACHE_KEY = "academia.imablongo.v2";
+const IMABLONGO_CACHE_KEY = "academia.imablongo.v3";
 const IMABLONGO_CACHE_DIAS = 7;
 
-async function buscarSgs(codigo, dataInicial) {
-  const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${codigo}/dados?formato=json` +
-    (dataInicial ? `&dataInicial=${dataInicial}` : "");
-  const res = await fetch(url, { headers: { Accept: "application/json" } });
-  if (!res.ok) throw new Error(`SGS ${codigo}: HTTP ${res.status}`);
-  const rows = await res.json();
-  if (!Array.isArray(rows)) throw new Error(`SGS ${codigo}: resposta inesperada`);
-  return rows; // [{ data: "DD/MM/YYYY", valor: "0.87" }, ...]
+async function buscarSgs(codigo, params, timeoutMs) {
+  const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${codigo}/dados${params.ultimos ? `/ultimos/${params.ultimos}` : ""}?formato=json` +
+    (params.dataInicial ? `&dataInicial=${params.dataInicial}` : "") +
+    (params.dataFinal ? `&dataFinal=${params.dataFinal}` : "");
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs || 12000);
+  try {
+    const res = await fetch(url, { signal: ctrl.signal });
+    if (!res.ok) throw new Error(`SGS ${codigo}: HTTP ${res.status}`);
+    const rows = await res.json();
+    if (!Array.isArray(rows)) throw new Error(`SGS ${codigo}: resposta inesperada`);
+    return rows; // [{ data: "DD/MM/YYYY", valor: "..." }, ...]
+  } catch (e) {
+    if (e && e.name === "AbortError") throw new Error(`SGS ${codigo}: sem resposta em ${(timeoutMs || 12000) / 1000}s`);
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
-/** Agrupa uma série SGS (diária OU mensal, valor = % do período) por mês composto. */
-function mensalizaSgs(rows) {
+/** A API do BCB limita consultas de séries diárias a ~10 anos — busca em blocos. */
+async function buscarSgsLongo(codigo, anoInicial) {
+  const hoje = new Date();
+  const blocos = [];
+  for (let a = anoInicial; a <= hoje.getFullYear(); a += 9) {
+    const fimAno = Math.min(a + 8, hoje.getFullYear());
+    blocos.push({ dataInicial: `01/01/${a}`, dataFinal: `31/12/${fimAno}` });
+  }
+  const partes = await Promise.all(blocos.map(b => buscarSgs(codigo, b, 20000)));
+  const vistos = new Set();
+  const rows = [];
+  for (const parte of partes) {
+    for (const r of parte) {
+      if (!vistos.has(r.data)) { vistos.add(r.data); rows.push(r); }
+    }
+  }
+  return rows;
+}
+
+function parseValor(r) {
+  const v = parseFloat(String(r.valor).replace(",", "."));
+  return isFinite(v) ? v : null;
+}
+
+/** Interpretação A — valor = % do período: compõe por mês. */
+function mensalizaComoVariacao(rows) {
   const porMes = new Map(); // "YYYY-MM" → fator acumulado do mês
   for (const r of rows) {
-    const v = parseFloat(String(r.valor).replace(",", "."));
-    if (!isFinite(v)) continue;
+    const v = parseValor(r);
+    if (v === null) continue;
     const [, mm, yyyy] = r.data.split("/");
     const chave = `${yyyy}-${mm}`;
     porMes.set(chave, (porMes.get(chave) || 1) * (1 + v / 100));
@@ -6177,6 +6214,23 @@ function mensalizaSgs(rows) {
   return [...porMes.entries()]
     .map(([mes, fator]) => ({ mes, retorno: fator - 1 }))
     .sort((a, b) => (a.mes < b.mes ? -1 : 1));
+}
+
+/** Interpretação B — valor = número-índice diário: retorno mensal = fim/fim anterior. */
+function mensalizaComoIndice(rows) {
+  const fimDeMes = new Map(); // "YYYY-MM" → último índice do mês (rows em ordem)
+  for (const r of rows) {
+    const v = parseValor(r);
+    if (v === null || v <= 0) continue;
+    const [, mm, yyyy] = r.data.split("/");
+    fimDeMes.set(`${yyyy}-${mm}`, v);
+  }
+  const meses = [...fimDeMes.keys()].sort();
+  const out = [];
+  for (let i = 1; i < meses.length; i++) {
+    out.push({ mes: meses[i], retorno: fimDeMes.get(meses[i]) / fimDeMes.get(meses[i - 1]) - 1 });
+  }
+  return out;
 }
 
 /** Retornos mensais do ETF IMAB11 a partir do dados.js (gabarito da validação). */
@@ -6242,34 +6296,49 @@ async function montarImabLongo(forcar) {
   if (imabLongoBuscando) return;
   imabLongoBuscando = true;
   status.style.display = "";
-  status.innerHTML = "⏳ Buscando a série oficial no Banco Central (SGS)…";
 
   try {
     const gabarito = retornosMensaisImab11();
     if (gabarito.size < 36) throw new Error("gabarito IMAB11 indisponível no dados.js");
 
-    // Fase 1: descobrir QUAL série do bloco ANBIMA é o IMA-B (janela curta, leve)
+    // Fase 0: ping rápido — se o BCB não responde, avisa já com o motivo
+    status.innerHTML = "⏳ Conectando ao Banco Central (SGS)…";
+    await buscarSgs(SGS_CDI_MENSAL, { ultimos: 1 }, 8000);
+
+    // Fase 1: descobrir QUAL série é o IMA-B (candidatos em paralelo, janela curta).
+    // Cada candidata é testada nas DUAS interpretações possíveis do SGS
+    // (número-índice diário e variação %): a validação decide.
+    status.innerHTML = "⏳ Identificando a série do IMA-B (validando contra o IMAB11)…";
+    const amostras = await Promise.allSettled(
+      SGS_IMAB_CANDIDATOS.map(c => buscarSgs(c, { dataInicial: "01/06/2021" }, 15000)),
+    );
     let escolhido = null;
-    for (const codigo of SGS_IMAB_CANDIDATOS) {
-      try {
-        const amostra = mensalizaSgs(await buscarSgs(codigo, "01/06/2021"));
-        const v = validaContraImab11(amostra, gabarito);
-        if (v.ok) { escolhido = { codigo, verif: v }; break; }
-      } catch { /* candidato indisponível — tenta o próximo */ }
+    for (let i = 0; i < SGS_IMAB_CANDIDATOS.length && !escolhido; i++) {
+      if (amostras[i].status !== "fulfilled") continue;
+      const rows = amostras[i].value;
+      for (const modo of ["indice", "variacao"]) {
+        const mensal = modo === "indice" ? mensalizaComoIndice(rows) : mensalizaComoVariacao(rows);
+        const v = validaContraImab11(mensal, gabarito);
+        if (v.ok) { escolhido = { codigo: SGS_IMAB_CANDIDATOS[i], modo, verif: v }; break; }
+      }
     }
     if (!escolhido) {
-      throw new Error("nenhuma série do SGS passou na validação contra o IMAB11 — sem gráfico para não arriscar dado errado");
+      const erroRede = amostras.find(a => a.status === "rejected");
+      throw new Error(erroRede
+        ? `candidatas indisponíveis (${erroRede.reason && erroRede.reason.message})`
+        : "nenhuma série do SGS passou na validação contra o IMAB11 — sem gráfico para não arriscar dado errado");
     }
 
-    // Fase 2: histórico completo do aprovado + CDI e IPCA mensais
+    // Fase 2: histórico completo do aprovado + CDI e IPCA mensais (em blocos)
+    status.innerHTML = "⏳ Baixando o histórico completo (desde 2004)…";
     const [imabFull, cdiFull, ipcaFull] = await Promise.all([
-      buscarSgs(escolhido.codigo, "01/01/2003"),
-      buscarSgs(SGS_CDI_MENSAL, "01/01/2003"),
-      buscarSgs(SGS_IPCA_MENSAL, "01/01/2003"),
+      buscarSgsLongo(escolhido.codigo, 2003),
+      buscarSgsLongo(SGS_CDI_MENSAL, 2003),
+      buscarSgsLongo(SGS_IPCA_MENSAL, 2003),
     ]);
-    const imabM = mensalizaSgs(imabFull);
-    const cdiM = new Map(mensalizaSgs(cdiFull).map(r => [r.mes, r.retorno]));
-    const ipcaM = new Map(mensalizaSgs(ipcaFull).map(r => [r.mes, r.retorno]));
+    const imabM = escolhido.modo === "indice" ? mensalizaComoIndice(imabFull) : mensalizaComoVariacao(imabFull);
+    const cdiM = new Map(mensalizaComoVariacao(cdiFull).map(r => [r.mes, r.retorno]));
+    const ipcaM = new Map(mensalizaComoVariacao(ipcaFull).map(r => [r.mes, r.retorno]));
 
     const meses = [], sImab = [], sCdi = [], sIpca = [];
     let fImab = 1, fCdi = 1, fIpca = 1;
@@ -6288,13 +6357,18 @@ async function montarImabLongo(forcar) {
     const payload = {
       buscadoEm: Date.now(),
       codigo: escolhido.codigo,
+      modo: escolhido.modo,
       verif: escolhido.verif,
       series: { meses, imab: sImab, cdi: sCdi, ipca: sIpca },
     };
     try { localStorage.setItem(IMABLONGO_CACHE_KEY, JSON.stringify(payload)); } catch { /* storage cheio — segue sem cache */ }
     renderImabLongo(payload);
   } catch (e) {
-    status.innerHTML = `⚠️ Não consegui montar a série longa agora (${(e && e.message) || "falha de rede"}).
+    let motivo = (e && e.message) || "falha de rede";
+    if (/Failed to fetch|NetworkError|Load failed/i.test(motivo)) {
+      motivo = "o navegador não conseguiu falar com api.bcb.gov.br — bloqueio de rede/CORS ou BCB fora do ar";
+    }
+    status.innerHTML = `⚠️ Não consegui montar a série longa agora (${motivo}).
       <button class="grafico-periodo-btn" onclick="montarImabLongo(true)">Tentar de novo</button>`;
   } finally {
     imabLongoBuscando = false;
