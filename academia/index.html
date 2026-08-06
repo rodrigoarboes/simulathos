@@ -3023,6 +3023,32 @@ body.dark .crono-resultado.bad { background: #3a1a1a; }
       <div class="grafico-fonte">Fonte: IMA-B via ETF IMAB11 (iShares, B3) · CDI/IPCA: Banco Central do Brasil (SGS 4391, 433) · série até 04/2026</div>
     </div>
 
+    <!-- GRÁFICO 5: IMA-B x CDI — O LONGO PRAZO (série oficial SGS, busca ao vivo) -->
+    <div class="grafico-card" id="card-grafico-imablongo">
+      <h4>🏆 IMA-B vs CDI — o longo prazo</h4>
+      <div class="grafico-sub">
+        A série oficial ANBIMA completa, direto do Banco Central: R$ 100 corrigidos pelo IMA-B,
+        pelo CDI e pela inflação desde o início do índice (2004). O gráfico de cima mostra a
+        marcação a mercado no curto prazo; este mostra o que o juro real composto faz em 20 anos.
+      </div>
+      <div class="grafico-status" id="status-imablongo" style="font-size:12px;color:var(--text-soft);padding:8px 0;">
+        Abra para buscar a série oficial no Banco Central…
+      </div>
+      <div class="grafico-canvas-wrap" id="wrap-imablongo" style="display:none;">
+        <canvas id="canvas-imablongo"></canvas>
+      </div>
+      <div class="grafico-destaque" id="destaque-imablongo" style="display:none;"></div>
+      <div class="grafico-acao" id="acao-imablongo" style="display:none;">
+        <button class="btn-inserir-slide" onclick="inserirGraficoNoSlide('imablongo')">
+          ➕ Inserir nos slides do pitch
+        </button>
+      </div>
+      <div class="grafico-fonte">
+        Fonte: Banco Central do Brasil (SGS/ANBIMA — IMA-B, CDI 4391, IPCA 433), busca ao vivo com
+        validação automática contra o ETF IMAB11. Se a validação falhar, o gráfico não aparece.
+      </div>
+    </div>
+
     <div id="graficos-inseridos-aviso" class="graficos-inseridos-aviso"></div>
 
     <p style="font-size:12px; color:var(--text-soft); line-height:1.5; margin-top:8px;">
@@ -5775,6 +5801,7 @@ let chartDolar = null;
 let chartIndices = null;
 let chartR100 = null;
 let chartImab = null;
+let chartImabLongo = null;
 let periodoDolarAtual = "tudo";
 
 // Gráficos que o aluno escolheu inserir nos slides do pitch
@@ -5790,6 +5817,7 @@ function abrirGraficos() {
     renderGraficoDolar(periodoDolarAtual);
     renderGraficoIndices();
     renderGraficoImab();
+    montarImabLongo();
     atualizarBotoesInseridos();
   }, 320);
 }
@@ -6112,12 +6140,231 @@ function renderGraficoImab() {
   `;
 }
 
+/* ============ IMA-B LONGO PRAZO — SGS AO VIVO COM AUTOVALIDAÇÃO ============
+   A série longa do IMA-B (desde 2004) vem do SGS do Banco Central, buscada
+   pelo navegador de quem abre a página. Como o número exato da série ANBIMA
+   no catálogo do SGS não deve ser confiado às cegas, o código PROVA qual
+   candidato é o IMA-B: compara os retornos mensais de cada um com o ETF
+   IMAB11 (data/dados.js) na janela 2021→2026 e só aceita quem bate em
+   correlação, erro médio E volatilidade. Sem aprovação → sem gráfico. */
+
+const SGS_IMAB_CANDIDATOS = [12466, 12468, 12462, 12467, 12469, 12471, 12472, 12459, 12460, 12461, 12463, 12464, 12465, 12470];
+const SGS_CDI_MENSAL = 4391;
+const SGS_IPCA_MENSAL = 433;
+const IMABLONGO_CACHE_KEY = "academia.imablongo.v2";
+const IMABLONGO_CACHE_DIAS = 7;
+
+async function buscarSgs(codigo, dataInicial) {
+  const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${codigo}/dados?formato=json` +
+    (dataInicial ? `&dataInicial=${dataInicial}` : "");
+  const res = await fetch(url, { headers: { Accept: "application/json" } });
+  if (!res.ok) throw new Error(`SGS ${codigo}: HTTP ${res.status}`);
+  const rows = await res.json();
+  if (!Array.isArray(rows)) throw new Error(`SGS ${codigo}: resposta inesperada`);
+  return rows; // [{ data: "DD/MM/YYYY", valor: "0.87" }, ...]
+}
+
+/** Agrupa uma série SGS (diária OU mensal, valor = % do período) por mês composto. */
+function mensalizaSgs(rows) {
+  const porMes = new Map(); // "YYYY-MM" → fator acumulado do mês
+  for (const r of rows) {
+    const v = parseFloat(String(r.valor).replace(",", "."));
+    if (!isFinite(v)) continue;
+    const [, mm, yyyy] = r.data.split("/");
+    const chave = `${yyyy}-${mm}`;
+    porMes.set(chave, (porMes.get(chave) || 1) * (1 + v / 100));
+  }
+  return [...porMes.entries()]
+    .map(([mes, fator]) => ({ mes, retorno: fator - 1 }))
+    .sort((a, b) => (a.mes < b.mes ? -1 : 1));
+}
+
+/** Retornos mensais do ETF IMAB11 a partir do dados.js (gabarito da validação). */
+function retornosMensaisImab11() {
+  const raw = (typeof DADOS !== "undefined" && DADOS.etfs && DADOS.etfs.IMAB11) || [];
+  const fimDeMes = new Map();
+  raw.forEach(p => fimDeMes.set(p.data.slice(0, 7), p.close));
+  const meses = [...fimDeMes.keys()].sort();
+  const out = new Map();
+  for (let i = 1; i < meses.length; i++) {
+    const prev = fimDeMes.get(meses[i - 1]);
+    if (prev > 0) out.set(meses[i], fimDeMes.get(meses[i]) / prev - 1);
+  }
+  return out; // "YYYY-MM" → retorno mensal
+}
+
+/** Prova se a série candidata é mesmo o IMA-B: correlação, erro médio e vol. */
+function validaContraImab11(mensalSgs, gabarito) {
+  const pares = [];
+  for (const { mes, retorno } of mensalSgs) {
+    if (gabarito.has(mes)) pares.push([retorno, gabarito.get(mes)]);
+  }
+  if (pares.length < 36) return { ok: false, motivo: `só ${pares.length} meses em comum` };
+
+  const n = pares.length;
+  const ma = pares.reduce((s, p) => s + p[0], 0) / n;
+  const mb = pares.reduce((s, p) => s + p[1], 0) / n;
+  let cov = 0, va = 0, vb = 0, mae = 0;
+  for (const [a, b] of pares) {
+    cov += (a - ma) * (b - mb);
+    va += (a - ma) ** 2;
+    vb += (b - mb) ** 2;
+    mae += Math.abs(a - b);
+  }
+  const corr = va > 0 && vb > 0 ? cov / Math.sqrt(va * vb) : 0;
+  mae /= n;
+  const volRatio = vb > 0 ? Math.sqrt(va / vb) : 0;
+
+  const ok = corr >= 0.985 && mae <= 0.003 && volRatio >= 0.85 && volRatio <= 1.18;
+  return { ok, corr, mae, volRatio, meses: n };
+}
+
+function leCacheImabLongo() {
+  try {
+    const raw = localStorage.getItem(IMABLONGO_CACHE_KEY);
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    if (!c || !c.series || !c.buscadoEm) return null;
+    const idadeDias = (Date.now() - c.buscadoEm) / 86400000;
+    return idadeDias <= IMABLONGO_CACHE_DIAS ? c : null;
+  } catch { return null; }
+}
+
+let imabLongoBuscando = false;
+
+async function montarImabLongo(forcar) {
+  const status = document.getElementById("status-imablongo");
+  const card = document.getElementById("card-grafico-imablongo");
+  if (!status || !card) return;
+
+  const cache = forcar ? null : leCacheImabLongo();
+  if (cache) { renderImabLongo(cache); return; }
+  if (imabLongoBuscando) return;
+  imabLongoBuscando = true;
+  status.style.display = "";
+  status.innerHTML = "⏳ Buscando a série oficial no Banco Central (SGS)…";
+
+  try {
+    const gabarito = retornosMensaisImab11();
+    if (gabarito.size < 36) throw new Error("gabarito IMAB11 indisponível no dados.js");
+
+    // Fase 1: descobrir QUAL série do bloco ANBIMA é o IMA-B (janela curta, leve)
+    let escolhido = null;
+    for (const codigo of SGS_IMAB_CANDIDATOS) {
+      try {
+        const amostra = mensalizaSgs(await buscarSgs(codigo, "01/06/2021"));
+        const v = validaContraImab11(amostra, gabarito);
+        if (v.ok) { escolhido = { codigo, verif: v }; break; }
+      } catch { /* candidato indisponível — tenta o próximo */ }
+    }
+    if (!escolhido) {
+      throw new Error("nenhuma série do SGS passou na validação contra o IMAB11 — sem gráfico para não arriscar dado errado");
+    }
+
+    // Fase 2: histórico completo do aprovado + CDI e IPCA mensais
+    const [imabFull, cdiFull, ipcaFull] = await Promise.all([
+      buscarSgs(escolhido.codigo, "01/01/2003"),
+      buscarSgs(SGS_CDI_MENSAL, "01/01/2003"),
+      buscarSgs(SGS_IPCA_MENSAL, "01/01/2003"),
+    ]);
+    const imabM = mensalizaSgs(imabFull);
+    const cdiM = new Map(mensalizaSgs(cdiFull).map(r => [r.mes, r.retorno]));
+    const ipcaM = new Map(mensalizaSgs(ipcaFull).map(r => [r.mes, r.retorno]));
+
+    const meses = [], sImab = [], sCdi = [], sIpca = [];
+    let fImab = 1, fCdi = 1, fIpca = 1;
+    for (const { mes, retorno } of imabM) {
+      if (!cdiM.has(mes) || !ipcaM.has(mes)) continue;
+      fImab *= 1 + retorno;
+      fCdi *= 1 + cdiM.get(mes);
+      fIpca *= 1 + ipcaM.get(mes);
+      meses.push(mes);
+      sImab.push(100 * fImab);
+      sCdi.push(100 * fCdi);
+      sIpca.push(100 * fIpca);
+    }
+    if (meses.length < 120) throw new Error("histórico do SGS veio curto demais");
+
+    const payload = {
+      buscadoEm: Date.now(),
+      codigo: escolhido.codigo,
+      verif: escolhido.verif,
+      series: { meses, imab: sImab, cdi: sCdi, ipca: sIpca },
+    };
+    try { localStorage.setItem(IMABLONGO_CACHE_KEY, JSON.stringify(payload)); } catch { /* storage cheio — segue sem cache */ }
+    renderImabLongo(payload);
+  } catch (e) {
+    status.innerHTML = `⚠️ Não consegui montar a série longa agora (${(e && e.message) || "falha de rede"}).
+      <button class="grafico-periodo-btn" onclick="montarImabLongo(true)">Tentar de novo</button>`;
+  } finally {
+    imabLongoBuscando = false;
+  }
+}
+
+function mesLabel(m) { return m.slice(5) + "/" + m.slice(0, 4); }
+
+let imabLongoUltimo = null;
+
+function renderImabLongo(payload) {
+  imabLongoUltimo = payload;
+  const { series, codigo, verif, buscadoEm } = payload;
+  const status = document.getElementById("status-imablongo");
+  document.getElementById("wrap-imablongo").style.display = "";
+  document.getElementById("destaque-imablongo").style.display = "";
+  document.getElementById("acao-imablongo").style.display = "";
+
+  const ctx = document.getElementById("canvas-imablongo").getContext("2d");
+  if (chartImabLongo) chartImabLongo.destroy();
+  chartImabLongo = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: series.meses.map(mesLabel),
+      datasets: [
+        { label: "IMA-B", data: series.imab, borderColor: corCSS("--ok"), borderWidth: 2.5, pointRadius: 0, tension: 0.2, fill: false },
+        { label: "CDI", data: series.cdi, borderColor: corCSS("--brand-blue"), borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false },
+        { label: "IPCA (inflação)", data: series.ipca, borderColor: corCSS("--brand-red"), borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 }, color: corCSS("--text") } } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 8, font: { size: 10 }, color: corCSS("--text-soft") }, grid: { display: false } },
+        y: { ticks: { font: { size: 10 }, color: corCSS("--text-soft"), callback: v => "R$ " + Number(v).toFixed(0) }, grid: { color: corCSS("--border") } }
+      }
+    }
+  });
+
+  const n = series.meses.length;
+  const imabF = series.imab[n - 1], cdiF = series.cdi[n - 1], ipcaF = series.ipca[n - 1];
+  const aMais = ((imabF / cdiF - 1) * 100).toFixed(0);
+  const imabReal = ((imabF / ipcaF - 1) * 100).toFixed(0);
+  const cdiReal = ((cdiF / ipcaF - 1) * 100).toFixed(0);
+  document.getElementById("destaque-imablongo").innerHTML = `
+    R$ 100 em ${mesLabel(series.meses[0])} viraram:
+    <strong>R$ ${imabF.toFixed(0)} no IMA-B</strong> vs <strong>R$ ${cdiF.toFixed(0)} no CDI</strong>
+    (inflação: R$ ${ipcaF.toFixed(0)}). No acumulado, o IMA-B entregou <strong>${aMais}% a mais</strong>
+    que o CDI — juro real de <strong>+${imabReal}%</strong> contra <strong>+${cdiReal}%</strong>.
+    O tranco de curto prazo é o pedágio; o longo prazo é a cobrança.
+  `;
+  if (status) {
+    const data = new Date(buscadoEm);
+    const dd = String(data.getDate()).padStart(2, "0");
+    const mm = String(data.getMonth() + 1).padStart(2, "0");
+    status.innerHTML = `✅ SGS série ${codigo}, validada contra o IMAB11 (correlação ${verif.corr.toFixed(3)}
+      em ${verif.meses} meses) · buscado em ${dd}/${mm}/${data.getFullYear()}
+      <button class="grafico-periodo-btn" onclick="montarImabLongo(true)">Atualizar</button>`;
+  }
+}
+
 /* ============ INSERIR GRÁFICO NOS SLIDES DO PITCH ============ */
 const GRAFICOS_META = {
   r100:    { titulo: "Quanto vale R$100 em dólar", fonte: "Banco Central do Brasil (SGS série 1)" },
   dolar:   { titulo: "Dólar (USD/BRL) ao longo do tempo", fonte: "Banco Central do Brasil (SGS série 1)" },
   indices: { titulo: "CDI vs IPCA vs Poupança", fonte: "Banco Central do Brasil (SGS séries 4391, 433, 196)" },
-  imab:    { titulo: "IMA-B vs CDI vs IPCA — títulos IPCA+ na prática", fonte: "IMA-B via ETF IMAB11 (iShares, B3); CDI/IPCA: Banco Central do Brasil (SGS 4391, 433)", congelado: "29/05/2026" }
+  imab:    { titulo: "IMA-B vs CDI vs IPCA — títulos IPCA+ na prática", fonte: "IMA-B via ETF IMAB11 (iShares, B3); CDI/IPCA: Banco Central do Brasil (SGS 4391, 433)", congelado: "29/05/2026" },
+  imablongo: { titulo: "IMA-B vs CDI — o longo prazo (desde 2004)", fonte: "Banco Central do Brasil (SGS/ANBIMA — IMA-B; CDI 4391; IPCA 433), validado contra o ETF IMAB11", congelado: "busca ao vivo no SGS" }
 };
 
 // graficosInseridos: array de { tipo, posicao }
@@ -6271,6 +6518,30 @@ function renderChartsNosSlides() {
           scales: {
             x: { ticks: { maxTicksLimit: 7, font: { size: 11 } }, grid: { display: false } },
             y: { ticks: { font: { size: 11 }, callback: v => "R$ " + v.toFixed(0) } }
+          }
+        }
+      });
+    }
+    else if (tipo === "imablongo") {
+      const payload = imabLongoUltimo || leCacheImabLongo();
+      if (!payload) return;
+      const s = payload.series;
+      new Chart(ctx, {
+        type: "line",
+        data: {
+          labels: s.meses.map(mesLabel),
+          datasets: [
+            { label: "IMA-B", data: s.imab, borderColor: corCSS("--ok"), borderWidth: 2.5, pointRadius: 0, tension: 0.2 },
+            { label: "CDI", data: s.cdi, borderColor: corCSS("--brand-blue"), borderWidth: 2, pointRadius: 0, tension: 0.2 },
+            { label: "IPCA", data: s.ipca, borderColor: corCSS("--brand-red"), borderWidth: 2, pointRadius: 0, tension: 0.2 }
+          ]
+        },
+        options: {
+          responsive: true, maintainAspectRatio: false,
+          plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 12 } } } },
+          scales: {
+            x: { ticks: { maxTicksLimit: 8, font: { size: 11 } }, grid: { display: false } },
+            y: { ticks: { font: { size: 11 }, callback: v => "R$ " + Number(v).toFixed(0) } }
           }
         }
       });
