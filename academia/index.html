@@ -4032,6 +4032,17 @@ const CASES = [
 let caseAtual = null;
 let montagemAtual = []; // [{ticker, pct}]
 let modoLivre = false;
+// Pseudo-case do Modo Livre: libera pitch (tela 5) e apresentação (tela 6)
+// para carteiras montadas fora do catálogo — mesmos fluxos, contexto neutro.
+const CASE_MODO_LIVRE = {
+  id: 0,
+  titulo: "Carteira própria",
+  cliente: "Cliente real — carteira montada no Modo Livre",
+  perfil: "—",
+  ciclo: null,
+  macro: ""
+};
+function caseParaPitch() { return caseAtual || CASE_MODO_LIVRE; }
 let chartMontagem = null;
 let chartSua = null;
 let chartGabarito = null;
@@ -5420,7 +5431,10 @@ function submeterProposta() {
         p.style.display = 'none';
       }
     }
-    document.getElementById("btn-ir-pitch").style.display = "none";
+    // Modo Livre também estrutura pitch e gera apresentação (pedido 18/08):
+    // o botão fica visível, com rótulo que já anuncia a apresentação.
+    document.getElementById("btn-ir-pitch").style.display = "";
+    document.getElementById("btn-ir-pitch").textContent = "Estruturar pitch e gerar apresentação →";
     document.getElementById("btn-voltar-inicio-livre").style.display = "";
     document.getElementById("btn-refazer-montagem").textContent = "← Refazer montagem";
     if (window.AIDASim) AIDASim.render(montagemAtual, null);
@@ -5559,6 +5573,7 @@ function renderTela4(score) {
   var paineis4 = document.querySelectorAll('#tela4 > .painel');
   for (var i = 0; i < paineis4.length; i++) paineis4[i].style.display = '';
   document.getElementById("btn-ir-pitch").style.display = "";
+  document.getElementById("btn-ir-pitch").textContent = "Estruturar pitch comercial →";
   document.getElementById("btn-voltar-inicio-livre").style.display = "none";
   document.getElementById("btn-refazer-montagem").textContent = "← Refazer montagem";
 
@@ -6758,10 +6773,10 @@ let frameworkAtual = null;
 let pitchData = {}; // { etapaId: "texto..." }
 
 function sugerirFramework() {
-  if (!caseAtual) return null;
-  // Lógica de sugestão baseada no perfil e contexto
-  const perfil = caseAtual.perfil;
-  const ciclo = caseAtual.ciclo;
+  const c = caseParaPitch();
+  // Lógica de sugestão baseada no perfil e contexto (Modo Livre cai no AIDA)
+  const perfil = c.perfil;
+  const ciclo = c.ciclo;
 
   if (perfil === "arrojado") return "GBGA"; // Ambição, crescimento
   if (perfil === "conservador" && (ciclo === "crise" || ciclo === "queda-selic")) return "PASA"; // Dor concreta
@@ -6769,8 +6784,8 @@ function sugerirFramework() {
 }
 
 function irTela5() {
-  // Inicializa contexto
-  document.getElementById("tela5-titulo").textContent = `Estruturar pitch — ${caseAtual.titulo}`;
+  // Inicializa contexto (Modo Livre usa o pseudo-case "Carteira própria")
+  document.getElementById("tela5-titulo").textContent = `Estruturar pitch — ${caseParaPitch().titulo}`;
   renderContextoResumo();
 
   // Limpa sugestões anteriores
@@ -6808,11 +6823,11 @@ function renderContextoResumo() {
   cont.innerHTML = `
     <div class="contexto-item">
       <strong>Cliente</strong>
-      ${caseAtual.cliente.split(',').slice(0, 2).join(',')}
+      ${caseParaPitch().cliente.split(',').slice(0, 2).join(',')}
     </div>
     <div class="contexto-item">
       <strong>Perfil</strong>
-      ${caseAtual.perfil} · ${labelCiclo(caseAtual.ciclo)}
+      ${caseAtual ? `${caseAtual.perfil} · ${labelCiclo(caseAtual.ciclo)}` : 'Modo Livre — você define na conversa'}
     </div>
     <div class="contexto-item">
       <strong>Top carteira</strong>
@@ -6820,7 +6835,7 @@ function renderContextoResumo() {
     </div>
     <div class="contexto-item">
       <strong>Macro-chave</strong>
-      ${getCenarioAtivo().split('.')[0]}.
+      ${getCenarioAtivo().trim() ? getCenarioAtivo().split('.')[0] + '.' : 'Modo Livre — traga o cenário na sua fala'}
     </div>
   `;
 }
@@ -7186,11 +7201,11 @@ function renderSlides() {
       .forEach(g => slides.push(htmlSlideGrafico(g.tipo)));
   }
 
-  // SLIDE 1 — Capa
+  // SLIDE 1 — Capa (Modo Livre: sem número de case, é carteira própria)
   slides.push(`
     <div class="slide slide-capa active">
-      <div class="capa-eyebrow">AIDA Allocation · Case ${String(caseAtual.id).padStart(2,'0')}</div>
-      <h1>${caseAtual.titulo}</h1>
+      <div class="capa-eyebrow">AIDA Allocation${caseAtual ? ` · Case ${String(caseAtual.id).padStart(2,'0')}` : ' · Modo Livre'}</div>
+      <h1>${caseParaPitch().titulo}</h1>
       <div class="capa-sub">Proposta de alocação e tese de investimento · Framework ${fw.nome}</div>
       ${htmlIdentidadeAluno()}
     </div>
@@ -7199,15 +7214,18 @@ function renderSlides() {
   // Gráficos posicionados "no início" — logo após a capa
   inserirGraficosNaPosicao("inicio");
 
-  // SLIDE — Cenário
-  slides.push(`
-    <div class="slide">
-      <div class="slide-num">CENÁRIO</div>
-      <h2>O cenário que estamos enfrentando</h2>
-      <p>${escapeHtml(getCenarioAtivo())}</p>
-      ${cenarioFoiEditado() ? '<p style="font-size:12px; color:var(--text-soft); margin-top:auto;">Cenário atualizado pelo apresentador.</p>' : ''}
-    </div>
-  `);
+  // SLIDE — Cenário (só quando há texto: no Modo Livre sem cenário editado,
+  // um slide em branco só atrapalharia a apresentação)
+  if (getCenarioAtivo().trim()) {
+    slides.push(`
+      <div class="slide">
+        <div class="slide-num">CENÁRIO</div>
+        <h2>O cenário que estamos enfrentando</h2>
+        <p>${escapeHtml(getCenarioAtivo())}</p>
+        ${cenarioFoiEditado() ? '<p style="font-size:12px; color:var(--text-soft); margin-top:auto;">Cenário atualizado pelo apresentador.</p>' : ''}
+      </div>
+    `);
+  }
 
   // SLIDE — A carteira proposta
   const linhasCarteira = topETFs.map(l => {
@@ -7246,7 +7264,7 @@ function renderSlides() {
     <div class="slide slide-capa">
       <div class="capa-eyebrow">Vamos dar o próximo passo</div>
       <h1 style="font-size:32px;">Obrigado.</h1>
-      <div class="capa-sub">${escapeHtml(caseAtual.titulo)}</div>
+      <div class="capa-sub">${escapeHtml(caseParaPitch().titulo)}</div>
       ${htmlIdentidadeAluno()}
     </div>
   `);
@@ -7303,7 +7321,7 @@ function copiarPitch() {
     .sort((a, b) => b.pct - a.pct);
   const carteira = topETFs.map(l => `${l.ticker} (${l.pct.toFixed(1)}%)`).join(", ");
 
-  let txt = `PITCH — ${caseAtual.titulo}\n`;
+  let txt = `PITCH — ${caseParaPitch().titulo}\n`;
   txt += `Framework: ${fw.nome}\n`;
   txt += `Carteira: ${carteira}\n`;
   txt += `Cenário: ${getCenarioAtivo()}\n`;
