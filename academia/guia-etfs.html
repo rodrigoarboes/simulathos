@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Super Guia de ETFs — FAP &amp; FEA · VocêBancário</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --brand-blue: #0088cc;
+  --brand-red: #a12026;
+  --brand-orange: #eb8105;
+  --gold: #b8860b;
+  --bg: #f7f5f0;
+  --bg-card: #ffffff;
+  --bg-soft: #efece5;
+  --text: #1a1a1a;
+  --text-soft: #5a5a5a;
+  --border: #d8d4c8;
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: var(--font-body); font-size: 14.5px; line-height: 1.65;
+}
+.page { max-width: 880px; margin: 0 auto; padding: 32px 22px 60px; }
+
+/* ---- capa ---- */
+.capa { text-align: center; padding: 44px 20px 36px; border-bottom: 3px solid var(--brand-blue); margin-bottom: 8px; }
+.capa .kicker { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--brand-blue); font-weight: 700; }
+.capa h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 6vw, 52px); margin: 10px 0 6px; line-height: 1.08; }
+.capa .sub { font-size: 16px; color: var(--text-soft); max-width: 560px; margin: 0 auto; }
+.capa .badges { margin-top: 18px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+.capa .badges span { font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 999px; background: var(--bg-card); border: 1px solid var(--border); }
+
+/* ---- sumário ---- */
+.sumario { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin: 26px 0; }
+.sumario h2 { font-family: var(--font-display); font-size: 19px; margin: 0 0 12px; }
+.sumario .caps a { display: block; padding: 4px 0; color: var(--text); text-decoration: none; font-weight: 600; font-size: 14px; }
+.sumario .caps a:hover { color: var(--brand-blue); }
+.sumario .caps a .n { color: var(--brand-blue); font-family: var(--font-mono); margin-right: 8px; }
+.sumario .cats { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border); display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 2px 18px; }
+.sumario .cats a { font-size: 13px; color: var(--text-soft); text-decoration: none; padding: 3px 0; display: block; }
+.sumario .cats a:hover { color: var(--brand-blue); }
+.sumario .cats a em { font-style: normal; color: var(--brand-blue); font-family: var(--font-mono); font-size: 11px; }
+
+/* ---- capítulos ---- */
+h2.cap { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin: 46px 0 6px; padding-top: 18px; border-top: 3px solid var(--brand-blue); }
+h2.cap .num { color: var(--brand-blue); font-family: var(--font-mono); font-size: 17px; vertical-align: middle; margin-right: 10px; }
+.lead { font-size: 15.5px; color: var(--text-soft); margin: 0 0 18px; }
+.box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin: 14px 0; }
+.box h4 { margin: 0 0 6px; font-size: 15px; }
+.box.destaque { border-left: 4px solid var(--brand-blue); }
+.box.alerta { border-left: 4px solid var(--brand-red); }
+.box.ouro { border-left: 4px solid var(--gold); }
+table { width: 100%; border-collapse: collapse; background: var(--bg-card); border-radius: 10px; overflow: hidden; font-size: 13.5px; margin: 14px 0; }
+th { background: var(--bg-soft); text-align: left; padding: 9px 12px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top; }
+.tbl-wrap { overflow-x: auto; }
+.check { list-style: none; padding: 0; margin: 0; counter-reset: chk; }
+.check li { counter-increment: chk; background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px 14px 58px; margin: 10px 0; position: relative; }
+.check li::before { content: counter(chk); position: absolute; left: 16px; top: 14px; width: 28px; height: 28px; border-radius: 50%; background: var(--brand-blue); color: #fff; font-weight: 700; font-family: var(--font-mono); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+.check li b.t { display: block; font-size: 15px; margin-bottom: 3px; }
+.erros { list-style: none; padding: 0; margin: 0; }
+.erros li { background: var(--bg-card); border: 1px solid var(--border); border-left: 4px solid var(--brand-red); border-radius: 10px; padding: 12px 16px; margin: 9px 0; }
+.erros li b { display: block; }
+.gloss { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 10px; }
+.gloss div { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 11px 15px; font-size: 13.5px; }
+.gloss b { color: var(--brand-blue); }
+
+/* ---- catálogo ---- */
+.cat h3 { font-family: var(--font-display); font-size: 23px; font-weight: 800; margin: 40px 0 4px; padding-top: 14px; border-top: 2px solid var(--border); }
+.cat h3 .ccount { font-family: var(--font-mono); font-size: 12px; color: var(--brand-blue); font-weight: 600; margin-left: 8px; }
+.cintro { color: var(--text-soft); font-size: 14px; margin: 4px 0 10px; }
+.bolso { background: #fdf8ec; border: 1px solid #e8d9ab; border-radius: 10px; padding: 10px 16px; font-size: 13.5px; margin: 0 0 16px; }
+.ficha { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin: 12px 0; scroll-margin-top: 20px; }
+.ficha:target { border-color: var(--brand-blue); box-shadow: 0 0 0 3px rgba(0,136,204,0.18); }
+.ficha header { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.ficha .tk { font-family: var(--font-mono); font-weight: 600; font-size: 19px; color: var(--brand-blue); }
+.ficha .nm { font-weight: 600; font-size: 14.5px; flex: 1; }
+.ficha .flag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.f-br { background: rgba(45,140,92,0.1); color: #21663f; }
+.f-us { background: rgba(0,136,204,0.1); color: #005580; }
+.f-ie { background: rgba(235,129,5,0.12); color: #9a5503; }
+.ficha .meta { font-size: 12px; color: var(--text-soft); margin: 3px 0 10px; }
+.fsec { font-size: 13.5px; margin: 8px 0; }
+.flabel { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-soft); font-weight: 700; margin-bottom: 2px; }
+.fpitch { font-style: italic; border-left: 3px solid var(--brand-blue); padding-left: 12px; }
+.fpitch .flabel { font-style: normal; }
+
+/* ---- rodapé ---- */
+.timbre { margin-top: 56px; padding-top: 18px; border-top: 3px solid var(--brand-blue); text-align: center; font-size: 12px; color: var(--text-soft); line-height: 1.8; }
+.timbre b { color: var(--text); }
+.voltar { position: fixed; right: 18px; bottom: 18px; background: var(--brand-blue); color: #fff; text-decoration: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+
+/* ---- impressão ---- */
+@page { size: A4; margin: 13mm 11mm; }
+@media print {
+  body { background: #fff; font-size: 11.5px; }
+  .page { max-width: none; padding: 0; }
+  .voltar { display: none; }
+  .capa { padding-top: 10px; }
+  .ficha, .box, .check li, .erros li, .gloss div, .bolso { page-break-inside: avoid; break-inside: avoid; box-shadow: none; }
+  h2.cap { page-break-before: always; break-before: page; border-top: none; margin-top: 0; }
+  .sumario .cats { grid-template-columns: repeat(3, 1fr); }
+  a { color: inherit; }
+  .ficha:target { box-shadow: none; }
+}
+@media (max-width: 560px) {
+  .capa h1 { font-size: 32px; }
+  .gloss { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a class="voltar" href="#topo" title="Voltar ao topo">↑</a>
+<div class="page" id="topo">
+
+<header class="capa">
+  <div class="kicker">VocêBancário · Método MAP® · FAP &amp; FEA</div>
+  <h1>Super Guia de ETFs</h1>
+  <p class="sub">O manual de bolso do assessor: o que cada ETF faz, o risco que você precisa nomear e a frase que explica pro cliente — sem economês.</p>
+  <div class="badges">
+    <span>📚 100 ETFs catalogados</span>
+    <span>🇧🇷 B3 · 🇺🇸 EUA · 🇮🇪 UCITS</span>
+    <span>🖨️ Pronto pra imprimir</span>
+  </div>
+</header>
+
+<nav class="sumario">
+  <h2>O que tem aqui dentro</h2>
+  <div class="caps">
+    <a href="#cap1"><span class="n">01</span>ETF em 2 minutos</a>
+    <a href="#cap2"><span class="n">02</span>Como escolher: as 6 verificações</a>
+    <a href="#cap3"><span class="n">03</span>Tributação sem surpresa</a>
+    <a href="#cap4"><span class="n">04</span>Catálogo: 100 ETFs por função</a>
+    <a href="#cap5"><span class="n">05</span>Os 10 erros clássicos</a>
+    <a href="#cap6"><span class="n">06</span>Glossário do assessor</a>
+  </div>
+  <div class="cats">
+      <a href="#rf-brasil">🏦 Renda fixa Brasil <em>9</em></a>
+      <a href="#acoes-brasil">🇧🇷 Ações Brasil <em>11</em></a>
+      <a href="#imobiliario">🏢 Imobiliário — FIIs e REITs <em>2</em></a>
+      <a href="#metais-cripto">🥇 Ouro, prata e cripto <em>8</em></a>
+      <a href="#inter-b3">🌎 Internacionais pela B3 <em>6</em></a>
+      <a href="#eua-nucleo">🇺🇸 EUA — o núcleo <em>12</em></a>
+      <a href="#eua-fatores">🎯 EUA — fatores e dividendos <em>10</em></a>
+      <a href="#eua-setoriais">🏭 EUA — setoriais <em>4</em></a>
+      <a href="#ex-eua">🌏 Mundo ex-EUA e emergentes <em>11</em></a>
+      <a href="#globais">🌐 O mundo inteiro em um ticker <em>4</em></a>
+      <a href="#renda-dolar">💵 Renda mensal em dólar <em>3</em></a>
+      <a href="#rf-dolar">🏛️ Renda fixa em dólar <em>10</em></a>
+      <a href="#tematicos">🚀 Temáticos — a prateleira das teses <em>10</em></a>
+  </div>
+</nav>
+
+<!-- ============================================================ CAP 1 -->
+<h2 class="cap" id="cap1"><span class="num">01</span>ETF em 2 minutos</h2>
+<p class="lead">Antes de decorar ticker, entenda a máquina. É isso que separa quem vende sigla de quem explica investimento.</p>
+
+<div class="box destaque">
+  <h4>O que é</h4>
+  <p style="margin:0;">ETF (<i>Exchange Traded Fund</i>) é um <b>fundo que copia um índice e é negociado em bolsa como se fosse uma ação</b>. Você compra uma cota — e dentro dela vem a cesta inteira: as ~85 empresas do Ibovespa, as 500 do S&amp;P, os títulos do IMA-B. Um clique, uma carteira.</p>
+</div>
+
+<div class="box">
+  <h4>Como o preço "gruda" no valor justo</h4>
+  <p style="margin:0;">Instituições autorizadas (<i>market makers</i>) podem criar e resgatar cotas trocando-as pela cesta de ativos de verdade. Se a cota fica mais cara que a cesta, eles criam cotas novas e vendem; se fica mais barata, compram e resgatam. Essa arbitragem contínua é o motivo de o ETF negociar colado no valor da carteira — e é o mecanismo que você cita quando o cliente pergunta "mas quem garante o preço?".</p>
+</div>
+
+<div class="box">
+  <h4>Por que o mundo migrou pra cá</h4>
+  <p style="margin:0;"><b>Custo</b> (taxas a partir de 0,03% a.a. — fundo ativo tradicional cobra 1–2% + performance), <b>diversificação instantânea</b> (centenas de ativos numa ordem), <b>transparência</b> (a carteira é o índice, publicada diariamente) e <b>disciplina</b> (o índice não muda de ideia no pânico — o investidor, sim; o ETF ajuda a segurar).</p>
+</div>
+
+<div class="box alerta">
+  <h4>O que ETF NÃO é</h4>
+  <p style="margin:0;">Não é renda garantida, não é "fundo que só sobe" e não protege da queda do índice — ele CAI junto, por definição. Também não escolhe ativo: se o índice tem empresa ruim, o ETF carrega a empresa ruim. A inteligência está em <b>qual índice</b> você escolhe e <b>quanto</b> aloca — e é aí que entra o assessor.</p>
+</div>
+
+<!-- ============================================================ CAP 2 -->
+<h2 class="cap" id="cap2"><span class="num">02</span>Como escolher: as 6 verificações</h2>
+<p class="lead">Roteiro de análise pra qualquer ETF do planeta — na ordem em que profissional verifica.</p>
+
+<ol class="check">
+  <li><b class="t">O índice — o que tem DENTRO</b>
+  Ticker famoso não diz nada. Abra a metodologia: quantos ativos, qual critério de entrada, qual peso máximo por papel. "ETF de dividendos" pode ser yield alto de hoje (VYM) ou crescimento de dividendo (VIG) — teses opostas com o mesmo apelido.</li>
+
+  <li><b class="t">Taxa de administração (TER)</b>
+  Parece pouco, mas taxa é a única variável garantida: retorno não se promete, custo se cobra sempre. Exemplo ilustrativo (rentabilidade hipotética de 10% a.a. antes de custos): R$ 100 mil por 20 anos a 0,05% de taxa terminam perto de R$ 670 mil; a 0,95%, perto de R$ 570 mil. <b>A mesma carteira, ~R$ 100 mil de diferença</b> — pagos ao gestor, não a você.</li>
+
+  <li><b class="t">Liquidez e spread</b>
+  Volume diário baixo = spread largo entre compra e venda, e o spread é um custo invisível pago na entrada E na saída. Regra prática: sempre <b>ordem limitada</b> em ETF de pouco volume, e evite os 10 primeiros minutos do pregão, quando o spread abre.</li>
+
+  <li><b class="t">Tracking difference — o retorno que chegou</b>
+  Compare o retorno REAL do ETF com o do índice nos últimos anos. Essa diferença (tracking difference) engloba taxa, eficiência de replicação e empréstimo de ativos — é a métrica que manda, mais completa que a taxa isolada. Dois ETFs do mesmo índice podem entregar resultados diferentes.</li>
+
+  <li><b class="t">Patrimônio e idade</b>
+  Fundo muito pequeno (ou muito novo) pode ser encerrado pela gestora — não é calote (o dinheiro volta), mas força realização de imposto na hora errada e dá trabalho. Patrimônio robusto e histórico de alguns anos compram tranquilidade.</li>
+
+  <li><b class="t">Domicílio e tributação</b>
+  O MESMO índice pode ser comprado na B3 (real, simplicidade), nos EUA (liquidez máxima, mas dividendo retido em 30% e estate tax) ou na Irlanda (retenção menor, classe que acumula, sem estate tax americano). Pra volumes relevantes, o domicílio muda o resultado líquido mais que a taxa. Capítulo 3 é inteiro sobre isso.</li>
+</ol>
+
+<!-- ============================================================ CAP 3 -->
+<h2 class="cap" id="cap3"><span class="num">03</span>Tributação sem surpresa</h2>
+<p class="lead">O capítulo que evita a ligação constrangedora em maio. Regras gerais para pessoa física residente no Brasil.</p>
+
+<div class="tbl-wrap"><table>
+  <tr><th>Onde</th><th>O quê</th><th>Regra geral</th><th>Pegadinha</th></tr>
+  <tr>
+    <td><b>B3</b></td>
+    <td>ETF de ações<br/>(BOVA11, IVVB11, HASH11…)</td>
+    <td>15% sobre o ganho na venda (swing trade); 20% em day trade. Apuração e DARF mensais.</td>
+    <td><b>NÃO existe isenção de R$ 20 mil</b> — esse benefício é de ação à vista, não de ETF.</td>
+  </tr>
+  <tr>
+    <td><b>B3</b></td>
+    <td>ETF de renda fixa<br/>(LFTS11, IMAB11, IRFM11…)</td>
+    <td>Alíquota pelo prazo médio da carteira do índice: 25% (até 180 dias), 20% (181–720), 15% (acima de 720 — o caso dos principais). Retido na fonte na venda.</td>
+    <td><b>Sem come-cotas</b> — vantagem real sobre fundo tradicional: o imposto só existe quando você decide vender.</td>
+  </tr>
+  <tr>
+    <td><b>B3</b></td>
+    <td>ETF de FII (XFIX11)</td>
+    <td>Tributa como ETF de ações: 15% no ganho.</td>
+    <td>O rendimento mensal isento do FII comprado direto <b>não atravessa</b> o ETF.</td>
+  </tr>
+  <tr>
+    <td><b>Exterior</b></td>
+    <td>Ganhos e dividendos<br/>(VOO, VWRA, JEPI…)</td>
+    <td>Lei 14.754/2023: 15% sobre ganhos e rendimentos do exterior, apurados na declaração anual. Perdas no exterior podem compensar ganhos, dentro das regras.</td>
+    <td>Câmbio entra no cálculo do custo e da venda — guarde os comprovantes de cada remessa.</td>
+  </tr>
+  <tr>
+    <td><b>EUA</b></td>
+    <td>Dividendos de ETF americano</td>
+    <td>Retenção de 30% na fonte para investidor brasileiro (sem tratado).</td>
+    <td>Em ETF de renda (JEPI, QYLD) a mordida é grande — o yield anunciado não é o seu yield.</td>
+  </tr>
+  <tr>
+    <td><b>EUA</b></td>
+    <td>Sucessão (estate tax)</td>
+    <td>Ativos domiciliados nos EUA acima de US$ 60 mil podem ser tributados em até 40% na herança de não-residente.</td>
+    <td>O motivo nº 1 de patrimônios maiores preferirem domicílio irlandês.</td>
+  </tr>
+  <tr>
+    <td><b>Irlanda</b></td>
+    <td>ETFs UCITS<br/>(VUAA, CSPX, VWRA, IWDA…)</td>
+    <td>O fundo retém só 15% dos dividendos americanos (tratado Irlanda–EUA); classes acumuladoras reinvestem sem distribuir; sem estate tax americano. Pro brasileiro, vale a mesma regra de 15% da lei 14.754 na venda.</td>
+    <td>Negociam na bolsa de Londres/Europa — exige corretora com acesso internacional de verdade.</td>
+  </tr>
+</table></div>
+
+<div class="box ouro">
+  <h4>⚠️ Leia antes de usar em reunião</h4>
+  <p style="margin:0;">Este resumo traz as <b>regras gerais vigentes na edição deste guia (2026)</b>. Legislação tributária muda — e casos concretos (grandes volumes, estruturas no exterior, residência fiscal, espólio) têm nuances que não cabem numa tabela. Antes de decisões relevantes: <b>contador ou tributarista</b>. Este material é educacional e não substitui aconselhamento profissional.</p>
+</div>
+
+<!-- ============================================================ CAP 4 -->
+<h2 class="cap" id="cap4"><span class="num">04</span>Catálogo: 100 ETFs por função</h2>
+<p class="lead">Organizado pela pergunta certa — não "qual ETF é bom?", mas <b>"qual função esta posição cumpre na carteira?"</b>. Cada ficha traz o papel, o risco que você nomeia antes do cliente descobrir sozinho, e a explicação pronta em uma frase.</p>
+
+
+<section class="cat" id="rf-brasil">
+  <h3><span class="cemoji">🏦</span> Renda fixa Brasil <span class="ccount">9 ETFs</span></h3>
+  <p class="cintro">São os ETFs que substituem (ou complementam) o Tesouro Direto e os fundos DI: uma cesta de títulos públicos ou privados dentro de um ticker da B3. A grande sacada é operacional — um clique compra a carteira inteira, sem custódia de título, sem vencimento pra rolar — e tributária: <b>ETF de renda fixa não tem come-cotas</b>, o imposto só aparece quando você vende.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Pós-fixado é o colchão, IMA-B é a proteção de poder de compra, prefixado é aposta em queda de juro. Nomeie qual função o cliente está comprando antes de escolher o ticker.</div>
+  
+<article class="ficha" id="LFTS11">
+  <header>
+    <span class="tk">LFTS11</span>
+    <span class="nm">It Now Tesouro Selic</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,19% a.a. · segue Tesouro Selic</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O caixa remunerado da carteira: reserva e dinheiro com data marcada, rendendo perto da Selic todo dia.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Quase nenhum de mercado — o risco é de USO: deixar demais aqui parado e perder os prêmios das outras classes.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;É a sua reserva rendendo Selic sem vencimento e com liquidez de bolsa — o dinheiro que dorme tranquilo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="LFTB11">
+  <header>
+    <span class="tk">LFTB11</span>
+    <span class="nm">Investo Tesouro Selic</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Investo · taxa 0,19% a.a. · segue Tesouro Selic Target 760</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesma função do LFTS11 (caixa em Tesouro Selic) — alternativa de gestora pra mesma prateleira.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Igual ao LFTS11: o risco é comportamental, não de mercado. Compare liquidez em tela antes de escolher entre os dois.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Seu caixa no Tesouro Selic, negociado em bolsa — segurança de título público com praticidade de ação.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IMAB11">
+  <header>
+    <span class="tk">IMAB11</span>
+    <span class="nm">It Now IMA-B</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,25% a.a. · segue IMA-B</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O núcleo de inflação da carteira: cesta de Tesouro IPCA+ que protege o poder de compra no médio-longo prazo.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>No curto prazo se comporta como renda variável 'light': juro real subindo derruba a cota. Proteção é no HORIZONTE, não no dia a dia.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Inflação alta? Você recebe IPCA + juro real. É o seguro do seu poder de compra — pense em anos, não em meses.&rdquo;</div>
+</article>
+
+<article class="ficha" id="B5P211">
+  <header>
+    <span class="tk">B5P211</span>
+    <span class="nm">It Now IMA-B 5 P2</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,20% a.a. · segue IMA-B 5 P2</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>IPCA+ de prazo curto (até 5 anos): proteção de inflação com MUITO menos solavanco que o IMA-B cheio.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Menos volátil, mas também menos prêmio — em rali de fechamento de curva, fica pra trás dos longos.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Proteção contra inflação sem montanha-russa: a versão suave do Tesouro IPCA+ pra objetivos mais próximos.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IB5M11">
+  <header>
+    <span class="tk">IB5M11</span>
+    <span class="nm">It Now IMA-B 5+</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,25% a.a. · segue IMA-B 5+</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>IPCA+ longo (5+ anos): a ponta agressiva da renda fixa — máxima sensibilidade ao juro real.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Cai como ação em estresse de curva. Só faz sentido com horizonte LONGO de verdade e posição dimensionada.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O prêmio mais gordo da renda fixa brasileira — pra quem pode esperar o longo prazo trabalhar a favor.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IRFM11">
+  <header>
+    <span class="tk">IRFM11</span>
+    <span class="nm">It Now IRF-M P2</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,20% a.a. · segue IRF-M P2</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Aposta em queda de juros com prazo médio: prefixados que se valorizam quando a curva fecha.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Se o juro SOBE, a cota cai — marcação a mercado dói no curto prazo. Não é 'renda fixa que não mexe'.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Se a Selic cair como o mercado espera, você trava o juro alto de hoje — e o preço do título te paga por isso.&rdquo;</div>
+</article>
+
+<article class="ficha" id="FIXA11">
+  <header>
+    <span class="tk">FIXA11</span>
+    <span class="nm">Mirae RF Pre</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Mirae Asset · taxa 0,30% a.a. · segue S&amp;P/B3 Prefixados</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Prefixados pela régua S&amp;P/B3 — mesma tese do IRFM11 com outro índice e gestora.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mesma física do prefixado: alta de juros machuca a cota. Tamanho da posição é quem controla a dor.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Uma cesta de prefixados pra capturar o ciclo de queda de juros sem escolher vencimento a dedo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IDKA11">
+  <header>
+    <span class="tk">IDKA11</span>
+    <span class="nm">It Now IRF-M P3</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,25% a.a. · segue IRF-M P3</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Prefixados mais longos (IRF-M P3): mais sensibilidade à curva = mais prêmio se o juro ceder.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Duração maior amplifica TUDO — os ganhos e as quedas. Exige estômago e horizonte.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A versão turbinada da aposta em juros: prazo maior, prêmio maior — pra quem aguenta ver o preço balançar.&rdquo;</div>
+</article>
+
+<article class="ficha" id="DEBB11">
+  <header>
+    <span class="tk">DEBB11</span>
+    <span class="nm">BTG Debentures DI</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">BTG Pactual · taxa 0,60% a.a. · segue Teva Debentures DI</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Crédito privado incentivado atrelado ao CDI: turbina o pós-fixado com o spread das debêntures.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Risco de crédito das emissoras + liquidez menor em estresse. O spread é o pagamento por esses riscos.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;CDI + um extra: uma cesta de debêntures incentivadas diversificada, sem você escolher emissor a emissor.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="acoes-brasil">
+  <h3><span class="cemoji">🇧🇷</span> Ações Brasil <span class="ccount">11 ETFs</span></h3>
+  <p class="cintro">A bolsa brasileira em cestas prontas: do índice cheio (Ibovespa) às fatias — small caps, dividendos, setores. Aqui a conversa com o cliente costuma começar por BOVA11 e amadurecer para as variações quando ele entende o que quer enfatizar.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Índice cheio primeiro, tempero depois. Small caps e setoriais são complemento de convicção, nunca o prato principal.</div>
+  
+<article class="ficha" id="BOVA11">
+  <header>
+    <span class="tk">BOVA11</span>
+    <span class="nm">iShares Ibovespa</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,10% a.a. · segue Ibovespa</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O beta do Brasil em 1 ticker: núcleo de renda variável local, líquido e barato.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Concentração setorial do índice (bancos + commodities) — você compra o Brasil COM os defeitos do Ibovespa.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As maiores empresas do país numa cota só — o jeito mais simples e líquido de ter bolsa brasileira.&rdquo;</div>
+</article>
+
+<article class="ficha" id="BOVV11">
+  <header>
+    <span class="tk">BOVV11</span>
+    <span class="nm">It Now Ibovespa</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,10% a.a. · segue Ibovespa</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesma exposição do BOVA11 (Ibovespa) — alternativa de gestora, útil pra comparar spread e liquidez.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Idêntico ao BOVA11: risco Brasil concentrado. A escolha entre eles é operacional, não estratégica.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Ibovespa em cota única — mesma tese do BOVA11, escolha pelo custo de operar no dia.&rdquo;</div>
+</article>
+
+<article class="ficha" id="PIBB11">
+  <header>
+    <span class="tk">PIBB11</span>
+    <span class="nm">It Now IBrX-50</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,06% a.a. · segue IBrX-50</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>IBrX-50 com taxa mínima histórica: as 50 mais negociadas, custo de manutenção quase zero.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Liquidez em tela menor que BOVA11 — spread pode comer a vantagem da taxa em quem gira muito.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bolsa brasileira com uma das menores taxas do mercado — feita pra quem compra e SEGURA.&rdquo;</div>
+</article>
+
+<article class="ficha" id="SMAL11">
+  <header>
+    <span class="tk">SMAL11</span>
+    <span class="nm">iShares Small Cap</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,50% a.a. · segue SMLL</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Small caps brasileiras: o motor de crescimento da RV local, ciclo-sensível.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Volatilidade e drawdowns bem maiores que o Ibovespa — e sofre primeiro em aperto de liquidez.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As empresas que podem dobrar de tamanho — em cesta, porque escolher UMA small é loteria.&rdquo;</div>
+</article>
+
+<article class="ficha" id="DIVO11">
+  <header>
+    <span class="tk">DIVO11</span>
+    <span class="nm">It Now Dividendos</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,50% a.a. · segue IDIV</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Empresas pagadoras (IDIV): perfil mais defensivo dentro da bolsa BR, caixa recorrente.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>ETF de ações BR historicamente REINVESTE — o cliente que espera 'pix de dividendo' se frustra; o retorno vem na cota.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As boas pagadoras do Brasil numa cesta — perfil mais estável de bolsa, com o retorno compondo dentro da cota.&rdquo;</div>
+</article>
+
+<article class="ficha" id="DIVD11">
+  <header>
+    <span class="tk">DIVD11</span>
+    <span class="nm">It Now Dividendos Dist</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,50% a.a. · segue IDIV</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesma prateleira do DIVO11 (IDIV) — confira na B3 o tratamento de proventos da versão atual antes de prometer renda.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Igual DIVO11: nunca prometa 'renda mensal' sem confirmar o regulamento vigente do ETF.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bolsa de dividendos em cota única — o filtro das empresas que remuneram o acionista.&rdquo;</div>
+</article>
+
+<article class="ficha" id="MATB11">
+  <header>
+    <span class="tk">MATB11</span>
+    <span class="nm">It Now Materiais</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,50% a.a. · segue Materiais Basicos</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Setorial de materiais básicos: mineração, siderurgia, papel — o Brasil exportador.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Refém do ciclo global de commodities e da China — pode passar anos fora de moda.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A aposta no Brasil que o mundo compra: commodities em cesta, sem escolher entre Vale e Suzano.&rdquo;</div>
+</article>
+
+<article class="ficha" id="FIND11">
+  <header>
+    <span class="tk">FIND11</span>
+    <span class="nm">It Now Financeiro</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,60% a.a. · segue IFNC</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Setorial financeiro (IFNC): concentra bancos, seguradoras e B3 — aposta direcional no setor.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Setor único = risco único: regulação, spread bancário e ciclo de crédito batem juntos.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O sistema financeiro brasileiro em uma cota — pra quem acredita no setor mais lucrativo da bolsa.&rdquo;</div>
+</article>
+
+<article class="ficha" id="GOVE11">
+  <header>
+    <span class="tk">GOVE11</span>
+    <span class="nm">It Now Governanca</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,50% a.a. · segue IGC-NM</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Filtro de governança (IGC-NM): empresas com padrões mais altos de gestão.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Filtro não é escudo — continua sendo bolsa BR com volatilidade cheia.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Investir nas empresas que tratam o minoritário a sério — governança como critério, não como discurso.&rdquo;</div>
+</article>
+
+<article class="ficha" id="ISUS11">
+  <header>
+    <span class="tk">ISUS11</span>
+    <span class="nm">It Now Sustentabilidade</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,40% a.a. · segue ISE</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>ESG brasileiro (ISE): tese de sustentabilidade aplicada à bolsa local.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Universo menor = mais concentração; performance pode descolar do Ibovespa pros dois lados.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Pra quem quer que o dinheiro invista de acordo com os valores — sem abrir mão de ser bolsa.&rdquo;</div>
+</article>
+
+<article class="ficha" id="TECK11">
+  <header>
+    <span class="tk">TECK11</span>
+    <span class="nm">It Now Top 10 Tech</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,25% a.a. · segue Top 10 Tech</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Tecnologia via B3: cesta enxuta das top 10 techs disponíveis ao investidor local.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Pouquíssimos papéis = concentração alta; 'tech BR' é um universo pequeno e volátil.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O jeito local de ter tecnologia na carteira — concentrado, então dimensione como tempero, não como base.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="imobiliario">
+  <h3><span class="cemoji">🏢</span> Imobiliário — FIIs e REITs <span class="ccount">2 ETFs</span></h3>
+  <p class="cintro">Tijolo e papel via bolsa, nos dois hemisférios: o XFIX11 compra o índice de fundos imobiliários brasileiros de uma vez; o VNQ faz o mesmo com os REITs americanos. Atenção redobrada à tributação — é aqui que mora um dos erros mais caros do varejo (veja o capítulo de impostos).</p>
+  <div class="bolso"><b>Regra de bolso ·</b> ETF de FII <b>não herda</b> a isenção do rendimento mensal do FII comprado direto. Se a tese do cliente é renda mensal isenta, o instrumento é o FII, não o ETF.</div>
+  
+<article class="ficha" id="XFIX11">
+  <header>
+    <span class="tk">XFIX11</span>
+    <span class="nm">iShares IFIX</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,29% a.a. · segue IFIX</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O IFIX em cota única: exposição diversificada a fundos imobiliários sem montar carteira tijolo a tijolo.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>NÃO herda a isenção de rendimento do FII direto — no ETF o retorno vem via cota. Explique isso ANTES do cliente comparar.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Todo o mercado de FIIs numa cota — diversificação imobiliária instantânea, com a tributação própria de ETF.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VNQ">
+  <header>
+    <span class="tk">VNQ</span>
+    <span class="nm">Vanguard Real Estate</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,12% a.a. · segue MSCI US REIT</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>REITs americanos: renda imobiliária em dólar — shoppings, galpões logísticos, data centers e torres de celular.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Muito sensível a juros americanos; e o dividendo de REIT sofre retenção de 30% na fonte para estrangeiro.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O 'fundo imobiliário' dos EUA num ticker só — imóvel de verdade, dolarizado e diversificado.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="metais-cripto">
+  <h3><span class="cemoji">🥇</span> Ouro, prata e cripto <span class="ccount">8 ETFs</span></h3>
+  <p class="cintro">Reservas de valor e ativos de descorrelação. O ouro é o seguro clássico contra stress; a prata é a prima industrial e mais volátil; cripto via ETF resolve a fricção de custódia (sem carteira, sem chave privada) ao custo de uma taxa de administração.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Posição de seguro se mede em pontos percentuais, não em dezenas. E cripto via ETF continua sendo cripto: a embalagem regulada não reduz a volatilidade do que está dentro.</div>
+  
+<article class="ficha" id="GOLD11">
+  <header>
+    <span class="tk">GOLD11</span>
+    <span class="nm">Trend Ouro</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">XP Asset · taxa 0,30% a.a. · segue LBMA Gold Price</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Ouro em reais: o seguro clássico contra crise e inflação global, com efeito câmbio embutido.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Não rende nada por si — passa anos de lado; o valor aparece justamente quando o resto quebra.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O ativo de 5 mil anos na sua corretora: proteção que sobe quando o mercado treme — e em dólar.&rdquo;</div>
+</article>
+
+<article class="ficha" id="GLD">
+  <header>
+    <span class="tk">GLD</span>
+    <span class="nm">SPDR Gold Trust</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">State Street · taxa 0,40% a.a. · segue LBMA Gold Price</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O maior ETF de ouro do mundo: proteção clássica em dólar.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Não paga renda; anda de lado por anos até o momento dele chegar.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Ouro físico guardado em cofre, negociado como ação — o seguro global na forma mais líquida.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IAU">
+  <header>
+    <span class="tk">IAU</span>
+    <span class="nm">iShares Gold Trust</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,25% a.a. · segue LBMA Gold Price</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Ouro com taxa menor que o GLD: mesma proteção, custo de carregar mais leve.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Igual GLD — a diferença é só o custo de manutenção.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O mesmo ouro, mais barato de segurar — pra posição de longo prazo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="SLV">
+  <header>
+    <span class="tk">SLV</span>
+    <span class="nm">iShares Silver Trust</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,50% a.a. · segue LBMA Silver Price</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Prata: metal precioso com pé na indústria (solar, eletrônica) — híbrido de proteção e ciclo.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Bem mais volátil que o ouro; o lado industrial cobra pedágio em recessão.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A prima agitada do ouro: proteção que também surfa o ciclo industrial.&rdquo;</div>
+</article>
+
+<article class="ficha" id="HASH11">
+  <header>
+    <span class="tk">HASH11</span>
+    <span class="nm">Hashdex Crypto</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Hashdex · taxa 1,30% a.a. · segue NCI Top 10</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Cesta das maiores criptos (NCI): exposição ao tema sem escolher moeda nem abrir exchange.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Volatilidade extrema e drawdowns históricos acima de 70% — é posição SATÉLITE por definição.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O mercado cripto inteiro numa cota regulada na B3 — participação no tema com tamanho sob controle.&rdquo;</div>
+</article>
+
+<article class="ficha" id="QBTC11">
+  <header>
+    <span class="tk">QBTC11</span>
+    <span class="nm">QR Bitcoin</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">QR Asset · taxa 0,70% a.a. · segue CME CF Bitcoin</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Bitcoin puro via B3: a tese 'ouro digital' isolada, sem altcoins.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>A volatilidade do Bitcoin, ponto. Quem entra precisa saber que 50% de queda faz parte do jogo.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bitcoin na sua corretora de sempre, sem carteira digital nem chave privada — exposição direta e regulada.&rdquo;</div>
+</article>
+
+<article class="ficha" id="BITH11">
+  <header>
+    <span class="tk">BITH11</span>
+    <span class="nm">Hashdex Bitcoin</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Hashdex · taxa 0,70% a.a. · segue Nasdaq Bitcoin</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Bitcoin via Hashdex — mesma prateleira do QBTC11, alternativa de emissor.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Idêntico ao QBTC11: o risco é o ativo, não o veículo. Compare custos e liquidez.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O mesmo Bitcoin, em outro emissor — escolha operacional pra mesma convicção.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IBIT">
+  <header>
+    <span class="tk">IBIT</span>
+    <span class="nm">iShares Bitcoin Trust</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,25% a.a. · segue CME CF Bitcoin</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Bitcoin spot pela BlackRock: o selo institucional definitivo do ativo.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>O risco é o Bitcoin, não o veículo: metade do valor pode sumir num ciclo — e voltar no outro.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bitcoin com a chancela da maior gestora do mundo — acesso institucional ao ouro digital.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="inter-b3">
+  <h3><span class="cemoji">🌎</span> Internacionais pela B3 <span class="ccount">6 ETFs</span></h3>
+  <p class="cintro">Dolarização sem sair de casa: BDRs de ETF e ETFs de índice internacional negociados em reais, na conta da corretora brasileira que o cliente já tem. É a porta de entrada natural — sem remessa, sem conta lá fora, sem inventário americano. O preço embute o câmbio: quando o dólar sobe, essas cotas sobem junto (e vice-versa).</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Pra começar a internacionalizar um cliente iniciante, o caminho de menor atrito é este. Conta no exterior é o passo seguinte, quando volume e maturidade justificarem.</div>
+  
+<article class="ficha" id="IVVB11">
+  <header>
+    <span class="tk">IVVB11</span>
+    <span class="nm">iShares S&amp;P 500 BRL</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,23% a.a. · segue S&amp;P 500</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>S&amp;P 500 em reais: o núcleo internacional da carteira local — 500 maiores dos EUA + dólar.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Dupla exposição: bolsa americana E câmbio. Real forte pode comer retorno de bolsa boa.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As 500 maiores empresas do mundo desenvolvido + proteção cambial, sem sair da B3 nem abrir conta fora.&rdquo;</div>
+</article>
+
+<article class="ficha" id="NASD11">
+  <header>
+    <span class="tk">NASD11</span>
+    <span class="nm">It Now Nasdaq 100</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,30% a.a. · segue Nasdaq 100</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Nasdaq-100 em reais: o growth americano concentrado em tecnologia, com câmbio junto.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mais volátil que o S&amp;P e concentrado em poucas mega-techs — quedas de 30%+ fazem parte do histórico.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As empresas que estão construindo o futuro — Apple, Microsoft, Nvidia — em uma cota na B3.&rdquo;</div>
+</article>
+
+<article class="ficha" id="SPXI11">
+  <header>
+    <span class="tk">SPXI11</span>
+    <span class="nm">It Now S&amp;P 500</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,21% a.a. · segue S&amp;P 500</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesmo S&amp;P 500 do IVVB11 — alternativa de emissor pra mesma tese núcleo.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Igual IVVB11 (bolsa EUA + câmbio). Decida pelo custo total de operar.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;S&amp;P 500 em reais — mesma tese, outro emissor; o que importa é ESTAR posicionado.&rdquo;</div>
+</article>
+
+<article class="ficha" id="EURP11">
+  <header>
+    <span class="tk">EURP11</span>
+    <span class="nm">It Now Europa</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Itau Asset · taxa 0,30% a.a. · segue Stoxx Europe 600</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Europa desenvolvida (Stoxx 600): diversificação geográfica fora do eixo EUA.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Crescimento estrutural menor que os EUA — é diversificação, raramente é o motor.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As grandes da Europa — Nestlé, ASML, LVMH — completando o mapa-múndi da carteira.&rdquo;</div>
+</article>
+
+<article class="ficha" id="ACWI11">
+  <header>
+    <span class="tk">ACWI11</span>
+    <span class="nm">iShares MSCI ACWI</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,30% a.a. · segue MSCI ACWI</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O mundo inteiro numa cota (desenvolvidos + emergentes): diversificação geográfica máxima em 1 linha.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>‘Mundo’ hoje é ~60% EUA — você ainda carrega bastante América, só que com o resto junto.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um clique, todos os mercados: a carteira global pronta pra quem quer simplicidade com classe.&rdquo;</div>
+</article>
+
+<article class="ficha" id="WRLD11">
+  <header>
+    <span class="tk">WRLD11</span>
+    <span class="nm">Investo FTSE Global</span>
+    <span class="flag f-br">🇧🇷 B3</span>
+  </header>
+  <div class="meta">Investo · taxa 0,30% a.a. · segue FTSE All-World</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>FTSE All-World via B3 — irmão do ACWI11, mesma função de núcleo global.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mesmo perfil do ACWI11; escolha por custo e liquidez local.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O mundo todo em reais — o atalho da diversificação internacional séria.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="eua-nucleo">
+  <h3><span class="cemoji">🇺🇸</span> EUA — o núcleo <span class="ccount">12 ETFs</span></h3>
+  <p class="cintro">O coração de qualquer carteira internacional: o mercado americano inteiro ou seu índice-símbolo, o S&P 500. VOO, IVV e SPY compram exatamente a mesma coisa — a escolha é por custo e liquidez. VTI alarga para o mercado total; QQQ concentra na Nasdaq; RSP tira o peso das gigantes; VO, VB e IWM descem de tamanho.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Núcleo é uma escolha, não uma coleção: VOO + IVV + SPY + VTI na mesma carteira é a mesma aposta quatro vezes, com quatro linhas pra declarar.</div>
+  
+<article class="ficha" id="VOO">
+  <header>
+    <span class="tk">VOO</span>
+    <span class="nm">Vanguard S&amp;P 500</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,03% a.a. · segue S&amp;P 500</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>S&amp;P 500 na fonte, custo mínimo: o núcleo clássico de quem investe direto nos EUA.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Bolsa americana cheia — e pra brasileiro, o pacote offshore: estate tax acima de US$ 60 mil e sucessão mais complexa.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O índice mais vencedor da história pelo menor custo do mercado — o padrão-ouro do buy and hold.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IVV">
+  <header>
+    <span class="tk">IVV</span>
+    <span class="nm">iShares Core S&amp;P 500</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,03% a.a. · segue S&amp;P 500</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesmo S&amp;P 500 do VOO (iShares) — gêmeos de função, escolha operacional.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Igual VOO, incluindo as questões de sucessão do investimento direto nos EUA.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;S&amp;P 500 puro pela BlackRock — mesma tese núcleo, mesmo custo mínimo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="SPY">
+  <header>
+    <span class="tk">SPY</span>
+    <span class="nm">SPDR S&amp;P 500</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P 500</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O ETF mais líquido do planeta (S&amp;P 500): padrão pra grandes volumes e operações táticas.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Taxa maior que VOO/IVV — pra segurar anos, os irmãos mais baratos ganham.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A liquidez absoluta do mercado americano — entra e sai qualquer tamanho, a qualquer momento.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VUAA">
+  <header>
+    <span class="tk">VUAA</span>
+    <span class="nm">Vanguard S&amp;P 500 UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,07% a.a. · segue S&amp;P 500</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>S&amp;P 500 UCITS acumulador: núcleo EUA sem estate tax americano e sem dividendo pra declarar.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Liquidez menor que os irmãos americanos; horário europeu de negociação.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O S&amp;P 500 na embalagem mais eficiente pra brasileiro: acumula dividendo sozinho e simplifica a sucessão.&rdquo;</div>
+</article>
+
+<article class="ficha" id="CSPX">
+  <header>
+    <span class="tk">CSPX</span>
+    <span class="nm">iShares Core S&amp;P 500 UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,07% a.a. · segue S&amp;P 500</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Gêmeo do VUAA (iShares): S&amp;P 500 acumulador na Irlanda — o mais tradicional dos UCITS.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mesmo pacote do VUAA; escolha por corretora e liquidez disponível.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;S&amp;P 500 blindado pra herança e sem pingar dividendo — compõe em silêncio.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VTI">
+  <header>
+    <span class="tk">VTI</span>
+    <span class="nm">Vanguard Total Market</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,03% a.a. · segue CRSP US Total</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>TODO o mercado americano (large a micro caps): a versão 'mercado completo' do núcleo EUA.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Na prática anda colado no S&amp;P; a diferença é filosófica — e o pacote offshore de sempre.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Não escolha quais empresas americanas: leve TODAS, de gigantes a novatas, numa cota só.&rdquo;</div>
+</article>
+
+<article class="ficha" id="QQQ">
+  <header>
+    <span class="tk">QQQ</span>
+    <span class="nm">Invesco QQQ Trust</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Invesco · taxa 0,20% a.a. · segue Nasdaq 100</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Nasdaq-100 na fonte: o motor growth/tech pra quem opera direto nos EUA.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Concentração em mega-techs e volatilidade alta — históricos de -30% não são exceção.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A elite da inovação americana — o índice que capturou as maiores criações de valor da era digital.&rdquo;</div>
+</article>
+
+<article class="ficha" id="CNDX">
+  <header>
+    <span class="tk">CNDX</span>
+    <span class="nm">iShares Nasdaq 100 UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,30% a.a. · segue Nasdaq 100</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Nasdaq-100 UCITS acumulador: o growth americano na embalagem europeia.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Volatilidade cheia da Nasdaq + liquidez UCITS — dimensione com calma.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As mega-techs americanas com eficiência fiscal europeia — crescimento que se reinveste sozinho.&rdquo;</div>
+</article>
+
+<article class="ficha" id="RSP">
+  <header>
+    <span class="tk">RSP</span>
+    <span class="nm">Invesco S&amp;P 500 Equal Weight</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Invesco · taxa 0,20% a.a. · segue S&amp;P 500 Equal Weight</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>S&amp;P 500 em pesos IGUAIS: tira a concentração das mega caps, dá voz às 500.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Quando as gigantes puxam o mercado, o equal weight fica pra trás — é aposta na 'média', não nos líderes.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As mesmas 500 empresas, sem deixar 7 delas mandarem no resultado — diversificação de verdade dentro do índice.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VO">
+  <header>
+    <span class="tk">VO</span>
+    <span class="nm">Vanguard Mid-Cap</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,04% a.a. · segue CRSP US Mid Cap</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mid caps EUA: o meio-termo esquecido — mais crescimento que large, menos susto que small.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Menos cobertura e menos glamour; exige paciência com ciclos.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Empresas grandes o bastante pra sobreviver, pequenas o bastante pra crescer — o ponto doce do mercado.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VB">
+  <header>
+    <span class="tk">VB</span>
+    <span class="nm">Vanguard Small-Cap</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,05% a.a. · segue CRSP US Small Cap</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Small caps EUA pela régua Vanguard — função gêmea do IWM com custo menor.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mesmo perfil de volatilidade do universo small; escolha pelo custo.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O motor pequeno do mercado americano, na gestora do custo mínimo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IWM">
+  <header>
+    <span class="tk">IWM</span>
+    <span class="nm">iShares Russell 2000</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,19% a.a. · segue Russell 2000</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Small caps americanas (Russell 2000): ciclo doméstico dos EUA, beta alto.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mais voláteis, mais sensíveis a juros e crédito — sofrem primeiro e mais fundo.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As 2000 pequenas que podem virar as próximas grandes — o lado agressivo do mercado americano.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="eua-fatores">
+  <h3><span class="cemoji">🎯</span> EUA — fatores e dividendos <span class="ccount">10 ETFs</span></h3>
+  <p class="cintro">O mesmo mercado americano, fatiado por estilo: crescimento vs valor, qualidade, baixa volatilidade, momentum, e as várias escolas de dividendos (quem paga mais hoje vs quem aumenta o pagamento todo ano). São ferramentas de ênfase — inclinam a carteira sem abandonar a diversificação.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Fator é tempero de longo prazo: qualquer um deles passa anos atrás do índice cheio. Só inclina quem aguenta esperar a tese.</div>
+  
+<article class="ficha" id="VUG">
+  <header>
+    <span class="tk">VUG</span>
+    <span class="nm">Vanguard Growth</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,04% a.a. · segue CRSP US Large Growth</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>A metade growth do mercado americano: as empresas que crescem acima da média — tech pesa muito.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Paga caro pelo crescimento: quando juros sobem ou o lucro decepciona, a queda é maior que a do índice cheio.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A metade acelerada dos EUA — as empresas que mais crescem, aceitando pagar mais caro por isso.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VTV">
+  <header>
+    <span class="tk">VTV</span>
+    <span class="nm">Vanguard Value</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,04% a.a. · segue CRSP US Large Value</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>A metade value: empresas maduras e baratas (financeiro, saúde, energia) — contrapeso natural do growth.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Barato pode ficar barato por anos — o value atravessa ciclos longos atrás do growth.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A metade 'sem glamour' da bolsa americana: negócios maduros, dividendos e menos susto no preço.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VIG">
+  <header>
+    <span class="tk">VIG</span>
+    <span class="nm">Vanguard Dividend Appreciation</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,06% a.a. · segue S&amp;P Dividend Growers</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Empresas que AUMENTAM dividendo há 10+ anos: qualidade disfarçada de renda.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Yield atual baixo — a tese é crescimento do dividendo, não renda alta hoje.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Não é quem paga mais hoje — é quem aumenta o pagamento todo ano há uma década. Isso filtra qualidade.&rdquo;</div>
+</article>
+
+<article class="ficha" id="DGRO">
+  <header>
+    <span class="tk">DGRO</span>
+    <span class="nm">iShares Core Dividend Growth</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,08% a.a. · segue Morningstar Dividend Growth</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Crescimento de dividendos (5+ anos): o VIG mais acessível da iShares.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mesma pegada do VIG: renda ainda modesta hoje, aposta no amanhã.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Dividendos que crescem — a bola de neve começando pequena e ganhando corpo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VYM">
+  <header>
+    <span class="tk">VYM</span>
+    <span class="nm">Vanguard High Dividend</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,06% a.a. · segue FTSE High Dividend</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Alto dividendo americano: yield acima da média com diversificação ampla.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Yield alto às vezes é preço caído — setores value dominam, pode ficar atrás em bull de tech.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um salário em dólar da América corporativa — centenas de pagadoras num ticker só.&rdquo;</div>
+</article>
+
+<article class="ficha" id="SCHD">
+  <header>
+    <span class="tk">SCHD</span>
+    <span class="nm">Schwab US Dividend Equity</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Schwab · taxa 0,06% a.a. · segue Dow Jones US Dividend 100</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O queridinho dos dividendos: filtro de qualidade + yield + crescimento, tudo junto.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Concentrado em value; em anos de tech eufórica, fica olhando de fora.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Dividendos com critério de engenheiro: só entra quem tem balanço, histórico e capacidade de pagar mais.&rdquo;</div>
+</article>
+
+<article class="ficha" id="HDV">
+  <header>
+    <span class="tk">HDV</span>
+    <span class="nm">iShares Core High Dividend</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,08% a.a. · segue Morningstar Dividend Yield</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Dividendos com filtro de saúde financeira (Morningstar): renda com colchão defensivo.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Cesta concentrada em setores maduros — energia e saúde pesam.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As pagadoras mais sólidas da América — renda com o pé no chão.&rdquo;</div>
+</article>
+
+<article class="ficha" id="QUAL">
+  <header>
+    <span class="tk">QUAL</span>
+    <span class="nm">iShares MSCI USA Quality</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,15% a.a. · segue MSCI USA Quality</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Fator qualidade puro: ROE alto, dívida baixa, lucro estável.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Qualidade fica cara em pânico — o fator não imuniza contra quedas de mercado.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As empresas com o dever de casa em dia — o filtro que Warren Buffett aprovaria.&rdquo;</div>
+</article>
+
+<article class="ficha" id="USMV">
+  <header>
+    <span class="tk">USMV</span>
+    <span class="nm">iShares MSCI Min Vol USA</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,15% a.a. · segue MSCI USA Min Vol</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mínima volatilidade EUA: mesma bolsa, passeio menos turbulento.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Em rali forte, sobe menos — o preço da suavidade é deixar prêmio na mesa.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bolsa americana pra quem não gosta de sobressalto: menos tranco na descida, chegada mais serena.&rdquo;</div>
+</article>
+
+<article class="ficha" id="MTUM">
+  <header>
+    <span class="tk">MTUM</span>
+    <span class="nm">iShares MSCI Momentum</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,15% a.a. · segue MSCI USA Momentum</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Momentum: surfa o que está subindo, corta o que enfraquece.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Vira a chave com atraso nas mudanças bruscas de mercado — chicotes machucam.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A estratégia de seguir a força do mercado, sistematizada e sem emoção.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="eua-setoriais">
+  <h3><span class="cemoji">🏭</span> EUA — setoriais <span class="ccount">4 ETFs</span></h3>
+  <p class="cintro">Um setor do S&P 500 isolado num ticker. Servem pra sobre-alocar numa tese setorial (juros, petróleo, demografia, tecnologia) com prazo e tamanho definidos — são posições táticas, não fundação de carteira.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Setorial bom é setorial com tese escrita: por que este setor, por quanto tempo, e o que faz você sair.</div>
+  
+<article class="ficha" id="XLK">
+  <header>
+    <span class="tk">XLK</span>
+    <span class="nm">SPDR Technology Select</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P Technology Select</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Setor de tecnologia do S&amp;P: a fatia mais inovadora do índice, isolada.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Setor único e concentrado — Apple e Microsoft dominam a cesta.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O coração tech do S&amp;P 500 — pra sobre-alocar no setor que lidera o século.&rdquo;</div>
+</article>
+
+<article class="ficha" id="XLF">
+  <header>
+    <span class="tk">XLF</span>
+    <span class="nm">SPDR Financial Select</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P Financial Select</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Financeiro americano: bancos, seguradoras e gestoras — sensível a juros e crédito.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Cíclico clássico: crises bancárias batem aqui primeiro.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O sistema financeiro dos EUA numa cota — aposta em juros saudáveis e crédito fluindo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="XLE">
+  <header>
+    <span class="tk">XLE</span>
+    <span class="nm">SPDR Energy Select</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P Energy Select</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Energia (petróleo e gás): proteção contra choque de oferta e inflação de commodities.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Volatilidade de commodity + transição energética no horizonte estrutural.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As petroleiras americanas — o hedge que paga dividendo quando o barril sobe.&rdquo;</div>
+</article>
+
+<article class="ficha" id="XLV">
+  <header>
+    <span class="tk">XLV</span>
+    <span class="nm">SPDR Health Care Select</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P Health Care Select</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Saúde americana: defensivo estrutural com vento demográfico a favor.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Regulação de preços de medicamentos é o fantasma permanente do setor.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um setor que não depende do humor da economia: o mundo não para de precisar de saúde.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="ex-eua">
+  <h3><span class="cemoji">🌏</span> Mundo ex-EUA e emergentes <span class="ccount">11 ETFs</span></h3>
+  <p class="cintro">O antídoto contra apostar tudo num país só — mesmo que esse país seja os EUA. Desenvolvidos (Europa, Japão) e emergentes (China, Índia, e o próprio Brasil visto de fora com o EWZ) completam o mapa. Valuations costumam ser mais baixos que os americanos; a contrapartida é governança, câmbio e política.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Emergente se compra em cesta (VWO/EIMI), não em país isolado — salvo convicção específica e dimensionada.</div>
+  
+<article class="ficha" id="VEA">
+  <header>
+    <span class="tk">VEA</span>
+    <span class="nm">Vanguard FTSE Developed</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,05% a.a. · segue FTSE Developed ex-US</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Desenvolvidos ex-EUA (Europa + Japão + outros): a perna internacional madura da carteira.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Décadas de retorno abaixo dos EUA — é diversificação, não promessa de liderança.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O resto do mundo rico numa cota — porque nem só de América vive um portfólio global.&rdquo;</div>
+</article>
+
+<article class="ficha" id="EFA">
+  <header>
+    <span class="tk">EFA</span>
+    <span class="nm">iShares MSCI EAFE</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,32% a.a. · segue MSCI EAFE</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>MSCI EAFE — função gêmea do VEA (desenvolvidos ex-EUA) com taxa maior.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Igual VEA; se for segurar muito tempo, o custo pesa a favor do VEA.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Europa, Austrália e Extremo Oriente no índice mais tradicional da categoria.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VGK">
+  <header>
+    <span class="tk">VGK</span>
+    <span class="nm">Vanguard FTSE Europe</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,06% a.a. · segue FTSE Developed Europe</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Europa desenvolvida isolada: sobre-alocação na tese europeia.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Crescimento estrutural modesto; energia e geopolítica são fantasmas recorrentes.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As multinacionais europeias — valuation historicamente mais gentil que o americano.&rdquo;</div>
+</article>
+
+<article class="ficha" id="EWJ">
+  <header>
+    <span class="tk">EWJ</span>
+    <span class="nm">iShares MSCI Japan</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,50% a.a. · segue MSCI Japan</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Japão isolado: governança em reforma e indústria de precisão.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Iene mexe forte no resultado em dólar; décadas de andar de lado no retrovisor.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O Japão que voltou ao radar global — reformas corporativas destravando valor antigo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VWO">
+  <header>
+    <span class="tk">VWO</span>
+    <span class="nm">Vanguard Emerging Markets</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,08% a.a. · segue FTSE Emerging</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Emergentes na fonte (FTSE): China, Índia, Taiwan e cia — inclui menos Coreia que o MSCI.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Volatilidade e política em dose dupla; China pesa muito na cesta.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O crescimento demográfico do planeta numa cota — os mercados onde o século XXI acontece.&rdquo;</div>
+</article>
+
+<article class="ficha" id="EEM">
+  <header>
+    <span class="tk">EEM</span>
+    <span class="nm">iShares MSCI Emerging</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,68% a.a. · segue MSCI Emerging</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Emergentes MSCI — o veterano da categoria, mais caro que o VWO.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Igual VWO com taxa maior; usado por liquidez em derivativos.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O índice emergente clássico do mercado — o mesmo mundo em outra régua.&rdquo;</div>
+</article>
+
+<article class="ficha" id="EIMI">
+  <header>
+    <span class="tk">EIMI</span>
+    <span class="nm">iShares Core MSCI EM UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,18% a.a. · segue MSCI EM IMI</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Emergentes UCITS (MSCI EM IMI): o complemento do IWDA pra fechar o mundo.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Volatilidade emergente de sempre, na embalagem irlandesa.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A peça que falta do quebra-cabeça global — emergentes acumulando junto.&rdquo;</div>
+</article>
+
+<article class="ficha" id="MCHI">
+  <header>
+    <span class="tk">MCHI</span>
+    <span class="nm">iShares MSCI China</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,59% a.a. · segue MSCI China</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>China ampla (MSCI): a segunda economia do mundo isolada na carteira.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Risco regulatório e geopolítico em outro patamar — posição satélite, nunca núcleo.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A China investível inteira — tecnologia, consumo e indústria do gigante asiático.&rdquo;</div>
+</article>
+
+<article class="ficha" id="FXI">
+  <header>
+    <span class="tk">FXI</span>
+    <span class="nm">iShares China Large-Cap</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,74% a.a. · segue FTSE China 50</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>China large caps (50 maiores): a versão concentrada e estatal-pesada do gigante.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mais bancos estatais, menos tech — e o mesmo risco político do MCHI.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As blue chips chinesas — o jeito mais direto de expressar visão sobre Pequim.&rdquo;</div>
+</article>
+
+<article class="ficha" id="INDA">
+  <header>
+    <span class="tk">INDA</span>
+    <span class="nm">iShares MSCI India</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,65% a.a. · segue MSCI India</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Índia isolada: demografia, digitalização e a tese estrutural mais querida da década.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Valuation cronicamente caro — o mercado já sabe da história e cobra por ela.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O país que mais cresce entre os grandes — a aposta demográfica do século em uma cota.&rdquo;</div>
+</article>
+
+<article class="ficha" id="EWZ">
+  <header>
+    <span class="tk">EWZ</span>
+    <span class="nm">iShares MSCI Brazil</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,58% a.a. · segue MSCI Brazil</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Brasil em dólar: nosso mercado visto de fora — útil pra comparações e hedge tático.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Volatilidade dupla (bolsa + câmbio) e a mesma concentração do Ibovespa.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O Brasil como o gringo enxerga — bolsa local com o dólar embutido no retorno.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="globais">
+  <h3><span class="cemoji">🌐</span> O mundo inteiro em um ticker <span class="ccount">4 ETFs</span></h3>
+  <p class="cintro">A resposta pra quem pergunta "e se eu quisesse comprar tudo?": índices globais que juntam desenvolvidos e emergentes (ou só desenvolvidos) numa cota única, com rebalanceamento automático entre países. É a carteira internacional de uma linha só — elegante para quem quer simplicidade radical.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Um ticker global + um de renda fixa já é uma carteira internacional defensável. Complexidade a mais precisa pagar o próprio aluguel.</div>
+  
+<article class="ficha" id="ACWI">
+  <header>
+    <span class="tk">ACWI</span>
+    <span class="nm">iShares MSCI ACWI</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,32% a.a. · segue MSCI ACWI</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mundo inteiro (desenvolvidos + emergentes) na fonte americana.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>~60% EUA na prática; e o pacote offshore de sempre pra brasileiro.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um ticker, o planeta: a alocação global definitiva pra quem quer parar de escolher país.&rdquo;</div>
+</article>
+
+<article class="ficha" id="VWRA">
+  <header>
+    <span class="tk">VWRA</span>
+    <span class="nm">Vanguard FTSE All-World UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">Vanguard · taxa 0,22% a.a. · segue FTSE All-World</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mundo TODO acumulador (FTSE All-World): a carteira global de 1 linha na melhor embalagem.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Como todo 'mundo': maioria EUA; e liquidez menor que os ETFs americanos.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um ticker pra vida inteira: o planeta acumulando dividendos automaticamente, sem estate tax.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IWDA">
+  <header>
+    <span class="tk">IWDA</span>
+    <span class="nm">iShares Core MSCI World UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,20% a.a. · segue MSCI World</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>MSCI World acumulador (só desenvolvidos): o núcleo global clássico UCITS.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Sem emergentes — quem quiser, completa com EIMI.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Os mercados desenvolvidos do mundo compondo em piloto automático.&rdquo;</div>
+</article>
+
+<article class="ficha" id="SWRD">
+  <header>
+    <span class="tk">SWRD</span>
+    <span class="nm">SPDR MSCI World UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">State Street · taxa 0,12% a.a. · segue MSCI World</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>MSCI World da State Street: mesma função do IWDA com taxa menor.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mais novo e menos líquido que o IWDA; a taxa compensa pra quem segura.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O mundo desenvolvido pela menor taxa da categoria UCITS.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="renda-dolar">
+  <h3><span class="cemoji">💵</span> Renda mensal em dólar <span class="ccount">3 ETFs</span></h3>
+  <p class="cintro">A prateleira que mais cresce no varejo americano: ETFs que vendem opções cobertas (covered calls) sobre a carteira e distribuem o prêmio como renda mensal. Yields chamam atenção — e exatamente por isso exigem a conversa mais honesta deste guia: renda alta não é retorno total, e parte do potencial de alta é vendida junto com a opção.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Compare sempre o <b>retorno total</b> (preço + distribuições) com o índice de referência. Se o cliente precisa do fluxo mensal, ok; se está reinvestindo tudo, o índice puro costuma servir melhor.</div>
+  
+<article class="ficha" id="JEPI">
+  <header>
+    <span class="tk">JEPI</span>
+    <span class="nm">JPMorgan Equity Premium Income</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">JPMorgan · taxa 0,35% a.a. · segue S&amp;P 500 + covered calls</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Renda mensal com S&amp;P 500 + opções: o meio-termo entre bolsa e fluxo de caixa.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Em rali forte, participa só em parte da alta — o prêmio da renda tem esse custo.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bolsa americana que paga aluguel mensal — volatilidade menor, fluxo constante.&rdquo;</div>
+</article>
+
+<article class="ficha" id="JEPQ">
+  <header>
+    <span class="tk">JEPQ</span>
+    <span class="nm">JPMorgan Nasdaq Premium Income</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">JPMorgan · taxa 0,35% a.a. · segue Nasdaq 100 + covered calls</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O JEPI da Nasdaq: renda mensal com motor growth por trás.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mais volátil que o JEPI (a base é tech) e mesma troca: renda hoje por alta amanhã.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Renda mensal com as empresas de tecnologia como lastro — fluxo e futuro no mesmo ticker.&rdquo;</div>
+</article>
+
+<article class="ficha" id="QYLD">
+  <header>
+    <span class="tk">QYLD</span>
+    <span class="nm">Global X Nasdaq Covered Call</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Global X · taxa 0,60% a.a. · segue CBOE Nasdaq BuyWrite</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Covered call sobre Nasdaq: transforma volatilidade em renda mensal ALTA.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Vende a alta em troca da renda: em bull market fica MUITO pra trás; o principal tende a se erodir.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Renda mensal gorda extraída da volatilidade da Nasdaq — pra quem prioriza o fluxo e aceita abrir mão da valorização.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="rf-dolar">
+  <h3><span class="cemoji">🏛️</span> Renda fixa em dólar <span class="ccount">10 ETFs</span></h3>
+  <p class="cintro">Do caixa remunerado em dólar (T-Bills) ao crédito high yield, passando por Treasuries longos e TIPS: a renda fixa americana em todas as durações. Regra que o brasileiro leva um susto pra aprender: <b>renda fixa oscila</b> — e quanto mais longo o título, mais o ETF se comporta como ação quando o juro se mexe.</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Diga a duration antes do yield: SHV/IB01 é caixa, IEF é meio de campo, TLT é aposta direcional em juro. São três produtos diferentes com o mesmo emissor.</div>
+  
+<article class="ficha" id="SHV">
+  <header>
+    <span class="tk">SHV</span>
+    <span class="nm">iShares Short Treasury</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,15% a.a. · segue ICE Short Treasury</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>T-Bills (curtíssimo prazo): o caixa em dólar, praticamente sem risco de preço.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Rende o juro curto e só — é estacionamento, não investimento.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Dólar rendendo o juro americano de curto prazo — o caixa mais seguro do planeta.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IB01">
+  <header>
+    <span class="tk">IB01</span>
+    <span class="nm">iShares $ Treasury Bond 0-1yr UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,07% a.a. · segue ICE US Treasury Short</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>T-Bills UCITS: caixa em dólar na embalagem irlandesa — o SHV sem estate tax.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>É estacionamento em dólar: rende o juro curto, nada além.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Dólar parado rendendo Treasury de curtíssimo prazo — o caixa offshore bem resolvido.&rdquo;</div>
+</article>
+
+<article class="ficha" id="FLOA">
+  <header>
+    <span class="tk">FLOA</span>
+    <span class="nm">iShares $ Floating Rate Bond UCITS</span>
+    <span class="flag f-ie">🇮🇪 UCITS</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,10% a.a. · segue Bloomberg US Floating Rate</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Floating rate em dólar: pós-fixado americano — rende mais quando o Fed sobe juro.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Crédito corporativo por trás — não é Treasury puro.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O 'CDI americano': renda que acompanha o juro do Fed, sem risco de marcação.&rdquo;</div>
+</article>
+
+<article class="ficha" id="AGG">
+  <header>
+    <span class="tk">AGG</span>
+    <span class="nm">iShares Core Aggregate Bond</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,03% a.a. · segue Bloomberg Aggregate</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>A renda fixa americana inteira (Treasuries + corporativos IG): o lastro clássico do portfólio 60/40.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Sensível a juros dos EUA — 2022 provou que bond também cai.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O contrapeso tradicional da bolsa: renda fixa americana ampla, de qualidade, num ticker.&rdquo;</div>
+</article>
+
+<article class="ficha" id="IEF">
+  <header>
+    <span class="tk">IEF</span>
+    <span class="nm">iShares 7-10 Year Treasury</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,15% a.a. · segue ICE 7-10 Year Treasury</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Treasuries 7-10 anos: o meio da curva — proteção com menos violência que o TLT.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mesmo vetor do TLT, amplitude menor. Ainda assim, juro subindo machuca.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Título do Tesouro americano no prazo clássico — o porto seguro global na dose intermediária.&rdquo;</div>
+</article>
+
+<article class="ficha" id="TLT">
+  <header>
+    <span class="tk">TLT</span>
+    <span class="nm">iShares 20+ Year Treasury</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,15% a.a. · segue ICE 20+ Year Treasury</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Treasuries 20+ anos: a aposta mais alavancada em QUEDA de juro americano.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Duração gigante = volatilidade de ação; se o juro sobe, cai forte e sem dó.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Se os juros americanos caírem, isso aqui é o turbo — proteção de recessão com prêmio grande.&rdquo;</div>
+</article>
+
+<article class="ficha" id="TIP">
+  <header>
+    <span class="tk">TIP</span>
+    <span class="nm">iShares TIPS Bond</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,19% a.a. · segue Bloomberg TIPS</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>TIPS: Tesouro americano indexado à inflação dos EUA — o IMA-B deles.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Juro REAL subindo derruba a cota mesmo com inflação alta — proteção é no horizonte.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Proteção contra a inflação americana com garantia do Tesouro dos EUA.&rdquo;</div>
+</article>
+
+<article class="ficha" id="LQD">
+  <header>
+    <span class="tk">LQD</span>
+    <span class="nm">iShares Investment Grade Bond</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,14% a.a. · segue Markit iBoxx IG</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Crédito corporativo investment grade: um degrau de prêmio acima dos Treasuries.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Em crise, o spread abre e cai junto com bolsa — diversifica menos do que parece.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Emprestar para as maiores empresas dos EUA — prêmio sobre o Tesouro com grau de investimento.&rdquo;</div>
+</article>
+
+<article class="ficha" id="HYG">
+  <header>
+    <span class="tk">HYG</span>
+    <span class="nm">iShares High Yield Bond</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,49% a.a. · segue Markit iBoxx HY</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>High yield: crédito 'apimentado' — renda alta, comportamento meio-bolsa.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Em recessão, calotes sobem e ele cai COM a bolsa — não conte com ele como defesa.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O prêmio gordo do crédito mais arriscado — renda alta para quem entende que é RISCO, não renda fixa.&rdquo;</div>
+</article>
+
+<article class="ficha" id="EMB">
+  <header>
+    <span class="tk">EMB</span>
+    <span class="nm">iShares EM Bond</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">BlackRock · taxa 0,39% a.a. · segue JPM EMBI Global</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Dívida soberana emergente em dólar: prêmio de país sem risco de moeda local.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Crises de emergentes (calote, política) batem direto; correlaciona com apetite a risco global.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Receber em dólar o prêmio que os países emergentes pagam pra se financiar.&rdquo;</div>
+</article>
+</section>
+
+<section class="cat" id="tematicos">
+  <h3><span class="cemoji">🚀</span> Temáticos — a prateleira das teses <span class="ccount">10 ETFs</span></h3>
+  <p class="cintro">Inovação disruptiva, robótica, IA, urânio, lítio, cibersegurança, cobre, infraestrutura: cada ticker aqui é uma tese de futuro embalada. São os ETFs de conversa mais empolgante e de disciplina mais difícil — concentrados, voláteis e cíclicos de narrativa (o tema entra e sai de moda antes do lucro chegar).</p>
+  <div class="bolso"><b>Regra de bolso ·</b> Temático é satélite de satélite: some todos e mantenha a soma pequena. E prefira entrar quando o tema está fora das manchetes, não no pico do hype.</div>
+  
+<article class="ficha" id="ARKK">
+  <header>
+    <span class="tk">ARKK</span>
+    <span class="nm">ARK Innovation</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">ARK Invest · taxa 0,75% a.a. · segue Gestao Ativa</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Inovação disruptiva com gestão ativa: a aposta concentrada em futuro distante.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Drawdowns brutais (histórico de -70%+) — tese de convicção, tamanho de tempero.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As empresas que podem mudar o mundo em 10 anos — com a volatilidade que essa promessa cobra.&rdquo;</div>
+</article>
+
+<article class="ficha" id="ARKW">
+  <header>
+    <span class="tk">ARKW</span>
+    <span class="nm">ARK Next Gen Internet</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">ARK Invest · taxa 0,87% a.a. · segue Gestao Ativa</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Internet de próxima geração e fintech — recorte digital da família ARK.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Mesmo DNA do ARKK: concentração, convicção e solavancos épicos.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A carteira de quem acredita que a internet ainda está no começo.&rdquo;</div>
+</article>
+
+<article class="ficha" id="ARKG">
+  <header>
+    <span class="tk">ARKG</span>
+    <span class="nm">ARK Genomic Revolution</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">ARK Invest · taxa 0,75% a.a. · segue Gestao Ativa</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Genômica e biotecnologia de fronteira: a aposta mais científica da prateleira.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Empresas pré-lucro, aprovações regulatórias binárias — o mais volátil dos temas.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A medicina do futuro — edição genética e diagnóstico molecular — pra quem tem estômago de pioneiro.&rdquo;</div>
+</article>
+
+<article class="ficha" id="BOTZ">
+  <header>
+    <span class="tk">BOTZ</span>
+    <span class="nm">Global X Robotics &amp; AI</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Global X · taxa 0,68% a.a. · segue Indxx Global Robotics</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Robótica e IA global: automação industrial + inteligência artificial em cesta.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Tema quente = valuation esticado; Japão pesa mais do que se imagina na cesta.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As fábricas do futuro e quem as constrói — automação como tese de década.&rdquo;</div>
+</article>
+
+<article class="ficha" id="AIQ">
+  <header>
+    <span class="tk">AIQ</span>
+    <span class="nm">Global X AI &amp; Technology</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Global X · taxa 0,68% a.a. · segue Indxx AI &amp; Big Data</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>IA e big data em cesta ampla: o tema mais falado do mundo, diversificado.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Todo mundo já correu pra cá — pagar caro pelo óbvio é o risco número um.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A revolução da inteligência artificial inteira, sem apostar numa empresa só.&rdquo;</div>
+</article>
+
+<article class="ficha" id="BUG">
+  <header>
+    <span class="tk">BUG</span>
+    <span class="nm">Global X Cybersecurity</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Global X · taxa 0,50% a.a. · segue Indxx Cybersecurity</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Cibersegurança: gasto corporativo obrigatório e crescente — tema defensivo dentro de tech.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Múltiplos altos; consolidação do setor muda líderes rápido.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O único orçamento de TI que nenhum CEO corta — segurança digital como tese perene.&rdquo;</div>
+</article>
+
+<article class="ficha" id="URA">
+  <header>
+    <span class="tk">URA</span>
+    <span class="nm">Global X Uranium</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Global X · taxa 0,69% a.a. · segue Solactive Global Uranium</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Urânio e nuclear: energia limpa firme — tese de oferta apertada.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Setor minúsculo e político: um acidente nuclear no mundo muda tudo de preço.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A volta da energia nuclear — o combustível da transição que ninguém quer nomear.&rdquo;</div>
+</article>
+
+<article class="ficha" id="LIT">
+  <header>
+    <span class="tk">LIT</span>
+    <span class="nm">Global X Lithium &amp; Battery</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Global X · taxa 0,75% a.a. · segue Solactive Global Lithium</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Lítio e baterias: a cadeia de suprimento da eletrificação.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Preço do lítio é montanha-russa; China domina a cadeia — risco geopolítico embutido.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Da mina à bateria: a matéria-prima da era elétrica em uma cota.&rdquo;</div>
+</article>
+
+<article class="ficha" id="COPX">
+  <header>
+    <span class="tk">COPX</span>
+    <span class="nm">Global X Copper Miners</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Global X · taxa 0,65% a.a. · segue Solactive Global Copper Miners</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mineradoras de cobre: a aposta indireta em eletrificação e infraestrutura.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Alavancado no preço do metal — cai mais que o cobre na baixa.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O metal da eletrificação pelo lado de quem o tira do chão.&rdquo;</div>
+</article>
+
+<article class="ficha" id="PAVE">
+  <header>
+    <span class="tk">PAVE</span>
+    <span class="nm">Global X US Infrastructure</span>
+    <span class="flag f-us">🇺🇸 EUA</span>
+  </header>
+  <div class="meta">Global X · taxa 0,47% a.a. · segue Indxx US Infrastructure</div>
+  <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Infraestrutura americana: construção, materiais e engenharia — vento fiscal a favor.</div>
+  <div class="fsec"><span class="flabel">⚠️ O risco que você precisa nomear</span>Depende de ciclo de investimento público — eleições mexem na tese.</div>
+  <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A reconstrução da infraestrutura dos EUA — concreto, aço e décadas de obra pela frente.&rdquo;</div>
+</article>
+</section>
+
+<!-- ============================================================ CAP 5 -->
+<h2 class="cap" id="cap5"><span class="num">05</span>Os 10 erros clássicos</h2>
+<p class="lead">Cada um destes já custou dinheiro de verdade pra alguém. Cliente que ouve isso de você antes de errar vira cliente pra sempre.</p>
+
+<ol class="erros">
+  <li><b>1 · Comprar pelo ticker famoso sem abrir o índice.</b> "ETF de tecnologia" pode ser 50% Apple+Microsoft ou uma cesta de small caps chinesas. O nome não é a carteira.</li>
+  <li><b>2 · Achar que ETF de ação tem a isenção dos R$ 20 mil.</b> Não tem. É o erro de DARF mais comum do varejo — e a multa chega com juros.</li>
+  <li><b>3 · Comprar XFIX11 esperando renda mensal isenta.</b> ETF de FII não distribui o rendimento isento — quem quer a renda do tijolo compra o FII direto.</li>
+  <li><b>4 · Ordem a mercado em ETF sem liquidez.</b> O spread executa na hora e a tela não mostra o prejuízo. Ordem limitada custa dois cliques a mais e paga o esforço sempre.</li>
+  <li><b>5 · Comparar só a taxa e ignorar o tracking difference.</b> A taxa é uma promessa; o tracking difference é o resultado entregue. Julgue pelo entregue.</li>
+  <li><b>6 · Confundir renda alta com retorno total.</b> Yield de 11% ao ano com cota derretendo 8% não é renda — é devolução do próprio capital com imposto no meio. Some preço + distribuições antes de se apaixonar.</li>
+  <li><b>7 · Dolarizar tudo de uma vez por ansiedade.</b> Câmbio tem ciclo e reversão. Internacionalizar é maratona de aportes escalonados, não sprint de pânico.</li>
+  <li><b>8 · Montar patrimônio grande em domicílio americano ignorando o estate tax.</b> Acima de US$ 60 mil, a sucessão pode custar até 40%. A conversa sobre Irlanda começa BEM antes do primeiro milhão.</li>
+  <li><b>9 · Achar que ETF de renda fixa não oscila.</b> TLT já caiu mais de 40% num ciclo de alta de juros. Duration longa se comporta como ação — o nome "renda fixa" descreve o título, não a sua cota.</li>
+  <li><b>10 · Colecionar 15 ETFs sobrepostos e chamar de diversificação.</b> VOO + IVV + SPY + VTI é a mesma aposta quatro vezes, com quatro linhas pra declarar. Diversificar é somar funções diferentes, não tickers parecidos.</li>
+</ol>
+
+<!-- ============================================================ CAP 6 -->
+<h2 class="cap" id="cap6"><span class="num">06</span>Glossário do assessor</h2>
+<p class="lead">Os termos que aparecem em reunião — explicados como você explicaria.</p>
+
+<div class="gloss">
+  <div><b>Índice (benchmark)</b> — a "receita" que o ETF copia: a lista de ativos e seus pesos. É o produto de verdade; o ETF é a embalagem.</div>
+  <div><b>Cota</b> — sua fração do fundo, negociada em bolsa como uma ação, com código próprio (ticker).</div>
+  <div><b>Market maker</b> — instituição que cria e resgata cotas arbitrando contra a cesta, mantendo o preço colado no valor justo e a liquidez viva.</div>
+  <div><b>Spread</b> — a diferença entre o preço de compra e o de venda na tela. Custo invisível: quanto menor a liquidez, maior o pedágio.</div>
+  <div><b>Tracking difference</b> — quanto o retorno do ETF ficou do retorno do índice num período. A régua definitiva de qualidade da replicação.</div>
+  <div><b>TER (taxa de administração)</b> — o custo anual total do fundo, descontado diariamente da cota. Você não vê o débito — mas ele está lá, todo dia.</div>
+  <div><b>Yield</b> — a renda distribuída nos últimos 12 meses dividida pelo preço. Retrato do passado, não promessa do futuro.</div>
+  <div><b>Duration</b> — a sensibilidade de um título (ou ETF de RF) à mudança dos juros. Duration 17 ≈ juro sobe 1 ponto, cota cai ~17%.</div>
+  <div><b>Withholding</b> — imposto retido na fonte sobre dividendos pagos a estrangeiro. EUA→Brasil: 30%. EUA→fundo irlandês: 15%.</div>
+  <div><b>UCITS</b> — o padrão regulatório europeu de fundos. Na prática do brasileiro: ETFs domiciliados na Irlanda, com vantagens tributárias e sucessórias.</div>
+  <div><b>Acumuladora vs distribuidora</b> — classe que reinveste os dividendos dentro do fundo (Acc) vs a que deposita na sua conta (Dist). Acumuladora = juros compostos sem fricção.</div>
+  <div><b>Estate tax</b> — imposto sucessório americano sobre ativos domiciliados nos EUA de não-residentes, acima de US$ 60 mil. Até 40%.</div>
+  <div><b>Come-cotas</b> — antecipação semestral de IR dos fundos abertos tradicionais. ETFs (de RF inclusive) <b>não têm</b> — o imposto espera você vender.</div>
+  <div><b>Swing trade / day trade</b> — venda em dia diferente da compra (15%) vs no mesmo dia (20%), para ETFs de ações na B3.</div>
+  <div><b>Home bias</b> — a tendência de concentrar tudo no país onde se vive. O Brasil é ~2% do mercado global — carteira 100% local é uma aposta, não um padrão.</div>
+  <div><b>Patrimônio líquido (AUM)</b> — o tamanho do fundo. Grande demais nunca foi problema; pequeno demais pode ser encerrado.</div>
+  <div><b>Rebalanceamento</b> — vender o que subiu além do alvo e comprar o que ficou pra trás, devolvendo a carteira ao plano. O ETF rebalanceia o índice por dentro; a carteira entre ETFs, quem rebalanceia é você.</div>
+  <div><b>Covered call</b> — vender opção de compra sobre ativos que você tem, embolsando o prêmio e abrindo mão de parte da alta. O motor dos ETFs de renda mensal.</div>
+</div>
+
+<footer class="timbre">
+  <b>VocêBancário · Método MAP® — FAP &amp; FEA</b><br/>
+  RODRIGO BERNARDINO ARBOÉS – ME · CNPJ 27.581.543/0001-04<br/>
+  contato@vocebancario.com.br · +55 11 99186-9191<br/>
+  Material educacional de uso interno dos alunos. Não constitui recomendação de investimento nem aconselhamento tributário.
+</footer>
+
+</div>
+</body>
+</html>
