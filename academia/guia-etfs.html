@@ -30,6 +30,35 @@ body {
   font-family: var(--font-body); font-size: 14.5px; line-height: 1.65;
 }
 .page { max-width: 880px; margin: 0 auto; padding: 32px 22px 60px; }
+svg.fl { width: 1.15em; height: 0.8em; vertical-align: -0.08em; border-radius: 2px; }
+svg.flbig { width: 34px; height: 23px; border-radius: 4px; flex-shrink: 0; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
+
+/* ---- nav fixa ---- */
+.topnav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(247,245,240,0.94); backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.topnav .brand { font-family: var(--font-display); font-weight: 800; font-size: 15px; white-space: nowrap; }
+.topnav .brand a { color: var(--text); text-decoration: none; }
+.topnav .links { display: flex; gap: 2px 10px; flex-wrap: wrap; font-size: 12.5px; }
+.topnav .links a { color: var(--text-soft); text-decoration: none; font-weight: 600; padding: 3px 4px; }
+.topnav .links a:hover { color: var(--brand-blue); }
+.topnav .busca { flex: 1; min-width: 130px; max-width: 220px; margin-left: auto; }
+.topnav .busca input {
+  width: 100%; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
+  font-family: var(--font-mono); font-size: 12.5px; background: var(--bg-card); color: var(--text); outline: none;
+}
+.topnav .busca input:focus { border-color: var(--brand-blue); }
+.chips { display: flex; gap: 6px; align-items: center; }
+.chip {
+  border: 1px solid var(--border); background: var(--bg-card); border-radius: 999px;
+  padding: 4px 11px; font-size: 12px; font-weight: 600; cursor: pointer; color: var(--text-soft);
+  display: inline-flex; align-items: center; gap: 5px; font-family: var(--font-body);
+}
+.chip.on { border-color: var(--brand-blue); color: var(--brand-blue); background: rgba(0,136,204,0.08); }
+.contagem { font-family: var(--font-mono); font-size: 11px; color: var(--text-soft); white-space: nowrap; }
 
 /* ---- capa ---- */
 .capa { text-align: center; padding: 44px 20px 36px; border-bottom: 3px solid var(--brand-blue); margin-bottom: 8px; }
@@ -51,7 +80,7 @@ body {
 .sumario .cats a em { font-style: normal; color: var(--brand-blue); font-family: var(--font-mono); font-size: 11px; }
 
 /* ---- capítulos ---- */
-h2.cap { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin: 46px 0 6px; padding-top: 18px; border-top: 3px solid var(--brand-blue); }
+h2.cap { font-family: var(--font-display); font-weight: 800; font-size: 28px; margin: 46px 0 6px; padding-top: 18px; border-top: 3px solid var(--brand-blue); scroll-margin-top: 64px; }
 h2.cap .num { color: var(--brand-blue); font-family: var(--font-mono); font-size: 17px; vertical-align: middle; margin-right: 10px; }
 .lead { font-size: 15.5px; color: var(--text-soft); margin: 0 0 18px; }
 .box { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 18px 22px; margin: 14px 0; }
@@ -74,17 +103,43 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 .gloss div { background: var(--bg-card); border: 1px solid var(--border); border-radius: 10px; padding: 11px 15px; font-size: 13.5px; }
 .gloss b { color: var(--brand-blue); }
 
+/* ---- pizza ---- */
+.pizza-wrap { display: flex; gap: 28px; align-items: center; flex-wrap: wrap; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; margin: 14px 0; }
+.pie {
+  width: 220px; height: 220px; border-radius: 50%; flex-shrink: 0; margin: 0 auto;
+  background: conic-gradient(#0088cc 0% 40%, #2d8c5c 40% 70%, #eb8105 70% 85%, #a12026 85% 95%, #b8860b 95% 100%);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  print-color-adjust: exact; -webkit-print-color-adjust: exact;
+}
+.pizza-ctrl { flex: 1; min-width: 260px; }
+.fslider { display: flex; align-items: center; gap: 10px; margin: 9px 0; font-size: 13px; }
+.fdot { width: 13px; height: 13px; border-radius: 50%; flex-shrink: 0; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+.fname { flex: 1; min-width: 120px; font-weight: 600; }
+.fslider input { flex: 2; accent-color: var(--brand-blue); min-width: 90px; }
+.fpct { font-family: var(--font-mono); font-size: 13px; width: 44px; text-align: right; color: var(--brand-blue); font-weight: 600; }
+.pizza-note { font-size: 12px; color: var(--text-soft); margin-top: 10px; }
+.btn-simulador { display: inline-block; margin-top: 12px; background: var(--brand-blue); color: #fff; text-decoration: none; font-weight: 600; font-size: 13.5px; padding: 9px 18px; border-radius: 999px; }
+.btn-simulador:hover { filter: brightness(1.08); }
+
+/* ---- tese por país ---- */
+.paises { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 12px; }
+.pais { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; }
+.phead { display: flex; align-items: center; gap: 10px; font-family: var(--font-display); font-size: 18px; font-weight: 800; margin-bottom: 8px; }
+.ptk { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); display: flex; flex-wrap: wrap; gap: 6px; }
+.ptk a { font-family: var(--font-mono); font-size: 12px; font-weight: 600; color: var(--brand-blue); text-decoration: none; background: rgba(0,136,204,0.08); padding: 3px 10px; border-radius: 999px; }
+.ptk a:hover { background: rgba(0,136,204,0.16); }
+
 /* ---- catálogo ---- */
-.cat h3 { font-family: var(--font-display); font-size: 23px; font-weight: 800; margin: 40px 0 4px; padding-top: 14px; border-top: 2px solid var(--border); }
+.cat h3 { font-family: var(--font-display); font-size: 23px; font-weight: 800; margin: 40px 0 4px; padding-top: 14px; border-top: 2px solid var(--border); scroll-margin-top: 64px; }
 .cat h3 .ccount { font-family: var(--font-mono); font-size: 12px; color: var(--brand-blue); font-weight: 600; margin-left: 8px; }
 .cintro { color: var(--text-soft); font-size: 14px; margin: 4px 0 10px; }
 .bolso { background: #fdf8ec; border: 1px solid #e8d9ab; border-radius: 10px; padding: 10px 16px; font-size: 13.5px; margin: 0 0 16px; }
-.ficha { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin: 12px 0; scroll-margin-top: 20px; }
+.ficha { background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; padding: 16px 20px; margin: 12px 0; scroll-margin-top: 64px; }
 .ficha:target { border-color: var(--brand-blue); box-shadow: 0 0 0 3px rgba(0,136,204,0.18); }
 .ficha header { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .ficha .tk { font-family: var(--font-mono); font-weight: 600; font-size: 19px; color: var(--brand-blue); }
 .ficha .nm { font-weight: 600; font-size: 14.5px; flex: 1; }
-.ficha .flag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.ficha .flag { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 5px; }
 .f-br { background: rgba(45,140,92,0.1); color: #21663f; }
 .f-us { background: rgba(0,136,204,0.1); color: #005580; }
 .f-ie { background: rgba(235,129,5,0.12); color: #9a5503; }
@@ -93,33 +148,71 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 .flabel { display: block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text-soft); font-weight: 700; margin-bottom: 2px; }
 .fpitch { font-style: italic; border-left: 3px solid var(--brand-blue); padding-left: 12px; }
 .fpitch .flabel { font-style: normal; }
+.sem-resultado { display: none; text-align: center; color: var(--text-soft); padding: 30px; font-size: 14px; }
 
 /* ---- rodapé ---- */
 .timbre { margin-top: 56px; padding-top: 18px; border-top: 3px solid var(--brand-blue); text-align: center; font-size: 12px; color: var(--text-soft); line-height: 1.8; }
 .timbre b { color: var(--text); }
-.voltar { position: fixed; right: 18px; bottom: 18px; background: var(--brand-blue); color: #fff; text-decoration: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+.voltar { position: fixed; right: 18px; bottom: 18px; background: var(--brand-blue); color: #fff; text-decoration: none; width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 14px rgba(0,0,0,0.25); z-index: 99; }
 
 /* ---- impressão ---- */
 @page { size: A4; margin: 13mm 11mm; }
 @media print {
   body { background: #fff; font-size: 11.5px; }
   .page { max-width: none; padding: 0; }
-  .voltar { display: none; }
+  .voltar, .topnav, .btn-simulador, .fslider input { display: none !important; }
+  .ficha, .cat { display: block !important; }
   .capa { padding-top: 10px; }
-  .ficha, .box, .check li, .erros li, .gloss div, .bolso { page-break-inside: avoid; break-inside: avoid; box-shadow: none; }
+  .ficha, .box, .check li, .erros li, .gloss div, .bolso, .pais, .pizza-wrap { page-break-inside: avoid; break-inside: avoid; box-shadow: none; }
   h2.cap { page-break-before: always; break-before: page; border-top: none; margin-top: 0; }
   .sumario .cats { grid-template-columns: repeat(3, 1fr); }
+  .paises { grid-template-columns: repeat(2, 1fr); }
   a { color: inherit; }
   .ficha:target { box-shadow: none; }
+  .pie { box-shadow: none; }
 }
 @media (max-width: 560px) {
   .capa h1 { font-size: 32px; }
-  .gloss { grid-template-columns: 1fr; }
+  .gloss, .paises { grid-template-columns: 1fr; }
+  .topnav .links { display: none; }
 }
 </style>
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<clipPath id="fclip"><rect width="60" height="40" rx="5"/></clipPath>
+<symbol id="flag-br" viewBox="0 0 60 40"><g clip-path="url(#fclip)"><rect fill="#009c3b" width="60" height="40"/><path d="M30 5 55 20 30 35 5 20Z" fill="#ffdf00"/><circle cx="30" cy="20" r="8.5" fill="#002776"/><path d="M22.2 17.5 Q30 15.5 37.8 19.5" stroke="#fff" fill="none" stroke-width="1.6"/></g></symbol>
+<symbol id="flag-us" viewBox="0 0 60 40"><g clip-path="url(#fclip)"><rect fill="#b22234" width="60" height="40"/><rect fill="#fff" y="3.08" width="60" height="3.08"/><rect fill="#fff" y="9.23" width="60" height="3.08"/><rect fill="#fff" y="15.38" width="60" height="3.08"/><rect fill="#fff" y="21.54" width="60" height="3.08"/><rect fill="#fff" y="27.69" width="60" height="3.08"/><rect fill="#fff" y="33.85" width="60" height="3.08"/><rect fill="#3c3b6e" width="26" height="21.54"/><circle cx="4.5" cy="4.5" r="1.5" fill="#fff"/><circle cx="10.2" cy="4.5" r="1.5" fill="#fff"/><circle cx="15.9" cy="4.5" r="1.5" fill="#fff"/><circle cx="21.6" cy="4.5" r="1.5" fill="#fff"/><circle cx="4.5" cy="10.8" r="1.5" fill="#fff"/><circle cx="10.2" cy="10.8" r="1.5" fill="#fff"/><circle cx="15.9" cy="10.8" r="1.5" fill="#fff"/><circle cx="21.6" cy="10.8" r="1.5" fill="#fff"/><circle cx="4.5" cy="17.1" r="1.5" fill="#fff"/><circle cx="10.2" cy="17.1" r="1.5" fill="#fff"/><circle cx="15.9" cy="17.1" r="1.5" fill="#fff"/><circle cx="21.6" cy="17.1" r="1.5" fill="#fff"/></g></symbol>
+<symbol id="flag-ie" viewBox="0 0 60 40"><g clip-path="url(#fclip)"><rect fill="#169b62" width="20" height="40"/><rect fill="#ffffff" x="20" width="20" height="40"/><rect fill="#ff883e" x="40" width="20" height="40"/></g></symbol>
+<symbol id="flag-eu" viewBox="0 0 60 40"><g clip-path="url(#fclip)"><rect fill="#003399" width="60" height="40"/><circle cx="30.00" cy="10.00" r="1.7" fill="#ffcc00"/><circle cx="35.00" cy="11.34" r="1.7" fill="#ffcc00"/><circle cx="38.66" cy="15.00" r="1.7" fill="#ffcc00"/><circle cx="40.00" cy="20.00" r="1.7" fill="#ffcc00"/><circle cx="38.66" cy="25.00" r="1.7" fill="#ffcc00"/><circle cx="35.00" cy="28.66" r="1.7" fill="#ffcc00"/><circle cx="30.00" cy="30.00" r="1.7" fill="#ffcc00"/><circle cx="25.00" cy="28.66" r="1.7" fill="#ffcc00"/><circle cx="21.34" cy="25.00" r="1.7" fill="#ffcc00"/><circle cx="20.00" cy="20.00" r="1.7" fill="#ffcc00"/><circle cx="21.34" cy="15.00" r="1.7" fill="#ffcc00"/><circle cx="25.00" cy="11.34" r="1.7" fill="#ffcc00"/></g></symbol>
+<symbol id="flag-jp" viewBox="0 0 60 40"><g clip-path="url(#fclip)"><rect fill="#ffffff" width="60" height="40"/><rect fill="none" width="59" height="39" x="0.5" y="0.5" stroke="#d8d4c8"/><circle cx="30" cy="20" r="9" fill="#bc002d"/></g></symbol>
+<symbol id="flag-cn" viewBox="0 0 60 40"><g clip-path="url(#fclip)"><rect fill="#de2910" width="60" height="40"/><polygon fill="#ffde00" points="12,7 13.47,10.98 17.71,11.15 14.38,13.77 15.53,17.85 12,15.5 8.47,17.85 9.62,13.77 6.29,11.15 10.53,10.98"/><circle cx="21" cy="6" r="1.4" fill="#ffde00"/><circle cx="24" cy="10" r="1.4" fill="#ffde00"/><circle cx="24" cy="15" r="1.4" fill="#ffde00"/><circle cx="21" cy="19" r="1.4" fill="#ffde00"/></g></symbol>
+<symbol id="flag-in" viewBox="0 0 60 40"><g clip-path="url(#fclip)"><rect fill="#ff9933" width="60" height="13.33"/><rect fill="#ffffff" y="13.33" width="60" height="13.34"/><rect fill="#138808" y="26.67" width="60" height="13.33"/><circle cx="30" cy="20" r="4.6" fill="none" stroke="#000080" stroke-width="1.3"/><circle cx="30" cy="20" r="1" fill="#000080"/></g></symbol>
+<symbol id="flag-world" viewBox="0 0 60 40"><g clip-path="url(#fclip)"><rect fill="#eaf3f9" width="60" height="40"/><circle cx="30" cy="20" r="13.5" fill="#0088cc"/><ellipse cx="30" cy="20" rx="6.2" ry="13.5" fill="none" stroke="#fff" stroke-width="1.5"/><line x1="16.5" y1="20" x2="43.5" y2="20" stroke="#fff" stroke-width="1.5"/><path d="M18.5 12.5 Q30 17.5 41.5 12.5 M18.5 27.5 Q30 22.5 41.5 27.5" stroke="#fff" fill="none" stroke-width="1.5"/></g></symbol>
+</defs></svg>
 <a class="voltar" href="#topo" title="Voltar ao topo">↑</a>
+
+<nav class="topnav">
+  <span class="brand"><a href="#topo">📖 Super Guia de ETFs</a></span>
+  <span class="links">
+    <a href="#cap2">Escolher</a>
+    <a href="#cap3">Impostos</a>
+    <a href="#cap4">Pizza</a>
+    <a href="#cap5">Países</a>
+    <a href="#cap6">Catálogo</a>
+    <a href="#cap7">Erros</a>
+    <a href="#cap8">Glossário</a>
+  </span>
+  <span class="chips">
+    <button class="chip on" data-cust="" onclick="filtraCust(this)">🌐 Todos</button>
+    <button class="chip" data-cust="br" onclick="filtraCust(this)"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</button>
+    <button class="chip" data-cust="us" onclick="filtraCust(this)"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</button>
+    <button class="chip" data-cust="ie" onclick="filtraCust(this)"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</button>
+  </span>
+  <span class="busca"><input id="busca" type="search" placeholder="Buscar ticker…" oninput="filtra()" onkeydown="if(event.key==='Enter')pulaPrimeiro()"/></span>
+  <span class="contagem" id="contagem">100/100</span>
+</nav>
+
 <div class="page" id="topo">
 
 <header class="capa">
@@ -128,7 +221,7 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="sub">O manual de bolso do assessor: o que cada ETF faz, o risco que você precisa nomear e a frase que explica pro cliente — sem economês.</p>
   <div class="badges">
     <span>📚 100 ETFs catalogados</span>
-    <span>🇧🇷 B3 · 🇺🇸 EUA · 🇮🇪 UCITS</span>
+    <span><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3 · <svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA · <svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
     <span>🖨️ Pronto pra imprimir</span>
   </div>
 </header>
@@ -139,24 +232,26 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
     <a href="#cap1"><span class="n">01</span>ETF em 2 minutos</a>
     <a href="#cap2"><span class="n">02</span>Como escolher: as 6 verificações</a>
     <a href="#cap3"><span class="n">03</span>Tributação sem surpresa</a>
-    <a href="#cap4"><span class="n">04</span>Catálogo: 100 ETFs por função</a>
-    <a href="#cap5"><span class="n">05</span>Os 10 erros clássicos</a>
-    <a href="#cap6"><span class="n">06</span>Glossário do assessor</a>
+    <a href="#cap4"><span class="n">04</span>A pizza de alocação</a>
+    <a href="#cap5"><span class="n">05</span>A tese por país</a>
+    <a href="#cap6"><span class="n">06</span>Catálogo: 100 ETFs por função</a>
+    <a href="#cap7"><span class="n">07</span>Os 10 erros clássicos</a>
+    <a href="#cap8"><span class="n">08</span>Glossário do assessor</a>
   </div>
   <div class="cats">
-      <a href="#rf-brasil">🏦 Renda fixa Brasil <em>9</em></a>
-      <a href="#acoes-brasil">🇧🇷 Ações Brasil <em>11</em></a>
-      <a href="#imobiliario">🏢 Imobiliário — FIIs e REITs <em>2</em></a>
-      <a href="#metais-cripto">🥇 Ouro, prata e cripto <em>8</em></a>
-      <a href="#inter-b3">🌎 Internacionais pela B3 <em>6</em></a>
-      <a href="#eua-nucleo">🇺🇸 EUA — o núcleo <em>12</em></a>
-      <a href="#eua-fatores">🎯 EUA — fatores e dividendos <em>10</em></a>
-      <a href="#eua-setoriais">🏭 EUA — setoriais <em>4</em></a>
-      <a href="#ex-eua">🌏 Mundo ex-EUA e emergentes <em>11</em></a>
-      <a href="#globais">🌐 O mundo inteiro em um ticker <em>4</em></a>
-      <a href="#renda-dolar">💵 Renda mensal em dólar <em>3</em></a>
-      <a href="#rf-dolar">🏛️ Renda fixa em dólar <em>10</em></a>
-      <a href="#tematicos">🚀 Temáticos — a prateleira das teses <em>10</em></a>
+      <a href="#rf-brasil"><span class="cemoji">🏦</span> Renda fixa Brasil <em>9</em></a>
+      <a href="#acoes-brasil"><span class="cemoji"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg></span> Ações Brasil <em>11</em></a>
+      <a href="#imobiliario"><span class="cemoji">🏢</span> Imobiliário — FIIs e REITs <em>2</em></a>
+      <a href="#metais-cripto"><span class="cemoji">🥇</span> Ouro, prata e cripto <em>8</em></a>
+      <a href="#inter-b3"><span class="cemoji">🌎</span> Internacionais pela B3 <em>6</em></a>
+      <a href="#eua-nucleo"><span class="cemoji"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg></span> EUA — o núcleo <em>12</em></a>
+      <a href="#eua-fatores"><span class="cemoji">🎯</span> EUA — fatores e dividendos <em>10</em></a>
+      <a href="#eua-setoriais"><span class="cemoji">🏭</span> EUA — setoriais <em>4</em></a>
+      <a href="#ex-eua"><span class="cemoji">🌏</span> Mundo ex-EUA e emergentes <em>11</em></a>
+      <a href="#globais"><span class="cemoji"><svg class="fl" aria-hidden="true"><use href="#flag-world"/></svg></span> O mundo inteiro em um ticker <em>4</em></a>
+      <a href="#renda-dolar"><span class="cemoji">💵</span> Renda mensal em dólar <em>3</em></a>
+      <a href="#rf-dolar"><span class="cemoji">🏛️</span> Renda fixa em dólar <em>10</em></a>
+      <a href="#tematicos"><span class="cemoji">🚀</span> Temáticos — a prateleira das teses <em>10</em></a>
   </div>
 </nav>
 
@@ -215,43 +310,43 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 <div class="tbl-wrap"><table>
   <tr><th>Onde</th><th>O quê</th><th>Regra geral</th><th>Pegadinha</th></tr>
   <tr>
-    <td><b>B3</b></td>
+    <td><b><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</b></td>
     <td>ETF de ações<br/>(BOVA11, IVVB11, HASH11…)</td>
     <td>15% sobre o ganho na venda (swing trade); 20% em day trade. Apuração e DARF mensais.</td>
     <td><b>NÃO existe isenção de R$ 20 mil</b> — esse benefício é de ação à vista, não de ETF.</td>
   </tr>
   <tr>
-    <td><b>B3</b></td>
+    <td><b><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</b></td>
     <td>ETF de renda fixa<br/>(LFTS11, IMAB11, IRFM11…)</td>
     <td>Alíquota pelo prazo médio da carteira do índice: 25% (até 180 dias), 20% (181–720), 15% (acima de 720 — o caso dos principais). Retido na fonte na venda.</td>
     <td><b>Sem come-cotas</b> — vantagem real sobre fundo tradicional: o imposto só existe quando você decide vender.</td>
   </tr>
   <tr>
-    <td><b>B3</b></td>
+    <td><b><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</b></td>
     <td>ETF de FII (XFIX11)</td>
     <td>Tributa como ETF de ações: 15% no ganho.</td>
     <td>O rendimento mensal isento do FII comprado direto <b>não atravessa</b> o ETF.</td>
   </tr>
   <tr>
-    <td><b>Exterior</b></td>
+    <td><b>🌎 Exterior</b></td>
     <td>Ganhos e dividendos<br/>(VOO, VWRA, JEPI…)</td>
     <td>Lei 14.754/2023: 15% sobre ganhos e rendimentos do exterior, apurados na declaração anual. Perdas no exterior podem compensar ganhos, dentro das regras.</td>
     <td>Câmbio entra no cálculo do custo e da venda — guarde os comprovantes de cada remessa.</td>
   </tr>
   <tr>
-    <td><b>EUA</b></td>
+    <td><b><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</b></td>
     <td>Dividendos de ETF americano</td>
     <td>Retenção de 30% na fonte para investidor brasileiro (sem tratado).</td>
     <td>Em ETF de renda (JEPI, QYLD) a mordida é grande — o yield anunciado não é o seu yield.</td>
   </tr>
   <tr>
-    <td><b>EUA</b></td>
+    <td><b><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</b></td>
     <td>Sucessão (estate tax)</td>
     <td>Ativos domiciliados nos EUA acima de US$ 60 mil podem ser tributados em até 40% na herança de não-residente.</td>
     <td>O motivo nº 1 de patrimônios maiores preferirem domicílio irlandês.</td>
   </tr>
   <tr>
-    <td><b>Irlanda</b></td>
+    <td><b><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> Irlanda</b></td>
     <td>ETFs UCITS<br/>(VUAA, CSPX, VWRA, IWDA…)</td>
     <td>O fundo retém só 15% dos dividendos americanos (tratado Irlanda–EUA); classes acumuladoras reinvestem sem distribuir; sem estate tax americano. Pro brasileiro, vale a mesma regra de 15% da lei 14.754 na venda.</td>
     <td>Negociam na bolsa de Londres/Europa — exige corretora com acesso internacional de verdade.</td>
@@ -264,8 +359,123 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 </div>
 
 <!-- ============================================================ CAP 4 -->
-<h2 class="cap" id="cap4"><span class="num">04</span>Catálogo: 100 ETFs por função</h2>
-<p class="lead">Organizado pela pergunta certa — não "qual ETF é bom?", mas <b>"qual função esta posição cumpre na carteira?"</b>. Cada ficha traz o papel, o risco que você nomeia antes do cliente descobrir sozinho, e a explicação pronta em uma frase.</p>
+<h2 class="cap" id="cap4"><span class="num">04</span>A pizza de alocação</h2>
+<p class="lead">Carteira boa se desenha antes de escolher ticker: primeiro as fatias por <b>função</b>, depois o ETF que cumpre cada função. Mexa nos controles e veja a pizza se redesenhar.</p>
+
+<div class="pizza-wrap">
+  <div class="pie" id="pie"></div>
+  <div class="pizza-ctrl">
+
+    <label class="fslider" data-fatia="nucleo">
+      <span class="fdot" style="background:#0088cc"></span>
+      <span class="fname">Núcleo global de ações</span>
+      <input type="range" min="0" max="100" step="5" value="40" oninput="pizzaAtualiza()"/>
+      <span class="fpct">40%</span>
+    </label>
+
+    <label class="fslider" data-fatia="rf">
+      <span class="fdot" style="background:#2d8c5c"></span>
+      <span class="fname">Renda fixa (BR + dólar)</span>
+      <input type="range" min="0" max="100" step="5" value="30" oninput="pizzaAtualiza()"/>
+      <span class="fpct">30%</span>
+    </label>
+
+    <label class="fslider" data-fatia="regioes">
+      <span class="fdot" style="background:#eb8105"></span>
+      <span class="fname">Satélites: países e fatores</span>
+      <input type="range" min="0" max="100" step="5" value="15" oninput="pizzaAtualiza()"/>
+      <span class="fpct">15%</span>
+    </label>
+
+    <label class="fslider" data-fatia="tema">
+      <span class="fdot" style="background:#a12026"></span>
+      <span class="fname">Temáticos e alternativos</span>
+      <input type="range" min="0" max="100" step="5" value="10" oninput="pizzaAtualiza()"/>
+      <span class="fpct">10%</span>
+    </label>
+
+    <label class="fslider" data-fatia="caixa">
+      <span class="fdot" style="background:#b8860b"></span>
+      <span class="fname">Caixa remunerado</span>
+      <input type="range" min="0" max="100" step="5" value="5" oninput="pizzaAtualiza()"/>
+      <span class="fpct">5%</span>
+    </label>
+    <div class="pizza-note">⚠️ <b>Ponto de partida didático</b> — não é recomendação. A pizza certa depende do perfil, do prazo e dos objetivos do SEU cliente: use os controles pra desenhar a conversa, e o simulador pra testar com dados reais.</div>
+    <a class="btn-simulador" href="index.html">🧪 Testar essa carteira no simulador (Modo Livre) →</a>
+  </div>
+</div>
+
+<div class="box destaque">
+  <h4>Como ler as fatias</h4>
+  <p style="margin:0;"><b>Núcleo global de ações</b> é o motor de longo prazo (cap. <a href="#eua-nucleo">EUA</a> e <a href="#globais">globais</a>); <b>renda fixa</b> é o amortecedor que permite segurar o motor ligado na turbulência (<a href="#rf-brasil">BR</a> + <a href="#rf-dolar">dólar</a>); <b>satélites regionais e de fator</b> são as ênfases com opinião (<a href="#ex-eua">países</a>, <a href="#eua-fatores">fatores</a>); <b>temáticos e alternativos</b> são as teses de convicção em dose pequena (<a href="#tematicos">temáticos</a>, <a href="#metais-cripto">ouro/cripto</a>); e <b>caixa remunerado</b> é a munição pra oportunidade (<a href="#SHV">SHV</a>, <a href="#LFTS11">LFTS11</a>).</p>
+</div>
+
+<!-- ============================================================ CAP 5 -->
+<h2 class="cap" id="cap5"><span class="num">05</span>A tese por país</h2>
+<p class="lead">Comprar um país é comprar uma história. Antes do ticker, saiba contar a história — e o outro lado dela.</p>
+
+<div class="paises">
+
+<div class="pais">
+  <div class="phead"><svg class="flbig" aria-hidden="true"><use href="#flag-us"/></svg><b>Estados Unidos</b></div>
+  <div class="fsec"><span class="flabel">🎯 O que você está comprando</span>As empresas mais lucrativas e inovadoras do planeta — e o dólar junto, de brinde. É o mercado mais profundo, mais líquido e mais estudado do mundo; a fatia dominante de qualquer índice global.</div>
+  <div class="fsec"><span class="flabel">⚠️ O outro lado da tese</span>Valuation historicamente esticado e concentração recorde nas big techs: comprar "os EUA" hoje é comprar muito de poucas empresas.</div>
+  <div class="ptk"><a href="#VOO">VOO</a><a href="#VTI">VTI</a><a href="#QQQ">QQQ</a><a href="#IVVB11">IVVB11</a><a href="#NASD11">NASD11</a><a href="#VUAA">VUAA</a><a href="#CSPX">CSPX</a></div>
+</div>
+
+<div class="pais">
+  <div class="phead"><svg class="flbig" aria-hidden="true"><use href="#flag-br"/></svg><b>Brasil</b></div>
+  <div class="fsec"><span class="flabel">🎯 O que você está comprando</span>Value cíclico com juro real dos mais altos do mundo: bancos, commodities e utilities negociando com desconto de percepção. Quando o vento vira (juro caindo, fluxo estrangeiro voltando), a bolsa local anda rápido.</div>
+  <div class="fsec"><span class="flabel">⚠️ O outro lado da tese</span>O desconto tem endereço: fiscal, política e um mercado pequeno na escala global. Home bias já expõe o cliente ao Brasil pelo emprego e pelos imóveis — a carteira não precisa dobrar a aposta.</div>
+  <div class="ptk"><a href="#BOVA11">BOVA11</a><a href="#SMAL11">SMAL11</a><a href="#DIVO11">DIVO11</a><a href="#EWZ">EWZ</a></div>
+</div>
+
+<div class="pais">
+  <div class="phead"><svg class="flbig" aria-hidden="true"><use href="#flag-eu"/></svg><b>Europa</b></div>
+  <div class="fsec"><span class="flabel">🎯 O que você está comprando</span>Campeãs globais (luxo, saúde, industriais, energia) a múltiplos mais comportados que os americanos, com tradição de dividendos. Receita global, passaporte europeu.</div>
+  <div class="fsec"><span class="flabel">⚠️ O outro lado da tese</span>Crescimento estrutural baixo, demografia pesada e dependência energética — a região entrega valor, raramente empolgação.</div>
+  <div class="ptk"><a href="#VGK">VGK</a><a href="#EURP11">EURP11</a></div>
+</div>
+
+<div class="pais">
+  <div class="phead"><svg class="flbig" aria-hidden="true"><use href="#flag-jp"/></svg><b>Japão</b></div>
+  <div class="fsec"><span class="flabel">🎯 O que você está comprando</span>A reforma de governança que destravou décadas de caixa parado: empresas recomprando ações e devolvendo capital ao acionista como nunca. O value com catalisador do mundo desenvolvido.</div>
+  <div class="fsec"><span class="flabel">⚠️ O outro lado da tese</span>Demografia mais desafiadora do planeta e o iene — a moeda pode devolver no câmbio o que a bolsa entrega no índice.</div>
+  <div class="ptk"><a href="#EWJ">EWJ</a></div>
+</div>
+
+<div class="pais">
+  <div class="phead"><svg class="flbig" aria-hidden="true"><use href="#flag-cn"/></svg><b>China</b></div>
+  <div class="fsec"><span class="flabel">🎯 O que você está comprando</span>Escala de 1,4 bilhão de consumidores e gigantes de tecnologia negociando com múltiplos de empresa madura. Pra quem aceita a tese, é crescimento pagando preço de valor.</div>
+  <div class="fsec"><span class="flabel">⚠️ O outro lado da tese</span>O desconto existe por motivo: regulação imprevisível, tensão geopolítica e interferência estatal. Posição de convicção, dimensionada como tal.</div>
+  <div class="ptk"><a href="#MCHI">MCHI</a><a href="#FXI">FXI</a></div>
+</div>
+
+<div class="pais">
+  <div class="phead"><svg class="flbig" aria-hidden="true"><use href="#flag-in"/></svg><b>Índia</b></div>
+  <div class="fsec"><span class="flabel">🎯 O que você está comprando</span>A demografia que a China teve há 20 anos + digitalização acelerada: o candidato a motor de crescimento estrutural da década. Mercado doméstico gigante e em formalização.</div>
+  <div class="fsec"><span class="flabel">⚠️ O outro lado da tese</span>Todo mundo já sabe — e o valuation cobra caro por isso. É a tese cara do bloco emergente.</div>
+  <div class="ptk"><a href="#INDA">INDA</a></div>
+</div>
+
+<div class="pais">
+  <div class="phead"><svg class="flbig" aria-hidden="true"><use href="#flag-world"/></svg><b>Emergentes em bloco</b></div>
+  <div class="fsec"><span class="flabel">🎯 O que você está comprando</span>O crescimento emergente sem escolher vencedor: uma cesta de dezenas de países onde os ciclos locais se compensam.</div>
+  <div class="fsec"><span class="flabel">⚠️ O outro lado da tese</span>A cesta não é neutra: China e Taiwan dominam o peso. Confira a composição antes de dizer "diversificado".</div>
+  <div class="ptk"><a href="#VWO">VWO</a><a href="#EEM">EEM</a><a href="#EIMI">EIMI</a></div>
+</div>
+
+<div class="pais">
+  <div class="phead"><svg class="flbig" aria-hidden="true"><use href="#flag-world"/></svg><b>O mundo inteiro</b></div>
+  <div class="fsec"><span class="flabel">🎯 O que você está comprando</span>A não-aposta: capitalização de mercado global, todos os países desenvolvidos (e, no ACWI/VWRA, emergentes também) se rebalanceando sozinhos. A resposta padrão de quem não quer ter opinião de país.</div>
+  <div class="fsec"><span class="flabel">⚠️ O outro lado da tese</span>Sem opinião também é uma posição: hoje "o mundo" é majoritariamente EUA — a diversificação geográfica é menor do que parece no nome.</div>
+  <div class="ptk"><a href="#VWRA">VWRA</a><a href="#ACWI">ACWI</a><a href="#IWDA">IWDA</a><a href="#SWRD">SWRD</a><a href="#ACWI11">ACWI11</a><a href="#WRLD11">WRLD11</a></div>
+</div>
+</div>
+
+<!-- ============================================================ CAP 6 -->
+<h2 class="cap" id="cap6"><span class="num">06</span>Catálogo: 100 ETFs por função</h2>
+<p class="lead">Organizado pela pergunta certa — não "qual ETF é bom?", mas <b>"qual função esta posição cumpre na carteira?"</b>. Use a busca e os filtros da barra do topo pra achar qualquer ticker. Cada ficha traz o papel, o risco que você nomeia antes do cliente descobrir sozinho, e a explicação pronta em uma frase.</p>
 
 
 <section class="cat" id="rf-brasil">
@@ -273,11 +483,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">São os ETFs que substituem (ou complementam) o Tesouro Direto e os fundos DI: uma cesta de títulos públicos ou privados dentro de um ticker da B3. A grande sacada é operacional — um clique compra a carteira inteira, sem custódia de título, sem vencimento pra rolar — e tributária: <b>ETF de renda fixa não tem come-cotas</b>, o imposto só aparece quando você vende.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Pós-fixado é o colchão, IMA-B é a proteção de poder de compra, prefixado é aposta em queda de juro. Nomeie qual função o cliente está comprando antes de escolher o ticker.</div>
   
-<article class="ficha" id="LFTS11">
+<article class="ficha" id="LFTS11" data-cust="br" data-busca="lfts11 it now tesouro selic rf pos-fixado">
   <header>
     <span class="tk">LFTS11</span>
     <span class="nm">It Now Tesouro Selic</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,19% a.a. · segue Tesouro Selic</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O caixa remunerado da carteira: reserva e dinheiro com data marcada, rendendo perto da Selic todo dia.</div>
@@ -285,11 +495,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;É a sua reserva rendendo Selic sem vencimento e com liquidez de bolsa — o dinheiro que dorme tranquilo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="LFTB11">
+<article class="ficha" id="LFTB11" data-cust="br" data-busca="lftb11 investo tesouro selic rf pos-fixado">
   <header>
     <span class="tk">LFTB11</span>
     <span class="nm">Investo Tesouro Selic</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Investo · taxa 0,19% a.a. · segue Tesouro Selic Target 760</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesma função do LFTS11 (caixa em Tesouro Selic) — alternativa de gestora pra mesma prateleira.</div>
@@ -297,11 +507,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Seu caixa no Tesouro Selic, negociado em bolsa — segurança de título público com praticidade de ação.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IMAB11">
+<article class="ficha" id="IMAB11" data-cust="br" data-busca="imab11 it now ima-b rf inflacao">
   <header>
     <span class="tk">IMAB11</span>
     <span class="nm">It Now IMA-B</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,25% a.a. · segue IMA-B</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O núcleo de inflação da carteira: cesta de Tesouro IPCA+ que protege o poder de compra no médio-longo prazo.</div>
@@ -309,11 +519,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Inflação alta? Você recebe IPCA + juro real. É o seguro do seu poder de compra — pense em anos, não em meses.&rdquo;</div>
 </article>
 
-<article class="ficha" id="B5P211">
+<article class="ficha" id="B5P211" data-cust="br" data-busca="b5p211 it now ima-b 5 p2 rf inflacao curta">
   <header>
     <span class="tk">B5P211</span>
     <span class="nm">It Now IMA-B 5 P2</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,20% a.a. · segue IMA-B 5 P2</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>IPCA+ de prazo curto (até 5 anos): proteção de inflação com MUITO menos solavanco que o IMA-B cheio.</div>
@@ -321,11 +531,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Proteção contra inflação sem montanha-russa: a versão suave do Tesouro IPCA+ pra objetivos mais próximos.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IB5M11">
+<article class="ficha" id="IB5M11" data-cust="br" data-busca="ib5m11 it now ima-b 5+ rf inflacao longa">
   <header>
     <span class="tk">IB5M11</span>
     <span class="nm">It Now IMA-B 5+</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,25% a.a. · segue IMA-B 5+</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>IPCA+ longo (5+ anos): a ponta agressiva da renda fixa — máxima sensibilidade ao juro real.</div>
@@ -333,11 +543,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O prêmio mais gordo da renda fixa brasileira — pra quem pode esperar o longo prazo trabalhar a favor.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IRFM11">
+<article class="ficha" id="IRFM11" data-cust="br" data-busca="irfm11 it now irf-m p2 rf prefixado">
   <header>
     <span class="tk">IRFM11</span>
     <span class="nm">It Now IRF-M P2</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,20% a.a. · segue IRF-M P2</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Aposta em queda de juros com prazo médio: prefixados que se valorizam quando a curva fecha.</div>
@@ -345,11 +555,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Se a Selic cair como o mercado espera, você trava o juro alto de hoje — e o preço do título te paga por isso.&rdquo;</div>
 </article>
 
-<article class="ficha" id="FIXA11">
+<article class="ficha" id="FIXA11" data-cust="br" data-busca="fixa11 mirae rf pre rf prefixado">
   <header>
     <span class="tk">FIXA11</span>
     <span class="nm">Mirae RF Pre</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Mirae Asset · taxa 0,30% a.a. · segue S&amp;P/B3 Prefixados</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Prefixados pela régua S&amp;P/B3 — mesma tese do IRFM11 com outro índice e gestora.</div>
@@ -357,11 +567,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Uma cesta de prefixados pra capturar o ciclo de queda de juros sem escolher vencimento a dedo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IDKA11">
+<article class="ficha" id="IDKA11" data-cust="br" data-busca="idka11 it now irf-m p3 rf prefixado">
   <header>
     <span class="tk">IDKA11</span>
     <span class="nm">It Now IRF-M P3</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,25% a.a. · segue IRF-M P3</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Prefixados mais longos (IRF-M P3): mais sensibilidade à curva = mais prêmio se o juro ceder.</div>
@@ -369,11 +579,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A versão turbinada da aposta em juros: prazo maior, prêmio maior — pra quem aguenta ver o preço balançar.&rdquo;</div>
 </article>
 
-<article class="ficha" id="DEBB11">
+<article class="ficha" id="DEBB11" data-cust="br" data-busca="debb11 btg debentures di rf credito">
   <header>
     <span class="tk">DEBB11</span>
     <span class="nm">BTG Debentures DI</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">BTG Pactual · taxa 0,60% a.a. · segue Teva Debentures DI</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Crédito privado incentivado atrelado ao CDI: turbina o pós-fixado com o spread das debêntures.</div>
@@ -383,15 +593,15 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 </section>
 
 <section class="cat" id="acoes-brasil">
-  <h3><span class="cemoji">🇧🇷</span> Ações Brasil <span class="ccount">11 ETFs</span></h3>
+  <h3><span class="cemoji"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg></span> Ações Brasil <span class="ccount">11 ETFs</span></h3>
   <p class="cintro">A bolsa brasileira em cestas prontas: do índice cheio (Ibovespa) às fatias — small caps, dividendos, setores. Aqui a conversa com o cliente costuma começar por BOVA11 e amadurecer para as variações quando ele entende o que quer enfatizar.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Índice cheio primeiro, tempero depois. Small caps e setoriais são complemento de convicção, nunca o prato principal.</div>
   
-<article class="ficha" id="BOVA11">
+<article class="ficha" id="BOVA11" data-cust="br" data-busca="bova11 ishares ibovespa acoes br">
   <header>
     <span class="tk">BOVA11</span>
     <span class="nm">iShares Ibovespa</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">BlackRock · taxa 0,10% a.a. · segue Ibovespa</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O beta do Brasil em 1 ticker: núcleo de renda variável local, líquido e barato.</div>
@@ -399,11 +609,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As maiores empresas do país numa cota só — o jeito mais simples e líquido de ter bolsa brasileira.&rdquo;</div>
 </article>
 
-<article class="ficha" id="BOVV11">
+<article class="ficha" id="BOVV11" data-cust="br" data-busca="bovv11 it now ibovespa acoes br">
   <header>
     <span class="tk">BOVV11</span>
     <span class="nm">It Now Ibovespa</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,10% a.a. · segue Ibovespa</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesma exposição do BOVA11 (Ibovespa) — alternativa de gestora, útil pra comparar spread e liquidez.</div>
@@ -411,11 +621,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Ibovespa em cota única — mesma tese do BOVA11, escolha pelo custo de operar no dia.&rdquo;</div>
 </article>
 
-<article class="ficha" id="PIBB11">
+<article class="ficha" id="PIBB11" data-cust="br" data-busca="pibb11 it now ibrx-50 acoes br">
   <header>
     <span class="tk">PIBB11</span>
     <span class="nm">It Now IBrX-50</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,06% a.a. · segue IBrX-50</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>IBrX-50 com taxa mínima histórica: as 50 mais negociadas, custo de manutenção quase zero.</div>
@@ -423,11 +633,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bolsa brasileira com uma das menores taxas do mercado — feita pra quem compra e SEGURA.&rdquo;</div>
 </article>
 
-<article class="ficha" id="SMAL11">
+<article class="ficha" id="SMAL11" data-cust="br" data-busca="smal11 ishares small cap small caps br">
   <header>
     <span class="tk">SMAL11</span>
     <span class="nm">iShares Small Cap</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">BlackRock · taxa 0,50% a.a. · segue SMLL</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Small caps brasileiras: o motor de crescimento da RV local, ciclo-sensível.</div>
@@ -435,11 +645,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As empresas que podem dobrar de tamanho — em cesta, porque escolher UMA small é loteria.&rdquo;</div>
 </article>
 
-<article class="ficha" id="DIVO11">
+<article class="ficha" id="DIVO11" data-cust="br" data-busca="divo11 it now dividendos dividendos br">
   <header>
     <span class="tk">DIVO11</span>
     <span class="nm">It Now Dividendos</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,50% a.a. · segue IDIV</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Empresas pagadoras (IDIV): perfil mais defensivo dentro da bolsa BR, caixa recorrente.</div>
@@ -447,11 +657,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As boas pagadoras do Brasil numa cesta — perfil mais estável de bolsa, com o retorno compondo dentro da cota.&rdquo;</div>
 </article>
 
-<article class="ficha" id="DIVD11">
+<article class="ficha" id="DIVD11" data-cust="br" data-busca="divd11 it now dividendos dist dividendos br">
   <header>
     <span class="tk">DIVD11</span>
     <span class="nm">It Now Dividendos Dist</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,50% a.a. · segue IDIV</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesma prateleira do DIVO11 (IDIV) — confira na B3 o tratamento de proventos da versão atual antes de prometer renda.</div>
@@ -459,11 +669,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bolsa de dividendos em cota única — o filtro das empresas que remuneram o acionista.&rdquo;</div>
 </article>
 
-<article class="ficha" id="MATB11">
+<article class="ficha" id="MATB11" data-cust="br" data-busca="matb11 it now materiais setorial">
   <header>
     <span class="tk">MATB11</span>
     <span class="nm">It Now Materiais</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,50% a.a. · segue Materiais Basicos</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Setorial de materiais básicos: mineração, siderurgia, papel — o Brasil exportador.</div>
@@ -471,11 +681,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A aposta no Brasil que o mundo compra: commodities em cesta, sem escolher entre Vale e Suzano.&rdquo;</div>
 </article>
 
-<article class="ficha" id="FIND11">
+<article class="ficha" id="FIND11" data-cust="br" data-busca="find11 it now financeiro setorial">
   <header>
     <span class="tk">FIND11</span>
     <span class="nm">It Now Financeiro</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,60% a.a. · segue IFNC</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Setorial financeiro (IFNC): concentra bancos, seguradoras e B3 — aposta direcional no setor.</div>
@@ -483,11 +693,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O sistema financeiro brasileiro em uma cota — pra quem acredita no setor mais lucrativo da bolsa.&rdquo;</div>
 </article>
 
-<article class="ficha" id="GOVE11">
+<article class="ficha" id="GOVE11" data-cust="br" data-busca="gove11 it now governanca governanca">
   <header>
     <span class="tk">GOVE11</span>
     <span class="nm">It Now Governanca</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,50% a.a. · segue IGC-NM</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Filtro de governança (IGC-NM): empresas com padrões mais altos de gestão.</div>
@@ -495,11 +705,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Investir nas empresas que tratam o minoritário a sério — governança como critério, não como discurso.&rdquo;</div>
 </article>
 
-<article class="ficha" id="ISUS11">
+<article class="ficha" id="ISUS11" data-cust="br" data-busca="isus11 it now sustentabilidade esg">
   <header>
     <span class="tk">ISUS11</span>
     <span class="nm">It Now Sustentabilidade</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,40% a.a. · segue ISE</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>ESG brasileiro (ISE): tese de sustentabilidade aplicada à bolsa local.</div>
@@ -507,11 +717,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Pra quem quer que o dinheiro invista de acordo com os valores — sem abrir mão de ser bolsa.&rdquo;</div>
 </article>
 
-<article class="ficha" id="TECK11">
+<article class="ficha" id="TECK11" data-cust="br" data-busca="teck11 it now top 10 tech tecnologia">
   <header>
     <span class="tk">TECK11</span>
     <span class="nm">It Now Top 10 Tech</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,25% a.a. · segue Top 10 Tech</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Tecnologia via B3: cesta enxuta das top 10 techs disponíveis ao investidor local.</div>
@@ -525,11 +735,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">Tijolo e papel via bolsa, nos dois hemisférios: o XFIX11 compra o índice de fundos imobiliários brasileiros de uma vez; o VNQ faz o mesmo com os REITs americanos. Atenção redobrada à tributação — é aqui que mora um dos erros mais caros do varejo (veja o capítulo de impostos).</p>
   <div class="bolso"><b>Regra de bolso ·</b> ETF de FII <b>não herda</b> a isenção do rendimento mensal do FII comprado direto. Se a tese do cliente é renda mensal isenta, o instrumento é o FII, não o ETF.</div>
   
-<article class="ficha" id="XFIX11">
+<article class="ficha" id="XFIX11" data-cust="br" data-busca="xfix11 ishares ifix fiis">
   <header>
     <span class="tk">XFIX11</span>
     <span class="nm">iShares IFIX</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">BlackRock · taxa 0,29% a.a. · segue IFIX</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O IFIX em cota única: exposição diversificada a fundos imobiliários sem montar carteira tijolo a tijolo.</div>
@@ -537,11 +747,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Todo o mercado de FIIs numa cota — diversificação imobiliária instantânea, com a tributação própria de ETF.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VNQ">
+<article class="ficha" id="VNQ" data-cust="us" data-busca="vnq vanguard real estate reits eua">
   <header>
     <span class="tk">VNQ</span>
     <span class="nm">Vanguard Real Estate</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,12% a.a. · segue MSCI US REIT</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>REITs americanos: renda imobiliária em dólar — shoppings, galpões logísticos, data centers e torres de celular.</div>
@@ -555,11 +765,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">Reservas de valor e ativos de descorrelação. O ouro é o seguro clássico contra stress; a prata é a prima industrial e mais volátil; cripto via ETF resolve a fricção de custódia (sem carteira, sem chave privada) ao custo de uma taxa de administração.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Posição de seguro se mede em pontos percentuais, não em dezenas. E cripto via ETF continua sendo cripto: a embalagem regulada não reduz a volatilidade do que está dentro.</div>
   
-<article class="ficha" id="GOLD11">
+<article class="ficha" id="GOLD11" data-cust="br" data-busca="gold11 trend ouro commodities">
   <header>
     <span class="tk">GOLD11</span>
     <span class="nm">Trend Ouro</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">XP Asset · taxa 0,30% a.a. · segue LBMA Gold Price</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Ouro em reais: o seguro clássico contra crise e inflação global, com efeito câmbio embutido.</div>
@@ -567,11 +777,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O ativo de 5 mil anos na sua corretora: proteção que sobe quando o mercado treme — e em dólar.&rdquo;</div>
 </article>
 
-<article class="ficha" id="GLD">
+<article class="ficha" id="GLD" data-cust="us" data-busca="gld spdr gold trust ouro">
   <header>
     <span class="tk">GLD</span>
     <span class="nm">SPDR Gold Trust</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">State Street · taxa 0,40% a.a. · segue LBMA Gold Price</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O maior ETF de ouro do mundo: proteção clássica em dólar.</div>
@@ -579,11 +789,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Ouro físico guardado em cofre, negociado como ação — o seguro global na forma mais líquida.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IAU">
+<article class="ficha" id="IAU" data-cust="us" data-busca="iau ishares gold trust ouro">
   <header>
     <span class="tk">IAU</span>
     <span class="nm">iShares Gold Trust</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,25% a.a. · segue LBMA Gold Price</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Ouro com taxa menor que o GLD: mesma proteção, custo de carregar mais leve.</div>
@@ -591,11 +801,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O mesmo ouro, mais barato de segurar — pra posição de longo prazo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="SLV">
+<article class="ficha" id="SLV" data-cust="us" data-busca="slv ishares silver trust prata">
   <header>
     <span class="tk">SLV</span>
     <span class="nm">iShares Silver Trust</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,50% a.a. · segue LBMA Silver Price</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Prata: metal precioso com pé na indústria (solar, eletrônica) — híbrido de proteção e ciclo.</div>
@@ -603,11 +813,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A prima agitada do ouro: proteção que também surfa o ciclo industrial.&rdquo;</div>
 </article>
 
-<article class="ficha" id="HASH11">
+<article class="ficha" id="HASH11" data-cust="br" data-busca="hash11 hashdex crypto criptoativos">
   <header>
     <span class="tk">HASH11</span>
     <span class="nm">Hashdex Crypto</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Hashdex · taxa 1,30% a.a. · segue NCI Top 10</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Cesta das maiores criptos (NCI): exposição ao tema sem escolher moeda nem abrir exchange.</div>
@@ -615,11 +825,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O mercado cripto inteiro numa cota regulada na B3 — participação no tema com tamanho sob controle.&rdquo;</div>
 </article>
 
-<article class="ficha" id="QBTC11">
+<article class="ficha" id="QBTC11" data-cust="br" data-busca="qbtc11 qr bitcoin bitcoin">
   <header>
     <span class="tk">QBTC11</span>
     <span class="nm">QR Bitcoin</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">QR Asset · taxa 0,70% a.a. · segue CME CF Bitcoin</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Bitcoin puro via B3: a tese 'ouro digital' isolada, sem altcoins.</div>
@@ -627,11 +837,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bitcoin na sua corretora de sempre, sem carteira digital nem chave privada — exposição direta e regulada.&rdquo;</div>
 </article>
 
-<article class="ficha" id="BITH11">
+<article class="ficha" id="BITH11" data-cust="br" data-busca="bith11 hashdex bitcoin bitcoin">
   <header>
     <span class="tk">BITH11</span>
     <span class="nm">Hashdex Bitcoin</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Hashdex · taxa 0,70% a.a. · segue Nasdaq Bitcoin</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Bitcoin via Hashdex — mesma prateleira do QBTC11, alternativa de emissor.</div>
@@ -639,11 +849,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O mesmo Bitcoin, em outro emissor — escolha operacional pra mesma convicção.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IBIT">
+<article class="ficha" id="IBIT" data-cust="us" data-busca="ibit ishares bitcoin trust bitcoin">
   <header>
     <span class="tk">IBIT</span>
     <span class="nm">iShares Bitcoin Trust</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,25% a.a. · segue CME CF Bitcoin</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Bitcoin spot pela BlackRock: o selo institucional definitivo do ativo.</div>
@@ -657,11 +867,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">Dolarização sem sair de casa: BDRs de ETF e ETFs de índice internacional negociados em reais, na conta da corretora brasileira que o cliente já tem. É a porta de entrada natural — sem remessa, sem conta lá fora, sem inventário americano. O preço embute o câmbio: quando o dólar sobe, essas cotas sobem junto (e vice-versa).</p>
   <div class="bolso"><b>Regra de bolso ·</b> Pra começar a internacionalizar um cliente iniciante, o caminho de menor atrito é este. Conta no exterior é o passo seguinte, quando volume e maturidade justificarem.</div>
   
-<article class="ficha" id="IVVB11">
+<article class="ficha" id="IVVB11" data-cust="br" data-busca="ivvb11 ishares s&amp;p 500 brl acoes internacionais">
   <header>
     <span class="tk">IVVB11</span>
     <span class="nm">iShares S&amp;P 500 BRL</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">BlackRock · taxa 0,23% a.a. · segue S&amp;P 500</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>S&amp;P 500 em reais: o núcleo internacional da carteira local — 500 maiores dos EUA + dólar.</div>
@@ -669,11 +879,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As 500 maiores empresas do mundo desenvolvido + proteção cambial, sem sair da B3 nem abrir conta fora.&rdquo;</div>
 </article>
 
-<article class="ficha" id="NASD11">
+<article class="ficha" id="NASD11" data-cust="br" data-busca="nasd11 it now nasdaq 100 acoes internacionais">
   <header>
     <span class="tk">NASD11</span>
     <span class="nm">It Now Nasdaq 100</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,30% a.a. · segue Nasdaq 100</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Nasdaq-100 em reais: o growth americano concentrado em tecnologia, com câmbio junto.</div>
@@ -681,11 +891,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As empresas que estão construindo o futuro — Apple, Microsoft, Nvidia — em uma cota na B3.&rdquo;</div>
 </article>
 
-<article class="ficha" id="SPXI11">
+<article class="ficha" id="SPXI11" data-cust="br" data-busca="spxi11 it now s&amp;p 500 acoes internacionais">
   <header>
     <span class="tk">SPXI11</span>
     <span class="nm">It Now S&amp;P 500</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,21% a.a. · segue S&amp;P 500</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesmo S&amp;P 500 do IVVB11 — alternativa de emissor pra mesma tese núcleo.</div>
@@ -693,11 +903,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;S&amp;P 500 em reais — mesma tese, outro emissor; o que importa é ESTAR posicionado.&rdquo;</div>
 </article>
 
-<article class="ficha" id="EURP11">
+<article class="ficha" id="EURP11" data-cust="br" data-busca="eurp11 it now europa acoes internacionais">
   <header>
     <span class="tk">EURP11</span>
     <span class="nm">It Now Europa</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Itau Asset · taxa 0,30% a.a. · segue Stoxx Europe 600</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Europa desenvolvida (Stoxx 600): diversificação geográfica fora do eixo EUA.</div>
@@ -705,11 +915,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As grandes da Europa — Nestlé, ASML, LVMH — completando o mapa-múndi da carteira.&rdquo;</div>
 </article>
 
-<article class="ficha" id="ACWI11">
+<article class="ficha" id="ACWI11" data-cust="br" data-busca="acwi11 ishares msci acwi acoes globais">
   <header>
     <span class="tk">ACWI11</span>
     <span class="nm">iShares MSCI ACWI</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">BlackRock · taxa 0,30% a.a. · segue MSCI ACWI</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O mundo inteiro numa cota (desenvolvidos + emergentes): diversificação geográfica máxima em 1 linha.</div>
@@ -717,11 +927,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um clique, todos os mercados: a carteira global pronta pra quem quer simplicidade com classe.&rdquo;</div>
 </article>
 
-<article class="ficha" id="WRLD11">
+<article class="ficha" id="WRLD11" data-cust="br" data-busca="wrld11 investo ftse global acoes globais">
   <header>
     <span class="tk">WRLD11</span>
     <span class="nm">Investo FTSE Global</span>
-    <span class="flag f-br">🇧🇷 B3</span>
+    <span class="flag f-br"><svg class="fl" aria-hidden="true"><use href="#flag-br"/></svg> B3</span>
   </header>
   <div class="meta">Investo · taxa 0,30% a.a. · segue FTSE All-World</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>FTSE All-World via B3 — irmão do ACWI11, mesma função de núcleo global.</div>
@@ -731,15 +941,15 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 </section>
 
 <section class="cat" id="eua-nucleo">
-  <h3><span class="cemoji">🇺🇸</span> EUA — o núcleo <span class="ccount">12 ETFs</span></h3>
+  <h3><span class="cemoji"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg></span> EUA — o núcleo <span class="ccount">12 ETFs</span></h3>
   <p class="cintro">O coração de qualquer carteira internacional: o mercado americano inteiro ou seu índice-símbolo, o S&P 500. VOO, IVV e SPY compram exatamente a mesma coisa — a escolha é por custo e liquidez. VTI alarga para o mercado total; QQQ concentra na Nasdaq; RSP tira o peso das gigantes; VO, VB e IWM descem de tamanho.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Núcleo é uma escolha, não uma coleção: VOO + IVV + SPY + VTI na mesma carteira é a mesma aposta quatro vezes, com quatro linhas pra declarar.</div>
   
-<article class="ficha" id="VOO">
+<article class="ficha" id="VOO" data-cust="us" data-busca="voo vanguard s&amp;p 500 acoes eua">
   <header>
     <span class="tk">VOO</span>
     <span class="nm">Vanguard S&amp;P 500</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,03% a.a. · segue S&amp;P 500</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>S&amp;P 500 na fonte, custo mínimo: o núcleo clássico de quem investe direto nos EUA.</div>
@@ -747,11 +957,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O índice mais vencedor da história pelo menor custo do mercado — o padrão-ouro do buy and hold.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IVV">
+<article class="ficha" id="IVV" data-cust="us" data-busca="ivv ishares core s&amp;p 500 acoes eua">
   <header>
     <span class="tk">IVV</span>
     <span class="nm">iShares Core S&amp;P 500</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,03% a.a. · segue S&amp;P 500</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mesmo S&amp;P 500 do VOO (iShares) — gêmeos de função, escolha operacional.</div>
@@ -759,11 +969,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;S&amp;P 500 puro pela BlackRock — mesma tese núcleo, mesmo custo mínimo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="SPY">
+<article class="ficha" id="SPY" data-cust="us" data-busca="spy spdr s&amp;p 500 acoes eua">
   <header>
     <span class="tk">SPY</span>
     <span class="nm">SPDR S&amp;P 500</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P 500</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O ETF mais líquido do planeta (S&amp;P 500): padrão pra grandes volumes e operações táticas.</div>
@@ -771,11 +981,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A liquidez absoluta do mercado americano — entra e sai qualquer tamanho, a qualquer momento.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VUAA">
+<article class="ficha" id="VUAA" data-cust="ie" data-busca="vuaa vanguard s&amp;p 500 ucits acoes eua">
   <header>
     <span class="tk">VUAA</span>
     <span class="nm">Vanguard S&amp;P 500 UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">Vanguard · taxa 0,07% a.a. · segue S&amp;P 500</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>S&amp;P 500 UCITS acumulador: núcleo EUA sem estate tax americano e sem dividendo pra declarar.</div>
@@ -783,11 +993,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O S&amp;P 500 na embalagem mais eficiente pra brasileiro: acumula dividendo sozinho e simplifica a sucessão.&rdquo;</div>
 </article>
 
-<article class="ficha" id="CSPX">
+<article class="ficha" id="CSPX" data-cust="ie" data-busca="cspx ishares core s&amp;p 500 ucits acoes eua">
   <header>
     <span class="tk">CSPX</span>
     <span class="nm">iShares Core S&amp;P 500 UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">BlackRock · taxa 0,07% a.a. · segue S&amp;P 500</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Gêmeo do VUAA (iShares): S&amp;P 500 acumulador na Irlanda — o mais tradicional dos UCITS.</div>
@@ -795,11 +1005,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;S&amp;P 500 blindado pra herança e sem pingar dividendo — compõe em silêncio.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VTI">
+<article class="ficha" id="VTI" data-cust="us" data-busca="vti vanguard total market acoes eua total">
   <header>
     <span class="tk">VTI</span>
     <span class="nm">Vanguard Total Market</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,03% a.a. · segue CRSP US Total</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>TODO o mercado americano (large a micro caps): a versão 'mercado completo' do núcleo EUA.</div>
@@ -807,11 +1017,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Não escolha quais empresas americanas: leve TODAS, de gigantes a novatas, numa cota só.&rdquo;</div>
 </article>
 
-<article class="ficha" id="QQQ">
+<article class="ficha" id="QQQ" data-cust="us" data-busca="qqq invesco qqq trust acoes eua (nasdaq)">
   <header>
     <span class="tk">QQQ</span>
     <span class="nm">Invesco QQQ Trust</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Invesco · taxa 0,20% a.a. · segue Nasdaq 100</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Nasdaq-100 na fonte: o motor growth/tech pra quem opera direto nos EUA.</div>
@@ -819,11 +1029,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A elite da inovação americana — o índice que capturou as maiores criações de valor da era digital.&rdquo;</div>
 </article>
 
-<article class="ficha" id="CNDX">
+<article class="ficha" id="CNDX" data-cust="ie" data-busca="cndx ishares nasdaq 100 ucits acoes eua (nasdaq)">
   <header>
     <span class="tk">CNDX</span>
     <span class="nm">iShares Nasdaq 100 UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">BlackRock · taxa 0,30% a.a. · segue Nasdaq 100</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Nasdaq-100 UCITS acumulador: o growth americano na embalagem europeia.</div>
@@ -831,11 +1041,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As mega-techs americanas com eficiência fiscal europeia — crescimento que se reinveste sozinho.&rdquo;</div>
 </article>
 
-<article class="ficha" id="RSP">
+<article class="ficha" id="RSP" data-cust="us" data-busca="rsp invesco s&amp;p 500 equal weight acoes eua equal weight">
   <header>
     <span class="tk">RSP</span>
     <span class="nm">Invesco S&amp;P 500 Equal Weight</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Invesco · taxa 0,20% a.a. · segue S&amp;P 500 Equal Weight</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>S&amp;P 500 em pesos IGUAIS: tira a concentração das mega caps, dá voz às 500.</div>
@@ -843,11 +1053,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As mesmas 500 empresas, sem deixar 7 delas mandarem no resultado — diversificação de verdade dentro do índice.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VO">
+<article class="ficha" id="VO" data-cust="us" data-busca="vo vanguard mid-cap mid caps eua">
   <header>
     <span class="tk">VO</span>
     <span class="nm">Vanguard Mid-Cap</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,04% a.a. · segue CRSP US Mid Cap</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mid caps EUA: o meio-termo esquecido — mais crescimento que large, menos susto que small.</div>
@@ -855,11 +1065,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Empresas grandes o bastante pra sobreviver, pequenas o bastante pra crescer — o ponto doce do mercado.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VB">
+<article class="ficha" id="VB" data-cust="us" data-busca="vb vanguard small-cap small caps eua">
   <header>
     <span class="tk">VB</span>
     <span class="nm">Vanguard Small-Cap</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,05% a.a. · segue CRSP US Small Cap</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Small caps EUA pela régua Vanguard — função gêmea do IWM com custo menor.</div>
@@ -867,11 +1077,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O motor pequeno do mercado americano, na gestora do custo mínimo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IWM">
+<article class="ficha" id="IWM" data-cust="us" data-busca="iwm ishares russell 2000 small caps eua">
   <header>
     <span class="tk">IWM</span>
     <span class="nm">iShares Russell 2000</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,19% a.a. · segue Russell 2000</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Small caps americanas (Russell 2000): ciclo doméstico dos EUA, beta alto.</div>
@@ -885,11 +1095,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">O mesmo mercado americano, fatiado por estilo: crescimento vs valor, qualidade, baixa volatilidade, momentum, e as várias escolas de dividendos (quem paga mais hoje vs quem aumenta o pagamento todo ano). São ferramentas de ênfase — inclinam a carteira sem abandonar a diversificação.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Fator é tempero de longo prazo: qualquer um deles passa anos atrás do índice cheio. Só inclina quem aguenta esperar a tese.</div>
   
-<article class="ficha" id="VUG">
+<article class="ficha" id="VUG" data-cust="us" data-busca="vug vanguard growth growth eua">
   <header>
     <span class="tk">VUG</span>
     <span class="nm">Vanguard Growth</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,04% a.a. · segue CRSP US Large Growth</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>A metade growth do mercado americano: as empresas que crescem acima da média — tech pesa muito.</div>
@@ -897,11 +1107,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A metade acelerada dos EUA — as empresas que mais crescem, aceitando pagar mais caro por isso.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VTV">
+<article class="ficha" id="VTV" data-cust="us" data-busca="vtv vanguard value value eua">
   <header>
     <span class="tk">VTV</span>
     <span class="nm">Vanguard Value</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,04% a.a. · segue CRSP US Large Value</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>A metade value: empresas maduras e baratas (financeiro, saúde, energia) — contrapeso natural do growth.</div>
@@ -909,11 +1119,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A metade 'sem glamour' da bolsa americana: negócios maduros, dividendos e menos susto no preço.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VIG">
+<article class="ficha" id="VIG" data-cust="us" data-busca="vig vanguard dividend appreciation dividendos eua">
   <header>
     <span class="tk">VIG</span>
     <span class="nm">Vanguard Dividend Appreciation</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,06% a.a. · segue S&amp;P Dividend Growers</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Empresas que AUMENTAM dividendo há 10+ anos: qualidade disfarçada de renda.</div>
@@ -921,11 +1131,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Não é quem paga mais hoje — é quem aumenta o pagamento todo ano há uma década. Isso filtra qualidade.&rdquo;</div>
 </article>
 
-<article class="ficha" id="DGRO">
+<article class="ficha" id="DGRO" data-cust="us" data-busca="dgro ishares core dividend growth dividendos growth">
   <header>
     <span class="tk">DGRO</span>
     <span class="nm">iShares Core Dividend Growth</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,08% a.a. · segue Morningstar Dividend Growth</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Crescimento de dividendos (5+ anos): o VIG mais acessível da iShares.</div>
@@ -933,11 +1143,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Dividendos que crescem — a bola de neve começando pequena e ganhando corpo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VYM">
+<article class="ficha" id="VYM" data-cust="us" data-busca="vym vanguard high dividend dividendos eua">
   <header>
     <span class="tk">VYM</span>
     <span class="nm">Vanguard High Dividend</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,06% a.a. · segue FTSE High Dividend</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Alto dividendo americano: yield acima da média com diversificação ampla.</div>
@@ -945,11 +1155,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um salário em dólar da América corporativa — centenas de pagadoras num ticker só.&rdquo;</div>
 </article>
 
-<article class="ficha" id="SCHD">
+<article class="ficha" id="SCHD" data-cust="us" data-busca="schd schwab us dividend equity dividendos eua">
   <header>
     <span class="tk">SCHD</span>
     <span class="nm">Schwab US Dividend Equity</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Schwab · taxa 0,06% a.a. · segue Dow Jones US Dividend 100</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O queridinho dos dividendos: filtro de qualidade + yield + crescimento, tudo junto.</div>
@@ -957,11 +1167,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Dividendos com critério de engenheiro: só entra quem tem balanço, histórico e capacidade de pagar mais.&rdquo;</div>
 </article>
 
-<article class="ficha" id="HDV">
+<article class="ficha" id="HDV" data-cust="us" data-busca="hdv ishares core high dividend dividendos eua">
   <header>
     <span class="tk">HDV</span>
     <span class="nm">iShares Core High Dividend</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,08% a.a. · segue Morningstar Dividend Yield</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Dividendos com filtro de saúde financeira (Morningstar): renda com colchão defensivo.</div>
@@ -969,11 +1179,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As pagadoras mais sólidas da América — renda com o pé no chão.&rdquo;</div>
 </article>
 
-<article class="ficha" id="QUAL">
+<article class="ficha" id="QUAL" data-cust="us" data-busca="qual ishares msci usa quality quality eua">
   <header>
     <span class="tk">QUAL</span>
     <span class="nm">iShares MSCI USA Quality</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,15% a.a. · segue MSCI USA Quality</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Fator qualidade puro: ROE alto, dívida baixa, lucro estável.</div>
@@ -981,11 +1191,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As empresas com o dever de casa em dia — o filtro que Warren Buffett aprovaria.&rdquo;</div>
 </article>
 
-<article class="ficha" id="USMV">
+<article class="ficha" id="USMV" data-cust="us" data-busca="usmv ishares msci min vol usa min vol eua">
   <header>
     <span class="tk">USMV</span>
     <span class="nm">iShares MSCI Min Vol USA</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,15% a.a. · segue MSCI USA Min Vol</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mínima volatilidade EUA: mesma bolsa, passeio menos turbulento.</div>
@@ -993,11 +1203,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bolsa americana pra quem não gosta de sobressalto: menos tranco na descida, chegada mais serena.&rdquo;</div>
 </article>
 
-<article class="ficha" id="MTUM">
+<article class="ficha" id="MTUM" data-cust="us" data-busca="mtum ishares msci momentum momentum eua">
   <header>
     <span class="tk">MTUM</span>
     <span class="nm">iShares MSCI Momentum</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,15% a.a. · segue MSCI USA Momentum</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Momentum: surfa o que está subindo, corta o que enfraquece.</div>
@@ -1011,11 +1221,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">Um setor do S&P 500 isolado num ticker. Servem pra sobre-alocar numa tese setorial (juros, petróleo, demografia, tecnologia) com prazo e tamanho definidos — são posições táticas, não fundação de carteira.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Setorial bom é setorial com tese escrita: por que este setor, por quanto tempo, e o que faz você sair.</div>
   
-<article class="ficha" id="XLK">
+<article class="ficha" id="XLK" data-cust="us" data-busca="xlk spdr technology select tecnologia eua">
   <header>
     <span class="tk">XLK</span>
     <span class="nm">SPDR Technology Select</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P Technology Select</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Setor de tecnologia do S&amp;P: a fatia mais inovadora do índice, isolada.</div>
@@ -1023,11 +1233,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O coração tech do S&amp;P 500 — pra sobre-alocar no setor que lidera o século.&rdquo;</div>
 </article>
 
-<article class="ficha" id="XLF">
+<article class="ficha" id="XLF" data-cust="us" data-busca="xlf spdr financial select financeiro eua">
   <header>
     <span class="tk">XLF</span>
     <span class="nm">SPDR Financial Select</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P Financial Select</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Financeiro americano: bancos, seguradoras e gestoras — sensível a juros e crédito.</div>
@@ -1035,11 +1245,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O sistema financeiro dos EUA numa cota — aposta em juros saudáveis e crédito fluindo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="XLE">
+<article class="ficha" id="XLE" data-cust="us" data-busca="xle spdr energy select energia eua">
   <header>
     <span class="tk">XLE</span>
     <span class="nm">SPDR Energy Select</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P Energy Select</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Energia (petróleo e gás): proteção contra choque de oferta e inflação de commodities.</div>
@@ -1047,11 +1257,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As petroleiras americanas — o hedge que paga dividendo quando o barril sobe.&rdquo;</div>
 </article>
 
-<article class="ficha" id="XLV">
+<article class="ficha" id="XLV" data-cust="us" data-busca="xlv spdr health care select saude eua">
   <header>
     <span class="tk">XLV</span>
     <span class="nm">SPDR Health Care Select</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">State Street · taxa 0,09% a.a. · segue S&amp;P Health Care Select</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Saúde americana: defensivo estrutural com vento demográfico a favor.</div>
@@ -1065,11 +1275,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">O antídoto contra apostar tudo num país só — mesmo que esse país seja os EUA. Desenvolvidos (Europa, Japão) e emergentes (China, Índia, e o próprio Brasil visto de fora com o EWZ) completam o mapa. Valuations costumam ser mais baixos que os americanos; a contrapartida é governança, câmbio e política.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Emergente se compra em cesta (VWO/EIMI), não em país isolado — salvo convicção específica e dimensionada.</div>
   
-<article class="ficha" id="VEA">
+<article class="ficha" id="VEA" data-cust="us" data-busca="vea vanguard ftse developed desenvolvidos ex-eua">
   <header>
     <span class="tk">VEA</span>
     <span class="nm">Vanguard FTSE Developed</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,05% a.a. · segue FTSE Developed ex-US</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Desenvolvidos ex-EUA (Europa + Japão + outros): a perna internacional madura da carteira.</div>
@@ -1077,11 +1287,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O resto do mundo rico numa cota — porque nem só de América vive um portfólio global.&rdquo;</div>
 </article>
 
-<article class="ficha" id="EFA">
+<article class="ficha" id="EFA" data-cust="us" data-busca="efa ishares msci eafe desenvolvidos ex-eua">
   <header>
     <span class="tk">EFA</span>
     <span class="nm">iShares MSCI EAFE</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,32% a.a. · segue MSCI EAFE</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>MSCI EAFE — função gêmea do VEA (desenvolvidos ex-EUA) com taxa maior.</div>
@@ -1089,11 +1299,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Europa, Austrália e Extremo Oriente no índice mais tradicional da categoria.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VGK">
+<article class="ficha" id="VGK" data-cust="us" data-busca="vgk vanguard ftse europe europa">
   <header>
     <span class="tk">VGK</span>
     <span class="nm">Vanguard FTSE Europe</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,06% a.a. · segue FTSE Developed Europe</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Europa desenvolvida isolada: sobre-alocação na tese europeia.</div>
@@ -1101,11 +1311,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As multinacionais europeias — valuation historicamente mais gentil que o americano.&rdquo;</div>
 </article>
 
-<article class="ficha" id="EWJ">
+<article class="ficha" id="EWJ" data-cust="us" data-busca="ewj ishares msci japan japao">
   <header>
     <span class="tk">EWJ</span>
     <span class="nm">iShares MSCI Japan</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,50% a.a. · segue MSCI Japan</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Japão isolado: governança em reforma e indústria de precisão.</div>
@@ -1113,11 +1323,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O Japão que voltou ao radar global — reformas corporativas destravando valor antigo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VWO">
+<article class="ficha" id="VWO" data-cust="us" data-busca="vwo vanguard emerging markets emergentes">
   <header>
     <span class="tk">VWO</span>
     <span class="nm">Vanguard Emerging Markets</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Vanguard · taxa 0,08% a.a. · segue FTSE Emerging</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Emergentes na fonte (FTSE): China, Índia, Taiwan e cia — inclui menos Coreia que o MSCI.</div>
@@ -1125,11 +1335,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O crescimento demográfico do planeta numa cota — os mercados onde o século XXI acontece.&rdquo;</div>
 </article>
 
-<article class="ficha" id="EEM">
+<article class="ficha" id="EEM" data-cust="us" data-busca="eem ishares msci emerging emergentes">
   <header>
     <span class="tk">EEM</span>
     <span class="nm">iShares MSCI Emerging</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,68% a.a. · segue MSCI Emerging</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Emergentes MSCI — o veterano da categoria, mais caro que o VWO.</div>
@@ -1137,11 +1347,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O índice emergente clássico do mercado — o mesmo mundo em outra régua.&rdquo;</div>
 </article>
 
-<article class="ficha" id="EIMI">
+<article class="ficha" id="EIMI" data-cust="ie" data-busca="eimi ishares core msci em ucits emergentes">
   <header>
     <span class="tk">EIMI</span>
     <span class="nm">iShares Core MSCI EM UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">BlackRock · taxa 0,18% a.a. · segue MSCI EM IMI</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Emergentes UCITS (MSCI EM IMI): o complemento do IWDA pra fechar o mundo.</div>
@@ -1149,11 +1359,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A peça que falta do quebra-cabeça global — emergentes acumulando junto.&rdquo;</div>
 </article>
 
-<article class="ficha" id="MCHI">
+<article class="ficha" id="MCHI" data-cust="us" data-busca="mchi ishares msci china china">
   <header>
     <span class="tk">MCHI</span>
     <span class="nm">iShares MSCI China</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,59% a.a. · segue MSCI China</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>China ampla (MSCI): a segunda economia do mundo isolada na carteira.</div>
@@ -1161,11 +1371,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A China investível inteira — tecnologia, consumo e indústria do gigante asiático.&rdquo;</div>
 </article>
 
-<article class="ficha" id="FXI">
+<article class="ficha" id="FXI" data-cust="us" data-busca="fxi ishares china large-cap china">
   <header>
     <span class="tk">FXI</span>
     <span class="nm">iShares China Large-Cap</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,74% a.a. · segue FTSE China 50</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>China large caps (50 maiores): a versão concentrada e estatal-pesada do gigante.</div>
@@ -1173,11 +1383,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As blue chips chinesas — o jeito mais direto de expressar visão sobre Pequim.&rdquo;</div>
 </article>
 
-<article class="ficha" id="INDA">
+<article class="ficha" id="INDA" data-cust="us" data-busca="inda ishares msci india india">
   <header>
     <span class="tk">INDA</span>
     <span class="nm">iShares MSCI India</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,65% a.a. · segue MSCI India</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Índia isolada: demografia, digitalização e a tese estrutural mais querida da década.</div>
@@ -1185,11 +1395,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O país que mais cresce entre os grandes — a aposta demográfica do século em uma cota.&rdquo;</div>
 </article>
 
-<article class="ficha" id="EWZ">
+<article class="ficha" id="EWZ" data-cust="us" data-busca="ewz ishares msci brazil brasil (usd)">
   <header>
     <span class="tk">EWZ</span>
     <span class="nm">iShares MSCI Brazil</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,58% a.a. · segue MSCI Brazil</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Brasil em dólar: nosso mercado visto de fora — útil pra comparações e hedge tático.</div>
@@ -1199,15 +1409,15 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 </section>
 
 <section class="cat" id="globais">
-  <h3><span class="cemoji">🌐</span> O mundo inteiro em um ticker <span class="ccount">4 ETFs</span></h3>
+  <h3><span class="cemoji"><svg class="fl" aria-hidden="true"><use href="#flag-world"/></svg></span> O mundo inteiro em um ticker <span class="ccount">4 ETFs</span></h3>
   <p class="cintro">A resposta pra quem pergunta "e se eu quisesse comprar tudo?": índices globais que juntam desenvolvidos e emergentes (ou só desenvolvidos) numa cota única, com rebalanceamento automático entre países. É a carteira internacional de uma linha só — elegante para quem quer simplicidade radical.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Um ticker global + um de renda fixa já é uma carteira internacional defensável. Complexidade a mais precisa pagar o próprio aluguel.</div>
   
-<article class="ficha" id="ACWI">
+<article class="ficha" id="ACWI" data-cust="us" data-busca="acwi ishares msci acwi acoes globais">
   <header>
     <span class="tk">ACWI</span>
     <span class="nm">iShares MSCI ACWI</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,32% a.a. · segue MSCI ACWI</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mundo inteiro (desenvolvidos + emergentes) na fonte americana.</div>
@@ -1215,11 +1425,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um ticker, o planeta: a alocação global definitiva pra quem quer parar de escolher país.&rdquo;</div>
 </article>
 
-<article class="ficha" id="VWRA">
+<article class="ficha" id="VWRA" data-cust="ie" data-busca="vwra vanguard ftse all-world ucits acoes globais">
   <header>
     <span class="tk">VWRA</span>
     <span class="nm">Vanguard FTSE All-World UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">Vanguard · taxa 0,22% a.a. · segue FTSE All-World</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mundo TODO acumulador (FTSE All-World): a carteira global de 1 linha na melhor embalagem.</div>
@@ -1227,11 +1437,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Um ticker pra vida inteira: o planeta acumulando dividendos automaticamente, sem estate tax.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IWDA">
+<article class="ficha" id="IWDA" data-cust="ie" data-busca="iwda ishares core msci world ucits acoes globais">
   <header>
     <span class="tk">IWDA</span>
     <span class="nm">iShares Core MSCI World UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">BlackRock · taxa 0,20% a.a. · segue MSCI World</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>MSCI World acumulador (só desenvolvidos): o núcleo global clássico UCITS.</div>
@@ -1239,11 +1449,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Os mercados desenvolvidos do mundo compondo em piloto automático.&rdquo;</div>
 </article>
 
-<article class="ficha" id="SWRD">
+<article class="ficha" id="SWRD" data-cust="ie" data-busca="swrd spdr msci world ucits acoes globais">
   <header>
     <span class="tk">SWRD</span>
     <span class="nm">SPDR MSCI World UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">State Street · taxa 0,12% a.a. · segue MSCI World</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>MSCI World da State Street: mesma função do IWDA com taxa menor.</div>
@@ -1257,11 +1467,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">A prateleira que mais cresce no varejo americano: ETFs que vendem opções cobertas (covered calls) sobre a carteira e distribuem o prêmio como renda mensal. Yields chamam atenção — e exatamente por isso exigem a conversa mais honesta deste guia: renda alta não é retorno total, e parte do potencial de alta é vendida junto com a opção.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Compare sempre o <b>retorno total</b> (preço + distribuições) com o índice de referência. Se o cliente precisa do fluxo mensal, ok; se está reinvestindo tudo, o índice puro costuma servir melhor.</div>
   
-<article class="ficha" id="JEPI">
+<article class="ficha" id="JEPI" data-cust="us" data-busca="jepi jpmorgan equity premium income income eua">
   <header>
     <span class="tk">JEPI</span>
     <span class="nm">JPMorgan Equity Premium Income</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">JPMorgan · taxa 0,35% a.a. · segue S&amp;P 500 + covered calls</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Renda mensal com S&amp;P 500 + opções: o meio-termo entre bolsa e fluxo de caixa.</div>
@@ -1269,11 +1479,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Bolsa americana que paga aluguel mensal — volatilidade menor, fluxo constante.&rdquo;</div>
 </article>
 
-<article class="ficha" id="JEPQ">
+<article class="ficha" id="JEPQ" data-cust="us" data-busca="jepq jpmorgan nasdaq premium income income nasdaq">
   <header>
     <span class="tk">JEPQ</span>
     <span class="nm">JPMorgan Nasdaq Premium Income</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">JPMorgan · taxa 0,35% a.a. · segue Nasdaq 100 + covered calls</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>O JEPI da Nasdaq: renda mensal com motor growth por trás.</div>
@@ -1281,11 +1491,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Renda mensal com as empresas de tecnologia como lastro — fluxo e futuro no mesmo ticker.&rdquo;</div>
 </article>
 
-<article class="ficha" id="QYLD">
+<article class="ficha" id="QYLD" data-cust="us" data-busca="qyld global x nasdaq covered call covered call">
   <header>
     <span class="tk">QYLD</span>
     <span class="nm">Global X Nasdaq Covered Call</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Global X · taxa 0,60% a.a. · segue CBOE Nasdaq BuyWrite</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Covered call sobre Nasdaq: transforma volatilidade em renda mensal ALTA.</div>
@@ -1299,11 +1509,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">Do caixa remunerado em dólar (T-Bills) ao crédito high yield, passando por Treasuries longos e TIPS: a renda fixa americana em todas as durações. Regra que o brasileiro leva um susto pra aprender: <b>renda fixa oscila</b> — e quanto mais longo o título, mais o ETF se comporta como ação quando o juro se mexe.</p>
   <div class="bolso"><b>Regra de bolso ·</b> Diga a duration antes do yield: SHV/IB01 é caixa, IEF é meio de campo, TLT é aposta direcional em juro. São três produtos diferentes com o mesmo emissor.</div>
   
-<article class="ficha" id="SHV">
+<article class="ficha" id="SHV" data-cust="us" data-busca="shv ishares short treasury t-bills">
   <header>
     <span class="tk">SHV</span>
     <span class="nm">iShares Short Treasury</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,15% a.a. · segue ICE Short Treasury</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>T-Bills (curtíssimo prazo): o caixa em dólar, praticamente sem risco de preço.</div>
@@ -1311,11 +1521,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Dólar rendendo o juro americano de curto prazo — o caixa mais seguro do planeta.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IB01">
+<article class="ficha" id="IB01" data-cust="ie" data-busca="ib01 ishares $ treasury bond 0-1yr ucits t-bills">
   <header>
     <span class="tk">IB01</span>
     <span class="nm">iShares $ Treasury Bond 0-1yr UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">BlackRock · taxa 0,07% a.a. · segue ICE US Treasury Short</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>T-Bills UCITS: caixa em dólar na embalagem irlandesa — o SHV sem estate tax.</div>
@@ -1323,11 +1533,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Dólar parado rendendo Treasury de curtíssimo prazo — o caixa offshore bem resolvido.&rdquo;</div>
 </article>
 
-<article class="ficha" id="FLOA">
+<article class="ficha" id="FLOA" data-cust="ie" data-busca="floa ishares $ floating rate bond ucits rf floating rate">
   <header>
     <span class="tk">FLOA</span>
     <span class="nm">iShares $ Floating Rate Bond UCITS</span>
-    <span class="flag f-ie">🇮🇪 UCITS</span>
+    <span class="flag f-ie"><svg class="fl" aria-hidden="true"><use href="#flag-ie"/></svg> UCITS</span>
   </header>
   <div class="meta">BlackRock · taxa 0,10% a.a. · segue Bloomberg US Floating Rate</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Floating rate em dólar: pós-fixado americano — rende mais quando o Fed sobe juro.</div>
@@ -1335,11 +1545,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O 'CDI americano': renda que acompanha o juro do Fed, sem risco de marcação.&rdquo;</div>
 </article>
 
-<article class="ficha" id="AGG">
+<article class="ficha" id="AGG" data-cust="us" data-busca="agg ishares core aggregate bond rf aggregate eua">
   <header>
     <span class="tk">AGG</span>
     <span class="nm">iShares Core Aggregate Bond</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,03% a.a. · segue Bloomberg Aggregate</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>A renda fixa americana inteira (Treasuries + corporativos IG): o lastro clássico do portfólio 60/40.</div>
@@ -1347,11 +1557,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O contrapeso tradicional da bolsa: renda fixa americana ampla, de qualidade, num ticker.&rdquo;</div>
 </article>
 
-<article class="ficha" id="IEF">
+<article class="ficha" id="IEF" data-cust="us" data-busca="ief ishares 7-10 year treasury treasuries medios">
   <header>
     <span class="tk">IEF</span>
     <span class="nm">iShares 7-10 Year Treasury</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,15% a.a. · segue ICE 7-10 Year Treasury</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Treasuries 7-10 anos: o meio da curva — proteção com menos violência que o TLT.</div>
@@ -1359,11 +1569,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Título do Tesouro americano no prazo clássico — o porto seguro global na dose intermediária.&rdquo;</div>
 </article>
 
-<article class="ficha" id="TLT">
+<article class="ficha" id="TLT" data-cust="us" data-busca="tlt ishares 20+ year treasury treasuries longos">
   <header>
     <span class="tk">TLT</span>
     <span class="nm">iShares 20+ Year Treasury</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,15% a.a. · segue ICE 20+ Year Treasury</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Treasuries 20+ anos: a aposta mais alavancada em QUEDA de juro americano.</div>
@@ -1371,11 +1581,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Se os juros americanos caírem, isso aqui é o turbo — proteção de recessão com prêmio grande.&rdquo;</div>
 </article>
 
-<article class="ficha" id="TIP">
+<article class="ficha" id="TIP" data-cust="us" data-busca="tip ishares tips bond tips inflacao">
   <header>
     <span class="tk">TIP</span>
     <span class="nm">iShares TIPS Bond</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,19% a.a. · segue Bloomberg TIPS</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>TIPS: Tesouro americano indexado à inflação dos EUA — o IMA-B deles.</div>
@@ -1383,11 +1593,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Proteção contra a inflação americana com garantia do Tesouro dos EUA.&rdquo;</div>
 </article>
 
-<article class="ficha" id="LQD">
+<article class="ficha" id="LQD" data-cust="us" data-busca="lqd ishares investment grade bond corporativo ig">
   <header>
     <span class="tk">LQD</span>
     <span class="nm">iShares Investment Grade Bond</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,14% a.a. · segue Markit iBoxx IG</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Crédito corporativo investment grade: um degrau de prêmio acima dos Treasuries.</div>
@@ -1395,11 +1605,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Emprestar para as maiores empresas dos EUA — prêmio sobre o Tesouro com grau de investimento.&rdquo;</div>
 </article>
 
-<article class="ficha" id="HYG">
+<article class="ficha" id="HYG" data-cust="us" data-busca="hyg ishares high yield bond high yield">
   <header>
     <span class="tk">HYG</span>
     <span class="nm">iShares High Yield Bond</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,49% a.a. · segue Markit iBoxx HY</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>High yield: crédito 'apimentado' — renda alta, comportamento meio-bolsa.</div>
@@ -1407,11 +1617,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O prêmio gordo do crédito mais arriscado — renda alta para quem entende que é RISCO, não renda fixa.&rdquo;</div>
 </article>
 
-<article class="ficha" id="EMB">
+<article class="ficha" id="EMB" data-cust="us" data-busca="emb ishares em bond rf emergentes">
   <header>
     <span class="tk">EMB</span>
     <span class="nm">iShares EM Bond</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">BlackRock · taxa 0,39% a.a. · segue JPM EMBI Global</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Dívida soberana emergente em dólar: prêmio de país sem risco de moeda local.</div>
@@ -1425,11 +1635,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <p class="cintro">Inovação disruptiva, robótica, IA, urânio, lítio, cibersegurança, cobre, infraestrutura: cada ticker aqui é uma tese de futuro embalada. São os ETFs de conversa mais empolgante e de disciplina mais difícil — concentrados, voláteis e cíclicos de narrativa (o tema entra e sai de moda antes do lucro chegar).</p>
   <div class="bolso"><b>Regra de bolso ·</b> Temático é satélite de satélite: some todos e mantenha a soma pequena. E prefira entrar quando o tema está fora das manchetes, não no pico do hype.</div>
   
-<article class="ficha" id="ARKK">
+<article class="ficha" id="ARKK" data-cust="us" data-busca="arkk ark innovation inovacao disruptiva">
   <header>
     <span class="tk">ARKK</span>
     <span class="nm">ARK Innovation</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">ARK Invest · taxa 0,75% a.a. · segue Gestao Ativa</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Inovação disruptiva com gestão ativa: a aposta concentrada em futuro distante.</div>
@@ -1437,11 +1647,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As empresas que podem mudar o mundo em 10 anos — com a volatilidade que essa promessa cobra.&rdquo;</div>
 </article>
 
-<article class="ficha" id="ARKW">
+<article class="ficha" id="ARKW" data-cust="us" data-busca="arkw ark next gen internet internet &amp; fintech">
   <header>
     <span class="tk">ARKW</span>
     <span class="nm">ARK Next Gen Internet</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">ARK Invest · taxa 0,87% a.a. · segue Gestao Ativa</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Internet de próxima geração e fintech — recorte digital da família ARK.</div>
@@ -1449,11 +1659,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A carteira de quem acredita que a internet ainda está no começo.&rdquo;</div>
 </article>
 
-<article class="ficha" id="ARKG">
+<article class="ficha" id="ARKG" data-cust="us" data-busca="arkg ark genomic revolution genomica">
   <header>
     <span class="tk">ARKG</span>
     <span class="nm">ARK Genomic Revolution</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">ARK Invest · taxa 0,75% a.a. · segue Gestao Ativa</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Genômica e biotecnologia de fronteira: a aposta mais científica da prateleira.</div>
@@ -1461,11 +1671,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A medicina do futuro — edição genética e diagnóstico molecular — pra quem tem estômago de pioneiro.&rdquo;</div>
 </article>
 
-<article class="ficha" id="BOTZ">
+<article class="ficha" id="BOTZ" data-cust="us" data-busca="botz global x robotics &amp; ai robotica &amp; ia">
   <header>
     <span class="tk">BOTZ</span>
     <span class="nm">Global X Robotics &amp; AI</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Global X · taxa 0,68% a.a. · segue Indxx Global Robotics</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Robótica e IA global: automação industrial + inteligência artificial em cesta.</div>
@@ -1473,11 +1683,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;As fábricas do futuro e quem as constrói — automação como tese de década.&rdquo;</div>
 </article>
 
-<article class="ficha" id="AIQ">
+<article class="ficha" id="AIQ" data-cust="us" data-busca="aiq global x ai &amp; technology ia &amp; tecnologia">
   <header>
     <span class="tk">AIQ</span>
     <span class="nm">Global X AI &amp; Technology</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Global X · taxa 0,68% a.a. · segue Indxx AI &amp; Big Data</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>IA e big data em cesta ampla: o tema mais falado do mundo, diversificado.</div>
@@ -1485,11 +1695,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A revolução da inteligência artificial inteira, sem apostar numa empresa só.&rdquo;</div>
 </article>
 
-<article class="ficha" id="BUG">
+<article class="ficha" id="BUG" data-cust="us" data-busca="bug global x cybersecurity ciberseguranca">
   <header>
     <span class="tk">BUG</span>
     <span class="nm">Global X Cybersecurity</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Global X · taxa 0,50% a.a. · segue Indxx Cybersecurity</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Cibersegurança: gasto corporativo obrigatório e crescente — tema defensivo dentro de tech.</div>
@@ -1497,11 +1707,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O único orçamento de TI que nenhum CEO corta — segurança digital como tese perene.&rdquo;</div>
 </article>
 
-<article class="ficha" id="URA">
+<article class="ficha" id="URA" data-cust="us" data-busca="ura global x uranium uranio">
   <header>
     <span class="tk">URA</span>
     <span class="nm">Global X Uranium</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Global X · taxa 0,69% a.a. · segue Solactive Global Uranium</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Urânio e nuclear: energia limpa firme — tese de oferta apertada.</div>
@@ -1509,11 +1719,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;A volta da energia nuclear — o combustível da transição que ninguém quer nomear.&rdquo;</div>
 </article>
 
-<article class="ficha" id="LIT">
+<article class="ficha" id="LIT" data-cust="us" data-busca="lit global x lithium &amp; battery litio &amp; baterias">
   <header>
     <span class="tk">LIT</span>
     <span class="nm">Global X Lithium &amp; Battery</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Global X · taxa 0,75% a.a. · segue Solactive Global Lithium</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Lítio e baterias: a cadeia de suprimento da eletrificação.</div>
@@ -1521,11 +1731,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;Da mina à bateria: a matéria-prima da era elétrica em uma cota.&rdquo;</div>
 </article>
 
-<article class="ficha" id="COPX">
+<article class="ficha" id="COPX" data-cust="us" data-busca="copx global x copper miners mineracao cobre">
   <header>
     <span class="tk">COPX</span>
     <span class="nm">Global X Copper Miners</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Global X · taxa 0,65% a.a. · segue Solactive Global Copper Miners</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Mineradoras de cobre: a aposta indireta em eletrificação e infraestrutura.</div>
@@ -1533,11 +1743,11 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div class="fsec fpitch"><span class="flabel">💬 Como explicar pro cliente</span>&ldquo;O metal da eletrificação pelo lado de quem o tira do chão.&rdquo;</div>
 </article>
 
-<article class="ficha" id="PAVE">
+<article class="ficha" id="PAVE" data-cust="us" data-busca="pave global x us infrastructure infraestrutura eua">
   <header>
     <span class="tk">PAVE</span>
     <span class="nm">Global X US Infrastructure</span>
-    <span class="flag f-us">🇺🇸 EUA</span>
+    <span class="flag f-us"><svg class="fl" aria-hidden="true"><use href="#flag-us"/></svg> EUA</span>
   </header>
   <div class="meta">Global X · taxa 0,47% a.a. · segue Indxx US Infrastructure</div>
   <div class="fsec"><span class="flabel">🎯 Papel na carteira</span>Infraestrutura americana: construção, materiais e engenharia — vento fiscal a favor.</div>
@@ -1546,8 +1756,10 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 </article>
 </section>
 
-<!-- ============================================================ CAP 5 -->
-<h2 class="cap" id="cap5"><span class="num">05</span>Os 10 erros clássicos</h2>
+<div class="sem-resultado" id="sem-resultado">Nenhum ETF bate com essa busca/filtro. 🌐 Volte em "Todos" ou limpe a busca.</div>
+
+<!-- ============================================================ CAP 7 -->
+<h2 class="cap" id="cap7"><span class="num">07</span>Os 10 erros clássicos</h2>
 <p class="lead">Cada um destes já custou dinheiro de verdade pra alguém. Cliente que ouve isso de você antes de errar vira cliente pra sempre.</p>
 
 <ol class="erros">
@@ -1563,8 +1775,8 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <li><b>10 · Colecionar 15 ETFs sobrepostos e chamar de diversificação.</b> VOO + IVV + SPY + VTI é a mesma aposta quatro vezes, com quatro linhas pra declarar. Diversificar é somar funções diferentes, não tickers parecidos.</li>
 </ol>
 
-<!-- ============================================================ CAP 6 -->
-<h2 class="cap" id="cap6"><span class="num">06</span>Glossário do assessor</h2>
+<!-- ============================================================ CAP 8 -->
+<h2 class="cap" id="cap8"><span class="num">08</span>Glossário do assessor</h2>
 <p class="lead">Os termos que aparecem em reunião — explicados como você explicaria.</p>
 
 <div class="gloss">
@@ -1596,5 +1808,62 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 </footer>
 
 </div>
+
+<script>
+// ---- filtro por domicílio + busca ----
+var custAtivo = '';
+function filtraCust(btn) {
+  custAtivo = btn.getAttribute('data-cust') || '';
+  document.querySelectorAll('.chip').forEach(function(c) { c.classList.remove('on'); });
+  btn.classList.add('on');
+  filtra();
+}
+function filtra() {
+  var q = (document.getElementById('busca').value || '').trim().toLowerCase();
+  var visiveis = 0, total = 0;
+  document.querySelectorAll('.ficha').forEach(function(f) {
+    total++;
+    var okCust = !custAtivo || f.getAttribute('data-cust') === custAtivo;
+    var okBusca = !q || (f.getAttribute('data-busca') || '').indexOf(q) !== -1;
+    var mostra = okCust && okBusca;
+    f.style.display = mostra ? '' : 'none';
+    if (mostra) visiveis++;
+  });
+  // esconde seções sem nenhuma ficha visível
+  document.querySelectorAll('.cat').forEach(function(sec) {
+    var alguma = false;
+    sec.querySelectorAll('.ficha').forEach(function(f) { if (f.style.display !== 'none') alguma = true; });
+    sec.style.display = alguma ? '' : 'none';
+  });
+  document.getElementById('contagem').textContent = visiveis + '/' + total;
+  document.getElementById('sem-resultado').style.display = visiveis === 0 ? 'block' : 'none';
+}
+function pulaPrimeiro() {
+  var primeira = null;
+  document.querySelectorAll('.ficha').forEach(function(f) { if (!primeira && f.style.display !== 'none') primeira = f; });
+  if (primeira) primeira.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+// ---- pizza interativa ----
+var FATIAS = [{"id":"nucleo","label":"Núcleo global de ações","cor":"#0088cc","v":40},{"id":"rf","label":"Renda fixa (BR + dólar)","cor":"#2d8c5c","v":30},{"id":"regioes","label":"Satélites: países e fatores","cor":"#eb8105","v":15},{"id":"tema","label":"Temáticos e alternativos","cor":"#a12026","v":10},{"id":"caixa","label":"Caixa remunerado","cor":"#b8860b","v":5}];
+function pizzaAtualiza() {
+  var sliders = document.querySelectorAll('.fslider');
+  var vals = [], soma = 0;
+  sliders.forEach(function(s) {
+    var v = parseFloat(s.querySelector('input').value) || 0;
+    vals.push(v); soma += v;
+  });
+  var stops = [], acc = 0;
+  sliders.forEach(function(s, i) {
+    var frac = soma > 0 ? (vals[i] / soma) * 100 : 0;
+    var de = acc; acc += frac;
+    stops.push(FATIAS[i].cor + ' ' + de.toFixed(2) + '% ' + acc.toFixed(2) + '%');
+    s.querySelector('.fpct').textContent = Math.round(frac) + '%';
+  });
+  document.getElementById('pie').style.background =
+    soma > 0 ? 'conic-gradient(' + stops.join(', ') + ')' : 'var(--bg-soft)';
+}
+pizzaAtualiza();
+</script>
 </body>
 </html>
