@@ -150,6 +150,15 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
 .fpitch .flabel { font-style: normal; }
 .sem-resultado { display: none; text-align: center; color: var(--text-soft); padding: 30px; font-size: 14px; }
 
+/* ---- referências ---- */
+.refgrupo h4 { font-family: var(--font-display); font-size: 17px; margin: 22px 0 8px; }
+.ref { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 12px 18px; margin: 9px 0; }
+.ref .rtopo { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.ref .rtopo b { font-size: 14.5px; }
+.ref .rtopo a { font-family: var(--font-mono); font-size: 12px; color: var(--brand-blue); text-decoration: none; }
+.ref .rtopo a:hover { text-decoration: underline; }
+.ref p { margin: 4px 0 0; font-size: 13.5px; color: var(--text-soft); }
+
 /* ---- rodapé ---- */
 .timbre { margin-top: 56px; padding-top: 18px; border-top: 3px solid var(--brand-blue); text-align: center; font-size: 12px; color: var(--text-soft); line-height: 1.8; }
 .timbre b { color: var(--text); }
@@ -163,7 +172,8 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   .voltar, .topnav, .btn-simulador, .fslider input { display: none !important; }
   .ficha, .cat { display: block !important; }
   .capa { padding-top: 10px; }
-  .ficha, .box, .check li, .erros li, .gloss div, .bolso, .pais, .pizza-wrap { page-break-inside: avoid; break-inside: avoid; box-shadow: none; }
+  .ficha, .box, .check li, .erros li, .gloss div, .bolso, .pais, .pizza-wrap, .ref { page-break-inside: avoid; break-inside: avoid; box-shadow: none; }
+  .ref .rtopo a { color: var(--brand-blue); }
   h2.cap { page-break-before: always; break-before: page; border-top: none; margin-top: 0; }
   .sumario .cats { grid-template-columns: repeat(3, 1fr); }
   .paises { grid-template-columns: repeat(2, 1fr); }
@@ -237,6 +247,7 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
     <a href="#cap6"><span class="n">06</span>Catálogo: 100 ETFs por função</a>
     <a href="#cap7"><span class="n">07</span>Os 10 erros clássicos</a>
     <a href="#cap8"><span class="n">08</span>Glossário do assessor</a>
+    <a href="#cap9"><span class="n">09</span>Referências em português</a>
   </div>
   <div class="cats">
       <a href="#rf-brasil"><span class="cemoji">🏦</span> Renda fixa Brasil <em>9</em></a>
@@ -1798,6 +1809,67 @@ td { padding: 9px 12px; border-top: 1px solid var(--border); vertical-align: top
   <div><b>Patrimônio líquido (AUM)</b> — o tamanho do fundo. Grande demais nunca foi problema; pequeno demais pode ser encerrado.</div>
   <div><b>Rebalanceamento</b> — vender o que subiu além do alvo e comprar o que ficou pra trás, devolvendo a carteira ao plano. O ETF rebalanceia o índice por dentro; a carteira entre ETFs, quem rebalanceia é você.</div>
   <div><b>Covered call</b> — vender opção de compra sobre ativos que você tem, embolsando o prêmio e abrindo mão de parte da alta. O motor dos ETFs de renda mensal.</div>
+</div>
+
+<!-- ============================================================ CAP 9 -->
+<h2 class="cap" id="cap9"><span class="num">09</span>Referências em português</h2>
+<p class="lead">Onde continuar estudando — e onde conferir o dado oficial antes de operar. Tudo em português.</p>
+
+
+<div class="refgrupo">
+  <h4>🏛️ Fontes oficiais</h4>
+  
+  <div class="ref">
+    <div class="rtopo"><b>ETF.com.vc</b><a href="https://etf.com.vc" target="_blank" rel="noopener">etf.com.vc</a></div>
+    <p>O portal educativo de ETFs da B3, feito em parceria com as gestoras (BlackRock, Itaú Asset, Investo, Hashdex, QR e XP): do básico ao comparador de fundos.</p>
+  </div>
+  <div class="ref">
+    <div class="rtopo"><b>B3</b><a href="https://www.b3.com.br" target="_blank" rel="noopener">www.b3.com.br</a></div>
+    <p>A bolsa. Lista oficial de todos os ETFs listados, regulamentos, composição de índices e estatísticas de mercado.</p>
+  </div>
+</div>
+
+<div class="refgrupo">
+  <h4>🏦 Gestoras com conteúdo em português</h4>
+  
+  <div class="ref">
+    <div class="rtopo"><b>It Now (Itaú Asset)</b><a href="https://www.itnow.com.br" target="_blank" rel="noopener">www.itnow.com.br</a></div>
+    <p>A casa da família It Now (IMAB11, BOVV11, PIBB11, IRFM11…). Seção "Aprenda" com FAQ, guias de como investir e material por categoria.</p>
+  </div>
+  <div class="ref">
+    <div class="rtopo"><b>Investo</b><a href="https://www.investoetf.com" target="_blank" rel="noopener">www.investoetf.com</a></div>
+    <p>Gestora brasileira especializada só em ETFs (LFTB11, WRLD11…), hoje do grupo VanEck. Blog ativo: IR de ETF, comparativos, casos de uso.</p>
+  </div>
+  <div class="ref">
+    <div class="rtopo"><b>iShares — BlackRock Brasil</b><a href="https://www.blackrock.com/br" target="_blank" rel="noopener">www.blackrock.com/br</a></div>
+    <p>Páginas em português de BOVA11, SMAL11, IVVB11 e cia., com fact sheet mensal de cada fundo — o documento que você abre antes da reunião.</p>
+  </div>
+  <div class="ref">
+    <div class="rtopo"><b>Hashdex</b><a href="https://hashdex.com/pt-BR" target="_blank" rel="noopener">hashdex.com/pt-BR</a></div>
+    <p>A gestora cripto (HASH11, BITH11). Educação sobre criptoativos em português, com relatórios semanais de mercado.</p>
+  </div>
+</div>
+
+<div class="refgrupo">
+  <h4>🔎 Consulta rápida e comparadores</h4>
+  
+  <div class="ref">
+    <div class="rtopo"><b>Conteúdos XP</b><a href="https://conteudos.xpi.com.br" target="_blank" rel="noopener">conteudos.xpi.com.br</a></div>
+    <p>Hub educacional da XP: artigos e guias sobre ETFs, renda fixa e alocação — útil pra mandar link pro cliente.</p>
+  </div>
+  <div class="ref">
+    <div class="rtopo"><b>Mais Retorno</b><a href="https://maisretorno.com/lista-etf" target="_blank" rel="noopener">maisretorno.com/lista-etf</a></div>
+    <p>Lista completa dos ETFs da B3 com filtros, mais portal de artigos e glossário.</p>
+  </div>
+  <div class="ref">
+    <div class="rtopo"><b>Investidor10</b><a href="https://investidor10.com.br/etfs" target="_blank" rel="noopener">investidor10.com.br/etfs</a></div>
+    <p>Cotações, histórico de rentabilidade, dividend yield e comparadores de ETF em interface simples.</p>
+  </div>
+</div>
+
+<div class="box ouro">
+  <h4>⚠️ Como usar essas fontes</h4>
+  <p style="margin:0;">Material de gestora é <b>material de divulgação</b> — excelente pra aprender o produto, mas lembre que a casa vende o próprio ETF: leia com o mesmo senso crítico que você ensina o cliente a ter. Taxas, benchmarks e composições mudam — <b>antes de operar ou citar número em reunião, confira no site oficial da gestora ou na B3</b> (vale inclusive pros dados das fichas deste guia). As gestoras internacionais (Vanguard, State Street, Invesco…) publicam em inglês nos sites oficiais — estude em português por aqui e confirme o dado de produto lá.</p>
 </div>
 
 <footer class="timbre">
