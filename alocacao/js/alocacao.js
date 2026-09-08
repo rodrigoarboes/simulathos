@@ -29,13 +29,20 @@
     function el(id) { return document.getElementById(id); }
 
     function fmtPct(v, decimals) {
+        if (v === null || v === undefined || isNaN(v)) return '—';
         decimals = decimals !== undefined ? decimals : 2;
         return (v * 100).toFixed(decimals).replace('.', ',') + '%';
     }
 
     function fmtNum(v, decimals) {
+        if (v === null || v === undefined || isNaN(v)) return '—';
         decimals = decimals !== undefined ? decimals : 2;
         return v.toFixed(decimals).replace('.', ',');
+    }
+
+    function fmtData(dataStr) {
+        if (!dataStr) return '—';
+        return formatDateBR(dataStr);
     }
 
     function todayStr() {
@@ -138,8 +145,8 @@
 
             html += '<div class="zw-weight-row" data-ticker="' + ticker + '">';
             html += '<span class="zw-weight-row__label">' + label + '</span>';
-            html += '<input type="range" class="zw-weight-row__slider" min="0" max="100" step="1" value="' + weight + '" data-ticker="' + ticker + '">';
-            html += '<input type="number" class="zw-weight-row__input zw-field" min="0" max="100" step="1" value="' + weight + '" data-ticker="' + ticker + '">';
+            html += '<input type="range" class="zw-weight-row__slider" min="0" max="100" step="0.1" value="' + weight + '" data-ticker="' + ticker + '">';
+            html += '<input type="number" class="zw-weight-row__input zw-field" min="0" max="100" step="0.1" value="' + weight + '" data-ticker="' + ticker + '">';
             html += '<span class="zw-weight-row__pct">%</span>';
             html += '</div>';
         }
@@ -160,7 +167,7 @@
 
     function onSliderChange(e) {
         var ticker = e.target.getAttribute('data-ticker');
-        var val = parseInt(e.target.value, 10) || 0;
+        var val = parseFloat(e.target.value) || 0;
         state.selected[ticker] = val;
 
         // Sync the number input
@@ -173,7 +180,7 @@
 
     function onWeightInputChange(e) {
         var ticker = e.target.getAttribute('data-ticker');
-        var val = parseInt(e.target.value, 10) || 0;
+        var val = parseFloat(e.target.value) || 0;
         if (val < 0) val = 0;
         if (val > 100) val = 100;
         state.selected[ticker] = val;
@@ -198,12 +205,17 @@
         var pctLabel = el('total-pct');
         var validationMsg = el('step1-validation');
 
-        pctLabel.textContent = total + '%';
+        // Tolerância de ±0,1 p.p. para acomodar arredondamento de decimais
+        var TOLERANCIA = 0.1;
+        var totalTexto = fmtNum(total, 1);
+        pctLabel.textContent = totalTexto + '%';
 
         var pctWidth = Math.min(total, 100);
         fill.style.width = pctWidth + '%';
 
-        if (total === 100 && tickers.length >= 2) {
+        var somaOk = Math.abs(total - 100) <= TOLERANCIA;
+
+        if (somaOk && tickers.length >= 2) {
             bar.className = 'zw-total-bar is-valid';
             fill.style.background = '#14B550';
             validationMsg.textContent = 'Carteira válida: ' + tickers.length + ' ativos, soma 100%.';
@@ -214,7 +226,7 @@
 
             var msgs = [];
             if (tickers.length < 2) msgs.push('Selecione pelo menos 2 ativos');
-            if (total !== 100) msgs.push('A soma dos pesos deve ser exatamente 100% (atual: ' + total + '%)');
+            if (!somaOk) msgs.push('A soma dos pesos deve ser 100% ± 0,1 p.p. (atual: ' + totalTexto + '%)');
             validationMsg.textContent = msgs.join('. ') + '.';
             validationMsg.className = 'zw-validation-msg is-error';
         }
@@ -226,7 +238,7 @@
         for (var i = 0; i < tickers.length; i++) {
             total += state.selected[tickers[i]] || 0;
         }
-        return tickers.length >= 2 && total === 100;
+        return tickers.length >= 2 && Math.abs(total - 100) <= 0.1;
     }
 
     // -----------------------------------------------------------------------
@@ -274,7 +286,7 @@
         var aporteMensal = Simulathos.parseCurrency(el('aporte-mensal').value);
         var dataInicio = el('data-inicio').value;
         var dataFim = el('data-fim').value;
-        var rebalDias = parseInt(el('rebalanceamento').value, 10);
+        var rebalDias = Number(el('rebalanceamento').value) || 0;
 
         // Build pesos map (fraction 0-1)
         var pesos = {};
@@ -461,6 +473,7 @@
         var curvas = bruto.curvas || {};
         var corr = bruto.correlacao || { labels: [], matrix: [] };
         var comp = bruto.composicao || { labels: [], pesos: [] };
+        var compAlvo = bruto.composicaoAlvo || { labels: [], pesos: [] };
         var datas = curvas.datas || [];
 
         function zip(valores) {
@@ -477,21 +490,31 @@
             pesosFinais[comp.labels[i]] = comp.pesos[i];
         }
 
+        var pesosAlvo = {};
+        for (var j = 0; j < compAlvo.labels.length; j++) {
+            pesosAlvo[compAlvo.labels[j]] = compAlvo.pesos[j];
+        }
+
         return {
             retornoAcumulado:  resumo.retornoAcumulado,
             retornoAnualizado: resumo.retornoAnualizado,
             volatilidade:      resumo.volatilidade,
             sharpe:            resumo.sharpe,
+            sortino:           resumo.sortino,
+            ulcerIndex:        resumo.ulcerIndex,
             drawdownMaximo:    resumo.drawdownMaximo,
             beta:              resumo.beta,
             percentualCDI:     resumo.percentualCDI,
             diasUteis:         resumo.diasUteis,
+            diasCorridos:      resumo.diasCorridos,
+            diagnostico:       resumo.diagnostico,
             curvaCarteira:     zip(curvas.carteira),
             curvaCdi:          zip(curvas.cdi),
             curvaIbov:         zip(curvas.ibov),
             curvaIpca5:        zip(curvas.ipcaMais5),
             matrizCorrelacao:  { labels: corr.labels, matrix: corr.matrix },
-            pesosFinais:       pesosFinais
+            pesosFinais:       pesosFinais,
+            pesosAlvo:         pesosAlvo
         };
     }
 
@@ -500,12 +523,26 @@
         el('res-retorno-acum').textContent = fmtPct(res.retornoAcumulado);
 
         // Metric cards
-        el('res-retorno-anual').textContent = fmtPct(res.retornoAnualizado);
+        var labelAnual = el('res-retorno-anual-label');
+        if (res.retornoAnualizado === null || res.retornoAnualizado === undefined) {
+            if (labelAnual) labelAnual.textContent = 'Retorno do Período';
+            el('res-retorno-anual').textContent = fmtPct(res.retornoAcumulado);
+        } else {
+            if (labelAnual) labelAnual.textContent = 'Retorno Anualizado';
+            el('res-retorno-anual').textContent = fmtPct(res.retornoAnualizado);
+        }
         el('res-volatilidade').textContent = fmtPct(res.volatilidade);
         el('res-sharpe').textContent = fmtNum(res.sharpe);
         el('res-drawdown').textContent = fmtPct(res.drawdownMaximo);
         el('res-beta').textContent = fmtNum(res.beta);
-        el('res-pct-cdi').textContent = fmtNum(res.percentualCDI) + '%';
+        el('res-pct-cdi').textContent = res.percentualCDI === null || res.percentualCDI === undefined ? '—' : fmtNum(res.percentualCDI) + '%';
+        var elSortino = el('res-sortino');
+        if (elSortino) elSortino.textContent = fmtNum(res.sortino);
+        var elUlcer = el('res-ulcer');
+        if (elUlcer) elUlcer.textContent = fmtPct(res.ulcerIndex);
+
+        // Diagnostico da janela de dados
+        renderDiagnostico(res.diagnostico);
 
         // Charts
         renderChartPatrimonio(res, config);
@@ -516,6 +553,36 @@
 
         // Status box
         renderStatusBox(res);
+    }
+
+    function renderDiagnostico(diag) {
+        var diagEl = el('res-diagnostico');
+        if (!diagEl) return;
+        if (!diag) {
+            diagEl.style.display = 'none';
+            diagEl.textContent = '';
+            return;
+        }
+
+        var partes = [];
+        partes.push('Janela: ' + fmtData(diag.primeiraData) + ' a ' + fmtData(diag.ultimaData));
+        if (typeof diag.diasUteis === 'number') {
+            partes.push(diag.diasUteis + ' pregões');
+        }
+        if (diag.dataCorteDados) {
+            partes.push('dados até ' + fmtData(diag.dataCorteDados));
+        }
+        if (diag.cdiFaltante) {
+            partes.push('CDI faltante em ' + diag.cdiFaltante + ' dias');
+        }
+
+        var texto = partes.join(' · ');
+        if (diag.ativoLimitante) {
+            texto += ' — janela limitada por ' + diag.ativoLimitante;
+        }
+
+        diagEl.textContent = texto;
+        diagEl.style.display = '';
     }
 
     // -----------------------------------------------------------------------
@@ -703,36 +770,54 @@
             state.charts.composicao = null;
         }
 
-        // Use final weights from the backtest result, or fall back to original allocation
+        // Composição final (após drift/rebalanceamento) vs composição alvo (entrada)
         var pesosFinais = res.pesosFinais || config.pesos;
-        var tickers = Object.keys(pesosFinais);
+        var pesosAlvo = res.pesosAlvo || config.pesos;
+
+        // União dos tickers presentes em qualquer um dos dois conjuntos
+        var tickersSet = {};
+        var t;
+        for (t in pesosAlvo) { if (pesosAlvo.hasOwnProperty(t)) tickersSet[t] = true; }
+        for (t in pesosFinais) { if (pesosFinais.hasOwnProperty(t)) tickersSet[t] = true; }
+        var tickers = Object.keys(tickersSet).sort();
+
         var labels = [];
-        var data = [];
-        var colors = [
-            '#010E30', '#2980B9', '#27AE60', '#E67E22', '#8E44AD',
-            '#E74C3C', '#1ABC9C', '#F39C12', '#34495E', '#D35400',
-            '#16A085', '#C0392B', '#7F8C8D', '#2C3E50', '#9B59B6'
-        ];
+        var dataAlvo = [];
+        var dataFinal = [];
 
         for (var i = 0; i < tickers.length; i++) {
             labels.push(tickers[i]);
-            data.push(Math.round(pesosFinais[tickers[i]] * 10000) / 100); // to % with 2 decimals
+            var alvo = pesosAlvo[tickers[i]] || 0;
+            var final = pesosFinais[tickers[i]] || 0;
+            dataAlvo.push(Math.round(alvo * 10000) / 100); // % com 2 casas
+            dataFinal.push(Math.round(final * 10000) / 100);
         }
 
         state.charts.composicao = new Chart(canvas, {
-            type: 'doughnut',
+            type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: colors.slice(0, tickers.length),
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
+                datasets: [
+                    {
+                        label: 'Alocação alvo',
+                        data: dataAlvo,
+                        backgroundColor: 'rgba(1, 14, 48, 0.35)',
+                        borderColor: '#010E30',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Composição final',
+                        data: dataFinal,
+                        backgroundColor: '#14B550',
+                        borderColor: '#14B550',
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
+                indexAxis: 'y',
                 plugins: {
                     legend: {
                         position: 'bottom',
@@ -741,9 +826,23 @@
                     tooltip: {
                         callbacks: {
                             label: function (ctx) {
-                                return ctx.label + ': ' + ctx.parsed.toFixed(1) + '%';
+                                return ctx.dataset.label + ': ' + ctx.parsed.x.toFixed(1) + '%';
                             }
                         }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (val) { return val + '%'; },
+                            font: { size: 11 }
+                        },
+                        grid: { color: 'rgba(0,0,0,0.04)' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
                     }
                 }
             }
@@ -868,7 +967,7 @@
         for (var i = 0; i < tickers.length; i++) {
             var etfInfo = Catalogo.porTicker(tickers[i]);
             var nome = etfInfo ? etfInfo.nome : tickers[i];
-            var peso = (config.pesos[tickers[i]] * 100).toFixed(0);
+            var peso = fmtNum(config.pesos[tickers[i]] * 100, 1);
             carteiraHtml += '<div class="zw-relatorio-item"><span>' + tickers[i] + ' — ' + nome + '</span><span>' + peso + '%</span></div>';
         }
         el('rel-carteira').innerHTML = carteiraHtml;

@@ -1,25 +1,33 @@
 /* ==========================================================================
-   Simulathos — Backtest Engine (motor único: academia + alocacao)
-   Depends on: Metricas (shared/js/motor/metricas.js)
+   Simulathos — Motor de backtest (motor único: academia + alocacao)
+   Depende de: Metricas (shared/js/motor/metricas.js)
+   Contrato v2.0.0
    ========================================================================== */
 
 var Backtest = (function () {
   'use strict';
 
+  var DIAS_ANO_CALENDARIO = 365.2425;
+
+  // Motivos de validação que INVALIDAM a série (o cálculo sai errado com eles).
+  // 'gap_congelado' é sinalizado mas não bloqueia por padrão: preços repetidos
+  // são normais em ETFs de caixa (SHV, BIL, TFLO) e em FIIs pouco líquidos.
+  // Use config.validarDados = 'estrito' para bloquear em qualquer motivo.
+  var MOTIVOS_BLOQUEANTES = { salto_suspeito: true, serie_quebrada: true };
+
   // -----------------------------------------------------------------------
-  // Internal helpers
+  // Helpers internos
   // -----------------------------------------------------------------------
 
   /**
-   * Find the intersection of date strings across all series in a map.
+   * Interseção das datas presentes em TODAS as séries do mapa.
    * @param {Object} seriesObj – { "TICKER": [{data:"YYYY-MM-DD", ...}, ...], ... }
-   * @returns {string[]} sorted array of dates present in EVERY series
+   * @returns {string[]} datas ordenadas presentes em todas as séries
    */
   function alinharDatas(seriesObj) {
     var keys = Object.keys(seriesObj);
     if (keys.length === 0) return [];
 
-    // Build a Set for each series, then intersect
     var sets = [];
     for (var k = 0; k < keys.length; k++) {
       var arr = seriesObj[keys[k]];
@@ -31,11 +39,10 @@ var Backtest = (function () {
       sets.push(s);
     }
 
-    // Start with the first set, intersect with the rest
     var baseKeys = Object.keys(sets[0]);
     var result = [];
-    for (var i = 0; i < baseKeys.length; i++) {
-      var d = baseKeys[i];
+    for (var b = 0; b < baseKeys.length; b++) {
+      var d = baseKeys[b];
       var inAll = true;
       for (var j = 1; j < sets.length; j++) {
         if (!sets[j][d]) { inAll = false; break; }
@@ -48,10 +55,8 @@ var Backtest = (function () {
   }
 
   /**
-   * Convert a price series [{data, close}] to daily return series [{data, retorno}].
-   * The first element is dropped (no prior price).
-   * @param {Array} precos – [{data:"YYYY-MM-DD", close: number}, ...]
-   * @returns {Array} [{data, retorno}, ...]
+   * Converte série de preços [{data, close}] em retornos [{data, retorno}].
+   * O primeiro ponto é descartado (não há preço anterior).
    */
   function precosParaRetornos(precos) {
     if (!precos || precos.length < 2) return [];
@@ -65,12 +70,6 @@ var Backtest = (function () {
     return retornos;
   }
 
-  /**
-   * Filter a series array to entries whose .data is in the given Set.
-   * @param {Array} series – [{data, ...}, ...]
-   * @param {Object} dateSet – { "YYYY-MM-DD": true, ... }
-   * @returns {Array}
-   */
   function filtrarPorDatas(series, dateSet) {
     if (!series) return [];
     var result = [];
@@ -83,7 +82,7 @@ var Backtest = (function () {
   }
 
   /**
-   * Filter a series to entries within [dataInicio, dataFim] (inclusive, string comparison).
+   * Filtra a série para o intervalo [dataInicio, dataFim] (inclusive, string).
    */
   function filtrarIntervalo(series, dataInicio, dataFim) {
     if (!series) return [];
@@ -98,13 +97,118 @@ var Backtest = (function () {
   }
 
   /**
-   * Build the daily total-return series for IPCA + 5% p.a.
-   * IPCA is monthly (data: "YYYY-MM", valor: percentage like 0.56 meaning 0.56%).
-   * The real rate added is 5% p.a. => daily ~= (1.05)^(1/252) - 1.
+   * Sanidade de uma série de preços [{data, close}].
    *
-   * @param {Array} ipcaMensal – [{data:"YYYY-MM", valor: number}, ...]
-   * @param {string[]} datasUteis – sorted trading dates
-   * @returns {number[]} daily total returns, one per trading date
+   * Regras:
+   *   - |retorno diário| > 0,5            -> 'salto_suspeito'
+   *   - 3+ closes idênticos consecutivos  -> 'gap_congelado'
+   *   - queda > 80% e recuperação > 80%
+   *     em até 10 pregões                 -> 'serie_quebrada'
+   *
+   * @returns {{ok:boolean, motivos:string[], bloqueante:boolean,
+   *            motivosBloqueantes:string[], detalhes:Object}}
+   */
+  function validarSerie(serie) {
+    var motivos = [];
+    var detalhes = {
+      pontos: serie ? serie.length : 0,
+      maiorSequenciaIgual: 0,
+      maiorSaltoAbs: 0,
+      primeiroSalto: null,
+      primeiraQuebra: null
+    };
+
+    if (!serie || serie.length < 2) {
+      return {
+        ok: true,
+        motivos: [],
+        bloqueante: false,
+        motivosBloqueantes: [],
+        detalhes: detalhes
+      };
+    }
+
+    var temSalto = false;
+    var temCongelado = false;
+    var temQuebra = false;
+    var sequencia = 1;
+
+    for (var i = 1; i < serie.length; i++) {
+      var anterior = serie[i - 1] ? serie[i - 1].close : null;
+      var atual = serie[i] ? serie[i].close : null;
+      if (typeof anterior !== 'number' || typeof atual !== 'number') continue;
+
+      // 3+ closes idênticos consecutivos
+      if (atual === anterior) {
+        sequencia++;
+        if (sequencia > detalhes.maiorSequenciaIgual) detalhes.maiorSequenciaIgual = sequencia;
+        if (sequencia >= 3) temCongelado = true;
+      } else {
+        sequencia = 1;
+        if (detalhes.maiorSequenciaIgual < 1) detalhes.maiorSequenciaIgual = 1;
+      }
+
+      if (anterior === 0) continue;
+      var r = atual / anterior - 1;
+      if (Math.abs(r) > detalhes.maiorSaltoAbs) detalhes.maiorSaltoAbs = Math.abs(r);
+
+      // salto suspeito
+      if (Math.abs(r) > 0.5) {
+        if (!temSalto) {
+          detalhes.primeiroSalto = {
+            data: serie[i].data,
+            de: anterior,
+            para: atual,
+            retorno: r
+          };
+        }
+        temSalto = true;
+      }
+
+      // queda > 80% seguida de recuperação > 80% em <= 10 pregões
+      if (atual <= anterior * 0.2 && atual > 0) {
+        var limite = Math.min(i + 10, serie.length - 1);
+        for (var j = i + 1; j <= limite; j++) {
+          var posterior = serie[j] ? serie[j].close : null;
+          if (typeof posterior !== 'number') continue;
+          if (posterior > atual * 1.8) {
+            if (!temQuebra) {
+              detalhes.primeiraQuebra = {
+                data: serie[i].data,
+                de: anterior,
+                fundo: atual,
+                voltaPara: posterior,
+                dataVolta: serie[j].data
+              };
+            }
+            temQuebra = true;
+            break;
+          }
+        }
+      }
+    }
+
+    if (temSalto) motivos.push('salto_suspeito');
+    if (temCongelado) motivos.push('gap_congelado');
+    if (temQuebra) motivos.push('serie_quebrada');
+
+    var motivosBloqueantes = [];
+    for (var m = 0; m < motivos.length; m++) {
+      if (MOTIVOS_BLOQUEANTES[motivos[m]]) motivosBloqueantes.push(motivos[m]);
+    }
+
+    return {
+      ok: motivos.length === 0,
+      motivos: motivos,
+      bloqueante: motivosBloqueantes.length > 0,
+      motivosBloqueantes: motivosBloqueantes,
+      detalhes: detalhes
+    };
+  }
+
+  /**
+   * Série diária de IPCA + 5% a.a.
+   * IPCA é mensal ({data:"YYYY-MM", valor: 0.56 = 0,56%}).
    */
   function ipcaMais5Retornos(ipcaMensal, datasUteis) {
     if (!datasUteis || datasUteis.length === 0) return [];
@@ -122,14 +226,14 @@ var Backtest = (function () {
     var ultimoMes = '';
     var taxaDiariaIPCA = 0;
 
-    for (var i = 0; i < datasUteis.length; i++) {
-      var d = datasUteis[i];
+    for (var k = 0; k < datasUteis.length; k++) {
+      var d = datasUteis[k];
       var mesAtual = d.substring(0, 7); // "YYYY-MM"
 
       if (mesAtual !== ultimoMes) {
         ultimoMes = mesAtual;
         var diasNoMes = 0;
-        for (var j = i; j < datasUteis.length; j++) {
+        for (var j = k; j < datasUteis.length; j++) {
           if (datasUteis[j].substring(0, 7) === mesAtual) {
             diasNoMes++;
           } else {
@@ -148,73 +252,46 @@ var Backtest = (function () {
   }
 
   /**
-   * Build an equity curve from a daily-return series, applying the same
-   * monthly contributions used for the portfolio. This keeps every line
-   * (carteira and benchmarks) comparable when aporteMensal > 0.
-   * @returns {number[]} equity values, one per return date
+   * Curva patrimonial com os MESMOS aportes da carteira, tolerando buracos:
+   * dia sem retorno (null) vira null na curva — a linha para de ser desenhada
+   * em vez de congelar num valor que não aconteceu.
    */
   function curvaComAportes(retornosDiarios, valorInicial, aporteMensal) {
-    var curva = Metricas.curvaPatrimonial(retornosDiarios, valorInicial, aporteMensal, 21);
     var vals = [];
-    for (var i = 1; i < curva.length; i++) {
-      vals.push(curva[i].valor);
+    if (!retornosDiarios) return vals;
+    var valor = valorInicial || 0;
+    var aporte = aporteMensal || 0;
+    for (var i = 0; i < retornosDiarios.length; i++) {
+      if (i > 0 && i % 21 === 0) valor += aporte;
+      var r = retornosDiarios[i];
+      if (typeof r === 'number' && isFinite(r)) {
+        valor *= (1 + r);
+        vals.push(valor);
+      } else {
+        vals.push(null);
+      }
     }
     return vals;
   }
 
-  /**
-   * Get the final (drifted) weights after applying a series of returns
-   * starting from pesosAlvo without rebalancing.
-   */
-  function pesosFinaisDrift(pesosAlvo, retornosDiariosAtivos) {
-    var tickers = Object.keys(pesosAlvo);
-    if (tickers.length === 0) return { labels: [], pesos: [] };
-
-    var maxLen = 0;
-    for (var t = 0; t < tickers.length; t++) {
-      var arr = retornosDiariosAtivos[tickers[t]];
-      if (arr && arr.length > maxLen) maxLen = arr.length;
-    }
-
-    // Simulate weight drift
-    var w = {};
-    for (var t = 0; t < tickers.length; t++) {
-      w[tickers[t]] = pesosAlvo[tickers[t]] || 0;
-    }
-
-    for (var i = 0; i < maxLen; i++) {
-      var soma = 0;
-      for (var t = 0; t < tickers.length; t++) {
-        var ticker = tickers[t];
-        var rets = retornosDiariosAtivos[ticker];
-        var r = (rets && i < rets.length) ? rets[i] : 0;
-        w[ticker] = w[ticker] * (1 + r);
-        soma += w[ticker];
-      }
-      if (soma !== 0) {
-        for (var t = 0; t < tickers.length; t++) {
-          w[tickers[t]] = w[tickers[t]] / soma;
-        }
-      }
-    }
-
-    var labels = [];
-    var pesos = [];
-    for (var t = 0; t < tickers.length; t++) {
-      labels.push(tickers[t]);
-      pesos.push(w[tickers[t]]);
-    }
-    return { labels: labels, pesos: pesos };
+  function _diasCorridosEntre(dataInicial, dataFinal) {
+    if (!dataInicial || !dataFinal) return null;
+    var a = new Date(dataInicial + 'T00:00:00Z').getTime();
+    var b = new Date(dataFinal + 'T00:00:00Z').getTime();
+    if (isNaN(a) || isNaN(b)) return null;
+    var dias = Math.round((b - a) / 86400000);
+    return dias > 0 ? dias : null;
   }
 
   // -----------------------------------------------------------------------
-  // Main entry point
+  // Entrada principal
   // -----------------------------------------------------------------------
 
   /**
-   * Run a full backtest.
-   * @param {Object} config – see module documentation for shape
-   * @returns {Object} result – { resumo, curvas, correlacao, composicao }
+   * Roda um backtest completo.
+   * @param {Object} config
+   * @returns {Object} { resumo, curvas, correlacao, composicao, composicaoAlvo,
+   *                     retornosCarteira, retornosPorAtivo }
    */
   function rodar(config) {
     if (!config) throw new Error('Backtest.rodar: config é obrigatório');
@@ -226,21 +303,30 @@ var Backtest = (function () {
     var pesos       = config.pesos        || {};
     var valorInicial    = config.valorInicial    || 100000;
     var aporteMensal    = config.aporteMensal    || 0;
-    var rebalanceamento = (typeof config.rebalanceamento === 'number') ? config.rebalanceamento : 0;
     var dataInicio  = config.dataInicio    || '';
     var dataFim     = config.dataFim       || '';
+    var validarDados = (typeof config.validarDados === 'undefined') ? true : config.validarDados;
+    var modoEstrito  = (validarDados === 'estrito');
+
+    // 0, null, undefined ou Infinity => NUNCA rebalancear (buy&hold com drift).
+    var rebalRaw = config.rebalanceamento;
+    var rebalanceamento = (typeof rebalRaw === 'number' && isFinite(rebalRaw) && rebalRaw > 0)
+      ? rebalRaw
+      : Infinity;
 
     var tickers = Object.keys(pesos);
     if (tickers.length === 0) {
       throw new Error('Backtest.rodar: pesos deve conter ao menos um ativo');
     }
 
+    var t, i, ticker;
+
     // -------------------------------------------------------------------
-    // Step 1: Filter all series to [dataInicio, dataFim]
+    // Passo 1: filtrar séries para [dataInicio, dataFim]
     // -------------------------------------------------------------------
     var dadosFiltrados = {};
-    for (var t = 0; t < tickers.length; t++) {
-      var ticker = tickers[t];
+    for (t = 0; t < tickers.length; t++) {
+      ticker = tickers[t];
       var serie = dados[ticker];
       if (!serie || serie.length === 0) {
         throw new Error('Backtest.rodar: dados ausentes para ' + ticker);
@@ -252,15 +338,30 @@ var Backtest = (function () {
     var ibovFiltrado = filtrarIntervalo(ibovSeries, dataInicio, dataFim);
 
     // -------------------------------------------------------------------
-    // Step 2: Align by common trading dates (intersection of all series)
+    // Passo 1b: validação de sanidade dos dados
     // -------------------------------------------------------------------
-    // IMPORTANT: only the PORTFOLIO assets define the trading dates. The
-    // benchmarks (CDI/IBOV) are intentionally NOT part of the intersection —
-    // their values are looked up per-date later (cdiPorData / ibovPorData), so
-    // including them here would wrongly truncate the backtest whenever a
-    // benchmark series is shorter/stale (e.g. CDI not yet updated to today).
+    var validacoes = {};
+    if (validarDados) {
+      for (t = 0; t < tickers.length; t++) {
+        ticker = tickers[t];
+        var v = validarSerie(dadosFiltrados[ticker]);
+        validacoes[ticker] = v;
+        var reprova = modoEstrito ? !v.ok : v.bloqueante;
+        if (reprova) {
+          var motivosErro = modoEstrito ? v.motivos : v.motivosBloqueantes;
+          throw new Error('dado_suspeito:' + ticker + ':' + motivosErro.join(','));
+        }
+      }
+    }
+
+    // -------------------------------------------------------------------
+    // Passo 2: alinhar pelas datas comuns (interseção dos ATIVOS)
+    // -------------------------------------------------------------------
+    // Os benchmarks (CDI/Ibov) de propósito NÃO entram na interseção: eles são
+    // consultados por data mais adiante (carry-forward no CDI, null no Ibov),
+    // senão um benchmark desatualizado truncaria o backtest inteiro.
     var todasSeries = {};
-    for (var t = 0; t < tickers.length; t++) {
+    for (t = 0; t < tickers.length; t++) {
       todasSeries[tickers[t]] = dadosFiltrados[tickers[t]];
     }
 
@@ -269,102 +370,118 @@ var Backtest = (function () {
       throw new Error('Backtest.rodar: menos de 2 datas comuns encontradas');
     }
 
-    // Build a lookup for fast filtering
     var dateSet = {};
-    for (var i = 0; i < datasComuns.length; i++) {
+    for (i = 0; i < datasComuns.length; i++) {
       dateSet[datasComuns[i]] = true;
     }
 
-    // Re-filter all series to the common dates
     var dadosAlinhados = {};
-    for (var t = 0; t < tickers.length; t++) {
+    for (t = 0; t < tickers.length; t++) {
       dadosAlinhados[tickers[t]] = filtrarPorDatas(dadosFiltrados[tickers[t]], dateSet);
     }
     var cdiAlinhado  = filtrarPorDatas(cdiFiltrado, dateSet);
     var ibovAlinhado = filtrarPorDatas(ibovFiltrado, dateSet);
 
     // -------------------------------------------------------------------
-    // Step 3: Convert price series to daily returns
+    // Passo 3: preços -> retornos diários
     // -------------------------------------------------------------------
     var retornosPorAtivo = {};   // { "TICKER": [number, ...] }
     var retornosComData = {};    // { "TICKER": [{data, retorno}, ...] }
 
-    for (var t = 0; t < tickers.length; t++) {
-      var ticker = tickers[t];
+    for (t = 0; t < tickers.length; t++) {
+      ticker = tickers[t];
       var rc = precosParaRetornos(dadosAlinhados[ticker]);
       retornosComData[ticker] = rc;
       retornosPorAtivo[ticker] = [];
-      for (var i = 0; i < rc.length; i++) {
+      for (i = 0; i < rc.length; i++) {
         retornosPorAtivo[ticker].push(rc[i].retorno);
       }
     }
 
-    // CDI daily returns (already rates, not prices)
-    // We skip the first date to align with the returns (which lose the first date)
-    var cdiRetornos = [];
-    var cdiDatasRetorno = [];
-    // Build a set of return-dates from the first ticker
-    var primeiroTicker = tickers[0];
+    // Datas dos retornos (perde-se a primeira data, que é o preço de partida)
     var datasRetorno = [];
-    for (var i = 0; i < retornosComData[primeiroTicker].length; i++) {
-      datasRetorno.push(retornosComData[primeiroTicker][i].data);
-    }
-    var datasRetornoSet = {};
-    for (var i = 0; i < datasRetorno.length; i++) {
-      datasRetornoSet[datasRetorno[i]] = true;
+    for (i = 1; i < datasComuns.length; i++) {
+      datasRetorno.push(datasComuns[i]);
     }
 
-    // Map CDI values by date for quick lookup
+    // CDI: taxa diária por data, com carry-forward da última taxa conhecida.
     var cdiPorData = {};
-    for (var i = 0; i < cdiAlinhado.length; i++) {
-      cdiPorData[cdiAlinhado[i].data] = cdiAlinhado[i].valor;
+    for (i = 0; i < cdiAlinhado.length; i++) {
+      if (typeof cdiAlinhado[i].valor === 'number') {
+        cdiPorData[cdiAlinhado[i].data] = cdiAlinhado[i].valor;
+      }
+    }
+    // Se as primeiras datas não têm CDI, usa a primeira taxa conhecida
+    // (carry-backward só no início) — nunca 0, que subestimaria o benchmark.
+    var primeiraTaxaConhecida = null;
+    for (i = 0; i < datasRetorno.length; i++) {
+      if (typeof cdiPorData[datasRetorno[i]] === 'number') {
+        primeiraTaxaConhecida = cdiPorData[datasRetorno[i]];
+        break;
+      }
     }
 
-    for (var i = 0; i < datasRetorno.length; i++) {
-      var d = datasRetorno[i];
-      var val = (typeof cdiPorData[d] === 'number') ? cdiPorData[d] : 0;
-      cdiRetornos.push(val);
-      cdiDatasRetorno.push(d);
+    var cdiRetornos = [];
+    var cdiFaltante = 0;
+    var ultimaTaxaCDI = (primeiraTaxaConhecida !== null) ? primeiraTaxaConhecida : 0;
+    for (i = 0; i < datasRetorno.length; i++) {
+      var valCDI = cdiPorData[datasRetorno[i]];
+      if (typeof valCDI === 'number') {
+        ultimaTaxaCDI = valCDI;
+      } else {
+        cdiFaltante++;
+      }
+      cdiRetornos.push(ultimaTaxaCDI);
     }
 
-    // Ibov returns (from prices)
+    // Ibov: retornos por data. Data sem Ibov => null (não entra no beta e a
+    // linha do gráfico é interrompida em vez de congelar).
     var ibovRetornosComData = precosParaRetornos(ibovAlinhado);
-    // Align ibov returns to the same return dates
     var ibovPorData = {};
-    for (var i = 0; i < ibovRetornosComData.length; i++) {
+    for (i = 0; i < ibovRetornosComData.length; i++) {
       ibovPorData[ibovRetornosComData[i].data] = ibovRetornosComData[i].retorno;
     }
     var ibovRetornos = [];
-    for (var i = 0; i < datasRetorno.length; i++) {
-      var r = ibovPorData[datasRetorno[i]];
-      ibovRetornos.push(typeof r === 'number' ? r : 0);
+    var ibovFaltante = 0;
+    for (i = 0; i < datasRetorno.length; i++) {
+      var rIbov = ibovPorData[datasRetorno[i]];
+      if (typeof rIbov === 'number' && isFinite(rIbov)) {
+        ibovRetornos.push(rIbov);
+      } else {
+        ibovRetornos.push(null);
+        ibovFaltante++;
+      }
     }
 
     var numDias = datasRetorno.length;
 
     // -------------------------------------------------------------------
-    // Step 4: Build portfolio daily returns
+    // Passo 3b: janela de calendário e frequência real de observações
     // -------------------------------------------------------------------
-    var retornosCarteira;
-    if (rebalanceamento > 0) {
-      retornosCarteira = Metricas.rebalancear(retornosPorAtivo, pesos, rebalanceamento);
-    } else {
-      retornosCarteira = Metricas.retornoCarteira(pesos, retornosPorAtivo);
-    }
+    var primeiraData = datasComuns[0];
+    var ultimaData = datasComuns[datasComuns.length - 1];
+    var diasCorridos = _diasCorridosEntre(primeiraData, ultimaData);
+    var observacoesPorAno = (diasCorridos && diasCorridos > 0)
+      ? numDias / (diasCorridos / DIAS_ANO_CALENDARIO)
+      : null;
+    var obsAnualizacao = (observacoesPorAno && isFinite(observacoesPorAno) && observacoesPorAno > 0)
+      ? observacoesPorAno
+      : 252;
 
     // -------------------------------------------------------------------
-    // Step 5: Build equity curve
+    // Passo 4: retornos diários da carteira (trajetória efetivamente simulada)
+    // -------------------------------------------------------------------
+    var retornosCarteira = Metricas.rebalancear(retornosPorAtivo, pesos, rebalanceamento);
+
+    // -------------------------------------------------------------------
+    // Passo 5: curva patrimonial
     // -------------------------------------------------------------------
     var curvaObj = Metricas.curvaPatrimonial(retornosCarteira, valorInicial, aporteMensal, 21);
 
-    // Extract equity values (skip index 0 which is the initial value before any return)
     var equityValues = [];
-    for (var i = 1; i < curvaObj.length; i++) {
+    for (i = 1; i < curvaObj.length; i++) {
       equityValues.push(curvaObj[i].valor);
     }
-
-    // If curvaObj has more entries than datasRetorno (shouldn't happen, but be safe),
-    // or fewer, align lengths
     while (equityValues.length < datasRetorno.length) {
       equityValues.push(equityValues.length > 0 ? equityValues[equityValues.length - 1] : valorInicial);
     }
@@ -373,63 +490,120 @@ var Backtest = (function () {
     }
 
     // -------------------------------------------------------------------
-    // Step 6: Build benchmark curves
+    // Passo 6: curvas dos benchmarks (mesmos aportes da carteira)
     // -------------------------------------------------------------------
-
-    // All benchmark curves receive the SAME contributions as the portfolio,
-    // so the comparison stays fair when aporteMensal > 0 ("had I invested the
-    // same monthly amount in CDI / Ibov / IPCA+5% instead").
-
-    // CDI: daily rates already computed in cdiRetornos
     var cdiValues = curvaComAportes(cdiRetornos, valorInicial, aporteMensal);
-
-    // Ibovespa: daily price returns already computed in ibovRetornos
     var ibovValues = curvaComAportes(ibovRetornos, valorInicial, aporteMensal);
-
-    // IPCA + 5% p.a.
     var ipcaRetornos = ipcaMais5Retornos(ipcaSeries, datasRetorno);
     var ipcaMais5Values = curvaComAportes(ipcaRetornos, valorInicial, aporteMensal);
 
     // -------------------------------------------------------------------
-    // Step 7: Calculate metrics
+    // Passo 7: métricas
     // -------------------------------------------------------------------
     var retAcum     = Metricas.retornoAcumulado(retornosCarteira);
-    var retAnual    = Metricas.retornoAnualizado(retAcum, numDias);
-    var vol         = Metricas.volatilidadeAnualizada(retornosCarteira);
+    // Menos de 1 ano de dados não se anualiza: a UI mostra "retorno do período".
+    var retAnual    = (numDias >= 252)
+      ? Metricas.retornoAnualizado(retAcum, numDias, diasCorridos)
+      : null;
+    var vol         = Metricas.volatilidadeAnualizada(retornosCarteira, obsAnualizacao);
     var maxDD       = Metricas.drawdownMaximo(retornosCarteira);
-    var sharpeVal   = Metricas.sharpe(retornosCarteira, cdiRetornos);
-    var sortinoVal  = Metricas.sortino(retornosCarteira, cdiRetornos);
+    var sharpeVal   = Metricas.sharpe(retornosCarteira, cdiRetornos, obsAnualizacao);
+    var sortinoVal  = Metricas.sortino(retornosCarteira, cdiRetornos, obsAnualizacao);
     var ulcerVal    = Metricas.ulcerIndex(retornosCarteira);
     var betaVal     = Metricas.beta(retornosCarteira, ibovRetornos);
     var cdiAcum     = Metricas.retornoAcumulado(cdiRetornos);
     var pctCDI      = Metricas.percentualDoCDI(retAcum, cdiAcum);
+    var serieDD     = Metricas.serieDrawdown(retornosCarteira);
 
-    // Correlation matrix
+    // Matriz de correlação
     var mapaRetornos = {};
-    for (var t = 0; t < tickers.length; t++) {
+    for (t = 0; t < tickers.length; t++) {
       mapaRetornos[tickers[t]] = retornosPorAtivo[tickers[t]];
     }
     var corr = Metricas.matrizCorrelacao(mapaRetornos);
 
     // -------------------------------------------------------------------
-    // Step 8: Composition (final weights)
+    // Passo 8: composição (pesos do último dia simulado) e alvo
     // -------------------------------------------------------------------
-    var composicao;
-    if (rebalanceamento > 0) {
-      // If rebalanced, final weights are approximately the target weights
-      var labels = [];
-      var pesosArr = [];
-      for (var t = 0; t < tickers.length; t++) {
-        labels.push(tickers[t]);
-        pesosArr.push(pesos[tickers[t]]);
-      }
-      composicao = { labels: labels, pesos: pesosArr };
-    } else {
-      composicao = pesosFinaisDrift(pesos, retornosPorAtivo);
+    var composicao = Metricas.pesosFinais(retornosPorAtivo, pesos, rebalanceamento);
+
+    var labelsAlvo = [];
+    var pesosAlvoArr = [];
+    var pesoInformado = 0;
+    for (t = 0; t < tickers.length; t++) {
+      labelsAlvo.push(tickers[t]);
+      var p = (typeof pesos[tickers[t]] === 'number') ? pesos[tickers[t]] : 0;
+      pesosAlvoArr.push(p);
+      pesoInformado += p;
+    }
+    var pesoUtilizado = 0;
+    for (i = 0; i < composicao.pesos.length; i++) {
+      pesoUtilizado += composicao.pesos[i];
     }
 
     // -------------------------------------------------------------------
-    // Return result
+    // Passo 9: diagnóstico
+    // -------------------------------------------------------------------
+    var primeiraDataPorAtivo = {};
+    var ultimaDataPorAtivo = {};
+    var ativoLimitante = null;
+    var maiorPrimeiraData = '';
+    for (t = 0; t < tickers.length; t++) {
+      ticker = tickers[t];
+      var serieT = dadosFiltrados[ticker];
+      var pri = (serieT && serieT.length) ? serieT[0].data : null;
+      var ult = (serieT && serieT.length) ? serieT[serieT.length - 1].data : null;
+      primeiraDataPorAtivo[ticker] = pri;
+      ultimaDataPorAtivo[ticker] = ult;
+      if (pri && pri > maiorPrimeiraData) {
+        maiorPrimeiraData = pri;
+        ativoLimitante = ticker;
+      }
+    }
+
+    // Menor última data entre TODAS as séries usadas (ativos + benchmarks):
+    // é a data em que os dados realmente acabam.
+    var dataCorteDados = null;
+    for (ticker in ultimaDataPorAtivo) {
+      if (!ultimaDataPorAtivo.hasOwnProperty(ticker)) continue;
+      var u = ultimaDataPorAtivo[ticker];
+      if (u && (dataCorteDados === null || u < dataCorteDados)) dataCorteDados = u;
+    }
+    if (cdiFiltrado.length) {
+      var uCDI = cdiFiltrado[cdiFiltrado.length - 1].data;
+      if (uCDI && (dataCorteDados === null || uCDI < dataCorteDados)) dataCorteDados = uCDI;
+    }
+    if (ibovFiltrado.length) {
+      var uIbov = ibovFiltrado[ibovFiltrado.length - 1].data;
+      if (uIbov && (dataCorteDados === null || uIbov < dataCorteDados)) dataCorteDados = uIbov;
+    }
+
+    var diagnostico = {
+      diasUteis: numDias,
+      diasCorridos: diasCorridos,
+      observacoesPorAno: observacoesPorAno,
+      cdiFaltante: cdiFaltante,
+      ibovFaltante: ibovFaltante,
+      ativoLimitante: ativoLimitante,
+      primeiraData: primeiraData,
+      ultimaData: ultimaData,
+      primeiraDataPorAtivo: primeiraDataPorAtivo,
+      pesoInformado: pesoInformado,
+      pesoUtilizado: pesoUtilizado,
+      motorVersion: Metricas.MOTOR_VERSION,
+      dataCorteDados: dataCorteDados,
+      rebalanceamento: isFinite(rebalanceamento) ? rebalanceamento : null,
+      validacoes: validacoes
+    };
+
+    var totalAportado = valorInicial +
+      Metricas.numeroDeAportes(numDias, 21) * aporteMensal;
+    var valorFinal = equityValues.length
+      ? equityValues[equityValues.length - 1]
+      : valorInicial;
+
+    // -------------------------------------------------------------------
+    // Resultado
     // -------------------------------------------------------------------
     return {
       resumo: {
@@ -442,14 +616,22 @@ var Backtest = (function () {
         drawdownMaximo:    maxDD,
         beta:              betaVal,
         percentualCDI:     pctCDI,
-        diasUteis:         numDias
+        retornoCDI:        cdiAcum,
+        diasUteis:         numDias,
+        diasCorridos:      diasCorridos,
+        observacoesPorAno: observacoesPorAno,
+        valorInicial:      valorInicial,
+        valorFinal:        valorFinal,
+        totalAportado:     totalAportado,
+        diagnostico:       diagnostico
       },
       curvas: {
         datas:     datasRetorno,
         carteira:  equityValues,
         cdi:       cdiValues,
         ibov:      ibovValues,
-        ipcaMais5: ipcaMais5Values
+        ipcaMais5: ipcaMais5Values,
+        drawdown:  serieDD
       },
       correlacao: {
         labels: corr.labels,
@@ -458,16 +640,26 @@ var Backtest = (function () {
       composicao: {
         labels: composicao.labels,
         pesos:  composicao.pesos
-      }
+      },
+      composicaoAlvo: {
+        labels: labelsAlvo,
+        pesos:  pesosAlvoArr
+      },
+      retornosCarteira: retornosCarteira,
+      retornosPorAtivo: retornosPorAtivo
     };
   }
 
   // -----------------------------------------------------------------------
-  // Public API
+  // API pública
   // -----------------------------------------------------------------------
 
   return {
-    rodar: rodar
+    MOTOR_VERSION: '2.0.0',
+    rodar: rodar,
+    validarSerie: validarSerie,
+    alinharDatas: alinharDatas,
+    precosParaRetornos: precosParaRetornos
   };
 
 })();

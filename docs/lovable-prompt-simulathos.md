@@ -40,7 +40,19 @@ CREATE TABLE assets (
   metadata JSONB DEFAULT '{}',
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMPTZ DEFAULT now(),
+  first_date DATE,     -- primeira data com preço em price_series
+  last_date DATE,      -- última data com preço em price_series
+  points INT,          -- contagem de pontos em price_series (cache, não fonte)
+  quality JSONB DEFAULT '{}', -- ex.: { gaps: number, motivos: string[] } de Backtest.validarSerie
   UNIQUE(ticker)
+);
+
+-- Frescor dos dados por fonte (CVM, BCB, etc.) — para diagnostico.dataCorteDados
+-- e para a UI avisar quando os dados estão desatualizados.
+CREATE TABLE data_freshness (
+  source TEXT PRIMARY KEY,       -- 'cvm', 'bcb_cdi', 'bcb_ipca', 'ibov'
+  last_sync_at TIMESTAMPTZ,      -- quando o cron rodou por último
+  last_data_date DATE            -- data do dado mais recente efetivamente gravado
 );
 
 -- Séries de preços diários
@@ -85,10 +97,58 @@ CREATE TABLE simulations (
   result_data JSONB NOT NULL, -- { retornoAcumulado, sharpe, sortino, ulcer, curvas... }
   score NUMERIC(5,2), -- nota calculada (0-100)
   status TEXT DEFAULT 'completed',
+  engine_version TEXT,   -- Metricas.MOTOR_VERSION que gerou result_data, ex '2.0.0'
+  diagnostics JSONB,     -- resumo.diagnostico do motor (ver docs/MOTOR-CONTRATO.md §12.4)
   created_at TIMESTAMPTZ DEFAULT now()
 );
 CREATE INDEX idx_simulations_enrollment ON simulations(enrollment_id);
 CREATE INDEX idx_simulations_slug ON simulations(simulator_slug);
+
+-- Casos de treinamento (missões com gabarito) para os simuladores de avaliação
+CREATE TABLE cases (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  titulo TEXT NOT NULL,
+  briefing JSONB NOT NULL,   -- enunciado, perfil do cliente, restrições
+  gabarito JSONB NOT NULL,   -- [{ ticker, alvo, min, max, porque }, ...]
+  missao TEXT,               -- objetivo textual da missão
+  alavanca TEXT,             -- dimensão que o caso quer treinar (ex. 'renda_fixa_duration')
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Versões de rubrica de avaliação (dimensões e pesos usados para pontuar attempts)
+CREATE TABLE rubrics (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  versao TEXT NOT NULL,
+  dimensoes JSONB NOT NULL,  -- [{ nome, peso, formula }, ...]
+  created_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(versao)
+);
+
+-- Tentativas de resolução de um case por um aluno/enrollment
+CREATE TABLE attempts (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  case_id UUID NOT NULL REFERENCES cases(id),
+  enrollment_id TEXT NOT NULL,
+  carteira JSONB NOT NULL,        -- pesos submetidos pelo aluno
+  score_por_dimensao JSONB,       -- { dimensao: nota } conforme rubrics.dimensoes
+  erros_nomeados JSONB,           -- [{ ticker, tipo_erro, explicacao }, ...]
+  tentativa_n INT NOT NULL DEFAULT 1,
+  rubric_version TEXT REFERENCES rubrics(versao),
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+CREATE INDEX idx_attempts_case ON attempts(case_id);
+CREATE INDEX idx_attempts_enrollment ON attempts(enrollment_id);
+
+-- Estatísticas agregadas de turma por case (para comparação "você vs. a turma")
+CREATE TABLE cohort_stats (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  case_id UUID NOT NULL REFERENCES cases(id),
+  cohort_id TEXT NOT NULL,
+  mediana NUMERIC(5,2),
+  percentis JSONB,   -- { p25, p50, p75, p90, ... }
+  updated_at TIMESTAMPTZ DEFAULT now(),
+  UNIQUE(case_id, cohort_id)
+);
 
 -- API keys para clientes (Advisor PRO, outros)
 CREATE TABLE api_clients (
@@ -145,6 +205,7 @@ Recebe resultado de simulação e envia webhook pro cliente.
 - Grava em `simulations`
 - Envia POST pro `api_clients.webhook_url` com body assinado (HMAC-SHA256 em `x-simulathos-signature`)
 - Payload do webhook: `{ external_user_id, enrollment_id, source_content_item_id, simulator_slug, score, calculated_metrics, submission_data, finished_at }`
+- `calculated_metrics.engine_version` e `calculated_metrics.diagnostics` vêm de `simulations.engine_version`/`simulations.diagnostics`, que por sua vez vêm de `resumo.diagnostico` do motor (docs/MOTOR-CONTRATO.md §12.4) — nunca inventados pela edge function.
 
 ### 3. `cvm-daily-sync` (Cron: todo dia útil às 6h BRT)
 - Baixa `https://dados.cvm.gov.br/dados/FI/DOC/INF_DIARIO/DADOS/inf_diario_fi_YYYYMM.zip`
@@ -190,9 +251,9 @@ src/
 │
 ├── lib/
 │   ├── engine/
-│   │   ├── backtest.ts         -- motor de backtest (porta do JS atual)
-│   │   ├── metrics.ts          -- Sharpe, Sortino, Ulcer, Beta, correlação, etc.
-│   │   └── comecotas.ts        -- cálculo de come-cotas
+│   │   ├── backtest.ts         -- motor de backtest (implementa docs/MOTOR-CONTRATO.md, não "a lógica do protótipo")
+│   │   ├── metrics.ts          -- Sharpe, Sortino, Ulcer, Beta, correlação, etc. — fórmulas em docs/MOTOR-CONTRATO.md
+│   │   └── comecotas.ts        -- cálculo de come-cotas (docs/MOTOR-CONTRATO.md §11)
 │   │
 │   ├── auth/
 │   │   └── launchToken.ts      -- validação de launch-token JWT
@@ -226,23 +287,58 @@ src/
 
 ## Motor de Backtest (especificação)
 
-O motor deve replicar exatamente a lógica do arquivo `academia/js/motor/backtest.js` do protótipo HTML. Métricas calculadas:
+O motor **não** deve replicar "a lógica" de um arquivo de protótipo — deve
+replicar as **fórmulas** de **`docs/MOTOR-CONTRATO.md`**. Esse documento é o
+contrato canônico: para cada métrica ele define a fórmula completa (com
+denominador, alinhamento por data, tratamento de dado ausente e mínimo de
+observações), a referência bibliográfica (Sharpe 1994; Sortino & van der Meer
+1991; Martin & McCann para o Ulcer Index; Morningstar Methodology; GIPS 2020
+5.A.4 para a proibição de anualizar períodos < 12 meses) e um caso de teste
+com entrada e saída esperada.
 
-| Métrica | Fórmula |
-|---------|---------|
-| Retorno acumulado | Produto dos (1+r) - 1 |
-| Retorno anualizado | (1+retAcum)^(252/dias) - 1 |
-| Volatilidade | StdDev diária × √252 |
-| Sharpe | (média excess return / stddev excess) × √252 |
-| Sortino | (média excess / downside dev) × √252 |
-| Ulcer Index | √(média dos DD² em %) |
-| Max Drawdown | Maior queda peak-to-trough |
-| Beta | Cov(carteira, ibov) / Var(ibov) |
-| % do CDI | retorno carteira / retorno CDI |
-| Correlação | Matriz N×N dos ativos |
+A suíte `shared/js/motor/__tests__/` (`metricas.test.js` e `backtest.test.js`)
+é o contrato **executável** — cada regra do MOTOR-CONTRATO.md vira um teste
+lá. O port TypeScript (`src/lib/engine/metrics.ts` e `src/lib/engine/backtest.ts`)
+precisa de uma suíte equivalente, com os mesmos casos e tolerâncias, rodando
+verde antes de qualquer PR do motor ser aceito como pronto. **Não deduza
+fórmula nenhuma a partir do protótipo HTML ou por analogia com "o que a
+maioria dos backtests faz"** — se um comportamento não está no
+MOTOR-CONTRATO.md, ele precisa ser adicionado lá primeiro (fórmula +
+referência + caso de teste) antes de ser implementado.
+
+Pontos do contrato que mais frequentemente saem errados num port ingênuo
+(ver MOTOR-CONTRATO.md para o detalhe completo de cada um):
+
+- **Sortino nunca retorna `99`** como sentinela de "não calculável" — retorna
+  `null` (amostra < 60 dias, ou nenhum dia abaixo do MAR), e a UI mostra "—".
+- **Retorno anualizado é `null`** quando a amostra tem menos de 252 dias
+  úteis (GIPS 5.A.4) — a UI mostra "retorno do período", não uma taxa
+  anualizada inventada por extrapolação de poucos dias.
+- **Rebalanceamento**: `config.rebalanceamento` igual a `0`/`null`/`Infinity`
+  significa **nunca rebalancear** (drift real de buy & hold via
+  `Metricas.rebalancear(retornos, pesos, Infinity)`), não "rebalanceamento
+  diário implícito" (`Metricas.retornoCarteira`, que o backtest não usa mais).
+- **CDI ausente** numa data → carry-forward da última taxa conhecida (nunca
+  vira `0`). **Ibov ausente** → o dia não entra no cálculo de beta (só pares
+  completos) e `curvas.ibov` recebe `null` nessa data (a linha do gráfico
+  para, não congela).
+- **Validação de dado suspeito** (`config.validarDados`, default `true`):
+  salto diário > 50%, 3+ closes idênticos consecutivos, ou queda/recuperação
+  > 80% em ≤ 10 pregões — série reprovada em motivo bloqueante lança erro em
+  vez de entrar silenciosamente no cálculo.
+- **`resumo.diagnostico`** (motorVersion, diasUteis, diasCorridos,
+  observacoesPorAno, cdiFaltante, ibovFaltante, ativoLimitante,
+  dataCorteDados, pesoInformado vs. pesoUtilizado) precisa ser propagado até
+  a UI e até `calculated_metrics` do webhook — é o que permite ao advisor
+  (ou ao instrutor revisando uma tentativa) saber se o número que está vendo
+  é confiável.
 
 Benchmarks no gráfico: CDI, Ibovespa, IPCA+5%.
-Rebalanceamento: trimestral (63 dias úteis) por padrão.
+Rebalanceamento: sem valor informado, o padrão é **nunca rebalancear**
+(drift/buy & hold) — ver MOTOR-CONTRATO.md §12.1. Se o produto quiser um
+padrão trimestral (63 dias úteis) na UI, isso é uma escolha de
+`config.rebalanceamento` passada explicitamente pelo componente, não um
+comportamento embutido no motor.
 
 ---
 
@@ -291,12 +387,14 @@ interface SimulationWebhook {
   score: number;                // 0-100
   calculated_metrics: {
     retorno_acumulado: number;
-    retorno_anualizado: number;
+    retorno_anualizado: number | null;   // null quando diasUteis < 252 — ver docs/MOTOR-CONTRATO.md §2
     sharpe: number;
-    sortino: number;
+    sortino: number | null;              // null, nunca 99 — ver docs/MOTOR-CONTRATO.md §5
     volatilidade: number;
     max_drawdown: number;
-    pct_cdi: number;
+    pct_cdi: number | null;              // null quando carteira ou CDI <= 0 — ver §9
+    engine_version: string;              // Metricas.MOTOR_VERSION, ex '2.0.0'
+    diagnostics: object;                 // resumo.diagnostico do motor — ver §12.4
   };
   submission_data: object;      // input completo (pesos, datas, etc.)
   media_url?: string;           // screenshot/PDF da simulação
@@ -339,7 +437,7 @@ Usar como referência para:
 1. **Schema do Supabase** (tabelas, indexes, seeds)
 2. **Componente AssetAutocomplete** (busca no banco com debounce)
 3. **PortfolioBuilder** (montar carteira com %)
-4. **Motor de backtest** (TypeScript, port do JS)
+4. **Motor de backtest** (TypeScript, implementa docs/MOTOR-CONTRATO.md, com suíte de testes equivalente à `shared/js/motor/__tests__/`)
 5. **BacktestResults** (métricas + gráfico)
 6. **Página Allocation** (junta tudo)
 7. **Script de seed** (popular banco com dados do protótipo)
