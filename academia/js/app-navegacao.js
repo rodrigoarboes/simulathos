@@ -1,0 +1,813 @@
+// academia/js/app-navegacao.js — extraído de index.html (linhas 5835-6646 do monólito original)
+function trocarTela(idTela) {
+  document.querySelectorAll(".tela").forEach(t => t.classList.remove("ativo"));
+  document.getElementById(idTela).classList.add("ativo");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  // FAB "Consultar case": telas de trabalho (3, 4, 5, 6) — hide in Modo Livre (no case)
+  const fabCase = document.getElementById("fab-case");
+  const telasComFabCase = ["tela3", "tela4", "tela5", "tela6"];
+  if (telasComFabCase.includes(idTela) && caseAtual && !modoLivre) {
+    fabCase.classList.add("visible");
+  } else {
+    fabCase.classList.remove("visible");
+  }
+
+  // FAB "Ajuda Macroalocação": onde o aluno trava de verdade (Briefing + Montagem)
+  const fabAjuda = document.getElementById("fab-ajuda");
+  const telasComFabAjuda = ["tela2", "tela3"];
+  if (telasComFabAjuda.includes(idTela)) {
+    fabAjuda.classList.add("visible");
+  } else {
+    fabAjuda.classList.remove("visible");
+  }
+
+  // FAB "Gráficos de mercado": útil ao montar carteira e ao estruturar o pitch
+  const fabGraficos = document.getElementById("fab-graficos");
+  const telasComFabGraficos = ["tela2", "tela3", "tela5"];
+  if (telasComFabGraficos.includes(idTela)) {
+    fabGraficos.classList.add("visible");
+  } else {
+    fabGraficos.classList.remove("visible");
+  }
+}
+function voltarTela1() {
+  modoLivre = false;
+  montagemAtual = [];
+  pitchData = {};
+  frameworkAtual = null;
+  fecharDrawer();
+  fecharAjudaMacro();
+  fecharGraficos();
+  trocarTela("tela1");
+  renderGrid();
+  atualizarStatsHome();
+}
+function irTela2() { trocarTela("tela2"); }
+
+/* =================================================================================
+   DRAWER — Consultar Case
+   ================================================================================= */
+function popularDrawer() {
+  if (!caseAtual) return;
+
+  document.getElementById("drawer-numero").textContent = `CASE ${String(caseAtual.id).padStart(2,'0')}`;
+  document.getElementById("drawer-titulo").textContent = caseAtual.titulo;
+
+  const tagsHtml = `
+    <div class="case-meta" style="margin-bottom:16px;">
+      <span class="tag perfil-${caseAtual.perfil.slice(0,5)}">${caseAtual.perfil}</span>
+      <span class="tag">${labelCiclo(caseAtual.ciclo)}</span>
+      <span class="tag">${labelPatrim(caseAtual.patrimonio)}</span>
+      <span class="tag">${caseAtual.custodia === "OFFSHORE" ? "Offshore" : "Brasil"}</span>
+    </div>
+  `;
+
+  const dadosHtml = Object.entries(caseAtual.dados).map(([k,v]) => 
+    `<div class="dado-key"><span>${k}</span><span>${v}</span></div>`
+  ).join("");
+
+  const objetivosHtml = caseAtual.objetivos.map(o => `<li>${o}</li>`).join("");
+  const restricoesHtml = caseAtual.restricoes.map(r => `<li>${r}</li>`).join("");
+
+  document.getElementById("drawer-body").innerHTML = `
+    ${tagsHtml}
+    <h4>👤 Perfil do Cliente</h4>
+    <p>${caseAtual.cliente}</p>
+
+    <h4>💼 Situação Patrimonial</h4>
+    ${dadosHtml}
+
+    <div class="macro-box">
+      <h4>📈 Cenário Macroeconômico</h4>
+      ${cenarioFoiEditado() ? '<span class="cenario-editado-tag">Cenário atual (editado)</span><br/>' : ''}
+      <p>${getCenarioAtivo()}</p>
+    </div>
+
+    <h4>🎯 Objetivos</h4>
+    <ul>${objetivosHtml}</ul>
+
+    <h4>⚠️ Restrições / Atenção</h4>
+    <ul>${restricoesHtml}</ul>
+  `;
+}
+
+function abrirDrawer() {
+  popularDrawer();
+  document.getElementById("drawer").classList.add("open");
+  document.getElementById("drawer-overlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function fecharDrawer() {
+  document.getElementById("drawer").classList.remove("open");
+  document.getElementById("drawer-overlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+/* ============ DRAWER AJUDA MACROALOCAÇÃO ============ */
+function abrirAjudaMacro() {
+  document.getElementById("drawer-ajuda").classList.add("open");
+  document.getElementById("ajuda-overlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+}
+
+function fecharAjudaMacro() {
+  document.getElementById("drawer-ajuda").classList.remove("open");
+  document.getElementById("ajuda-overlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+/* ============ DRAWER GRÁFICOS DE MERCADO ============ */
+let chartDolar = null;
+let chartIndices = null;
+let chartR100 = null;
+let chartImab = null;
+let chartImabLongo = null;
+let periodoDolarAtual = "tudo";
+
+// Gráficos que o aluno escolheu inserir nos slides do pitch
+let graficosInseridos = []; // ['r100', 'dolar', 'indices']
+
+function abrirGraficos() {
+  document.getElementById("drawer-graficos").classList.add("open");
+  document.getElementById("graficos-overlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  // Renderiza com leve atraso para o drawer abrir antes do Chart.js medir o canvas
+  setTimeout(() => {
+    renderGraficoR100();
+    renderGraficoDolar(periodoDolarAtual);
+    renderGraficoIndices();
+    renderGraficoImab();
+    montarImabLongo();
+    atualizarBotoesInseridos();
+  }, 320);
+}
+
+function fecharGraficos() {
+  document.getElementById("drawer-graficos").classList.remove("open");
+  document.getElementById("graficos-overlay").classList.remove("open");
+  document.body.style.overflow = "";
+}
+
+function corCSS(nome) {
+  return getComputedStyle(document.body).getPropertyValue(nome).trim();
+}
+
+function mudarPeriodoDolar(periodo) {
+  periodoDolarAtual = periodo;
+  document.querySelectorAll(".grafico-periodo-btn").forEach(b => {
+    b.classList.toggle("active", b.dataset.periodo === periodo);
+  });
+  renderGraficoDolar(periodo);
+}
+
+function renderGraficoDolar(periodo) {
+  const d = DADOS_MERCADO.dolar;
+  let meses = d.meses, valores = d.valores;
+
+  // Recorta o período
+  if (periodo === "10a") {
+    meses = meses.slice(-120); valores = valores.slice(-120);
+  } else if (periodo === "5a") {
+    meses = meses.slice(-60); valores = valores.slice(-60);
+  }
+
+  const ctx = document.getElementById("canvas-dolar").getContext("2d");
+  if (chartDolar) chartDolar.destroy();
+
+  chartDolar = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: meses,
+      datasets: [{
+        label: "USD/BRL",
+        data: valores,
+        borderColor: corCSS("--brand-blue"),
+        backgroundColor: "rgba(0,136,204,0.08)",
+        borderWidth: 2,
+        fill: true,
+        pointRadius: 0,
+        tension: 0.2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          ticks: {
+            maxTicksLimit: 8,
+            font: { size: 10 },
+            color: corCSS("--text-soft")
+          },
+          grid: { display: false }
+        },
+        y: {
+          ticks: {
+            font: { size: 10 },
+            color: corCSS("--text-soft"),
+            callback: v => "R$ " + v.toFixed(2)
+          },
+          grid: { color: corCSS("--border") }
+        }
+      }
+    }
+  });
+
+  // Destaque
+  const ini = valores[0], fim = valores[valores.length - 1];
+  const variacao = (((fim - ini) / ini) * 100).toFixed(0);
+  document.getElementById("destaque-dolar").innerHTML = `
+    No início do período: <strong>R$ ${ini.toFixed(2)}</strong> por dólar.
+    Hoje: <strong>R$ ${fim.toFixed(2)}</strong>.
+    O real ${variacao >= 0 ? 'desvalorizou' : 'valorizou'}
+    <strong>${Math.abs(variacao)}%</strong> frente ao dólar nesse intervalo.
+  `;
+}
+
+function renderGraficoR100() {
+  const d = DADOS_MERCADO.dolar;
+  const ctx = document.getElementById("canvas-r100").getContext("2d");
+  if (chartR100) chartR100.destroy();
+
+  chartR100 = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: d.meses,
+      datasets: [{
+        label: "Valor de R$100 em dólar",
+        data: d.r100emdolar,
+        borderColor: corCSS("--brand-red"),
+        backgroundColor: "rgba(161,32,38,0.12)",
+        borderWidth: 2,
+        fill: true,
+        pointRadius: 0,
+        tension: 0.2
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          ticks: { maxTicksLimit: 8, font: { size: 10 }, color: corCSS("--text-soft") },
+          grid: { display: false }
+        },
+        y: {
+          beginAtZero: true,
+          ticks: {
+            font: { size: 10 },
+            color: corCSS("--text-soft"),
+            callback: v => "US$ " + v
+          },
+          grid: { color: corCSS("--border") }
+        }
+      }
+    }
+  });
+
+  // Destaque
+  const ini = d.r100emdolar[0];
+  const fim = d.r100emdolar[d.r100emdolar.length - 1];
+  const perda = (((ini - fim) / ini) * 100).toFixed(0);
+  document.getElementById("destaque-r100").innerHTML = `
+    Em <strong>${d.meses[0]}</strong>, R$100 valiam <strong>US$ ${ini.toFixed(0)}</strong>.
+    Hoje valem <strong>US$ ${fim.toFixed(2)}</strong> — uma perda de
+    <strong>${perda}%</strong> do poder de compra em dólar. É por isso que dolarizar parte do patrimônio é proteção, não aposta.
+  `;
+}
+
+function renderGraficoIndices() {
+  const idx = DADOS_MERCADO.indices;
+  const ctx = document.getElementById("canvas-indices").getContext("2d");
+  if (chartIndices) chartIndices.destroy();
+
+  chartIndices = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: idx.meses,
+      datasets: [
+        {
+          label: "CDI",
+          data: idx.cdi,
+          borderColor: corCSS("--brand-blue"),
+          borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false
+        },
+        {
+          label: "IPCA (inflação)",
+          data: idx.ipca,
+          borderColor: corCSS("--brand-red"),
+          borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false
+        },
+        {
+          label: "Poupança",
+          data: idx.poupanca,
+          borderColor: corCSS("--brand-orange"),
+          borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false,
+          borderDash: [5, 4]
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { boxWidth: 12, font: { size: 11 }, color: corCSS("--text") }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { maxTicksLimit: 7, font: { size: 10 }, color: corCSS("--text-soft") },
+          grid: { display: false }
+        },
+        y: {
+          ticks: {
+            font: { size: 10 },
+            color: corCSS("--text-soft"),
+            callback: v => "R$ " + v.toFixed(0)
+          },
+          grid: { color: corCSS("--border") }
+        }
+      }
+    }
+  });
+
+  // Destaque
+  const cdiF = idx.cdi[idx.cdi.length - 1];
+  const ipcaF = idx.ipca[idx.ipca.length - 1];
+  const poupF = idx.poupanca[idx.poupanca.length - 1];
+  const cdiReal = (((cdiF / ipcaF) - 1) * 100).toFixed(1);
+  const poupReal = (((poupF / ipcaF) - 1) * 100).toFixed(1);
+  document.getElementById("destaque-indices").innerHTML = `
+    R$ 100 em ${idx.meses[0]} viraram: <strong>R$ ${cdiF.toFixed(0)} no CDI</strong>,
+    <strong>R$ ${poupF.toFixed(0)} na Poupança</strong>,
+    enquanto a inflação levou o "custo de vida" para <strong>R$ ${ipcaF.toFixed(0)}</strong>.
+    Ganho real: CDI <strong>+${cdiReal}%</strong> · Poupança <strong>${poupReal >= 0 ? '+' : ''}${poupReal}%</strong> acima da inflação.
+  `;
+}
+
+/**
+ * Série do IMA-B derivada EM RUNTIME do ETF IMAB11 que já está em data/dados.js
+ * (nada de número duplicado ou digitado à mão). Fechamento do último pregão de
+ * cada mês, rebase 100 no primeiro mês, alinhado ao CDI/IPCA do DADOS_MERCADO.
+ */
+function dadosGraficoImab() {
+  const raw = (typeof DADOS !== "undefined" && DADOS.etfs && DADOS.etfs.IMAB11) || [];
+  if (raw.length < 2) return null;
+
+  const porMes = new Map(); // "YYYY-MM" → último close do mês (raw vem ordenado)
+  raw.forEach(p => porMes.set(p.data.slice(0, 7), p.close));
+
+  const idx = DADOS_MERCADO.indices;
+  const chave = m => m.slice(3) + "-" + m.slice(0, 2); // "05/2021" → "2021-05"
+  const i0 = idx.meses.findIndex(m => porMes.has(chave(m)));
+  if (i0 < 0) return null;
+
+  const baseImab = porMes.get(chave(idx.meses[i0]));
+  const baseCdi = idx.cdi[i0];
+  const baseIpca = idx.ipca[i0];
+  const out = { meses: [], imab: [], cdi: [], ipca: [] };
+  for (let i = i0; i < idx.meses.length; i++) {
+    const v = porMes.get(chave(idx.meses[i]));
+    if (v == null) break; // fim da série do ETF — nunca "achata" a curva
+    out.meses.push(idx.meses[i]);
+    out.imab.push(100 * v / baseImab);
+    out.cdi.push(100 * idx.cdi[i] / baseCdi);
+    out.ipca.push(100 * idx.ipca[i] / baseIpca);
+  }
+  return out.meses.length >= 2 ? out : null;
+}
+
+function renderGraficoImab() {
+  const card = document.getElementById("card-grafico-imab");
+  const dados = dadosGraficoImab();
+  if (!dados) { if (card) card.style.display = "none"; return; }
+  if (card) card.style.display = "";
+
+  const ctx = document.getElementById("canvas-imab").getContext("2d");
+  if (chartImab) chartImab.destroy();
+
+  chartImab = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: dados.meses,
+      datasets: [
+        {
+          label: "IMA-B (IMAB11)",
+          data: dados.imab,
+          borderColor: corCSS("--ok"),
+          borderWidth: 2.5, pointRadius: 0, tension: 0.2, fill: false
+        },
+        {
+          label: "CDI",
+          data: dados.cdi,
+          borderColor: corCSS("--brand-blue"),
+          borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false
+        },
+        {
+          label: "IPCA (inflação)",
+          data: dados.ipca,
+          borderColor: corCSS("--brand-red"),
+          borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: { boxWidth: 12, font: { size: 11 }, color: corCSS("--text") }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { maxTicksLimit: 7, font: { size: 10 }, color: corCSS("--text-soft") },
+          grid: { display: false }
+        },
+        y: {
+          ticks: {
+            font: { size: 10 },
+            color: corCSS("--text-soft"),
+            callback: v => "R$ " + v.toFixed(0)
+          },
+          grid: { color: corCSS("--border") }
+        }
+      }
+    }
+  });
+
+  // Destaque — tudo calculado da própria série, nada digitado à mão
+  const imabF = dados.imab[dados.imab.length - 1];
+  const cdiF = dados.cdi[dados.cdi.length - 1];
+  const ipcaF = dados.ipca[dados.ipca.length - 1];
+  const imabReal = ((imabF / ipcaF - 1) * 100).toFixed(1);
+  const menorVsBase = Math.min(...dados.imab.map(v => v / 100 - 1));
+  const trechoVale = menorVsBase < -0.005
+    ? `Mesmo chegando a ficar <strong>${(menorVsBase * 100).toFixed(1)}%</strong> abaixo do ponto
+       de partida na marcação a mercado do ciclo de alta da Selic, o`
+    : `O`;
+  document.getElementById("destaque-imab").innerHTML = `
+    R$ 100 em ${dados.meses[0]} viraram: <strong>R$ ${imabF.toFixed(0)} no IMA-B</strong>,
+    <strong>R$ ${cdiF.toFixed(0)} no CDI</strong>, com a inflação em <strong>R$ ${ipcaF.toFixed(0)}</strong>.
+    ${trechoVale} IMA-B entregou
+    <strong>${Number(imabReal) >= 0 ? '+' : ''}${imabReal}%</strong> acima da inflação no período.
+    Argumento de pitch: é o termômetro do Tesouro IPCA+ — proteção de poder de compra com juro real.
+  `;
+}
+
+/* ============ IMA-B LONGO PRAZO — SGS AO VIVO COM AUTOVALIDAÇÃO ============
+   A série longa do IMA-B (desde 2004) vem do SGS do Banco Central, buscada
+   pelo navegador de quem abre a página. Como o número exato da série ANBIMA
+   no catálogo do SGS não deve ser confiado às cegas, o código PROVA qual
+   candidato é o IMA-B: compara os retornos mensais de cada um com o ETF
+   IMAB11 (data/dados.js) na janela 2021→2026 e só aceita quem bate em
+   correlação, erro médio E volatilidade. Sem aprovação → sem gráfico. */
+
+/* Códigos confirmados do bloco ANBIMA no SGS: 12466 = IMA-B (diário),
+   12467 = IMA-B 5, 12468 = IMA-B 5+. A validação contra o IMAB11 continua
+   decidindo — os códigos só ordenam a fila. */
+const SGS_IMAB_CANDIDATOS = [12466, 12467, 12468, 12462];
+const SGS_CDI_MENSAL = 4391;
+const SGS_IPCA_MENSAL = 433;
+const IMABLONGO_CACHE_KEY = "academia.imablongo.v4";
+const IMABLONGO_CACHE_DIAS = 7;
+
+async function buscarSgs(codigo, params, timeoutMs) {
+  const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.${codigo}/dados${params.ultimos ? `/ultimos/${params.ultimos}` : ""}?formato=json` +
+    (params.dataInicial ? `&dataInicial=${params.dataInicial}` : "") +
+    (params.dataFinal ? `&dataFinal=${params.dataFinal}` : "");
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), timeoutMs || 12000);
+  try {
+    const res = await fetch(url, { signal: ctrl.signal });
+    if (!res.ok) throw new Error(`SGS ${codigo}: HTTP ${res.status}`);
+    const rows = await res.json();
+    if (!Array.isArray(rows)) throw new Error(`SGS ${codigo}: resposta inesperada`);
+    return rows; // [{ data: "DD/MM/YYYY", valor: "..." }, ...]
+  } catch (e) {
+    if (e && e.name === "AbortError") throw new Error(`SGS ${codigo}: sem resposta em ${(timeoutMs || 12000) / 1000}s`);
+    throw e;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+/** A API do BCB limita consultas de séries diárias a ~10 anos — busca em blocos. */
+async function buscarSgsLongo(codigo, anoInicial) {
+  const hoje = new Date();
+  const blocos = [];
+  for (let a = anoInicial; a <= hoje.getFullYear(); a += 9) {
+    const fimAno = Math.min(a + 8, hoje.getFullYear());
+    blocos.push({ dataInicial: `01/01/${a}`, dataFinal: `31/12/${fimAno}` });
+  }
+  const partes = await Promise.all(blocos.map(b => buscarSgs(codigo, b, 20000)));
+  const vistos = new Set();
+  const rows = [];
+  for (const parte of partes) {
+    for (const r of parte) {
+      if (!vistos.has(r.data)) { vistos.add(r.data); rows.push(r); }
+    }
+  }
+  return rows;
+}
+
+function parseValor(r) {
+  let s = String(r.valor).trim();
+  // O SGS pode devolver número em formato brasileiro ("7.842,31") — ponto de
+  // milhar + vírgula decimal. Detecta e normaliza antes do parseFloat.
+  if (/^-?\d{1,3}(\.\d{3})+(,\d+)?$/.test(s)) s = s.replace(/\./g, "").replace(",", ".");
+  else if (s.indexOf(",") >= 0) s = s.replace(",", ".");
+  const v = parseFloat(s);
+  return isFinite(v) ? v : null;
+}
+
+/** Interpretação A — valor = % do período: compõe por mês. */
+function mensalizaComoVariacao(rows) {
+  const porMes = new Map(); // "YYYY-MM" → fator acumulado do mês
+  for (const r of rows) {
+    const v = parseValor(r);
+    if (v === null) continue;
+    const [, mm, yyyy] = r.data.split("/");
+    const chave = `${yyyy}-${mm}`;
+    porMes.set(chave, (porMes.get(chave) || 1) * (1 + v / 100));
+  }
+  return [...porMes.entries()]
+    .map(([mes, fator]) => ({ mes, retorno: fator - 1 }))
+    .sort((a, b) => (a.mes < b.mes ? -1 : 1));
+}
+
+/** Interpretação B — valor = número-índice diário: retorno mensal = fim/fim anterior. */
+function mensalizaComoIndice(rows) {
+  const fimDeMes = new Map(); // "YYYY-MM" → último índice do mês (rows em ordem)
+  for (const r of rows) {
+    const v = parseValor(r);
+    if (v === null || v <= 0) continue;
+    const [, mm, yyyy] = r.data.split("/");
+    fimDeMes.set(`${yyyy}-${mm}`, v);
+  }
+  const meses = [...fimDeMes.keys()].sort();
+  const out = [];
+  for (let i = 1; i < meses.length; i++) {
+    out.push({ mes: meses[i], retorno: fimDeMes.get(meses[i]) / fimDeMes.get(meses[i - 1]) - 1 });
+  }
+  return out;
+}
+
+/** Retornos mensais do ETF IMAB11 a partir do dados.js (gabarito da validação). */
+function retornosMensaisImab11() {
+  const raw = (typeof DADOS !== "undefined" && DADOS.etfs && DADOS.etfs.IMAB11) || [];
+  const fimDeMes = new Map();
+  raw.forEach(p => fimDeMes.set(p.data.slice(0, 7), p.close));
+  const meses = [...fimDeMes.keys()].sort();
+  const out = new Map();
+  for (let i = 1; i < meses.length; i++) {
+    const prev = fimDeMes.get(meses[i - 1]);
+    if (prev > 0) out.set(meses[i], fimDeMes.get(meses[i]) / prev - 1);
+  }
+  return out; // "YYYY-MM" → retorno mensal
+}
+
+/** Prova se a série candidata é mesmo o IMA-B: correlação, erro médio e vol.
+    O SGS descontinuou o bloco ANBIMA (migrou para data.anbima.com.br), então a
+    sobreposição com o IMAB11 pode ser curta — o mínimo é 6 meses, e a razão de
+    volatilidade é o que separa IMA-B de IMA-B 5 (vol menor) e 5+ (vol maior). */
+function validaContraImab11(mensalSgs, gabarito) {
+  const pares = [];
+  for (const { mes, retorno } of mensalSgs) {
+    if (gabarito.has(mes)) pares.push([retorno, gabarito.get(mes)]);
+  }
+  if (pares.length < 6) return { ok: false, motivo: `só ${pares.length} meses em comum` };
+
+  const n = pares.length;
+  const ma = pares.reduce((s, p) => s + p[0], 0) / n;
+  const mb = pares.reduce((s, p) => s + p[1], 0) / n;
+  let cov = 0, va = 0, vb = 0, mae = 0;
+  for (const [a, b] of pares) {
+    cov += (a - ma) * (b - mb);
+    va += (a - ma) ** 2;
+    vb += (b - mb) ** 2;
+    mae += Math.abs(a - b);
+  }
+  const corr = va > 0 && vb > 0 ? cov / Math.sqrt(va * vb) : 0;
+  mae /= n;
+  const volRatio = vb > 0 ? Math.sqrt(va / vb) : 0;
+
+  const ok = corr >= 0.97 && mae <= 0.004 && volRatio >= 0.8 && volRatio <= 1.25;
+  return { ok, corr, mae, volRatio, meses: n };
+}
+
+function leCacheImabLongo() {
+  try {
+    const raw = localStorage.getItem(IMABLONGO_CACHE_KEY);
+    if (!raw) return null;
+    const c = JSON.parse(raw);
+    if (!c || !c.series || !c.buscadoEm) return null;
+    const idadeDias = (Date.now() - c.buscadoEm) / 86400000;
+    return idadeDias <= IMABLONGO_CACHE_DIAS ? c : null;
+  } catch { return null; }
+}
+
+let imabLongoBuscando = false;
+
+async function montarImabLongo(forcar) {
+  const status = document.getElementById("status-imablongo");
+  const card = document.getElementById("card-grafico-imablongo");
+  if (!status || !card) return;
+
+  const cache = forcar ? null : leCacheImabLongo();
+  if (cache) { renderImabLongo(cache); return; }
+  if (imabLongoBuscando) return;
+  imabLongoBuscando = true;
+  status.style.display = "";
+
+  try {
+    const gabarito = retornosMensaisImab11();
+    if (gabarito.size < 36) throw new Error("gabarito IMAB11 indisponível no dados.js");
+
+    // Fase 0: ping rápido — se o BCB não responde, avisa já com o motivo
+    status.innerHTML = "⏳ Conectando ao Banco Central (SGS)…";
+    await buscarSgs(SGS_CDI_MENSAL, { ultimos: 1 }, 8000);
+
+    // Fase 1: descobrir QUAL série é o IMA-B. Pede o FIM de cada candidata
+    // (/ultimos/900 — onde quer que a série termine) e testa as duas
+    // interpretações possíveis (número-índice e variação %): a validação
+    // contra o IMAB11 decide. Se nada passar, o erro lista o que veio de
+    // cada candidata — diagnóstico completo na tela.
+    status.innerHTML = "⏳ Identificando a série do IMA-B (validando contra o IMAB11)…";
+    const amostras = await Promise.allSettled(
+      SGS_IMAB_CANDIDATOS.map(c => buscarSgs(c, { ultimos: 900 }, 15000)),
+    );
+    let escolhido = null;
+    const diag = [];
+    for (let i = 0; i < SGS_IMAB_CANDIDATOS.length && !escolhido; i++) {
+      const codigo = SGS_IMAB_CANDIDATOS[i];
+      if (amostras[i].status !== "fulfilled") {
+        diag.push(`${codigo}: falha na busca (${(amostras[i].reason && amostras[i].reason.message) || "?"})`);
+        continue;
+      }
+      const rows = amostras[i].value;
+      if (rows.length === 0) { diag.push(`${codigo}: veio vazia`); continue; }
+      let melhor = null;
+      for (const modo of ["indice", "variacao"]) {
+        const mensal = modo === "indice" ? mensalizaComoIndice(rows) : mensalizaComoVariacao(rows);
+        const v = validaContraImab11(mensal, gabarito);
+        if (v.ok) { escolhido = { codigo, modo, verif: v }; break; }
+        if (!melhor || (v.corr || 0) > (melhor.corr || 0)) melhor = v;
+      }
+      if (!escolhido) {
+        const resumoV = melhor && melhor.corr !== undefined
+          ? `melhor corr ${melhor.corr.toFixed(2)} em ${melhor.meses || 0}m (volRatio ${melhor.volRatio ? melhor.volRatio.toFixed(2) : "?"})`
+          : (melhor && melhor.motivo) || "sem janela de validação";
+        diag.push(`${codigo}: ${rows.length} pts, ${rows[0].data}→${rows[rows.length - 1].data}, últ. valor "${rows[rows.length - 1].valor}", ${resumoV}`);
+      }
+    }
+    if (!escolhido) {
+      throw new Error(`nenhuma candidata validou contra o IMAB11. Diagnóstico — ${diag.join(" · ")}`);
+    }
+
+    // Fase 2: histórico completo do aprovado + CDI e IPCA mensais (em blocos)
+    status.innerHTML = "⏳ Baixando o histórico completo (desde 2004)…";
+    const [imabFull, cdiFull, ipcaFull] = await Promise.all([
+      buscarSgsLongo(escolhido.codigo, 2003),
+      buscarSgsLongo(SGS_CDI_MENSAL, 2003),
+      buscarSgsLongo(SGS_IPCA_MENSAL, 2003),
+    ]);
+    let imabM = escolhido.modo === "indice" ? mensalizaComoIndice(imabFull) : mensalizaComoVariacao(imabFull);
+    const cdiM = new Map(mensalizaComoVariacao(cdiFull).map(r => [r.mes, r.retorno]));
+    const ipcaM = new Map(mensalizaComoVariacao(ipcaFull).map(r => [r.mes, r.retorno]));
+
+    // EMENDA declarada: o SGS descontinuou o bloco ANBIMA, então a série para
+    // no passado. Daí em diante entram os retornos mensais REAIS do IMAB11
+    // (dados.js) — a costura fica escrita no status e na fonte do card.
+    // O último mês do SGS pode estar incompleto: se o ETF cobre esse mês,
+    // descartamos o parcial e deixamos o ETF assumir.
+    let emendaDesde = null;
+    if (imabM.length > 0) {
+      while (imabM.length > 0 && gabarito.has(imabM[imabM.length - 1].mes)) {
+        imabM = imabM.slice(0, -1);
+      }
+      const ultimoSgs = imabM.length > 0 ? imabM[imabM.length - 1].mes : "";
+      const mesesEtf = [...gabarito.keys()].sort();
+      for (const mes of mesesEtf) {
+        if (mes > ultimoSgs) {
+          imabM.push({ mes, retorno: gabarito.get(mes) });
+          if (!emendaDesde) emendaDesde = mes;
+        }
+      }
+    }
+
+    const meses = [], sImab = [], sCdi = [], sIpca = [];
+    let fImab = 1, fCdi = 1, fIpca = 1;
+    for (const { mes, retorno } of imabM) {
+      if (!cdiM.has(mes) || !ipcaM.has(mes)) continue;
+      fImab *= 1 + retorno;
+      fCdi *= 1 + cdiM.get(mes);
+      fIpca *= 1 + ipcaM.get(mes);
+      meses.push(mes);
+      sImab.push(100 * fImab);
+      sCdi.push(100 * fCdi);
+      sIpca.push(100 * fIpca);
+    }
+    if (meses.length < 120) throw new Error("histórico do SGS veio curto demais");
+
+    const payload = {
+      buscadoEm: Date.now(),
+      codigo: escolhido.codigo,
+      modo: escolhido.modo,
+      verif: escolhido.verif,
+      emendaDesde,
+      series: { meses, imab: sImab, cdi: sCdi, ipca: sIpca },
+    };
+    try { localStorage.setItem(IMABLONGO_CACHE_KEY, JSON.stringify(payload)); } catch { /* storage cheio — segue sem cache */ }
+    renderImabLongo(payload);
+  } catch (e) {
+    let motivo = (e && e.message) || "falha de rede";
+    if (/Failed to fetch|NetworkError|Load failed/i.test(motivo)) {
+      motivo = "o navegador não conseguiu falar com api.bcb.gov.br — bloqueio de rede/CORS ou BCB fora do ar";
+    }
+    status.innerHTML = `⚠️ Não consegui montar a série longa agora (${motivo}).
+      <button class="grafico-periodo-btn" onclick="montarImabLongo(true)">Tentar de novo</button>`;
+  } finally {
+    imabLongoBuscando = false;
+  }
+}
+
+function mesLabel(m) { return m.slice(5) + "/" + m.slice(0, 4); }
+
+let imabLongoUltimo = null;
+
+function renderImabLongo(payload) {
+  imabLongoUltimo = payload;
+  const { series, codigo, verif, buscadoEm } = payload;
+  const status = document.getElementById("status-imablongo");
+  document.getElementById("wrap-imablongo").style.display = "";
+  document.getElementById("destaque-imablongo").style.display = "";
+  document.getElementById("acao-imablongo").style.display = "";
+
+  const ctx = document.getElementById("canvas-imablongo").getContext("2d");
+  if (chartImabLongo) chartImabLongo.destroy();
+  chartImabLongo = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: series.meses.map(mesLabel),
+      datasets: [
+        { label: "IMA-B", data: series.imab, borderColor: corCSS("--ok"), borderWidth: 2.5, pointRadius: 0, tension: 0.2, fill: false },
+        { label: "CDI", data: series.cdi, borderColor: corCSS("--brand-blue"), borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false },
+        { label: "IPCA (inflação)", data: series.ipca, borderColor: corCSS("--brand-red"), borderWidth: 2, pointRadius: 0, tension: 0.2, fill: false }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: "bottom", labels: { boxWidth: 12, font: { size: 11 }, color: corCSS("--text") } } },
+      scales: {
+        x: { ticks: { maxTicksLimit: 8, font: { size: 10 }, color: corCSS("--text-soft") }, grid: { display: false } },
+        y: { ticks: { font: { size: 10 }, color: corCSS("--text-soft"), callback: v => "R$ " + Number(v).toFixed(0) }, grid: { color: corCSS("--border") } }
+      }
+    }
+  });
+
+  const n = series.meses.length;
+  const imabF = series.imab[n - 1], cdiF = series.cdi[n - 1], ipcaF = series.ipca[n - 1];
+  const aMais = ((imabF / cdiF - 1) * 100).toFixed(0);
+  const imabReal = ((imabF / ipcaF - 1) * 100).toFixed(0);
+  const cdiReal = ((cdiF / ipcaF - 1) * 100).toFixed(0);
+  document.getElementById("destaque-imablongo").innerHTML = `
+    R$ 100 em ${mesLabel(series.meses[0])} viraram:
+    <strong>R$ ${imabF.toFixed(0)} no IMA-B</strong> vs <strong>R$ ${cdiF.toFixed(0)} no CDI</strong>
+    (inflação: R$ ${ipcaF.toFixed(0)}). No acumulado, o IMA-B entregou <strong>${aMais}% a mais</strong>
+    que o CDI — juro real de <strong>+${imabReal}%</strong> contra <strong>+${cdiReal}%</strong>.
+    O tranco de curto prazo é o pedágio; o longo prazo é a cobrança.
+  `;
+  if (status) {
+    const data = new Date(buscadoEm);
+    const dd = String(data.getDate()).padStart(2, "0");
+    const mm = String(data.getMonth() + 1).padStart(2, "0");
+    const emenda = payload.emendaDesde
+      ? ` · índice ANBIMA (SGS) até a descontinuação; de ${mesLabel(payload.emendaDesde)} em diante, ETF IMAB11`
+      : "";
+    status.innerHTML = `✅ SGS série ${codigo}, validada contra o IMAB11 (correlação ${verif.corr.toFixed(3)}
+      em ${verif.meses} meses)${emenda} · buscado em ${dd}/${mm}/${data.getFullYear()}
+      <button class="grafico-periodo-btn" onclick="montarImabLongo(true)">Atualizar</button>`;
+  }
+}
+
+/* ============ INSERIR GRÁFICO NOS SLIDES DO PITCH ============ */
+const GRAFICOS_META = {
+  r100:    { titulo: "Quanto vale R$100 em dólar", fonte: "Banco Central do Brasil (SGS série 1)" },
+  dolar:   { titulo: "Dólar (USD/BRL) ao longo do tempo", fonte: "Banco Central do Brasil (SGS série 1)" },
+  indices: { titulo: "CDI vs IPCA vs Poupança", fonte: "Banco Central do Brasil (SGS séries 4391, 433, 196)" },
+  imab:    { titulo: "IMA-B vs CDI vs IPCA — títulos IPCA+ na prática", fonte: "IMA-B via ETF IMAB11 (iShares, B3); CDI/IPCA: Banco Central do Brasil (SGS 4391, 433)", congelado: "29/05/2026" },
+  imablongo: { titulo: "IMA-B vs CDI — o longo prazo (desde 2004)", fonte: "IMA-B: índice ANBIMA via BCB/SGS, emendado com o ETF IMAB11 até hoje; CDI/IPCA: SGS 4391, 433 — validação automática entre as fontes", congelado: "busca ao vivo no SGS" }
+};
+
+// graficosInseridos: array de { tipo, posicao }
+// posicao: "inicio" | "fim" | "etapa-0".."etapa-3" (depois da etapa N do framework)
+
