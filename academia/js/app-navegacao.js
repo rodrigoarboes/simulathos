@@ -30,12 +30,51 @@ function trocarTela(idTela) {
   } else {
     fabGraficos.classList.remove("visible");
   }
+
+  // O FAB único só aparece quando ao menos uma ferramenta está disponível
+  const fabMenu = document.getElementById("fab-menu");
+  if (fabMenu) {
+    const algumaFerramenta = fabMenu.querySelectorAll(".fab-menu__itens button.visible").length > 0;
+    fabMenu.classList.toggle("visible", algumaFerramenta);
+    if (!algumaFerramenta) {
+      fabMenu.classList.remove("aberto");
+      const fabToggle = document.getElementById("fab-toggle");
+      if (fabToggle) fabToggle.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  // Stepper da topbar: passo atual + passos já percorridos
+  const passos = document.querySelectorAll("#stepper li");
+  let indiceAtual = -1;
+  passos.forEach((li, i) => { if (li.dataset.tela === idTela) indiceAtual = i; });
+  passos.forEach((li, i) => {
+    li.classList.toggle("done", indiceAtual > -1 && i < indiceAtual);
+    if (indiceAtual > -1 && i === indiceAtual) {
+      li.setAttribute("aria-current", "step");
+    } else {
+      li.removeAttribute("aria-current");
+    }
+  });
 }
 function voltarTela1() {
   modoLivre = false;
   montagemAtual = [];
   pitchData = {};
   frameworkAtual = null;
+
+  // APRESENTACAO-05 — limpeza da sessão de apresentação do case anterior.
+  // Sem isto, os gráficos escolhidos no case anterior reapareciam nos slides do
+  // case novo e o cronômetro continuava correndo em segundo plano.
+  graficosInseridos.length = 0;
+  if (typeof destruirChartsDosSlides === "function") destruirChartsDosSlides();
+  const viewport = document.getElementById("slide-viewport");
+  if (viewport) viewport.innerHTML = "";
+  if (typeof totalSlides !== "undefined") totalSlides = 0;
+  if (typeof slideAtual !== "undefined") slideAtual = 0;
+  if (typeof resetCronometro === "function") resetCronometro();
+  if (typeof atualizarBotoesInseridos === "function") atualizarBotoesInseridos();
+  if (typeof sairModoApresentacao === "function" && emModoApresentacao) sairModoApresentacao();
+
   fecharDrawer();
   fecharAjudaMacro();
   fecharGraficos();

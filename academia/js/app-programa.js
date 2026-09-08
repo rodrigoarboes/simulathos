@@ -420,28 +420,85 @@ function lerAnalytics() {
 function salvarAnalytics(a) {
   localStorage.setItem("aida_vo4_analytics", JSON.stringify(a));
 }
-function registrarTentativa(caseId) {
-  const a = lerAnalytics();
+/* ACADEMIA-10 — o progresso passa a ser guardado por case:
+   { tentativas, melhorScore, ultimoScore, ultimaData }. Abrir o briefing NÃO conta
+   tentativa: só a submissão conta, e por isso registrarTentativa exige o segundo
+   argumento "submit". */
+function normalizarAnalytics(a) {
+  if (!a || typeof a !== "object") a = {};
+  if (!a.tentativas || typeof a.tentativas !== "object") a.tentativas = {};
+  if (!Array.isArray(a.scores)) a.scores = [];
+  if (!a.cases || typeof a.cases !== "object") a.cases = {};
+  return a;
+}
+function registroDoCase(a, caseId) {
+  const chave = String(caseId);
+  if (!a.cases[chave]) {
+    a.cases[chave] = { tentativas: 0, melhorScore: null, ultimoScore: null, ultimaData: null };
+  }
+  return a.cases[chave];
+}
+function estadoDoCase(caseId, analytics) {
+  const a = normalizarAnalytics(analytics || lerAnalytics());
+  const chave = String(caseId);
+  const reg = a.cases[chave];
+  if (!reg || !reg.tentativas) return { situacao: "nao-iniciado", rotulo: "Não iniciado", melhorScore: null, tentativas: 0 };
+  if (reg.melhorScore !== null && reg.melhorScore >= 70) {
+    return { situacao: "concluido", rotulo: "Concluído · melhor " + reg.melhorScore, melhorScore: reg.melhorScore, tentativas: reg.tentativas };
+  }
+  return {
+    situacao: "em-progresso",
+    rotulo: reg.melhorScore !== null ? "Em progresso · melhor " + reg.melhorScore : "Em progresso",
+    melhorScore: reg.melhorScore,
+    tentativas: reg.tentativas
+  };
+}
+
+function registrarTentativa(caseId, origem) {
+  // Só conta quando a proposta é submetida (ACADEMIA-10). Abrir o briefing não conta.
+  if (origem !== "submit") return;
+  if (caseId === null || caseId === undefined) return;
+  const a = normalizarAnalytics(lerAnalytics());
   a.tentativas[caseId] = (a.tentativas[caseId] || 0) + 1;
+  const reg = registroDoCase(a, caseId);
+  reg.tentativas += 1;
+  reg.ultimaData = new Date().toISOString();
   salvarAnalytics(a);
   atualizarStatsHome();
 }
 function registrarScore(caseId, score) {
-  const a = lerAnalytics();
+  if (caseId === null || caseId === undefined) return;
+  const a = normalizarAnalytics(lerAnalytics());
   a.scores.push({ caseId, score, ts: Date.now() });
+  const reg = registroDoCase(a, caseId);
+  // A tentativa já foi contada por calcularScore; se não foi (chamada direta), conta aqui.
+  if (!reg.tentativas) {
+    reg.tentativas = 1;
+    a.tentativas[caseId] = (a.tentativas[caseId] || 0) + 1;
+  }
+  reg.ultimoScore = score;
+  reg.melhorScore = (reg.melhorScore === null || reg.melhorScore === undefined)
+    ? score : Math.max(reg.melhorScore, score);
+  reg.ultimaData = new Date().toISOString();
   salvarAnalytics(a);
   atualizarStatsHome();
+  // Atualiza a faixa de estado nos cards da tela 1.
+  if (typeof document !== "undefined" && document.getElementById("grid-cases")) renderGrid();
 }
 function atualizarStatsHome() {
-  const a = lerAnalytics();
-  const tentados = Object.keys(a.tentativas).length;
-  const scores = a.scores.map(s => s.score);
+  const a = normalizarAnalytics(lerAnalytics());
+  const ids = Object.keys(a.cases);
+  const tentados = ids.filter(id => (a.cases[id].tentativas || 0) > 0).length;
+  const scores = a.scores.map(s => s.score).filter(v => typeof v === "number");
   const media = scores.length ? Math.round(scores.reduce((x, y) => x + y, 0) / scores.length) : null;
   const melhor = scores.length ? Math.max(...scores) : null;
 
-  document.getElementById("stat-tentados").textContent = tentados;
-  document.getElementById("stat-media").textContent = media !== null ? media : "-";
-  document.getElementById("stat-melhor").textContent = melhor !== null ? melhor : "-";
+  const elTentados = document.getElementById("stat-tentados");
+  const elMedia = document.getElementById("stat-media");
+  const elMelhor = document.getElementById("stat-melhor");
+  if (elTentados) elTentados.textContent = tentados;
+  if (elMedia) elMedia.textContent = media !== null ? media : "-";
+  if (elMelhor) elMelhor.textContent = melhor !== null ? melhor : "-";
 }
 
 /* =================================================================================
@@ -472,11 +529,17 @@ function renderGrid() {
     return;
   }
 
+  // ACADEMIA-10 — lê o progresso uma única vez para todos os cards.
+  const analytics = normalizarAnalytics(lerAnalytics());
+
   filtrados.forEach(c => {
     const card = document.createElement("div");
     card.className = "case-card";
     card.dataset.ciclo = c.ciclo;
     card.onclick = () => abrirCase(c.id);
+
+    const estado = estadoDoCase(c.id, analytics);
+    card.dataset.estado = estado.situacao;
 
     const tagsHtml = `
       <span class="tag perfil-${c.perfil.slice(0,5)}">${c.perfil}</span>
@@ -490,7 +553,8 @@ function renderGrid() {
       <div class="case-titulo">${c.titulo}</div>
       <div class="case-meta">${tagsHtml}</div>
       <div class="case-resumo">${c.resumo}</div>
-      <div class="case-cta">Abrir briefing →</div>
+      <div class="case-estado estado-${estado.situacao}"><span class="tag">${estado.rotulo}</span></div>
+      <div class="case-cta">${estado.situacao === "nao-iniciado" ? "Abrir briefing →" : "Refazer o case →"}</div>
     `;
     grid.appendChild(card);
   });
@@ -570,9 +634,26 @@ function irTela3() {
     document.getElementById("montagem-titulo").textContent = `Montar carteira — ${caseAtual.titulo}`;
     document.getElementById("aporte").value = caseAtual.aporte_sugerido;
   }
-  if (montagemAtual.length === 0) {
+  // Rascunho salvo (hash > localStorage) tem prioridade sobre as três linhas vazias,
+  // desde que seja do mesmo case (ou do modo livre).
+  var idAtual = modoLivre ? "livre" : (caseAtual ? caseAtual.id : null);
+  var rascunho = null;
+  if (window.Estado && typeof window.Estado.restaurarCarteira === "function") {
+    try { rascunho = window.Estado.restaurarCarteira(); } catch (e) { rascunho = null; }
+  }
+  var mesmoCase = rascunho && (rascunho.caseId === idAtual ||
+    (rascunho.caseId == null && idAtual === "livre"));
+
+  if (mesmoCase && Array.isArray(rascunho.linhas) && rascunho.linhas.length) {
+    montagemAtual = rascunho.linhas.map(function (l) {
+      return { ticker: l.ticker || "", pct: Number(l.pct) || 0 };
+    });
+    var aporteSalvo = Number(rascunho.aporte);
+    if (aporteSalvo > 0) document.getElementById("aporte").value = aporteSalvo;
+  } else if (montagemAtual.length === 0) {
     montagemAtual = [{ ticker: "", pct: 0 }, { ticker: "", pct: 0 }, { ticker: "", pct: 0 }];
   }
+
   renderLinhasAlocacao();
   calcularMontagem();
   trocarTela("tela3");

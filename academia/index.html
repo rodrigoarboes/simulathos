@@ -19,23 +19,56 @@
 <body>
 
 <!-- TOP BAR -->
-<div class="topbar">
+<header class="topbar">
   <div class="brand">
     <img id="logo-acad" class="brand-logo" alt="Academia do Assessor"/>
     <div class="brand-divider"></div>
     <div class="brand-text">AIDA <span>Allocation</span></div>
   </div>
-  <div class="topbar-actions">
-    <div class="modo-switch" id="modo-switch" title="Simula o tipo de acesso do aluno (no AdvisorPro virá do login)">
-      <button class="modo-opt active" data-modo="MAP" onclick="trocarModo('MAP')">Modo MAP</button>
-      <button class="modo-opt" data-modo="FEA" onclick="trocarModo('FEA')">Modo FEA / Beta</button>
-    </div>
-    <button class="icon" onclick="voltarTela1()">📚 Ver Cases</button>
-    <button class="icon" onclick="window.open('guia-etfs.html','_blank')" title="Super Guia de ETFs — 100 fichas, tributação, pizza de alocação e tese por país">📖 Guia de ETFs</button>
-    <button class="icon" onclick="toggleTheme()">🌓 Tema</button>
-    <button class="icon" id="btn-atualizar-dados" onclick="atualizarDadosBCB()" title="Atualizar CDI e IPCA via BCB">🔄 Atualizar dados</button>
+
+  <ol class="stepper" id="stepper" aria-label="Etapas do simulador">
+    <li data-tela="tela1" data-passo="1" aria-current="step">Cases</li>
+    <li data-tela="tela2" data-passo="2">Briefing</li>
+    <li data-tela="tela3" data-passo="3">Montagem</li>
+    <li data-tela="tela4" data-passo="4">Gabarito</li>
+    <li data-tela="tela5" data-passo="5">Pitch</li>
+    <li data-tela="tela6" data-passo="6">Apresentação</li>
+  </ol>
+
+  <div class="topbar__zona-fim">
+    <button class="btn btn--secondary" onclick="toggleTheme(); document.documentElement.setAttribute('data-theme', document.body.classList.contains('dark') ? 'dark' : 'light');" title="Alternar tema claro/escuro">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      Tema
+    </button>
+
+    <details class="menu" id="menu-topbar">
+      <summary aria-label="Abrir menu de ferramentas">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        Menu
+      </summary>
+      <div class="menu__painel">
+        <button type="button" onclick="window.open('guia-etfs.html','_blank')" title="Super Guia de ETFs — 100 fichas, tributação, pizza de alocação e tese por país">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H19v16H5.5A1.5 1.5 0 0 1 4 18.5z"/><path d="M8 8h7M8 12h7"/></svg>
+          Guia de ETFs
+        </button>
+        <button type="button" onclick="voltarTela1()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="7" height="7" rx="1"/><rect x="14" y="4" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Ver cases
+        </button>
+        <button type="button" id="btn-atualizar-dados" onclick="atualizarDadosBCB()" title="Atualizar CDI e IPCA via BCB">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-13.7-5.7L4 7.5"/><path d="M4 4v3.5h3.5"/><path d="M4 13a8 8 0 0 0 13.7 5.7L20 16.5"/><path d="M20 20v-3.5h-3.5"/></svg>
+          Atualizar dados
+        </button>
+        <div class="menu__sep"></div>
+        <span class="menu__rotulo">Tipo de acesso</span>
+        <div class="modo-switch" id="modo-switch" title="Simula o tipo de acesso do aluno (no AdvisorPro virá do login)">
+          <button class="modo-opt active" data-modo="MAP" onclick="trocarModo('MAP')">Modo MAP</button>
+          <button class="modo-opt" data-modo="FEA" onclick="trocarModo('FEA')">Modo FEA / Beta</button>
+        </div>
+      </div>
+    </details>
   </div>
-</div>
+</header>
 
 <!-- BANNER DE CONTEXTO DO MODO -->
 <div class="modo-banner" id="modo-banner"></div>
@@ -190,108 +223,187 @@
 
 <!-- ============================== TELA 3: MONTAGEM ============================== -->
 <div class="tela" id="tela3">
-  <div class="hero" style="margin-bottom:20px;">
+  <div class="hero tela3-hero">
     <h2 id="montagem-titulo"></h2>
-    <p id="montagem-subtitulo" style="font-size:14px;">Digite o ticker ou nome no campo de busca e selecione. Defina os percentuais. Catálogo inclui ETFs B3 e offshore.</p>
-    <div id="modo-livre-info" style="display:none; background:rgba(0,136,204,0.06); border-left:3px solid var(--brand-blue); padding:12px 16px; border-radius:0 8px 8px 0; margin-top:8px; font-size:12px; line-height:1.5;">
-      <strong style="color:var(--brand-blue);">🧪 Modo Livre</strong> — Monte sua carteira com qualquer combinação de ativos. Digite o ticker ou nome em cada linha para buscar ETFs, ações, FIIs e mais.
+    <p id="montagem-subtitulo" class="tela3-hero__sub">Digite o ticker ou nome no campo de busca e selecione. Defina os percentuais. Catálogo inclui ETFs B3 e offshore.</p>
+    <!-- O modo livre é ligado/desligado por style.display no app-programa.js;
+         por isso este display:none inline continua aqui (ver hooks pendentes). -->
+    <div id="modo-livre-info" class="tela3-modo-livre" style="display:none;">
+      <strong>Modo Livre</strong> — Monte sua carteira com qualquer combinação de ativos. Digite o ticker ou nome em cada linha para buscar ETFs, ações, FIIs e mais.
     </div>
   </div>
 
-  <div class="montagem-grid">
-    <div class="painel">
-      <div class="aporte-input">
-        <label>Aporte total (R$):<span class="info-tip tip-down" data-tip="Valor total que o cliente tem para investir neste momento. Já vem preenchido com o valor sugerido do case, mas você pode ajustar."></span></label>
-        <input type="number" id="aporte" value="100000" oninput="calcularMontagem()"/>
+  <div class="montagem-grid tela3-grid">
+    <div class="painel tela3-painel">
+
+      <!-- Zona 1: aporte (máscara visual R$) + ações do painel -->
+      <div class="tela3-toolbar">
+        <div class="tela3-busca">
+          <label class="tela3-busca__rotulo" for="aporte">Aporte total<span class="info-tip tip-down" data-tip="Valor total que o cliente tem para investir neste momento. Já vem preenchido com o valor sugerido do case, mas você pode ajustar."></span></label>
+          <div class="tela3-busca__campo">
+            <span class="tela3-busca__prefixo" aria-hidden="true">R$</span>
+            <input type="number" id="aporte" value="100000" min="0" step="1000" inputmode="numeric" aria-label="Aporte total em reais" oninput="calcularMontagem()"/>
+          </div>
+        </div>
+
+        <div class="tela3-toolbar__acoes">
+          <button type="button" class="btn btn--ghost" onclick="abrirTutorial()" title="Como usar o simulador">Tutorial</button>
+          <button type="button" class="btn btn--ghost" onclick="window.open('guia-etfs.html','_blank')" title="Super Guia de ETFs — 100 fichas com papel, risco e pitch de cada ETF (nova aba)">Guia de ETFs</button>
+          <button type="button" class="btn btn--secondary" onclick="abrirListaCompleta()" title="Ver o catálogo completo de ativos disponíveis">Explorar catálogo</button>
+        </div>
       </div>
 
-      <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px;align-items:center;" id="category-pills">
-        <button class="cat-pill" onclick="abrirTutorial()" style="background:none;border:1px dashed var(--border);color:var(--text-soft);font-size:11px;" title="Como usar o simulador">❓ Tutorial</button>
-        <button class="cat-pill" onclick="window.open('guia-etfs.html','_blank')" style="background:none;border:1px dashed var(--brand-blue);color:var(--brand-blue);font-size:11px;" title="Super Guia de ETFs — 100 fichas com papel, risco e pitch de cada ETF (nova aba)">📖 Guia</button>
-        <button class="cat-pill active" onclick="filtrarCategoria('')">Todos</button>
-        <button class="cat-pill" onclick="filtrarCategoria('RF')">Renda Fixa</button>
-        <button class="cat-pill" onclick="filtrarCategoria('Ações BR')">Ações BR</button>
-        <button class="cat-pill" onclick="filtrarCategoria('FII')">FIIs</button>
-        <button class="cat-pill" onclick="filtrarCategoria('Dividendos')">Dividendos</button>
-        <button class="cat-pill" onclick="filtrarCategoria('Internacional')" title="ETFs listados na B3 que investem no exterior (ex: IVVB11, NASD11)">Internacional ℹ️</button>
-        <button class="cat-pill" onclick="filtrarCategoria('BDR')" title="BDRs de ETFs e ações estrangeiras listados na B3 (ex: BOTZ39, BAIQ39, AAPL34)">BDRs ℹ️</button>
-        <button class="cat-pill" onclick="filtrarCategoria('Cripto')">Cripto</button>
-        <button class="cat-pill" onclick="filtrarCategoria('Alternativos')">Alternativos</button>
-        <button class="cat-pill" onclick="filtrarCategoria('Fundos')" title="Fundos abertos brasileiros — dados oficiais da CVM com come-cotas">Fundos ℹ️</button>
-        <button class="cat-pill" onclick="filtrarCategoria('OFFSHORE')" title="ETFs listados nas bolsas americanas (ex: VOO, QQQ, ARKK, SCHD) — requer conta no exterior">Offshore US ℹ️</button>
-        <button class="cat-pill" onclick="filtrarCategoria('UCITS')" title="ETFs UCITS listados na Europa/Irlanda (ex: VUAA, CNDX, VWRA, CSPX) — sem estate tax, eficiente pra brasileiro">UCITS ℹ️</button>
-        <button class="cat-pill" onclick="abrirListaCompleta()" style="background:var(--brand-orange);color:white;border-color:var(--brand-orange);">📋 Ver lista</button>
+      <!-- Zona 2: só filtros de classe (o JS usa o id e os onclick) -->
+      <div class="segmented" id="category-pills" role="group" aria-label="Filtrar o catálogo por classe">
+        <button type="button" class="cat-pill active" aria-pressed="true" onclick="filtrarCategoria('')">Todos</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('RF')">Renda Fixa</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('Ações BR')">Ações BR</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('FII')">FIIs</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('Dividendos')">Dividendos</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('Internacional')" title="ETFs listados na B3 que investem no exterior (ex: IVVB11, NASD11)">Internacional</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('BDR')" title="BDRs de ETFs e ações estrangeiras listados na B3 (ex: BOTZ39, BAIQ39, AAPL34)">BDRs</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('Cripto')">Cripto</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('Alternativos')">Alternativos</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('Fundos')" title="Fundos abertos brasileiros — dados oficiais da CVM com come-cotas">Fundos</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('OFFSHORE')" title="ETFs listados nas bolsas americanas (ex: VOO, QQQ, ARKK, SCHD) — requer conta no exterior">Offshore US</button>
+        <button type="button" class="cat-pill" aria-pressed="false" onclick="filtrarCategoria('UCITS')" title="ETFs UCITS listados na Europa/Irlanda (ex: VUAA, CNDX, VWRA, CSPX) — sem estate tax, eficiente pra brasileiro">UCITS</button>
       </div>
+
+      <!-- Ações de carteira renderizadas pelo Estado (salvar, restaurar, limpar) -->
+      <div id="carteira-acoes" class="tela3-acoes-estado"></div>
 
       <div id="linhas-alocacao"></div>
 
-      <div style="margin-top:12px;">
-        <button onclick="adicionarLinha()">+ Adicionar ETF</button>
-        <button onclick="limparMontagem()">Limpar</button>
+      <div class="alloc-add">
+        <button type="button" class="btn btn--secondary" onclick="adicionarLinha()">Adicionar ativo</button>
+        <button type="button" class="btn btn--ghost" onclick="limparMontagem()">Limpar</button>
       </div>
 
-      <div class="soma-total" id="soma-total">
-        <span>Total alocado<span class="info-tip" data-tip="A soma de todos os percentuais precisa fechar 100%. Verde = 100%. Amarelo = perto (até 5pp de diferença). Vermelho = revise."></span></span>
-        <span id="soma-pct">0%</span>
-      </div>
+      <!-- Janela histórica comum aos ativos escolhidos -->
+      <div id="janela-comum" class="tela3-janela"></div>
     </div>
 
-    <div class="painel painel-pizza">
-      <h3>Sua carteira</h3>
-      <canvas id="grafico-montagem"></canvas>
-      <div id="resumo-classes" style="margin-top:16px; font-size:12px;"></div>
-    </div>
+    <aside class="painel tela3-lateral" aria-label="Resumo da carteira">
+      <h3 class="tela3-lateral__titulo">Sua carteira</h3>
+
+      <div id="composicao" class="tela3-composicao">
+        <div id="carteira-composicao"></div>
+      </div>
+
+      <div id="carteira-info" class="carteira-info"></div>
+
+      <div class="tela3-lateral__grafico" hidden>
+        <canvas id="grafico-montagem"></canvas>
+      </div>
+    </aside>
   </div>
 
-  <div class="acoes-tela">
-    <button id="btn-voltar-briefing" onclick="irTela2()">← Voltar para briefing</button>
-    <button id="btn-submeter" class="primary" onclick="submeterProposta()">Submeter proposta para avaliação →</button>
+  <div class="tela3-rodape">
+    <div class="alloc-total" id="alloc-total" data-estado="bad">
+      <div class="alloc-total__linha">
+        <span>Total alocado<span class="info-tip" data-tip="A soma de todos os percentuais precisa fechar 100%. Verde = 100%. Amarelo = perto (até 5pp de diferença). Vermelho = revise."></span></span>
+        <span class="alloc-total__pct" id="soma-pct">0%</span>
+      </div>
+      <div class="alloc-total__msg" role="status">Selecione pelo menos 2 ativos.</div>
+    </div>
+
+    <div class="acoes-tela tela3-rodape__acoes">
+      <button type="button" id="btn-voltar-briefing" class="btn btn--ghost" onclick="irTela2()">Voltar para briefing</button>
+      <button type="button" id="btn-submeter" class="btn btn--primary primary" onclick="submeterProposta()">Submeter proposta para avaliação</button>
+    </div>
   </div>
 </div>
 
 <!-- ============================== TELA 4: GABARITO + SCORE ============================== -->
 <div class="tela" id="tela4">
-  <div class="score-header">
-    <div class="score-label">Resultado da sua proposta</div>
-    <div class="score-numero" id="score-numero">--<small>/100</small></div>
-    <div id="score-mensagem" style="font-family:var(--font-display); font-size:18px; margin-top:4px;"></div>
+  <!-- Faixa 1: veredito -->
+  <section class="tela4-veredito" aria-label="Resultado">
+    <div class="score-header">
+      <div class="score-label">Resultado da sua proposta</div>
+      <div class="score-numero" id="score-numero">--<small>/100</small></div>
+      <div id="score-mensagem" class="score-mensagem"></div>
 
-    <div class="score-dimensoes" id="score-dimensoes"></div>
-  </div>
+      <div class="score-dimensoes" id="score-dimensoes"></div>
+    </div>
 
-  <div class="comparativo-grid">
-    <div class="painel painel-pizza">
+    <!-- Até 3 métricas-chave preenchidas pelo score (cartões .metric) -->
+    <div class="tela4-veredito__chaves" id="metricas-chave"></div>
+  </section>
+
+  <!-- Faixa 2: comparação sua carteira x gabarito -->
+  <section class="tela4-comparacao comparativo-grid" aria-label="Comparação com o gabarito">
+    <article class="tela4-comparacao__lado">
       <h3>Sua proposta</h3>
-      <canvas id="grafico-sua"></canvas>
-    </div>
-    <div class="painel painel-pizza">
+      <div class="compose" id="compose-sua" role="img" aria-label="Composição da sua proposta por classe"></div>
+      <div class="tela4-comparacao__grafico" hidden>
+        <canvas id="grafico-sua"></canvas>
+      </div>
+    </article>
+
+    <article class="tela4-comparacao__lado">
       <h3>Alocação-modelo (gabarito)</h3>
-      <div id="gabarito-perfil-tag" style="text-align:center; margin-bottom:12px;"></div>
-      <canvas id="grafico-gabarito"></canvas>
+      <div id="gabarito-perfil-tag"></div>
+      <div class="compose" id="compose-gabarito" role="img" aria-label="Composição do gabarito por classe"></div>
+      <div class="tela4-comparacao__grafico" hidden>
+        <canvas id="grafico-gabarito"></canvas>
+      </div>
+    </article>
+
+    <div class="tela4-comparacao__diferencas">
+      <table class="tabela-diferencas" id="diferencas-classe">
+        <caption>Diferença por classe</caption>
+        <thead>
+          <tr>
+            <th scope="col">Classe</th>
+            <th scope="col">Sua proposta</th>
+            <th scope="col">Gabarito</th>
+            <th scope="col">Diferença</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
+  </section>
+
+  <!-- Faixa 3: aprofundamento em abas (CSS puro, sem script) -->
+  <input type="radio" class="tela4-abas__radio" name="tela4-aba" id="aba-feedback" checked/>
+  <input type="radio" class="tela4-abas__radio" name="tela4-aba" id="aba-justificativa"/>
+  <input type="radio" class="tela4-abas__radio" name="tela4-aba" id="aba-backtest"/>
+
+  <div class="tela4-abas tela4-aprofundamento" role="tablist" aria-label="Aprofundamento">
+    <label class="tela4-abas__botao" data-tab="feedback" for="aba-feedback">Feedback</label>
+    <label class="tela4-abas__botao" data-tab="justificativa" for="aba-justificativa">Justificativa</label>
+    <label class="tela4-abas__botao" data-tab="backtest" for="aba-backtest">Backtest</label>
   </div>
 
-  <div class="painel">
-    <h3 style="margin-bottom:16px;">Comentário pedagógico</h3>
+  <div class="painel tela4-painel" data-tab="feedback">
+    <h3>Comentário pedagógico</h3>
     <ul class="feedback-lista" id="feedback-lista"></ul>
   </div>
 
-  <div class="painel" style="margin-top:24px;">
-    <h3 style="margin-bottom:8px;">Justificativa do gabarito</h3>
-    <p style="font-size:14px; color:var(--text-soft); line-height:1.6;" id="gabarito-justificativa"></p>
+  <div class="painel tela4-painel" data-tab="justificativa">
+    <h3>Justificativa do gabarito</h3>
+    <p id="gabarito-justificativa"></p>
   </div>
 
-  <div class="painel" id="painel-backtest-real" style="margin-top:24px;">
-    <h3 style="margin-bottom:4px;">📈 Desempenho histórico real</h3>
-    <p style="font-size:13px; color:var(--text-soft); margin:0 0 16px;">Backtest da carteira que você montou, com dados históricos reais dos ETFs (B3). Resultados passados não garantem retorno futuro.</p>
+  <div class="painel tela4-painel" id="painel-backtest-real" data-tab="backtest">
+    <h3>Desempenho histórico real</h3>
+    <p class="painel__sub">Backtest da carteira que você montou, com dados históricos reais dos ETFs (B3). Resultados passados não garantem retorno futuro.</p>
     <div id="backtest-real-conteudo"></div>
   </div>
 
   <div class="acoes-tela">
-    <button id="btn-voltar-inicio-livre" style="display:none;" onclick="voltarTela1()">← Voltar para início</button>
-    <button id="btn-refazer-montagem" onclick="irTela3()">← Refazer montagem</button>
-    <button id="btn-ir-pitch" class="primary" onclick="irTela5()">Estruturar pitch comercial →</button>
+    <button type="button" id="btn-voltar-inicio-livre" class="btn btn--ghost" style="display:none;" onclick="voltarTela1()">Voltar para início</button>
+    <button type="button" id="btn-refazer-montagem" class="btn btn--ghost" onclick="irTela3()">Refazer montagem</button>
+    <button type="button" id="btn-ir-pitch" class="btn btn--primary primary" onclick="irTela5()">Estruturar pitch comercial</button>
   </div>
+
+  <p class="tela4-disclaimer">
+    Conteúdo educacional da Academia do Assessor. Nada aqui é recomendação de investimento,
+    oferta ou consultoria: o gabarito é um exercício pedagógico e o backtest usa séries
+    históricas, que não garantem resultado futuro. Antes de levar qualquer carteira ao
+    cliente, valide suitability, custos, tributação e a política da sua instituição.
+  </p>
 </div>
 
 <!-- ============================== TELA 5: ESTRUTURAÇÃO DO PITCH ============================== -->
@@ -370,8 +482,8 @@
 
   <!-- FORM DE IDENTIDADE DO ALUNO -->
   <div class="identidade-form" id="identidade-form">
-    <h4>👤 Sua identificação na apresentação<span class="info-tip" data-tip="No AdvisorPro estes dados virão automaticamente do seu perfil. Aqui no protótipo, preencha manualmente. Fica salvo no navegador."></span></h4>
-    <p class="form-hint">Estes dados aparecem no slide de capa e no encerramento. Marque o que você quer expor.</p>
+    <h4>Sua identificação na apresentação<span class="info-tip" data-tip="No AdvisorPro estes dados virão automaticamente do seu perfil. Aqui no protótipo, preencha manualmente. Fica salvo no navegador."></span></h4>
+    <p class="form-hint">Estes dados aparecem no slide de capa e no slide de próximos passos. Marque o que você quer expor.</p>
     <div class="identidade-campos">
       <div>
         <label>Seu nome</label>
@@ -388,6 +500,27 @@
       <div>
         <label>URL da foto de perfil</label>
         <input type="text" id="id-foto" placeholder="Cole o link de uma imagem" oninput="atualizarIdentidade()"/>
+      </div>
+      <div>
+        <label for="id-whatsapp">WhatsApp de contato</label>
+        <input type="text" id="id-whatsapp" placeholder="Ex: (11) 99999-0000" oninput="atualizarIdentidade()"/>
+      </div>
+      <div>
+        <label for="id-email">E-mail de contato</label>
+        <input type="text" id="id-email" placeholder="Ex: voce@assessoria.com.br" oninput="atualizarIdentidade()"/>
+      </div>
+    </div>
+
+    <h4 class="identidade-subtitulo">A apresentação do cliente</h4>
+    <p class="form-hint">Quem lê a capa é o cliente, não a banca. O título e o nome dele vão para o primeiro slide.</p>
+    <div class="identidade-campos">
+      <div>
+        <label for="id-cliente">Nome do cliente</label>
+        <input type="text" id="id-cliente" placeholder="Ex: Família Andrade" oninput="atualizarClienteEtitulo()"/>
+      </div>
+      <div>
+        <label for="id-titulo-apres">Título da apresentação</label>
+        <input type="text" id="id-titulo-apres" placeholder="Proposta de alocação — nome do cliente" oninput="atualizarIdentidade()"/>
       </div>
     </div>
     <div class="identidade-toggles">
@@ -420,6 +553,57 @@
     No protótipo isso não é persistido — só o estado da sessão atual.
     ============================================================
   -->
+
+  <!-- Estilos dos blocos novos dos slides (tiles, tabela da carteira, rodapé de
+       disclaimer, ícones de etapa). Vivem aqui porque css/app.css tem outro dono;
+       podem ser movidos para lá sem nenhuma outra mudança. -->
+  <style id="apres-slides-estilos">
+    .slide-rodape { margin-top: auto; padding-top: 10px; display: flex; align-items: center;
+      justify-content: space-between; gap: 12px; border-top: 1px solid rgba(128,128,128,0.22); }
+    .slide-rodape-case { font-size: 10px; letter-spacing: .06em; text-transform: uppercase;
+      opacity: .55; white-space: nowrap; }
+    .slide-rodape-disclaimer { font-size: 10px; line-height: 1.35; opacity: .6; text-align: right; flex: 1; }
+    .slide-nota-rodape { font-size: 12px; opacity: .65; margin-top: 8px; }
+    .slide-vazio { opacity: .6; font-style: italic; }
+    .slide .vazio { opacity: .6; font-style: italic; }
+    .etapa-icone-svg { display: inline-flex; width: 1.05em; height: 1.05em; vertical-align: -0.12em; margin-right: 6px; }
+    .etapa-icone-svg svg { width: 100%; height: 100%; }
+    .etapa-header-dir { display: flex; align-items: center; gap: 10px; }
+    .btn-copiar-bloco { font-size: 11px; padding: 3px 10px; border-radius: 6px; cursor: pointer;
+      border: 1px solid rgba(128,128,128,0.35); background: transparent; color: inherit; }
+    .btn-copiar-bloco.copiado { border-color: #2e9e6b; color: #2e9e6b; }
+    .clipboard-offscreen { position: fixed; left: -10000px; top: 0; opacity: 0; }
+    .slide-tiles { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 14px 0; }
+    .slide-tiles-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .slide-tile { border: 1px solid rgba(128,128,128,0.22); border-radius: 10px; padding: 12px; }
+    .slide-tile-rotulo { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; opacity: .65; }
+    .slide-tile-valor { font-size: 26px; font-weight: 700; margin: 4px 0 6px; }
+    .slide-tile-nota { font-size: 11.5px; line-height: 1.4; opacity: .75; }
+    .slide-protocolo { margin: 10px 0 0; padding-left: 18px; }
+    .slide-protocolo li { margin-bottom: 6px; font-size: 14px; }
+    .slide-recuperacao { font-size: 14px; margin: 6px 0 4px; }
+    .slide-passos { margin: 12px 0 0; padding-left: 20px; }
+    .slide-passos li { margin-bottom: 8px; font-size: 15px; }
+    .slide-contato { margin-top: 16px; padding-top: 10px; border-top: 1px solid rgba(128,128,128,0.22);
+      display: flex; flex-direction: column; gap: 2px; font-size: 13px; }
+    .slide-contato-vazio { opacity: .6; font-style: italic; }
+    .slide-carteira { display: grid; grid-template-columns: minmax(180px, 34%) 1fr; gap: 18px; align-items: start; }
+    .slide-carteira-grafico { position: relative; height: 220px; }
+    .slide-carteira-tabela-wrap { overflow-x: auto; }
+    .slide-carteira-tabela { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .slide-carteira-tabela th, .slide-carteira-tabela td { padding: 5px 8px; text-align: left;
+      border-bottom: 1px solid rgba(128,128,128,0.18); }
+    .slide-carteira-tabela .col-num { text-align: right; white-space: nowrap; }
+    .slide-carteira-tabela thead th { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; opacity: .65; }
+    .slide-carteira-tabela tfoot th { font-weight: 700; border-top: 2px solid rgba(128,128,128,0.3); border-bottom: none; }
+    .slide-carteira-tabela .col-ticker { font-weight: 700; }
+    .aluno-identidade-vazia { font-size: 13px; opacity: .6; }
+    .identidade-subtitulo { margin-top: 18px; }
+    @media (max-width: 760px) {
+      .slide-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .slide-carteira { grid-template-columns: 1fr; }
+    }
+  </style>
 
   <!-- BARRA DE CONTROLES DA APRESENTAÇÃO -->
   <div class="apresentacao-controles">
@@ -457,7 +641,7 @@
   <div class="pitch-actions" style="margin-top:20px;">
     <button onclick="irTela5()">← Editar estrutura</button>
     <div class="actions-right">
-      <button onclick="copiarPitch()">📋 Copiar texto</button>
+      <button onclick="copiarPitch(this)">Copiar texto do pitch</button>
       <button onclick="window.print()">🖨️ Imprimir / PDF</button>
       <button class="primary" onclick="voltarTela1()">Próximo case →</button>
     </div>
@@ -466,20 +650,27 @@
 
 </div>
 
-<!-- ============================== FAB CONSULTAR CASE ============================== -->
-<button class="fab-case" id="fab-case" onclick="abrirDrawer()">
-  📋 Consultar case
-</button>
-
-<!-- ============================== FAB AJUDA MACROALOCAÇÃO ============================== -->
-<button class="fab-ajuda" id="fab-ajuda" onclick="abrirAjudaMacro()">
-  🎓 Ajuda Macroalocação
-</button>
-
-<!-- ============================== FAB GRÁFICOS DE MERCADO ============================== -->
-<button class="fab-graficos" id="fab-graficos" onclick="abrirGraficos()">
-  📈 Gráficos de mercado
-</button>
+<!-- ============================== FAB ÚNICO — FERRAMENTAS DA TELA ============================== -->
+<div class="fab-menu" id="fab-menu">
+  <div class="fab-menu__itens">
+    <button type="button" class="fab-item" id="fab-case" onclick="abrirDrawer()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3h6v3H9z"/><path d="M9 11h6M9 15h4"/></svg>
+      Consultar case
+    </button>
+    <button type="button" class="fab-item" id="fab-ajuda" onclick="abrirAjudaMacro()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 3 8.5 12 13l9-4.5z"/><path d="M7 10.5V15c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4.5"/></svg>
+      Ajuda Macroalocação
+    </button>
+    <button type="button" class="fab-item" id="fab-graficos" onclick="abrirGraficos()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7.5 15.5 11 11l3 2.5 4-6"/></svg>
+      Gráficos de mercado
+    </button>
+  </div>
+  <button type="button" class="fab" id="fab-toggle" aria-expanded="false" onclick="var m=document.getElementById('fab-menu');var a=m.classList.toggle('aberto');this.setAttribute('aria-expanded', a ? 'true' : 'false');">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg>
+    Ferramentas
+  </button>
+</div>
 
 <!-- ============================== DRAWER GRÁFICOS DE MERCADO ============================== -->
 <div class="drawer-overlay" id="graficos-overlay" onclick="fecharGraficos()"></div>
@@ -847,6 +1038,7 @@
 <script src="js/app-dados.js"></script>
 <script src="js/app-programa.js"></script>
 <script src="data/catalogo.js"></script>
+<script src="../shared/js/utils.js"></script>
 <script src="js/estado.js"></script>
 <script src="js/app-montagem.js"></script>
 <script src="js/app-score.js"></script>

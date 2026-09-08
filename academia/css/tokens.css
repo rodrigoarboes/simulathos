@@ -1,1 +1,269 @@
-/* academia/css/tokens.css — escala de tokens semânticos (dono: design system) */
+/* academia/css/tokens.css — escala de tokens semânticos (dono: design system)
+   ------------------------------------------------------------------------
+   Camada única de decisão visual do simulador. Nenhum componente deve
+   declarar hex, px de tipografia, raio ou sombra fora daqui.
+
+   Três blocos de tema:
+     1. :root                                   -> tema claro (padrão)
+     2. :root[data-theme="dark"], body.dark     -> escuro explícito
+     3. @media (prefers-color-scheme: dark)     -> escuro do sistema
+        :root:not([data-theme="light"])
+
+   Aliases legados (--brand-*, --bg, --text, --ok...) ficam no fim de cada
+   bloco e apontam para os tokens novos: o CSS antigo continua funcionando.
+   ======================================================================= */
+
+:root {
+  /* ---------- SUPERFÍCIES E TRAÇOS ---------- */
+  --surface-0: #f7f5f0;   /* fundo da página */
+  --surface-1: #ffffff;   /* cartões, painéis */
+  --surface-2: #efece5;   /* faixas, inputs, zebra */
+  --border-subtle: #d8d4c8;
+  --border-strong: #b5b0a2;
+
+  /* ---------- TEXTO ---------- */
+  --text-strong: #1a1a1a;
+  --text-muted:  #5a5a5a;
+  --text-faint:  #767269;
+
+  /* ---------- ACENTO ---------- */
+  --accent: #0088cc;
+  --accent-bg: rgba(0, 136, 204, 0.08);
+
+  /* ---------- ESTADOS (contraste >= 4,5:1 do -fg sobre --surface-1) ---------- */
+  --state-ok-bg:     #e8f4ed;
+  --state-ok-fg:     #226e46;
+  --state-ok-border: #c5e0d0;
+
+  --state-warn-bg:     #fef4dc;
+  --state-warn-fg:     #8b6914;
+  --state-warn-border: #f0dca8;
+
+  --state-bad-bg:     #fce8e8;
+  --state-bad-fg:     #a12026;
+  --state-bad-border: #f0c5c5;
+
+  /* ---------- TIPOGRAFIA ---------- */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 28px;
+  --text-display: 36px;
+
+  /* ---------- ESPAÇAMENTO ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  /* ---------- RAIOS ---------- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  /* ---------- ELEVAÇÃO ---------- */
+  --elev-0: none;
+  --elev-1: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --elev-2: 0 8px 24px rgba(0, 0, 0, 0.10);
+
+  /* ---------- CORES DE CLASSE (gráficos) ---------- */
+  --chart-1: #2b6cb0;  /* Renda Fixa */
+  --chart-2: #2c9c9c;  /* Renda Fixa Inflação */
+  --chart-3: #d9822b;  /* Ações Brasil */
+  --chart-4: #4f9d3a;  /* Dividendos */
+  --chart-5: #8e5fbb;  /* FIIs */
+  --chart-6: #c2455c;  /* Internacional */
+  --chart-7: #b08a2e;  /* Cripto */
+  --chart-8: #6b7280;  /* Alternativos */
+
+  /* ---------- SÉRIES DE LINHA ---------- */
+  --series-carteira:  #0088cc;
+  --series-benchmark: #8a8780;
+  --series-inflacao:  #d9822b;
+  --series-gabarito:  #8e5fbb;
+
+  /* ---------- MOVIMENTO ---------- */
+  --motion-fast: 120ms;
+  --motion-base: 240ms;
+
+  /* ===================== ALIASES LEGADOS ===================== */
+  --brand-blue: #0088cc;
+  --brand-red: #a12026;
+  --brand-orange: #eb8105;
+  --brand-yellow: #ebe310;
+
+  --bg: var(--surface-0);
+  --bg-card: var(--surface-1);
+  --bg-soft: var(--surface-2);
+  --text: var(--text-strong);
+  --text-soft: var(--text-muted);
+  --border: var(--border-subtle);
+
+  --ok: var(--state-ok-fg);
+  --warn: var(--state-warn-fg);
+  --bad: var(--state-bad-fg);
+
+  --shadow: var(--elev-1);
+  --shadow-lg: var(--elev-2);
+}
+
+/* ========================================================================
+   TEMA ESCURO EXPLÍCITO
+   ======================================================================== */
+:root[data-theme="dark"],
+body.dark {
+  --surface-0: #0f0f0f;
+  --surface-1: #1a1a1a;
+  --surface-2: #232323;
+  --border-subtle: #2e2e2e;
+  --border-strong: #454545;
+
+  --text-strong: #f0f0f0;
+  --text-muted:  #a0a0a0;
+  --text-faint:  #8b8b8b;
+
+  --accent: #4db8e8;
+  --accent-bg: rgba(77, 184, 232, 0.12);
+
+  --state-ok-bg:     #1a3024;
+  --state-ok-fg:     #76c99a;
+  --state-ok-border: #2a4f3a;
+
+  --state-warn-bg:     #3a2f15;
+  --state-warn-fg:     #e0b355;
+  --state-warn-border: #5a4520;
+
+  --state-bad-bg:     #3a1a1a;
+  --state-bad-fg:     #f2545b;   /* 5,1:1 sobre --surface-1 */
+  --state-bad-border: #5a2828;
+
+  --elev-0: none;
+  --elev-1: 0 2px 8px rgba(0, 0, 0, 0.35);
+  --elev-2: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+  --chart-1: #5fa8e0;
+  --chart-2: #4fc4c4;
+  --chart-3: #f0a44e;
+  --chart-4: #79c85f;
+  --chart-5: #b489e0;
+  --chart-6: #e8707f;
+  --chart-7: #d9b45c;
+  --chart-8: #9aa1ad;
+
+  --series-carteira:  #4db8e8;
+  --series-benchmark: #9aa1ad;
+  --series-inflacao:  #f0a44e;
+  --series-gabarito:  #b489e0;
+
+  /* aliases legados que mudam no escuro */
+  --bg: var(--surface-0);
+  --bg-card: var(--surface-1);
+  --bg-soft: var(--surface-2);
+  --text: var(--text-strong);
+  --text-soft: var(--text-muted);
+  --border: var(--border-subtle);
+  --ok: var(--state-ok-fg);
+  --warn: var(--state-warn-fg);
+  --bad: var(--state-bad-fg);
+  --shadow: var(--elev-1);
+  --shadow-lg: var(--elev-2);
+}
+
+/* ========================================================================
+   TEMA ESCURO DO SISTEMA (quando não há escolha explícita "light")
+   ======================================================================== */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-0: #0f0f0f;
+    --surface-1: #1a1a1a;
+    --surface-2: #232323;
+    --border-subtle: #2e2e2e;
+    --border-strong: #454545;
+
+    --text-strong: #f0f0f0;
+    --text-muted:  #a0a0a0;
+    --text-faint:  #8b8b8b;
+
+    --accent: #4db8e8;
+    --accent-bg: rgba(77, 184, 232, 0.12);
+
+    --state-ok-bg:     #1a3024;
+    --state-ok-fg:     #76c99a;
+    --state-ok-border: #2a4f3a;
+
+    --state-warn-bg:     #3a2f15;
+    --state-warn-fg:     #e0b355;
+    --state-warn-border: #5a4520;
+
+    --state-bad-bg:     #3a1a1a;
+    --state-bad-fg:     #f2545b;
+    --state-bad-border: #5a2828;
+
+    --elev-0: none;
+    --elev-1: 0 2px 8px rgba(0, 0, 0, 0.35);
+    --elev-2: 0 8px 24px rgba(0, 0, 0, 0.45);
+
+    --chart-1: #5fa8e0;
+    --chart-2: #4fc4c4;
+    --chart-3: #f0a44e;
+    --chart-4: #79c85f;
+    --chart-5: #b489e0;
+    --chart-6: #e8707f;
+    --chart-7: #d9b45c;
+    --chart-8: #9aa1ad;
+
+    --series-carteira:  #4db8e8;
+    --series-benchmark: #9aa1ad;
+    --series-inflacao:  #f0a44e;
+    --series-gabarito:  #b489e0;
+  }
+
+  /* O toggle grava data-theme no <html>; enquanto ele não existir, o corpo
+     sem .dark continua claro para não brigar com aplicarLogo(). */
+  :root:not([data-theme]) body:not(.dark) {
+    --surface-0: #f7f5f0;
+    --surface-1: #ffffff;
+    --surface-2: #efece5;
+    --border-subtle: #d8d4c8;
+    --border-strong: #b5b0a2;
+    --text-strong: #1a1a1a;
+    --text-muted: #5a5a5a;
+    --text-faint: #767269;
+    --accent: #0088cc;
+    --accent-bg: rgba(0, 136, 204, 0.08);
+    --state-ok-bg: #e8f4ed;
+    --state-ok-fg: #226e46;
+    --state-ok-border: #c5e0d0;
+    --state-warn-bg: #fef4dc;
+    --state-warn-fg: #8b6914;
+    --state-warn-border: #f0dca8;
+    --state-bad-bg: #fce8e8;
+    --state-bad-fg: #a12026;
+    --state-bad-border: #f0c5c5;
+    --elev-1: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --elev-2: 0 8px 24px rgba(0, 0, 0, 0.10);
+    --chart-1: #2b6cb0;
+    --chart-2: #2c9c9c;
+    --chart-3: #d9822b;
+    --chart-4: #4f9d3a;
+    --chart-5: #8e5fbb;
+    --chart-6: #c2455c;
+    --chart-7: #b08a2e;
+    --chart-8: #6b7280;
+    --series-carteira: #0088cc;
+    --series-benchmark: #8a8780;
+    --series-inflacao: #d9822b;
+    --series-gabarito: #8e5fbb;
+  }
+}

@@ -1,1 +1,1254 @@
-/* academia/css/telas.css — componentes das telas 3 e 4 (dono: redesign) */
+/* academia/css/telas.css — telas 3 (montagem) e 4 (gabarito)
+   ------------------------------------------------------------------
+   Dono: redesign das telas 3 e 4. Só tokens (nenhum hex aqui).
+   Carregado depois de app.css: onde houver empate de especificidade,
+   estas regras vencem o CSS antigo de propósito.
+
+   Índice
+     1. Tela 3 — cabeçalho, toolbar, filtros
+     2. Tela 3 — linhas de alocação (.alloc-row e filhos)
+     3. Tela 3 — janela comum e barra de total (.alloc-total)
+     4. Tela 3 — painel lateral (.compose, .carteira-info)
+     5. Tela 3 — rodapé (soma + submeter)
+     6. Tela 4 — veredito, comparação, aprofundamento (abas em CSS puro)
+     7. Tela 4 — painel de backtest (.bt e .bt-*)
+     8. Responsivo (<= 1024px e <= 640px)
+   ================================================================== */
+
+/* ===================================================================
+   1. TELA 3 — CABEÇALHO, TOOLBAR E FILTROS
+   =================================================================== */
+
+#tela3 .tela3-hero {
+  margin-bottom: var(--space-5);
+}
+
+#tela3 .tela3-hero__sub {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  max-width: 72ch;
+  line-height: 1.55;
+}
+
+.tela3-modo-livre {
+  margin-top: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  background: var(--accent-bg);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--text-strong);
+}
+
+.tela3-modo-livre strong {
+  color: var(--accent);
+}
+
+/* Grade principal: lista à esquerda, carteira à direita. */
+#tela3 .tela3-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: var(--space-5);
+  align-items: start;
+}
+
+/* --- Toolbar: aporte à esquerda, ações à direita --- */
+.tela3-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  margin-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.tela3-toolbar__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* --- Campo de aporte com prefixo R$ (máscara visual) --- */
+.tela3-busca {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 220px;
+}
+
+.tela3-busca__rotulo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.tela3-busca__campo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  transition: border-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
+}
+
+.tela3-busca__campo:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.tela3-busca__prefixo {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+}
+
+.tela3-busca__campo input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-lg);
+}
+
+.tela3-busca__campo input:focus {
+  outline: none;
+}
+
+.tela3-busca__dica {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+/* --- Filtros: uma faixa só de filtros, sem CTA e sem atalhos --- */
+#tela3 #category-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  margin-bottom: var(--space-4);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  overflow: visible;
+}
+
+#tela3 #category-pills .cat-pill {
+  flex: 0 0 auto;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--text-muted);
+  font-family: var(--font-body);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background var(--motion-fast) ease, color var(--motion-fast) ease;
+}
+
+/* VISUAL-09: hover deixa de imitar o estado ativo. */
+#tela3 #category-pills .cat-pill:hover {
+  background: var(--surface-1);
+  color: var(--text-strong);
+  border-color: var(--border-subtle);
+}
+
+#tela3 #category-pills .cat-pill.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--surface-1);
+  font-weight: 600;
+}
+
+#tela3 #category-pills .cat-pill.active:hover {
+  background: var(--accent);
+  color: var(--surface-1);
+}
+
+/* ===================================================================
+   2. TELA 3 — LINHAS DE ALOCAÇÃO
+   =================================================================== */
+
+.alloc-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+.alloc-tools__filtro:empty {
+  display: none;
+}
+
+#linhas-alocacao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.alloc-row {
+  display: grid;
+  grid-template-columns: var(--space-1) minmax(0, 1fr) 96px 128px auto;
+  grid-template-areas:
+    "faixa ativo peso valor acoes"
+    "faixa aviso aviso aviso aviso";
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  /* Sem padding vertical: a faixa de classe precisa ir de ponta a ponta. */
+  padding: 0 var(--space-3) 0 0;
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
+}
+
+.alloc-row:hover {
+  border-color: var(--border-strong);
+}
+
+.alloc-row:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.alloc-row[data-travado="true"] {
+  background: var(--surface-2);
+}
+
+/* Faixa de cor da classe — a cor vem de --c (var(--chart-n)), posta pelo JS. */
+.alloc-row__classe {
+  grid-area: faixa;
+  align-self: stretch;
+  width: var(--space-1);
+  min-height: var(--space-6);
+  background: var(--c, var(--border-subtle));
+}
+
+.alloc-row__ativo {
+  grid-area: ativo;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+  padding: var(--space-2) 0;
+}
+
+.alloc-row__ativo .ticker-autocomplete {
+  position: relative;
+}
+
+.alloc-row__ativo .ticker-autocomplete input,
+.alloc-row__custom {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+}
+
+.alloc-row__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 0;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.alloc-row__meta:empty {
+  display: none;
+}
+
+.alloc-row__nome {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 28ch;
+}
+
+.alloc-row__classe-nome {
+  padding: 0 var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.7;
+}
+
+.alloc-row__peso {
+  grid-area: peso;
+}
+
+.alloc-row__peso input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-base);
+  text-align: right;
+}
+
+.alloc-row__peso input[readonly] {
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+.alloc-row__valor {
+  grid-area: valor;
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.alloc-row__acoes {
+  grid-area: acoes;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.alloc-row__acoes .btn {
+  font-size: var(--text-xs);
+  padding: var(--space-1) var(--space-2);
+}
+
+.alloc-row__trava[aria-pressed="true"] {
+  background: var(--state-warn-bg);
+  border-color: var(--state-warn-border);
+  color: var(--state-warn-fg);
+}
+
+.alloc-row__aviso {
+  grid-area: aviso;
+  padding-bottom: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--state-warn-fg);
+}
+
+.alloc-row__aviso:empty {
+  display: none;
+}
+
+.alloc-add {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+/* Ponto de simulabilidade emitido pela montagem. */
+.alloc-row .badge-sim {
+  flex: 0 0 auto;
+}
+
+/* ===================================================================
+   3. TELA 3 — JANELA COMUM E BARRA DE TOTAL
+   =================================================================== */
+
+.alloc-janela,
+.tela3-janela {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+  margin-top: var(--space-3);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+}
+.alloc-janela__alerta { color: var(--state-warn-fg); }
+
+.alloc-janela:empty,
+.tela3-janela:empty {
+  display: none;
+}
+
+.alloc-total {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.alloc-total__barra {
+  display: flex;
+  width: 100%;
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.alloc-total__seg {
+  display: block;
+  height: 100%;
+  width: var(--w, 0%);
+  background: var(--c, var(--chart-8));
+}
+
+.alloc-total__linha {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.alloc-total__pct {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.alloc-total__msg {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.alloc-total[data-estado="ok"] {
+  border-color: var(--state-ok-border);
+  background: var(--state-ok-bg);
+}
+
+.alloc-total[data-estado="ok"] .alloc-total__pct,
+.alloc-total[data-estado="ok"] .alloc-total__msg {
+  color: var(--state-ok-fg);
+}
+
+.alloc-total[data-estado="warn"] {
+  border-color: var(--state-warn-border);
+  background: var(--state-warn-bg);
+}
+
+.alloc-total[data-estado="warn"] .alloc-total__pct,
+.alloc-total[data-estado="warn"] .alloc-total__msg {
+  color: var(--state-warn-fg);
+}
+
+.alloc-total[data-estado="bad"] {
+  border-color: var(--state-bad-border);
+  background: var(--state-bad-bg);
+}
+
+.alloc-total[data-estado="bad"] .alloc-total__pct,
+.alloc-total[data-estado="bad"] .alloc-total__msg {
+  color: var(--state-bad-fg);
+}
+
+/* ===================================================================
+   4. TELA 3 — PAINEL LATERAL: COMPOSIÇÃO E "O QUE ESSA CARTEIRA É"
+   =================================================================== */
+
+.tela3-lateral {
+  position: sticky;
+  top: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.tela3-lateral__titulo {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--text-strong);
+}
+
+.tela3-lateral__grafico[hidden] {
+  display: none;
+}
+
+.tela3-composicao:empty {
+  display: none;
+}
+
+/* Barra empilhada 100% — o único inline permitido é --w/--c no segmento. */
+.compose {
+  display: flex;
+  width: 100%;
+  height: var(--space-3);
+  border-radius: var(--radius-pill);
+  background: var(--surface-2);
+  overflow: hidden;
+}
+
+.compose__seg {
+  display: block;
+  flex: 0 0 var(--w, 0%);
+  width: var(--w, 0%);
+  height: 100%;
+  background: var(--c, var(--chart-8));
+}
+
+.compose__legenda {
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.compose__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.compose__ponto {
+  flex: 0 0 auto;
+  width: var(--space-2);
+  height: var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--c, var(--chart-8));
+}
+
+.compose__nome {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.compose__pct {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--text-strong);
+}
+
+.carteira-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  font-size: var(--text-xs);
+  line-height: 1.55;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.carteira-info:empty {
+  display: none;
+}
+
+.carteira-info h4,
+.carteira-info__titulo {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.carteira-info dl,
+.carteira-info ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.carteira-info li,
+.carteira-info__linha {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.carteira-info li:last-child,
+.carteira-info__linha:last-child {
+  border-bottom: 0;
+}
+
+.carteira-info strong {
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+}
+
+/* ===================================================================
+   5. TELA 3 — RODAPÉ (SOMA + SUBMETER)
+   =================================================================== */
+
+.tela3-rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-5);
+}
+
+.tela3-rodape .alloc-total {
+  flex: 1 1 280px;
+}
+
+.tela3-rodape__acoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+/* ===================================================================
+   6. TELA 4 — VEREDITO, COMPARAÇÃO, APROFUNDAMENTO
+   =================================================================== */
+
+.tela4-veredito {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.tela4-veredito__chaves {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+.tela4-veredito__chaves:empty {
+  display: none;
+}
+
+#tela4 .score-mensagem {
+  margin-top: var(--space-1);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+}
+
+/* --- Comparação: duas barras empilhadas lado a lado --- */
+#tela4 .tela4-comparacao {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.tela4-comparacao__lado {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--elev-1);
+}
+
+.tela4-comparacao__lado h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--text-strong);
+}
+
+.tela4-comparacao__grafico[hidden] {
+  display: none;
+}
+
+.tela4-comparacao__diferencas {
+  grid-column: 1 / -1;
+  padding: var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow-x: auto;
+}
+
+.tabela-diferencas {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.tabela-diferencas caption {
+  margin-bottom: var(--space-2);
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.tabela-diferencas th,
+.tabela-diferencas td {
+  padding: var(--space-2) var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+  text-align: right;
+  color: var(--text-muted);
+}
+
+.tabela-diferencas th:first-child,
+.tabela-diferencas td:first-child {
+  text-align: left;
+  color: var(--text-strong);
+}
+
+.tabela-diferencas thead th {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-faint);
+}
+
+/* Enquanto o score não preencher as linhas, o bloco não ocupa espaço. */
+.tela4-comparacao__diferencas:has(tbody:empty) {
+  display: none;
+}
+
+/* --- Abas em CSS puro: rádios ocultos + rótulos --- */
+.tela4-abas__radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tela4-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  margin-bottom: var(--space-4);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+}
+
+.tela4-abas__botao {
+  padding: var(--space-2) var(--space-5);
+  border-radius: var(--radius-pill);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  user-select: none;
+  transition: background var(--motion-fast) ease, color var(--motion-fast) ease;
+}
+
+.tela4-abas__botao:hover {
+  background: var(--surface-1);
+  color: var(--text-strong);
+}
+
+#tela4 > .tela4-painel {
+  display: none;
+  margin-top: 0;
+}
+
+#aba-feedback:checked ~ .tela4-painel[data-tab="feedback"],
+#aba-justificativa:checked ~ .tela4-painel[data-tab="justificativa"],
+#aba-backtest:checked ~ .tela4-painel[data-tab="backtest"] {
+  display: block;
+}
+
+#aba-feedback:checked ~ .tela4-abas [for="aba-feedback"],
+#aba-justificativa:checked ~ .tela4-abas [for="aba-justificativa"],
+#aba-backtest:checked ~ .tela4-abas [for="aba-backtest"] {
+  background: var(--surface-1);
+  border-color: var(--border-subtle);
+  color: var(--text-strong);
+  font-weight: 600;
+  box-shadow: var(--elev-1);
+}
+
+#aba-feedback:focus-visible ~ .tela4-abas [for="aba-feedback"],
+#aba-justificativa:focus-visible ~ .tela4-abas [for="aba-justificativa"],
+#aba-backtest:focus-visible ~ .tela4-abas [for="aba-backtest"] {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Modo Livre: o JS esconde o cabeçalho de score com style inline. Nesse
+   estado não há abas — só o histórico da carteira montada. */
+#tela4:has(.score-header[style*="none"]) .tela4-abas,
+#tela4:has(.score-header[style*="none"]) .tela4-veredito__chaves {
+  display: none;
+}
+
+#tela4:has(.score-header[style*="none"]) > #painel-backtest-real {
+  display: block;
+}
+
+#tela4 > .tela4-painel > h3 {
+  margin: 0 0 var(--space-3);
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  color: var(--text-strong);
+}
+
+#tela4 .painel__sub {
+  margin: calc(-1 * var(--space-2)) 0 var(--space-4);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  color: var(--text-muted);
+}
+
+#tela4 #gabarito-perfil-tag {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+#tela4 #gabarito-justificativa {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: 1.65;
+  color: var(--text-muted);
+}
+
+.tela4-disclaimer {
+  margin: var(--space-5) 0 0;
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  color: var(--text-faint);
+}
+
+/* ===================================================================
+   7. TELA 4 — PAINEL DE BACKTEST
+   =================================================================== */
+
+.bt {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-premissas {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.bt-premissas__campo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.bt-premissas__campo label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.bt-premissas__campo input,
+.bt-premissas__campo select {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--text-strong);
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+}
+
+.bt-cobertura {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+}
+
+.bt-cobertura__titulo {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: var(--space-2);
+}
+
+.bt-cobertura__lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.bt-cobertura__item {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-1) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.bt-cobertura__item:last-child {
+  border-bottom: 0;
+}
+
+.bt-cobertura__item[data-limitante="true"] {
+  color: var(--state-warn-fg);
+}
+
+.bt-cobertura__ticker {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-strong);
+}
+
+.bt-cobertura__item[data-limitante="true"] .bt-cobertura__ticker {
+  color: var(--state-warn-fg);
+}
+
+.bt-cobertura__intervalo {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-cobertura__nota {
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.bt-cobertura__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-3);
+}
+
+.bt-hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: var(--space-5);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.bt-hero__label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+
+.bt-hero__valor {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  color: var(--text-strong);
+}
+
+.bt-hero__ctx {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.bt-metrics {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-3);
+}
+
+.bt-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  padding: var(--space-1);
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-pill);
+  align-self: flex-start;
+}
+
+.bt-chart {
+  padding: var(--space-4);
+  background: var(--surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.bt-chart[hidden] {
+  display: none;
+}
+
+.bt-chart canvas {
+  width: 100%;
+  max-height: 340px;
+}
+
+.bt-chart__nota {
+  margin: var(--space-3) 0 0;
+  font-size: var(--text-xs);
+  line-height: 1.55;
+  color: var(--text-faint);
+}
+
+.bt-verdict {
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--state-ok-border);
+  border-left: 3px solid var(--state-ok-fg);
+  border-radius: var(--radius-md);
+  background: var(--state-ok-bg);
+  color: var(--text-strong);
+  font-size: var(--text-sm);
+  line-height: 1.6;
+}
+
+.bt-verdict[data-estado="warn"] {
+  border-color: var(--state-warn-border);
+  border-left-color: var(--state-warn-fg);
+  background: var(--state-warn-bg);
+}
+
+.bt-verdict[data-estado="bad"] {
+  border-color: var(--state-bad-border);
+  border-left-color: var(--state-bad-fg);
+  background: var(--state-bad-bg);
+}
+
+.bt-verdict__titulo {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: var(--space-2);
+}
+
+.bt-verdict p {
+  margin: 0 0 var(--space-2);
+}
+
+.bt-verdict__comparativo {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.bt-notes {
+  padding: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-1);
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  color: var(--text-muted);
+}
+
+.bt-notes__titulo {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+  margin-bottom: var(--space-2);
+}
+
+.bt-notes__toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.bt-notes__real[hidden] {
+  display: none;
+}
+
+.bt-notes__real {
+  margin-top: var(--space-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-attr {
+  margin: 0;
+  font-size: var(--text-xs);
+  line-height: 1.6;
+  color: var(--text-faint);
+}
+
+.bt-corr {
+  overflow-x: auto;
+}
+
+.bt-corr__tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.bt-corr__tabela th,
+.bt-corr__tabela td {
+  padding: var(--space-2);
+  border: 1px solid var(--border-subtle);
+  text-align: right;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.bt-corr__tabela th[scope="row"],
+.bt-corr__tabela thead th {
+  color: var(--text-strong);
+  background: var(--surface-2);
+}
+
+.bt-corr__tabela th[scope="row"] {
+  text-align: left;
+}
+
+/* ===================================================================
+   8. RESPONSIVO
+   =================================================================== */
+
+@media (max-width: 1024px) {
+  #tela3 .tela3-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .tela3-lateral {
+    position: static;
+  }
+
+  .alloc-row {
+    grid-template-columns: var(--space-1) minmax(0, 1fr) 88px 104px auto;
+  }
+
+  #tela4 .tela4-comparacao {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  /* A linha vira cartão empilhado: ativo em cima, peso e valor embaixo. */
+  .alloc-row {
+    grid-template-columns: var(--space-1) minmax(0, 1fr) auto;
+    grid-template-areas:
+      "faixa ativo  acoes"
+      "faixa peso   valor"
+      "faixa aviso  aviso";
+    align-items: center;
+    row-gap: var(--space-2);
+    padding: 0 var(--space-3) var(--space-3) 0;
+  }
+
+  .alloc-row__ativo {
+    padding: var(--space-3) 0 0;
+  }
+
+  .alloc-row__peso input {
+    text-align: left;
+  }
+
+  .alloc-row__valor {
+    text-align: right;
+  }
+
+  .alloc-row__nome {
+    max-width: 100%;
+  }
+
+  .tela3-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  /* Soma e submeter grudam no rodapé da tela. */
+  .tela3-rodape {
+    position: sticky;
+    bottom: 0;
+    z-index: 20;
+    flex-direction: column;
+    align-items: stretch;
+    gap: var(--space-2);
+    margin-left: calc(-1 * var(--space-4));
+    margin-right: calc(-1 * var(--space-4));
+    padding: var(--space-3) var(--space-4);
+    background: var(--surface-0);
+    border-top: 1px solid var(--border-strong);
+    box-shadow: var(--elev-2);
+  }
+
+  .tela3-rodape__acoes {
+    flex-direction: column-reverse;
+  }
+
+  .tela3-rodape__acoes .btn {
+    width: 100%;
+  }
+
+  .tela4-abas {
+    border-radius: var(--radius-md);
+  }
+
+  .tela4-abas__botao {
+    flex: 1 1 auto;
+    text-align: center;
+    padding: var(--space-2) var(--space-3);
+  }
+}
