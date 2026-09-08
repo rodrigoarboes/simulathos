@@ -60,7 +60,7 @@ const PROGRAMA_CONFIG = {
     badgeExclusivo: "Exclusivo Mentoria MAP®",
     ctaUpgrade: "Quero fazer parte da MAP®",
     ctaUpgradeAlerta: "No AdvisorPro este botão levará o membro FEA para a página de upgrade da Mentoria MAP®.\n\n(Protótipo: ação simulada)",
-    trilhaTitulo: "🧭 Onde esta ferramenta se encaixa",
+    trilhaTitulo: "Onde esta ferramenta se encaixa",
     trilhaLegenda: "FEA (nivelamento) + 6 níveis de maturidade · Beta → Athos",
     trilhaCta: "Este simulador treina o <strong>nível Beta</strong>: montar carteira com ETFs e vender a tese. Para o membro <strong>FEA</strong>, é a ferramenta principal da sua formação. Para o aluno <strong>MAP</strong>, é o primeiro de seis níveis — os próximos destravam ativos individuais, fundos, previdência e geração de alfa.",
     programaPadraoMAP: "MAP®",
@@ -188,11 +188,54 @@ let temaApresentacao = "claro"; // "claro" | "escuro" — salvo, independente do
 let emModoApresentacao = false;
 
 /* =================================================================================
+   ÍCONES — SVG de traço 16px em currentColor (substituem os emojis das telas 1 e 2)
+   ---------------------------------------------------------------------------------
+   Um só desenho por conceito, herdando cor e tamanho do texto ao redor.
+   ================================================================================= */
+var PROG_ICONES = {
+  bussola: '<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.2 4.8-4.8 2.2 2.2-4.8z"/>',
+  cadeado: '<rect x="4.5" y="10.5" width="15" height="9.5" rx="2"/><path d="M8.5 10.5V7.8a3.5 3.5 0 0 1 7 0v2.7"/>',
+  alvo: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="0.8" fill="currentColor" stroke="none"/>',
+  lampada: '<path d="M9.5 17.5h5"/><path d="M10 20.5h4"/><path d="M12 3.5a5.5 5.5 0 0 1 3.4 9.8c-.6.5-.9 1.1-.9 1.8v.4h-5v-.4c0-.7-.3-1.3-.9-1.8A5.5 5.5 0 0 1 12 3.5Z"/>',
+  circulo: '<circle cx="12" cy="12" r="8.5"/>',
+  relogio: '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 1.8"/>',
+  check: '<circle cx="12" cy="12" r="8.5"/><path d="m8.2 12.3 2.6 2.6 5-5.4"/>',
+  grafico: '<path d="M4.5 4.5v15h15"/><path d="m8 15 3.2-3.8 2.6 2.2L19 8"/>',
+  frasco: '<path d="M10 3.5h4"/><path d="M10.8 3.5v5.2L5.9 17a2 2 0 0 0 1.7 3h8.8a2 2 0 0 0 1.7-3l-4.9-8.3V3.5"/><path d="M8 14.5h8"/>'
+};
+function svgIcone(nome, classe) {
+  var d = PROG_ICONES[nome];
+  if (!d) return "";
+  return '<svg class="ico' + (classe ? " " + classe : "") + '" width="16" height="16" viewBox="0 0 24 24" ' +
+    'fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" ' +
+    'aria-hidden="true" focusable="false">' + d + '</svg>';
+}
+
+/* =================================================================================
    MODO DE ACESSO — MAP / FEA + GATING
    ================================================================================= */
+/* CARTEIRA-06 — todas as chaves deste arquivo vivem sob simulathos:academia:.
+   A leitura cai na chave legada "aida_vo4_<chave>" quando a nova ainda não existe
+   (migração silenciosa de quem já usava o simulador), e a legada é apagada na
+   primeira escrita para não sobrar chave solta fora do namespace. */
+function progStorageGet(chave) {
+  if (window.Simulathos && Simulathos.storage && typeof Simulathos.storage.get === "function") {
+    return Simulathos.storage.get("academia", chave);
+  }
+  try { return localStorage.getItem("aida_vo4_" + chave); } catch (e) { return null; }
+}
+function progStorageSet(chave, valor) {
+  try { localStorage.removeItem("aida_vo4_" + chave); } catch (e) { /* storage bloqueado */ }
+  if (window.Simulathos && Simulathos.storage && typeof Simulathos.storage.set === "function") {
+    return Simulathos.storage.set("academia", chave, valor);
+  }
+  try { localStorage.setItem("simulathos:academia:" + chave, String(valor)); return true; }
+  catch (e) { return false; }
+}
+
 function trocarModo(modo) {
   modoAcesso = modo;
-  localStorage.setItem("aida_vo4_modo", modo);
+  progStorageSet("modo", modo);
 
   document.querySelectorAll(".modo-opt").forEach(b => {
     b.classList.toggle("active", b.dataset.modo === modo);
@@ -237,7 +280,7 @@ function htmlModuloTravado(tituloModulo, descricao, previewHtml) {
     <div class="locked-module">
       <div class="locked-preview">${previewHtml || ""}</div>
       <div class="locked-overlay">
-        <div class="lock-icon">🔒</div>
+        <div class="lock-icon">${svgIcone("cadeado")}</div>
         <span class="locked-badge">${PROGRAMA_CONFIG.textos.badgeExclusivo}</span>
         <h3>${tituloModulo}</h3>
         <p>${descricao}</p>
@@ -299,7 +342,7 @@ function renderTrilhaNiveis() {
         <div class="nivel-card disponivel" title="${nivel.desc}">
           <div class="nivel-card-topo">
             <span class="nivel-num">NÍVEL ${nivel.num}</span>
-            <span class="nivel-status-icon">📍</span>
+            <span class="nivel-status-icon">${svgIcone("alvo")}</span>
           </div>
           <div class="nivel-nome">${nivel.nome}${tipHtml}</div>
           <div class="nivel-desc">${nivel.desc}</div>
@@ -311,7 +354,7 @@ function renderTrilhaNiveis() {
       <div class="nivel-card travado" title="${nivel.desc} — ${nivel.ferramenta}">
         <div class="nivel-card-topo">
           <span class="nivel-num">NÍVEL ${nivel.num}</span>
-          <span class="nivel-status-icon">🔒</span>
+          <span class="nivel-status-icon">${svgIcone("cadeado")}</span>
         </div>
         <div class="nivel-nome">${nivel.nome}</div>
         <div class="nivel-desc">${nivel.desc}</div>
@@ -322,7 +365,7 @@ function renderTrilhaNiveis() {
 
   cont.innerHTML = `
     <div class="trilha-header">
-      <h5>${PROGRAMA_CONFIG.textos.trilhaTitulo}</h5>
+      <h5>${svgIcone("bussola")} ${PROGRAMA_CONFIG.textos.trilhaTitulo}</h5>
       <span class="trilha-legenda">${PROGRAMA_CONFIG.textos.trilhaLegenda}</span>
     </div>
     <div class="trilha-track">${cards}</div>
@@ -382,7 +425,7 @@ function renderCenarioEditor() {
         <textarea id="cenario-textarea" placeholder="Cole ou escreva o cenário macroeconômico atual: Selic, IPCA, câmbio, conflitos geopolíticos, ano eleitoral, etc. O simulador usará este cenário no lugar do original do case."
           oninput="atualizarCenarioEditado(this.value)">${cenarioEditado}</textarea>
         <p style="font-size:12px; color:var(--text-soft); margin-top:6px;">
-          💡 Mantenha sua apresentação sempre atualizada — o cenário muda, o treino acompanha.
+          ${svgIcone("lampada")} Mantenha sua apresentação sempre atualizada — o cenário muda, o treino acompanha.
         </p>
       </div>
     `;
@@ -414,11 +457,12 @@ function atualizarCenarioEditado(valor) {
    ANALYTICS LOCAL
    ================================================================================= */
 function lerAnalytics() {
-  const raw = localStorage.getItem("aida_vo4_analytics");
-  return raw ? JSON.parse(raw) : { tentativas: {}, scores: [] };
+  var raw = progStorageGet("analytics");
+  if (!raw) return { tentativas: {}, scores: [], cases: {} };
+  try { return JSON.parse(raw); } catch (e) { return { tentativas: {}, scores: [], cases: {} }; }
 }
 function salvarAnalytics(a) {
-  localStorage.setItem("aida_vo4_analytics", JSON.stringify(a));
+  progStorageSet("analytics", JSON.stringify(a));
 }
 /* ACADEMIA-10 — o progresso passa a ser guardado por case:
    { tentativas, melhorScore, ultimoScore, ultimaData }. Abrir o briefing NÃO conta
@@ -438,18 +482,27 @@ function registroDoCase(a, caseId) {
   }
   return a.cases[chave];
 }
+function rotuloTentativas(n) {
+  return n === 1 ? "1 tentativa" : n + " tentativas";
+}
 function estadoDoCase(caseId, analytics) {
   const a = normalizarAnalytics(analytics || lerAnalytics());
   const chave = String(caseId);
   const reg = a.cases[chave];
-  if (!reg || !reg.tentativas) return { situacao: "nao-iniciado", rotulo: "Não iniciado", melhorScore: null, tentativas: 0 };
-  if (reg.melhorScore !== null && reg.melhorScore >= 70) {
-    return { situacao: "concluido", rotulo: "Concluído · melhor " + reg.melhorScore, melhorScore: reg.melhorScore, tentativas: reg.tentativas };
+  if (!reg || !reg.tentativas) {
+    return { situacao: "nao-iniciado", rotulo: "Não iniciado", melhorScore: null, tentativas: 0 };
+  }
+  // O card mostra sempre as três informações: situação, melhor score e tentativas.
+  const melhor = (reg.melhorScore === null || reg.melhorScore === undefined)
+    ? null : reg.melhorScore;
+  const partes = [melhor !== null ? "melhor " + melhor + "/100" : "sem score", rotuloTentativas(reg.tentativas)];
+  if (melhor !== null && melhor >= 70) {
+    return { situacao: "concluido", rotulo: "Concluído · " + partes.join(" · "), melhorScore: melhor, tentativas: reg.tentativas };
   }
   return {
     situacao: "em-progresso",
-    rotulo: reg.melhorScore !== null ? "Em progresso · melhor " + reg.melhorScore : "Em progresso",
-    melhorScore: reg.melhorScore,
+    rotulo: "Em progresso · " + partes.join(" · "),
+    melhorScore: melhor,
     tentativas: reg.tentativas
   };
 }
@@ -553,11 +606,20 @@ function renderGrid() {
       <div class="case-titulo">${c.titulo}</div>
       <div class="case-meta">${tagsHtml}</div>
       <div class="case-resumo">${c.resumo}</div>
-      <div class="case-estado estado-${estado.situacao}"><span class="tag">${estado.rotulo}</span></div>
+      <div class="case-estado estado-${estado.situacao}"><span class="tag">${svgIcone(iconeEstadoCase(estado.situacao))} ${estado.rotulo}</span></div>
       <div class="case-cta">${estado.situacao === "nao-iniciado" ? "Abrir briefing →" : "Refazer o case →"}</div>
     `;
     grid.appendChild(card);
   });
+
+  // CARTEIRA-05 — a tela 1 é o único lugar onde a carteira recebida por link pode
+  // se anunciar; sem isso o #c= da URL fica calculado e nunca é consumido.
+  renderAvisoCarteiraDoLink();
+}
+function iconeEstadoCase(situacao) {
+  if (situacao === "concluido") return "check";
+  if (situacao === "em-progresso") return "relogio";
+  return "circulo";
 }
 function filtrarCases() { renderGrid(); }
 function labelCiclo(c) {
@@ -573,22 +635,26 @@ function labelPatrim(p) {
 function iniciarModoLivre() {
   modoLivre = true;
   caseAtual = null;
-  montagemAtual = [{ ticker: "", pct: 0 }, { ticker: "", pct: 0 }, { ticker: "", pct: 0 }];
+  // CARTEIRA-01 — não zera nada aqui: quem decide entre rascunho salvo e três
+  // linhas vazias é irTela3(). Antes esta função sobrescrevia o rascunho.
+  montagemAtual = [];
   document.getElementById("aporte").value = 100000;
   document.getElementById("montagem-titulo").textContent = "Modo Livre — Monte sua carteira";
   document.getElementById("montagem-subtitulo").textContent = "Escolha ETFs da lista ou digite qualquer ticker. A simulação roda com dados históricos reais.";
   document.getElementById("modo-livre-info").style.display = "";
   document.getElementById("btn-voltar-briefing").style.display = "none";
   document.getElementById("btn-submeter").textContent = "Simular →";
-  renderLinhasAlocacao();
-  calcularMontagem();
-  trocarTela("tela3");
+  // irTela3() é o único lugar que restaura rascunho (localStorage + hash #c=).
+  irTela3();
 }
 
 function abrirCase(id) {
   caseAtual = CASES.find(c => c.id === id);
   if (!caseAtual) return;
   modoLivre = false;
+  // CARTEIRA-03 — a carteira do case anterior não pode vazar para este case.
+  // Zera aqui; irTela3() decide entre o rascunho DESTE case e três linhas vazias.
+  montagemAtual = [];
   document.getElementById("btn-voltar-briefing").style.display = "";
   document.getElementById("btn-submeter").textContent = "Submeter proposta para avaliação →";
   document.getElementById("modo-livre-info").style.display = "none";
@@ -627,6 +693,71 @@ function abrirCase(id) {
 /* =================================================================================
    TELA 3 — Montagem
    ================================================================================= */
+/* Normaliza o identificador de contexto da carteira: modo livre é "livre",
+   case é o id como string, e ausência de id vale como modo livre. */
+function idDeCaseNormalizado(id) {
+  if (id === null || id === undefined || id === "") return "livre";
+  return String(id);
+}
+function mesmoIdDeCase(a, b) {
+  return idDeCaseNormalizado(a) === idDeCaseNormalizado(b);
+}
+
+/* CARTEIRA-05 — carteira que chega pelo link (#c=...). O boot do estado.js só
+   calcula Estado.carteiraDaURL; sem ninguém consumir, o link não fazia nada.
+   Aqui a tela 1 avisa que existe uma carteira recebida e oferece abri-la. */
+function carteiraDoLinkRecebida() {
+  if (!window.Estado || !window.Estado.carteiraDaURL) return null;
+  var c = window.Estado.carteiraDaURL;
+  if (!c || !Array.isArray(c.linhas) || !c.linhas.length) return null;
+  return c;
+}
+
+function abrirCarteiraDoLink() {
+  var c = carteiraDoLinkRecebida();
+  if (!c) return;
+  var id = idDeCaseNormalizado(c.caseId);
+  var caso = (id !== "livre" && typeof CASES !== "undefined")
+    ? CASES.find(function (x) { return String(x.id) === id; })
+    : null;
+  if (caso) {
+    abrirCase(caso.id);   // briefing do case certo
+    irTela3();            // e já entra na montagem com o rascunho do link
+  } else {
+    iniciarModoLivre();   // iniciarModoLivre já passa por irTela3()
+  }
+}
+
+function renderAvisoCarteiraDoLink() {
+  var tela1 = document.getElementById("tela1");
+  if (!tela1) return;
+  var aviso = document.getElementById("aviso-carteira-link");
+  var c = carteiraDoLinkRecebida();
+  if (!c) { if (aviso) aviso.remove(); return; }
+  if (!aviso) {
+    aviso = document.createElement("div");
+    aviso.id = "aviso-carteira-link";
+    // .painel já existe no design system; o resto é layout mínimo, sem depender
+    // de CSS novo (o markup e o CSS pertencem a outros arquivos).
+    aviso.className = "painel";
+    aviso.setAttribute("role", "status");
+    aviso.style.display = "flex";
+    aviso.style.alignItems = "center";
+    aviso.style.justifyContent = "space-between";
+    aviso.style.gap = "16px";
+    aviso.style.flexWrap = "wrap";
+    aviso.style.marginBottom = "24px";
+    aviso.style.borderLeft = "3px solid var(--brand-blue)";
+    tela1.insertBefore(aviso, tela1.firstChild);
+  }
+  var qtd = c.linhas.filter(function (l) { return l.ticker; }).length;
+  var nome = c.nome ? String(c.nome) : "Carteira compartilhada";
+  aviso.innerHTML =
+    '<span>' + svgIcone("grafico") + ' <strong>Você recebeu uma carteira por link</strong> — ' +
+    nome + ' · ' + qtd + ' ativo(s).</span>' +
+    '<button type="button" class="btn btn--primary" onclick="abrirCarteiraDoLink()">Abrir esta carteira</button>';
+}
+
 function irTela3() {
   if (modoLivre) {
     document.getElementById("montagem-titulo").textContent = "Modo Livre — Monte sua carteira";
@@ -641,8 +772,9 @@ function irTela3() {
   if (window.Estado && typeof window.Estado.restaurarCarteira === "function") {
     try { rascunho = window.Estado.restaurarCarteira(); } catch (e) { rascunho = null; }
   }
-  var mesmoCase = rascunho && (rascunho.caseId === idAtual ||
-    (rascunho.caseId == null && idAtual === "livre"));
+  // CARTEIRA-02 — o rascunho guarda caseId sempre como string (estado.js normaliza),
+  // e caseAtual.id é number. A comparação precisa ser feita na mesma escala.
+  var mesmoCase = rascunho && mesmoIdDeCase(rascunho.caseId, idAtual);
 
   if (mesmoCase && Array.isArray(rascunho.linhas) && rascunho.linhas.length) {
     montagemAtual = rascunho.linhas.map(function (l) {

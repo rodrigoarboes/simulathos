@@ -11,6 +11,30 @@
 // Todas as chaves de localStorage vivem sob 'simulathos:academia:' — nada de
 // chave solta que outra tela apague com um localStorage.clear().
 //
+// API ESTÁVEL (window.Estado):
+//   Carteira corrente
+//     salvarCarteira(obj)        autosave com debounce de 300 ms (grava + hash #c=)
+//     salvarCarteiraAgora(obj)   grava na hora, sem esperar o debounce
+//     restaurarCarteira()        hash #c= > localStorage; null quando não há nada
+//     carteiraAtual()            a última carteira conhecida (memória > storage)
+//     aplicarCarteira(obj)       grava e pede à tela 3 que se redesenhe
+//     limparCarteira()           apaga rascunho e hash
+//   Identidade
+//     renomearCarteira(nome)     nomeia a carteira corrente
+//     duplicarCarteira(nome)     arquiva a versão atual e ativa uma cópia
+//     descreverRascunho()        { rotulo, ativos, somaPct, aporte, quando, ... } | null
+//     mesmoCaseId(a, b)          compara caseId string/number sem falso negativo
+//   Biblioteca
+//     salvarComNome(nome[,obj]) / listarSalvas() / abrirSalva(id) / removerSalva(id)
+//   Transporte
+//     exportarJSON() / importarJSON(texto) / linkCompartilhavel()
+//   Pitch e backtest
+//     salvarPitch(caseId,obj) / restaurarPitch(caseId) / limparPitch(caseId)
+//     setBacktest(res) / getBacktest()
+//   UI
+//     renderAcoesCarteira(el)    botões nome/link/duplicar/exportar/importar/limpar
+//     renderAvisoRetomar(el,opts) banner "Retomar carteira de X?" (só pergunta)
+//
 // Script clássico, sem dependências. Usa Simulathos.storage (shared/js/utils.js)
 // quando ele estiver carregado; senão fala com localStorage direto, com o mesmo
 // prefixo, para que o resultado no disco seja idêntico nos dois caminhos.
@@ -26,6 +50,7 @@
   var PREFIXO = "simulathos:" + APP + ":";
   var CHAVE_CARTEIRA = "carteira:draft";
   var CHAVE_PITCH = "pitch:";           // + caseId
+  var CHAVE_SALVAS = "carteiras:salvas"; // biblioteca de carteiras nomeadas
   var VERSAO_SCHEMA = 1;
   var DEBOUNCE_MS = 300;
   var PARAM_HASH = "c";                  // #c=<base64url do JSON>
@@ -324,6 +349,139 @@
   }
 
   /* =================================================================================
+     6b. IDENTIDADE DA CARTEIRA — nome, comparação de case, descrição amigável
+     ================================================================================= */
+
+  // caseId sempre vira string aqui (normalizar() faz String()), mas quem chama
+  // costuma ter o id como number (CASES[].id = 1). Comparar com === falha em
+  // silêncio. Este helper compara sempre na mesma escala, tratando null/'livre'
+  // como o mesmo caso "modo livre".
+  function mesmoCaseId(a, b) {
+    var na = (a === null || a === undefined || a === "") ? "livre" : String(a);
+    var nb = (b === null || b === undefined || b === "") ? "livre" : String(b);
+    return na === nb;
+  }
+
+  function renomearCarteira(nome) {
+    var c = carteiraAtual();
+    if (!c) return null;
+    c.nome = (nome === undefined || nome === null) ? "" : String(nome);
+    return salvarCarteiraAgora(c);
+  }
+
+  // "há 3 minutos" / "há 2 horas" / data curta — para o aviso "Retomar carteira de X?".
+  function tempoRelativo(iso) {
+    if (!iso) return null;
+    var t = Date.parse(iso);
+    if (!isFinite(t)) return null;
+    var seg = Math.round((Date.now() - t) / 1000);
+    if (seg < 45) return "agora há pouco";
+    if (seg < 3600) return "há " + Math.max(1, Math.round(seg / 60)) + " min";
+    if (seg < 86400) return "há " + Math.round(seg / 3600) + " h";
+    var d = new Date(t);
+    var dd = ("0" + d.getDate()).slice(-2), mm = ("0" + (d.getMonth() + 1)).slice(-2);
+    return "em " + dd + "/" + mm;
+  }
+
+  // Resumo legível do rascunho salvo, para a UI perguntar antes de sobrescrever.
+  // Retorna null quando não há rascunho utilizável. Nada de número inventado:
+  // aporte ausente devolve null e a tela mostra "—".
+  function descreverRascunho() {
+    var c = restaurarCarteira();
+    if (!c) return null;
+    var preenchidas = c.linhas.filter(function (l) { return l.ticker && Number(l.pct) > 0; });
+    var soma = preenchidas.reduce(function (a, l) { return a + Number(l.pct || 0); }, 0);
+    return {
+      carteira: c,
+      nome: c.nome || null,
+      caseId: c.caseId,
+      ativos: preenchidas.length,
+      tickers: preenchidas.map(function (l) { return l.ticker; }),
+      somaPct: preenchidas.length ? soma : null,
+      aporte: c.aporte,
+      salvoEm: c.salvoEm || null,
+      quando: tempoRelativo(c.salvoEm),
+      rotulo: (c.nome || (preenchidas.length ? preenchidas.slice(0, 3).map(function (l) { return l.ticker; }).join(" + ") : "carteira em branco"))
+    };
+  }
+
+  /* =================================================================================
+     6c. BIBLIOTECA DE CARTEIRAS NOMEADAS (salvar como / duplicar / abrir)
+     Uma carteira deixa de ser "o rascunho" e passa a ser um objeto com nome, id e
+     data. O rascunho continua sendo o que está na tela; a biblioteca é o arquivo.
+     ================================================================================= */
+
+  function lerSalvas() {
+    var bruto = storageGet(CHAVE_SALVAS);
+    if (!bruto) return [];
+    try {
+      var arr = JSON.parse(bruto);
+      return Array.isArray(arr) ? arr : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function gravarSalvas(arr) {
+    return storageSet(CHAVE_SALVAS, JSON.stringify(arr.slice(0, 50)));
+  }
+
+  function novoId() {
+    return "c" + Date.now().toString(36) + Math.floor(Math.random() * 1e4).toString(36);
+  }
+
+  function listarSalvas() {
+    return lerSalvas().map(function (c) {
+      return {
+        id: c.id, nome: c.nome || "(sem nome)", caseId: c.caseId || null,
+        salvoEm: c.salvoEm || null, quando: tempoRelativo(c.salvoEm),
+        ativos: (c.linhas || []).filter(function (l) { return l.ticker; }).length
+      };
+    });
+  }
+
+  // Guarda uma cópia nomeada da carteira informada (ou da atual) na biblioteca.
+  function salvarComNome(nome, obj) {
+    var base = obj || carteiraAtual();
+    if (!base) return null;
+    var v = validarBruto(base);
+    if (!v.ok) return null;
+    var copia = normalizar(base);
+    copia.id = novoId();
+    copia.nome = String(nome || copia.nome || "Carteira sem nome");
+    copia.salvoEm = new Date().toISOString();
+    var arr = lerSalvas();
+    arr.unshift(copia);
+    gravarSalvas(arr);
+    return copia;
+  }
+
+  function abrirSalva(id) {
+    var arr = lerSalvas();
+    for (var i = 0; i < arr.length; i++) {
+      if (arr[i].id === id) return salvarCarteiraAgora(arr[i]);
+    }
+    return null;
+  }
+
+  function removerSalva(id) {
+    var arr = lerSalvas().filter(function (c) { return c.id !== id; });
+    return gravarSalvas(arr);
+  }
+
+  // Duplicar: nunca sobrescreve o original. Guarda o original na biblioteca (se
+  // ainda não estiver lá) e devolve a cópia já ativa como rascunho, com nome novo.
+  function duplicarCarteira(novoNome) {
+    var c = carteiraAtual();
+    if (!c) return null;
+    salvarComNome(c.nome || "Versão anterior", c);
+    var copia = normalizar(c);
+    copia.nome = String(novoNome || ((c.nome ? c.nome : "Carteira") + " (cópia)"));
+    copia.salvoEm = new Date().toISOString();
+    return salvarCarteiraAgora(copia);
+  }
+
+  /* =================================================================================
      7. JSON e link compartilhável
      ================================================================================= */
 
@@ -529,6 +687,30 @@
 
     var btnImportar = criarBotao("Importar JSON", function () { input.click(); });
 
+    // Nome da carteira: o objeto ganha identidade e o link/arquivo passam a dizer
+    // de quem é a proposta.
+    var campoNome = document.createElement("input");
+    campoNome.type = "text";
+    campoNome.className = "carteira-acoes__nome";
+    campoNome.placeholder = "Nome da carteira";
+    campoNome.setAttribute("aria-label", "Nome da carteira");
+    try {
+      var atual = carteiraAtual();
+      if (atual && atual.nome) campoNome.value = atual.nome;
+    } catch (e) { /* sem rascunho ainda */ }
+    campoNome.addEventListener("change", function () {
+      if (!renomearCarteira(this.value)) { avisar("Monte a carteira antes de nomear."); return; }
+      avisar("Nome salvo");
+    });
+
+    var btnDuplicar = criarBotao("Duplicar", function () {
+      var copia = duplicarCarteira();
+      if (!copia) { avisar("Nada para duplicar ainda."); return; }
+      campoNome.value = copia.nome;
+      avisar("Cópia criada — a versão anterior ficou salva");
+      dispararEvento("estado:carteira-duplicada", copia);
+    });
+
     var btnLimpar = criarBotao("Limpar", function () {
       limparCarteira();
       avisar("Carteira limpa");
@@ -538,7 +720,23 @@
       dispararEvento("estado:carteira-limpa", null);
     });
 
+    // O campo de nome acompanha a carteira: importar um JSON ou receber um link
+    // troca o objeto embaixo da tela, e o rótulo tem que trocar junto.
+    function sincronizarNome() {
+      try {
+        var c = carteiraAtual();
+        campoNome.value = (c && c.nome) ? c.nome : "";
+      } catch (e) { /* sem carteira: campo fica vazio */ }
+    }
+    if (typeof document !== "undefined" && typeof document.addEventListener === "function") {
+      document.addEventListener("estado:carteira-importada", sincronizarNome);
+      document.addEventListener("estado:carteira-duplicada", sincronizarNome);
+      document.addEventListener("estado:carteira-limpa", sincronizarNome);
+    }
+
+    cont.appendChild(campoNome);
     cont.appendChild(btnLink);
+    cont.appendChild(btnDuplicar);
     cont.appendChild(btnExportar);
     cont.appendChild(btnImportar);
     cont.appendChild(btnLimpar);
@@ -567,6 +765,70 @@
   }
 
   /* =================================================================================
+     10b. AVISO "Retomar carteira de X?"
+     Restaurar em silêncio assusta: o aluno abre a tela e vê uma carteira que não
+     lembra de ter montado. Este bloco só PERGUNTA — quem restaura de fato é a tela
+     (irTela3), pela callback aoRetomar.
+     ================================================================================= */
+
+  // Torna a carteira informada a carteira corrente (grava agora, sem debounce) e
+  // pede à tela 3 que se redesenhe, quando ela existir.
+  function aplicarCarteira(obj) {
+    var c = salvarCarteiraAgora(obj);
+    if (!c) return null;
+    aplicarNaTela(c);
+    return c;
+  }
+
+  // Monta o banner de retomada dentro de containerEl.
+  // opts: { aoRetomar:function(carteira), aoDescartar:function(), texto:string }
+  // Retorna o elemento criado ou null quando não há rascunho para oferecer.
+  function renderAvisoRetomar(containerEl, opts) {
+    if (typeof document === "undefined") return null;
+    var cont = containerEl || document.getElementById("aviso-retomar");
+    if (!cont) return null;
+    var o = opts || {};
+    var d = descreverRascunho();
+    cont.textContent = "";
+    if (!d || !d.ativos) return null;
+
+    var box = document.createElement("div");
+    box.className = "aviso-retomar";
+    box.setAttribute("role", "status");
+
+    var texto = document.createElement("p");
+    texto.className = "aviso-retomar__texto";
+    texto.textContent = o.texto ||
+      ("Retomar carteira de " + d.rotulo + (d.quando ? " (salva " + d.quando + ")" : "") + "?");
+
+    var detalhe = document.createElement("p");
+    detalhe.className = "aviso-retomar__detalhe";
+    detalhe.textContent = d.ativos + (d.ativos === 1 ? " ativo" : " ativos") +
+      " · " + (d.somaPct === null ? "—" : d.somaPct.toFixed(1).replace(".", ",") + "%") +
+      " alocados · aporte " + (d.aporte === null ? "—" : "R$ " + Number(d.aporte).toLocaleString("pt-BR"));
+
+    var btnSim = criarBotao("Retomar", function () {
+      cont.textContent = "";
+      if (typeof o.aoRetomar === "function") o.aoRetomar(d.carteira);
+      else aplicarCarteira(d.carteira);
+    });
+    btnSim.className = "btn btn--primario";
+
+    var btnNao = criarBotao("Começar do zero", function () {
+      cont.textContent = "";
+      if (typeof o.aoDescartar === "function") o.aoDescartar();
+      else limparCarteira();
+    });
+
+    box.appendChild(texto);
+    box.appendChild(detalhe);
+    box.appendChild(btnSim);
+    box.appendChild(btnNao);
+    cont.appendChild(box);
+    return box;
+  }
+
+  /* =================================================================================
      11. BOOT
      ================================================================================= */
 
@@ -581,6 +843,19 @@
     salvarCarteiraAgora: salvarCarteiraAgora,
     restaurarCarteira: restaurarCarteira,
     limparCarteira: limparCarteira,
+    carteiraAtual: carteiraAtual,
+    aplicarCarteira: aplicarCarteira,
+
+    mesmoCaseId: mesmoCaseId,
+    renomearCarteira: renomearCarteira,
+    duplicarCarteira: duplicarCarteira,
+    descreverRascunho: descreverRascunho,
+    tempoRelativo: tempoRelativo,
+
+    salvarComNome: salvarComNome,
+    listarSalvas: listarSalvas,
+    abrirSalva: abrirSalva,
+    removerSalva: removerSalva,
 
     exportarJSON: exportarJSON,
     importarJSON: importarJSON,
@@ -594,6 +869,7 @@
     getBacktest: getBacktest,
 
     renderAcoesCarteira: renderAcoesCarteira,
+    renderAvisoRetomar: renderAvisoRetomar,
 
     get ultimoErroImportacao() { return _ultimoErroImportacao; },
 

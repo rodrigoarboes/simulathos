@@ -103,7 +103,7 @@
 
 .tela3-busca__campo:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-bg);
+  box-shadow: var(--ring-accent);
 }
 
 .tela3-busca__prefixo {
@@ -124,8 +124,14 @@
   font-size: var(--text-lg);
 }
 
-.tela3-busca__campo input:focus {
-  outline: none;
+/* O anel de foco vive no .tela3-busca__campo (:focus-within, acima), então o
+   input não precisa do seu próprio outline — mas só quando o campo realmente
+   mostra o anel. Navegando por teclado sem :focus-within suportado, o outline
+   padrão continua sendo a única pista visível: nunca o removemos incondicionalmente. */
+@supports selector(:focus-within) {
+  .tela3-busca__campo input:focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
 .tela3-busca__dica {
@@ -169,15 +175,15 @@
 }
 
 #tela3 #category-pills .cat-pill.active {
-  background: var(--accent);
+  background: var(--accent-solid);
   border-color: var(--accent);
-  color: var(--surface-1);
+  color: var(--on-accent);
   font-weight: 600;
 }
 
 #tela3 #category-pills .cat-pill.active:hover {
-  background: var(--accent);
-  color: var(--surface-1);
+  background: var(--accent-solid);
+  color: var(--on-accent);
 }
 
 /* ===================================================================
@@ -225,7 +231,7 @@
 
 .alloc-row:focus-within {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-bg);
+  box-shadow: var(--ring-accent);
 }
 
 .alloc-row[data-travado="true"] {

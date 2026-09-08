@@ -1,47 +1,882 @@
-var Catalogo = (function() {
-    var ativos = [
-        // Renda Variável Brasil
-        { ticker: "BOVA11", nome: "iShares Ibovespa", classe: "rv-br", descricao: "Ibovespa" },
-        { ticker: "BOVV11", nome: "It Now Ibovespa", classe: "rv-br", descricao: "Ibovespa" },
-        { ticker: "SMAL11", nome: "iShares Small Cap", classe: "rv-br", descricao: "Small Caps BR" },
-        { ticker: "DIVO11", nome: "It Now Dividendos", classe: "rv-br", descricao: "Dividendos BR" },
+// alocacao/js/catalogo.js — catalogo do AIDA Allocation. Expoe window.Catalogo.
+/* =================================================================================
+   CATALOGO DO AIDA (espelho do catalogo unico da Academia)
 
-        // Renda Variável Internacional
-        { ticker: "IVVB11", nome: "iShares S&P 500", classe: "rv-intl", descricao: "S&P 500 (USD)" },
-        { ticker: "NASD11", nome: "It Now Nasdaq", classe: "rv-intl", descricao: "Nasdaq 100 (USD)" },
-        { ticker: "ACWI11", nome: "iShares ACWI", classe: "rv-intl", descricao: "Ações Globais" },
-        { ticker: "HASH11", nome: "Hashdex Crypto", classe: "rv-intl", descricao: "Cripto (BTC/ETH)" },
+   ANTES: 15 ETFs escritos a mao aqui, enquanto academia/data/catalogo.js ja
+   descrevia ~670 ativos. Duas fontes de verdade, dois nomes para o mesmo ticker.
 
-        // Renda Fixa / Imobiliário
-        { ticker: "IMAB11", nome: "It Now IMA-B", classe: "rf", descricao: "Inflação (NTN-B)" },
-        { ticker: "B5P211", nome: "It Now IMA-B5+", classe: "rf", descricao: "IPCA+ longo" },
-        { ticker: "IB5M11", nome: "It Now IMA-B5", classe: "rf", descricao: "IPCA+ médio" },
-        { ticker: "IRFM11", nome: "It Now IRF-M", classe: "rf", descricao: "Prefixado" },
-        { ticker: "FIXA11", nome: "Mirae RF", classe: "rf", descricao: "Pós-fixado CDI" },
-        { ticker: "LFTS11", nome: "Investo Tesouro Selic", classe: "rf", descricao: "Tesouro Selic" },
-        { ticker: "XFIX11", nome: "iShares IFIX", classe: "imob", descricao: "Fundos Imobiliários" }
-    ];
+   AGORA: a tabela LINHAS abaixo e GERADA a partir de academia/data/catalogo.js
+   (Catalogo.all()), preservando ticker, nome, classe, subclasse, descricao,
+   custodia, moeda e taxa. Nada aqui e inventado: campo desconhecido vira null e
+   a tela mostra "—".
 
-    var benchmarks = [
-        { id: "cdi", nome: "CDI", cor: "#14B550" },
-        { id: "ibov", nome: "Ibovespa", cor: "#E67E22" },
-        { id: "ipca5", nome: "IPCA + 5%", cor: "#8E44AD" }
-    ];
+   Por que copiar em vez de dar <script src="../academia/data/catalogo.js">?
+   Porque aquele arquivo se constroi a partir de window.DADOS (24 MB),
+   window.MANIFEST, ETFs (app-dados.js) e ETF_INFO/ETF_GUIA (app-programa.js) —
+   quatro globais da Academia, sendo que app-programa.js mexe no DOM da Academia
+   ao carregar. Puxar tudo isso para uma pagina de 1,5 MB de dados quebraria o
+   AIDA. A tabela abaixo e o recorte estavel desse catalogo.
 
-    var classes = {
-        "rv-br": { nome: "Renda Variável Brasil", cor: "#010E30" },
-        "rv-intl": { nome: "Renda Variável Internacional", cor: "#2980B9" },
-        "rf": { nome: "Renda Fixa", cor: "#27AE60" },
-        "imob": { nome: "Imobiliário", cor: "#E67E22" }
+   PARA REGERAR (quando o catalogo da Academia mudar): rode em node um contexto
+   com window/document fake, carregue nesta ordem academia/data/dados.js,
+   academia/data/manifest.js, academia/js/app-dados.js, academia/js/app-programa.js,
+   academia/data/catalogo.js, e serialize Catalogo.all() no formato de LINHAS.
+
+   ---------------------------------------------------------------------------
+   SERIE HISTORICA — a diferenca que importa nesta tela
+   ---------------------------------------------------------------------------
+   O AIDA so consegue BACKTESTAR o que tem serie em alocacao/data/dados.js
+   (universo "etfs" e "offshore"). O nono campo de cada linha diz de qual
+   universo veio a serie, ou null quando o ativo NAO e simulavel aqui.
+   O catalogo inteiro fica pesquisavel (o assessor procura pelo que quiser),
+   mas quem nao tem serie aparece marcado como "sem serie" e nao entra na
+   carteira — melhor recusar na cara do que devolver numero inventado.
+
+   ---------------------------------------------------------------------------
+   API (window.Catalogo)
+   ---------------------------------------------------------------------------
+   Catalogo.ativos          -> array de registros (ordem alfabetica por ticker)
+   Catalogo.classes         -> { "<classe>": { nome, cor } }
+   Catalogo.porTicker(t)    -> registro ou null
+   Catalogo.porClasse(c)    -> array de registros daquela classe
+   Catalogo.simulaveis()    -> so os que tem serie nesta pagina
+   Catalogo.temSerie(t)     -> boolean
+   Catalogo.universoDe(t)   -> "etfs" | "offshore" | null
+   Catalogo.buscar(termo, opcoes) -> array de registros ordenados por relevancia
+                                     opcoes: { limite, somenteSimulaveis }
+   Catalogo.resumo()        -> { total, simulaveis, porClasse }
+
+   Registro:
+     { ticker, nome, classe, subclasse, descricao, custodia, moeda,
+       taxa (numero % a.a. ou null), universo ("etfs"|"offshore"|null),
+       temSerie (bool) }
+   ================================================================================= */
+
+var Catalogo = (function () {
+  "use strict";
+
+  /* Cores por classe — paleta da marca (azul #0088cc, laranja #eb8105,
+     vermelho #a12026) mais tons de apoio, para nao repetir cor em classes
+     vizinhas no grafico de composicao. */
+  var CLASSES = {
+    "RF Pos-Fixado":        { nome: "RF Pos-Fixado",        cor: "#0f766e" },
+    "RF Pós-Fixado":        { nome: "RF Pos-Fixado",        cor: "#0f766e" },
+    "RF Prefixado":         { nome: "RF Prefixado",         cor: "#15803d" },
+    "RF Inflação":          { nome: "RF Inflacao",          cor: "#4d7c0f" },
+    "RF Internacional":     { nome: "RF Internacional",     cor: "#0e7490" },
+    "Ações BR":             { nome: "Acoes BR",             cor: "#0088cc" },
+    "Ações Internacionais": { nome: "Acoes Internacionais", cor: "#1d4ed8" },
+    "Dividendos":           { nome: "Dividendos",           cor: "#0369a1" },
+    "Mid/Small Caps":       { nome: "Mid/Small Caps",       cor: "#6d28d9" },
+    "Setorial":             { nome: "Setorial",             cor: "#7e22ce" },
+    "FIIs Tijolo":          { nome: "FIIs Tijolo",          cor: "#eb8105" },
+    "FIIs Papel":           { nome: "FIIs Papel",           cor: "#b45309" },
+    "FIAgros":              { nome: "FIAgros",              cor: "#a16207" },
+    "BDRs":                 { nome: "BDRs",                 cor: "#be185d" },
+    "Cripto":               { nome: "Cripto",               cor: "#a12026" },
+    "Alternativos":         { nome: "Alternativos",         cor: "#9a3412" },
+    "Fundos Abertos":       { nome: "Fundos Abertos",       cor: "#475569" },
+    "Offshore US":          { nome: "Offshore US",          cor: "#1e40af" },
+    "UCITS":                { nome: "UCITS",                cor: "#0891b2" },
+    "Não classificado":     { nome: "Nao classificado",     cor: "#64748b" }
+  };
+
+  /* LINHAS — tabela gerada. Ordem dos campos:
+     [ ticker, nome, classe, subclasse, descricao, custodia, moeda, taxa, universo ]
+     nome null   = o nome e o proprio ticker.
+     universo null = sem serie historica nesta pagina (nao simulavel). */
+  var LINHAS = [
+    ["5PRE11",null,"RF Prefixado",null,null,"B3","BRL",null,null],
+    ["AAPL",null,"Offshore US","Big Tech (Ação)","Big Tech (Ação)","US","USD",null,null],
+    ["AAPL34","AAPL34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["ABEV3","ABEV3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["Absolute Vertex",null,"Fundos Abertos","Macro","Macro (CVM, come-cotas)","CVM","BRL",null,null],
+    ["ACB",null,"Offshore US","Cannabis (Ação)","Cannabis (Ação)","US","USD",null,null],
+    ["ACES",null,"Offshore US","Energia Limpa","Energia Limpa","US","USD",null,null],
+    ["ACWD",null,"UCITS","Ações Global","UCITS Ações Global","IE","USD",null,null],
+    ["ACWI","iShares MSCI ACWI","Offshore US","Global","Global","US","USD",0.32,null],
+    ["ACWI11","iShares MSCI ACWI","Ações Internacionais","Acoes Globais","Mundo desenvolvido + emergente","B3","BRL",0.3,"etfs"],
+    ["AGG","iShares Core Aggregate Bond","RF Internacional","RF Aggregate EUA","Aggregate bonds US","US","USD",0.03,"offshore"],
+    ["AGRI11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["AIQ","Global X AI & Technology","Offshore US","IA & Tecnologia","IA & Tecnologia","US","USD",0.68,null],
+    ["AKAM",null,"Offshore US","CDN (Ação)","CDN (Ação)","US","USD",null,null],
+    ["ALPA4",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["ALUG11",null,"FIIs Tijolo",null,null,"B3","BRL",null,null],
+    ["ALUP11","ALUP11 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["ALZR11","ALZR11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["AMGN",null,"Offshore US","Biotech (Ação)","Biotech (Ação)","US","USD",null,null],
+    ["AMZN",null,"Offshore US","Big Tech (Ação)","Big Tech (Ação)","US","USD",null,null],
+    ["AMZO34","AMZO34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["AREA11",null,"FIIs Tijolo",null,null,"B3","BRL",null,null],
+    ["ARGE11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["ARGT39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["ARKB",null,"Offshore US","Bitcoin (ARK)","Bitcoin (ARK)","US","USD",null,null],
+    ["ARKF",null,"Offshore US","Fintech (ARK)","Fintech (ARK)","US","USD",null,null],
+    ["ARKG","ARK Genomic Revolution","Offshore US","Genômica (ARK)","Genômica (ARK)","US","USD",0.75,null],
+    ["ARKK","ARK Innovation","Offshore US","Inovação (ARK)","Inovação (ARK)","US","USD",0.75,null],
+    ["ARKQ",null,"Offshore US","Robótica (ARK)","Robótica (ARK)","US","USD",null,null],
+    ["ARKW","ARK Next Gen Internet","Offshore US","Internet (ARK)","Internet (ARK)","US","USD",0.87,null],
+    ["ARKX",null,"Offshore US","Espaço (ARK)","Espaço (ARK)","US","USD",null,null],
+    ["ARX Vinson",null,"Fundos Abertos","Crédito HG","Crédito HG (CVM, come-cotas)","CVM","BRL",null,null],
+    ["ASAI3","ASAI3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["Augme 180",null,"Fundos Abertos","Crédito Multi","Crédito Multi (CVM, come-cotas)","CVM","BRL",null,null],
+    ["Augme 45",null,"Fundos Abertos","Crédito HG","Crédito HG (CVM, come-cotas)","CVM","BRL",null,null],
+    ["AUPO11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["AURO11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["AUVP11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["AVGO",null,"Offshore US","Semicondutores (Ação)","Semicondutores (Ação)","US","USD",null,null],
+    ["B3SA3","B3SA3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["B5P211","It Now IMA-B 5 P2","RF Inflação","RF Inflacao Curta","IPCA+ curto (até 5 anos)","B3","BRL",0.2,"etfs"],
+    ["BAIQ39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BB",null,"Offshore US","Cibersegurança (Ação)","Cibersegurança (Ação)","US","USD",null,null],
+    ["BBAS3","BBAS3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["BBCA",null,"Offshore US","Canadá","Canadá","US","USD",null,null],
+    ["BBDC3","BBDC3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["BBDC4","BBDC4 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["BBH",null,"Offshore US","Biotech","Biotech","US","USD",null,null],
+    ["BBOI11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["BBOV11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["BBSD11",null,"Dividendos",null,null,"B3","BRL",null,null],
+    ["BBSE3","BBSE3 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["BBTR",null,"UCITS","Treasuries","UCITS Treasuries","IE","USD",null,null],
+    ["BBUG39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BCIC11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["BCLO39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BCPX39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BDAP11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["BDEF11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["BDOM11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["BDRI39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BE",null,"Offshore US","Energia (Ação)","Energia (Ação)","US","USD",null,null],
+    ["BEST11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["BFNX39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BHER39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BIL",null,"Offshore US","T-Bills","T-Bills","US","USD",null,null],
+    ["BITB",null,"Offshore US","Bitcoin","Bitcoin","US","USD",null,null],
+    ["BITC11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["BITH11","Hashdex Bitcoin","Cripto","Bitcoin","Bitcoin","B3","BRL",0.7,null],
+    ["BITI11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["BITO",null,"Offshore US","Bitcoin Futures","Bitcoin Futures","US","USD",null,null],
+    ["BIV",null,"Offshore US","RF Média","RF Média","US","USD",null,null],
+    ["BKCH",null,"Offshore US","Blockchain","Blockchain","US","USD",null,null],
+    ["BKCH39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BLBT39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BLFT11",null,"FIIs Papel",null,null,"B3","BRL",null,null],
+    ["BLV",null,"Offshore US","RF Longa","RF Longa","US","USD",null,null],
+    ["BMMT11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["BND","Vanguard Total Bond (US)","RF Internacional","RF Aggregate EUA","Bonds total market USA","US","USD",null,"offshore"],
+    ["BNDX11",null,"RF Internacional",null,null,"B3","BRL",null,null],
+    ["BOL511",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["BOTZ","Global X Robotics & AI","Offshore US","Robótica & IA","Robótica & IA","US","USD",0.68,null],
+    ["BOTZ39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BOVA11","iShares Ibovespa","Ações BR","Acoes BR","Ibovespa, large caps BR","B3","BRL",0.1,"etfs"],
+    ["BOVB11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["BOVS11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["BOVV11","It Now Ibovespa","Ações BR","Acoes BR","Ibovespa, alternativa BOVA","B3","BRL",0.1,"etfs"],
+    ["BOVX11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["BPAC11","BPAC11 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["BPRE11",null,"RF Prefixado",null,null,"B3","BRL",null,null],
+    ["BQYL39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BRAX11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["BRCR11","BRCR11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["BREW11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["BRKB",null,"Offshore US","Conglomerado (Ação)","Conglomerado (Ação)","US","USD",null,null],
+    ["BRXC11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["BSDV39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BSIL39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BSV",null,"Offshore US","RF Curta","RF Curta","US","USD",null,null],
+    ["BTC",null,"Offshore US",null,"Offshore US","US","USD",null,null],
+    ["BTLG11","BTLG11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["BUG","Global X Cybersecurity","Offshore US","Cibersegurança","Cibersegurança","US","USD",0.5,null],
+    ["BURA39",null,"BDRs",null,null,"B3","BRL",null,null],
+    ["BVBR11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["BXPO11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["CANC",null,"Offshore US","Oncologia","Oncologia","US","USD",null,null],
+    ["CAPE11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["Capitania Premium",null,"Fundos Abertos","Crédito Multi","Crédito Multi (CVM, come-cotas)","CVM","BRL",null,null],
+    ["CASA11",null,"FIIs Tijolo",null,null,"B3","BRL",null,null],
+    ["CASH3","CASH3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["CGAS5","CGAS5 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["CHAT",null,"Offshore US","IA Generativa","IA Generativa","US","USD",null,null],
+    ["CHIP11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["CIBR",null,"Offshore US","Cibersegurança","Cibersegurança","US","USD",null,null],
+    ["CLOB11",null,"RF Internacional",null,null,"B3","BRL",null,null],
+    ["CLOU",null,"Offshore US","Cloud Computing","Cloud Computing","US","USD",null,null],
+    ["CMDB11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["CMIG4","CMIG4 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["CMIN3","CMIN3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["CNDX","iShares Nasdaq 100 UCITS","UCITS","Ações EUA","UCITS Ações EUA","IE","USD",0.3,null],
+    ["CNRG",null,"Offshore US","Energia Limpa","Energia Limpa","US","USD",null,null],
+    ["CNYA",null,"UCITS","Ações China","UCITS Ações China","IE","USD",null,null],
+    ["COCA34","COCA34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["COGN3","COGN3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["COIN",null,"Offshore US","Crypto Exchange (Ação)","Crypto Exchange (Ação)","US","USD",null,null],
+    ["COIN11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["COMT",null,"Offshore US","Commodities Broad","Commodities Broad","US","USD",null,null],
+    ["COPX","Global X Copper Miners","Offshore US","Mineração Cobre","Mineração Cobre","US","USD",0.65,null],
+    ["CORN11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["CORT",null,"Offshore US","Biotech (Ação)","Biotech (Ação)","US","USD",null,null],
+    ["COWZ",null,"Offshore US","Cash Flow EUA","Cash Flow EUA","US","USD",null,null],
+    ["CPER",null,"Offshore US","Cobre","Cobre","US","USD",null,null],
+    ["CPFE3","CPFE3 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["CPTR11","CPTR11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["CPTS11","CPTS11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["CPXJ",null,"UCITS","Ações Asia-Pac","UCITS Ações Asia-Pac","IE","USD",null,null],
+    ["CRCL",null,"Offshore US",null,"Offshore US","US","USD",null,null],
+    ["CRON",null,"Offshore US","Cannabis (Ação)","Cannabis (Ação)","US","USD",null,null],
+    ["CRPT11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["CRWD",null,"Offshore US","Cibersegurança (Ação)","Cibersegurança (Ação)","US","USD",null,null],
+    ["CSAN3","CSAN3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["CSCO",null,"Offshore US","Networking (Ação)","Networking (Ação)","US","USD",null,null],
+    ["CSMG3","CSMG3 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["CSPX","iShares Core S&P 500 UCITS","Ações Internacionais","Acoes EUA","S&P 500 UCITS (sem US estate tax)","IE","USD",0.07,"offshore"],
+    ["CSUS",null,"UCITS","Ações EUA","UCITS Ações EUA","IE","USD",null,null],
+    ["CTEC",null,"Offshore US","CleanTech","CleanTech","US","USD",null,null],
+    ["CVCB3","CVCB3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["CXSE3","CXSE3 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["CYRE3","CYRE3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["DBA",null,"Offshore US","Agro Commodities","Agro Commodities","US","USD",null,null],
+    ["DBC",null,"Offshore US","Commodities Broad","Commodities Broad","US","USD",null,null],
+    ["DEBB11","BTG Debentures DI","RF Pós-Fixado","RF Credito","RF Credito","B3","BRL",0.6,null],
+    ["DEFI11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["DEM",null,"Offshore US","Dividendos Emergentes","Dividendos Emergentes","US","USD",null,null],
+    ["DEVA11","DEVA11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["DFAC",null,"Offshore US","Core EUA (Dimensional)","Core EUA (Dimensional)","US","USD",null,null],
+    ["DFAI",null,"Offshore US","Core Intl (Dimensional)","Core Intl (Dimensional)","US","USD",null,null],
+    ["DFAT",null,"Offshore US","Core EUA Total (Dimensional)","Core EUA Total (Dimensional)","US","USD",null,null],
+    ["DFAX",null,"Offshore US","Core Emergentes (Dimensional)","Core Emergentes (Dimensional)","US","USD",null,null],
+    ["DFLV",null,"Offshore US","Value EUA (Dimensional)","Value EUA (Dimensional)","US","USD",null,null],
+    ["DFUS",null,"Offshore US","Equity EUA (Dimensional)","Equity EUA (Dimensional)","US","USD",null,null],
+    ["DGRO","iShares Core Dividend Growth","Offshore US","Dividendos Growth EUA","Dividendos Growth EUA","US","USD",0.08,null],
+    ["DGRW",null,"Offshore US","Dividendos Growth EUA","Dividendos Growth EUA","US","USD",null,null],
+    ["DGS",null,"Offshore US","Dividendos Emergentes","Dividendos Emergentes","US","USD",null,null],
+    ["DISB34","DISB34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["DIV",null,"Offshore US","Dividendos US","Dividendos US","US","USD",null,null],
+    ["DIVD11","It Now Dividendos Dist","Dividendos","Dividendos BR","Dividendos BR","B3","BRL",0.5,null],
+    ["DIVO11","It Now Dividendos","Dividendos","Dividendos BR","IDIV, dividendos","B3","BRL",0.5,"etfs"],
+    ["DJP",null,"Offshore US","Commodities Broad","Commodities Broad","US","USD",null,null],
+    ["DLS",null,"Offshore US","Small Dividendos Intl","Small Dividendos Intl","US","USD",null,null],
+    ["DOLA11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["DOLB11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["DOLX11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["DPYA",null,"UCITS","REITs Global","UCITS REITs Global","IE","USD",null,null],
+    ["DRIV",null,"Offshore US","Veículos Autônomos","Veículos Autônomos","US","USD",null,null],
+    ["DTCR",null,"Offshore US",null,"Offshore US","US","USD",null,null],
+    ["DVER11",null,"Dividendos",null,null,"B3","BRL",null,null],
+    ["DVY",null,"Offshore US","Dividendos EUA","Dividendos EUA","US","USD",null,null],
+    ["DXCO3","DXCO3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["EA",null,"Offshore US","Gaming (Ação)","Gaming (Ação)","US","USD",null,null],
+    ["EBIT11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["ECOO11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["EEM","iShares MSCI Emerging","Offshore US","Emergentes","Emergentes","US","USD",0.68,null],
+    ["EETH11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["EFA","iShares MSCI EAFE","Offshore US","Desenvolvidos ex-EUA","Desenvolvidos ex-EUA","US","USD",0.32,null],
+    ["EGAF11","EGAF11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["EGIE3","EGIE3 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["EIMI","iShares Core MSCI EM UCITS","Ações Internacionais","Emergentes","Emergentes UCITS","IE","USD",0.18,"offshore"],
+    ["ELAS11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["EMB","iShares EM Bond","Offshore US","RF Emergentes","RF Emergentes","US","USD",0.39,null],
+    ["ENEV3","ENEV3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["EPI",null,"Offshore US","Índia","Índia","US","USD",null,null],
+    ["EQTL3","EQTL3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["ESGB11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["ESPO",null,"Offshore US","Gaming & eSports","Gaming & eSports","US","USD",null,null],
+    ["ETH",null,"Offshore US","Ethereum","Ethereum","US","USD",null,null],
+    ["ETHA",null,"Offshore US","Ethereum","Ethereum","US","USD",null,null],
+    ["ETHE",null,"Offshore US",null,"Offshore US","US","USD",null,null],
+    ["ETHE11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["ETHY11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["EUAD",null,"Offshore US","Defesa Europa","Defesa Europa","US","USD",null,null],
+    ["EURP11","It Now Europa","Ações Internacionais","Acoes Internacionais","Stoxx Europe 600","B3","BRL",0.3,null],
+    ["EWBZ11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["EWG",null,"Offshore US","Alemanha","Alemanha","US","USD",null,null],
+    ["EWJ","iShares MSCI Japan","Offshore US","Japão","Japão","US","USD",0.5,null],
+    ["EWQ",null,"Offshore US","França","França","US","USD",null,null],
+    ["EWU",null,"Offshore US","Reino Unido","Reino Unido","US","USD",null,null],
+    ["EWW",null,"Offshore US","México","México","US","USD",null,null],
+    ["EWZ","iShares MSCI Brazil","Offshore US","Brasil","Brasil","US","USD",0.58,null],
+    ["EZA",null,"Offshore US","África do Sul","África do Sul","US","USD",null,null],
+    ["EZTC3","EZTC3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["FBT",null,"Offshore US","Biotech","Biotech","US","USD",null,null],
+    ["FBTC",null,"Offshore US","Bitcoin","Bitcoin","US","USD",null,null],
+    ["FDN",null,"Offshore US","Internet","Internet","US","USD",null,null],
+    ["FGAA11","FGAA11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["FIND11","It Now Financeiro","Setorial","Setorial","Setorial","B3","BRL",0.6,null],
+    ["FINX",null,"Offshore US","Fintech","Fintech","US","USD",null,null],
+    ["FISV",null,"Offshore US","Fintech (Ação)","Fintech (Ação)","US","USD",null,null],
+    ["FITE",null,"Offshore US","Segurança","Segurança","US","USD",null,null],
+    ["FIXA11","Mirae RF Pre","RF Prefixado","RF Prefixado","Títulos públicos prefixados","B3","BRL",0.3,"etfs"],
+    ["FIXX11",null,"RF Prefixado",null,null,"B3","BRL",null,null],
+    ["FLOA","iShares $ Floating Rate Bond UCITS","UCITS","RF Floating USD","UCITS RF Floating USD","IE","USD",0.1,null],
+    ["FLOT",null,"Offshore US","Floating Rate","Floating Rate","US","USD",null,null],
+    ["FLRY3","FLRY3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["FOMO11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["FRNW",null,"Offshore US","Energia Limpa","Energia Limpa","US","USD",null,null],
+    ["FTEC",null,"Offshore US","Tecnologia EUA","Tecnologia EUA","US","USD",null,null],
+    ["FTNT",null,"Offshore US","Cibersegurança (Ação)","Cibersegurança (Ação)","US","USD",null,null],
+    ["FXI","iShares China Large-Cap","Offshore US","China","China","US","USD",0.74,null],
+    ["GBIT11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["GBTC",null,"Offshore US","Bitcoin","Bitcoin","US","USD",null,null],
+    ["GBTC11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["GCRA11","GCRA11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["GDIV11",null,"Dividendos",null,null,"B3","BRL",null,null],
+    ["GENB11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["Genoa Radar",null,"Fundos Abertos","Macro","Macro (CVM, come-cotas)","CVM","BRL",null,null],
+    ["GFSA3","GFSA3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["GGBR4","GGBR4 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["GGRC11","GGRC11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["GICP11",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["GLD","SPDR Gold Trust","Alternativos","Ouro","Ouro físico","US","USD",0.4,"offshore"],
+    ["GLDI11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["GLDX11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["GLFT11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["GLTR",null,"Offshore US","Metais Preciosos","Metais Preciosos","US","USD",null,null],
+    ["GME",null,"Offshore US","Gaming Retail (Ação)","Gaming Retail (Ação)","US","USD",null,null],
+    ["GNOM",null,"Offshore US","Genômica","Genômica","US","USD",null,null],
+    ["GOGL34","GOGL34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["GOLB11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["GOLD11","Trend Ouro","Alternativos","Commodities","ETF (B3)","B3","BRL",0.3,null],
+    ["GOLX11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["GOOGL",null,"Offshore US","Big Tech (Ação)","Big Tech (Ação)","US","USD",null,null],
+    ["GOVE11","It Now Governanca","Ações BR","Governanca","ETF (B3)","B3","BRL",0.5,null],
+    ["GOVT",null,"Offshore US","Treasuries","Treasuries","US","USD",null,null],
+    ["GPCA11",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["GPUS11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["GSG",null,"Offshore US","Commodities Broad","Commodities Broad","US","USD",null,null],
+    ["GXUS11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["HACK",null,"Offshore US","Cibersegurança","Cibersegurança","US","USD",null,null],
+    ["HAPV3","HAPV3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["HASH11","Hashdex Crypto","Cripto","Criptoativos","Criptoativos","B3","BRL",1.3,"etfs"],
+    ["HCTR11","HCTR11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["HDV","iShares Core High Dividend","Offshore US","Dividendos EUA","Dividendos EUA","US","USD",0.08,null],
+    ["HEDK",null,"UCITS","Ações Europa","UCITS Ações Europa","IE","USD",null,null],
+    ["HERO",null,"Offshore US","Jogos & eSports","Jogos & eSports","US","USD",null,null],
+    ["HERT11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["HGBR11",null,"FIIs Tijolo",null,null,"B3","BRL",null,null],
+    ["HGBS11","HGBS11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["HGCR11","HGCR11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["HGLG11","HGLG11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["HGRE11","HGRE11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["HGRU11","HGRU11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["HITI",null,"Offshore US","Cannabis (Ação)","Cannabis (Ação)","US","USD",null,null],
+    ["HODL11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["HOOD",null,"Offshore US","Fintech (Ação)","Fintech (Ação)","US","USD",null,null],
+    ["HSML11","HSML11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["HTEK11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["HYBR11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["HYDR",null,"Offshore US","Hidrogênio","Hidrogênio","US","USD",null,null],
+    ["HYG","iShares High Yield Bond","Offshore US","High Yield","High Yield","US","USD",0.49,null],
+    ["IAU","iShares Gold Trust","Offshore US","Ouro","Ouro","US","USD",0.25,null],
+    ["IB01","iShares $ Treasury Bond 0-1yr UCITS","UCITS","RF Curta USD","UCITS RF Curta USD","IE","USD",0.07,null],
+    ["IB5M11","It Now IMA-B 5+","RF Inflação","RF Inflacao Longa","IPCA+ longo (5+ anos)","B3","BRL",0.25,"etfs"],
+    ["IBB",null,"Offshore US","Biotech","Biotech","US","USD",null,null],
+    ["IBIT","iShares Bitcoin Trust","Offshore US","Bitcoin","Bitcoin","US","USD",0.25,null],
+    ["Ibiuna Credit",null,"Fundos Abertos","Crédito Multi","Crédito Multi (CVM, come-cotas)","CVM","BRL",null,null],
+    ["Ibiuna Hedge STH",null,"Fundos Abertos","Macro","Macro (CVM, come-cotas)","CVM","BRL",null,null],
+    ["IBOB11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["ICLN",null,"Offshore US","Energia Limpa Global","Energia Limpa Global","US","USD",null,null],
+    ["IDEF",null,"Offshore US","Defesa","Defesa","US","USD",null,null],
+    ["IDIV","IDIV — ETF","Dividendos","ETFs","ETF (B3)","B3","BRL",null,null],
+    ["IDNA",null,"Offshore US","Genômica & Saúde","Genômica & Saúde","US","USD",null,null],
+    ["IEF","iShares 7-10 Year Treasury","RF Internacional","Treasuries Médios","Treasuries médios","US","USD",0.15,"offshore"],
+    ["IEFA",null,"Offshore US","Desenvolvidos ex-EUA","Desenvolvidos ex-EUA","US","USD",null,null],
+    ["IEMA",null,"UCITS","Emergentes","UCITS Emergentes","IE","USD",null,null],
+    ["IEMG",null,"Offshore US","Emergentes","Emergentes","US","USD",null,null],
+    ["IGIB",null,"Offshore US","Corporativo IG Médio","Corporativo IG Médio","US","USD",null,null],
+    ["IGM",null,"Offshore US","Tech & Mídia","Tech & Mídia","US","USD",null,null],
+    ["IGSB",null,"Offshore US","Corporativo IG Curto","Corporativo IG Curto","US","USD",null,null],
+    ["IHAK",null,"Offshore US","Cibersegurança","Cibersegurança","US","USD",null,null],
+    ["IJPA",null,"UCITS","Ações Japão","UCITS Ações Japão","IE","USD",null,null],
+    ["IMAB11","It Now IMA-B","RF Inflação","RF Inflacao","Tesouro IPCA+ médio","B3","BRL",0.25,"etfs"],
+    ["IMBB11",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["INDA","iShares MSCI India","Offshore US","Índia","Índia","US","USD",0.65,null],
+    ["INTB3","INTB3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["INTU",null,"Offshore US","Fintech (Ação)","Fintech (Ação)","US","USD",null,null],
+    ["IRDM11","IRDM11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["IRFM11","It Now IRF-M P2","RF Prefixado","RF Prefixado","IRF-M, prefixados médios","B3","BRL",0.2,"etfs"],
+    ["ISAC",null,"UCITS","Ações Global","UCITS Ações Global","IE","USD",null,null],
+    ["ISFD",null,"UCITS","Ações Europa","UCITS Ações Europa","IE","USD",null,null],
+    ["ISUS11","It Now Sustentabilidade","Ações BR","ESG","ESG","B3","BRL",0.4,null],
+    ["ITA",null,"Offshore US","Defesa & Aeroespacial","Defesa & Aeroespacial","US","USD",null,null],
+    ["Itau Artax",null,"Fundos Abertos","Macro","Macro (CVM, come-cotas)","CVM","BRL",null,null],
+    ["Itau Global Dinamico RF",null,"Fundos Abertos","RF Ativa","RF Ativa (CVM, come-cotas)","CVM","BRL",null,null],
+    ["ITSA4","ITSA4 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["ITUB4","ITUB4 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["IUVL",null,"UCITS","Ações EUA Value","UCITS Ações EUA Value","IE","USD",null,null],
+    ["IVV","iShares Core S&P 500","Offshore US","Ações EUA","Ações EUA","US","USD",0.03,null],
+    ["IVVB11","iShares S&P 500 BRL","Ações Internacionais","Acoes Internacionais","S&P 500 em reais","B3","BRL",0.23,"etfs"],
+    ["IVWO11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["IWB",null,"Offshore US","Ações EUA","Ações EUA","US","USD",null,null],
+    ["IWD",null,"Offshore US","Value EUA","Value EUA","US","USD",null,null],
+    ["IWDA","iShares Core MSCI World UCITS","Ações Internacionais","Acoes Globais","Mundo desenvolvido UCITS","IE","USD",0.2,"offshore"],
+    ["IWF",null,"Offshore US","Growth EUA","Growth EUA","US","USD",null,null],
+    ["IWM","iShares Russell 2000","Offshore US","Small Caps EUA","Small Caps EUA","US","USD",0.19,null],
+    ["IWMI11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["IWN",null,"Offshore US","Small Value EUA","Small Value EUA","US","USD",null,null],
+    ["IWO",null,"Offshore US","Small Growth EUA","Small Growth EUA","US","USD",null,null],
+    ["IWP",null,"Offshore US","Mid Growth EUA","Mid Growth EUA","US","USD",null,null],
+    ["IWS",null,"Offshore US","Mid Value EUA","Mid Value EUA","US","USD",null,null],
+    ["IXN",null,"Offshore US","Tech Global","Tech Global","US","USD",null,null],
+    ["IYR",null,"Offshore US","Imobiliário EUA","Imobiliário EUA","US","USD",null,null],
+    ["IYW",null,"Offshore US","Tecnologia EUA","Tecnologia EUA","US","USD",null,null],
+    ["JEDI",null,"Offshore US","Drones & Defesa","Drones & Defesa","US","USD",null,null],
+    ["JEPI","JPMorgan Equity Premium Income","Offshore US","Income EUA","Income EUA","US","USD",0.35,null],
+    ["JEPQ","JPMorgan Nasdaq Premium Income","Offshore US","Income Nasdaq","Income Nasdaq","US","USD",0.35,null],
+    ["JGP Corporate",null,"Fundos Abertos","Crédito HG","Crédito HG (CVM, come-cotas)","CVM","BRL",null,null],
+    ["JGP Select",null,"Fundos Abertos","Crédito Multi","Crédito Multi (CVM, come-cotas)","CVM","BRL",null,null],
+    ["JGP Strategy",null,"Fundos Abertos","Macro","Macro (CVM, come-cotas)","CVM","BRL",null,null],
+    ["JGPX11","JGPX11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["JHSF3","JHSF3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["JNJB34","JNJB34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["JPMC34","JPMC34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["JPST",null,"Offshore US","RF Ultra Curta USD","RF Ultra Curta USD","US","USD",null,null],
+    ["JSRE11","JSRE11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["Kapitalo K10",null,"Fundos Abertos","Macro","Macro (CVM, come-cotas)","CVM","BRL",null,null],
+    ["Kapitalo Kappa",null,"Fundos Abertos","Macro","Macro (CVM, come-cotas)","CVM","BRL",null,null],
+    ["Kapitalo Zeta",null,"Fundos Abertos","Macro","Macro (CVM, come-cotas)","CVM","BRL",null,null],
+    ["KBWB",null,"Offshore US","Bancos EUA","Bancos EUA","US","USD",null,null],
+    ["KBWY",null,"Offshore US","REITs Yield","REITs Yield","US","USD",null,null],
+    ["Kinea Dakar",null,"Fundos Abertos","RF Ativa","RF Ativa (CVM, come-cotas)","CVM","BRL",null,null],
+    ["Kinea IPCA Dinamico",null,"Fundos Abertos","RF Inflação","RF Inflação (CVM, come-cotas)","CVM","BRL",null,null],
+    ["KLBN11","KLBN11 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["KNCA11","KNCA11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["KNCR11","KNCR11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["KNHF11","KNHF11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["KNIP11","KNIP11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["KNRI11","KNRI11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["KNSC11","KNSC11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["KOMP",null,"Offshore US","New Economies","New Economies","US","USD",null,null],
+    ["KRBN",null,"Offshore US","Crédito de Carbono","Crédito de Carbono","US","USD",null,null],
+    ["KSA",null,"Offshore US","Arábia Saudita","Arábia Saudita","US","USD",null,null],
+    ["LCTD",null,"Offshore US","Transição Carbono","Transição Carbono","US","USD",null,null],
+    ["LFIN11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["LFIX11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["LFTI11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["LFTS11","It Now Tesouro Selic","RF Pós-Fixado","RF Pos-Fixado","Tesouro Selic, alta liquidez","B3","BRL",0.19,"etfs"],
+    ["LFTX11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["LIT","Global X Lithium & Battery","Offshore US","Lítio & Baterias","Lítio & Baterias","US","USD",0.75,null],
+    ["LLFT11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["LQD","iShares Investment Grade Bond","Offshore US","Corporativo IG","Corporativo IG","US","USD",0.14,null],
+    ["LREN3","LREN3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["LTBX11",null,"RF Prefixado",null,null,"B3","BRL",null,null],
+    ["LTNB11",null,"RF Prefixado",null,null,"B3","BRL",null,null],
+    ["LWSA3","LWSA3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["M1TA34","M1TA34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["MATB11","It Now Materiais","Setorial","Setorial","Setor materiais básicos","B3","BRL",0.5,"etfs"],
+    ["MBB",null,"Offshore US","Mortgage-Backed","Mortgage-Backed","US","USD",null,null],
+    ["MCCI11","MCCI11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["MCHI","iShares MSCI China","Offshore US","China","China","US","USD",0.59,null],
+    ["Melhores Fundos Multi",null,"Fundos Abertos","FoF Multi","FoF Multi (CVM, come-cotas)","CVM","BRL",null,null],
+    ["MELI34","MELI34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["META",null,"Offshore US","Big Tech (Ação)","Big Tech (Ação)","US","USD",null,null],
+    ["META11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["MFII11","MFII11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["MGLU3","MGLU3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["MIDB11",null,"Mid/Small Caps",null,null,"B3","BRL",null,null],
+    ["MILL11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["MISL",null,"Offshore US","Defesa","Defesa","US","USD",null,null],
+    ["MJ",null,"Offshore US","Cannabis Global","Cannabis Global","US","USD",null,null],
+    ["MLP",null,"Offshore US","MLP","MLP","US","USD",null,null],
+    ["MLPA",null,"Offshore US","MLP Energia","MLP Energia","US","USD",null,null],
+    ["MLPX",null,"Offshore US","MLP & Infraestrutura","MLP & Infraestrutura","US","USD",null,null],
+    ["MOAT",null,"Offshore US","Wide Moat EUA","Wide Moat EUA","US","USD",null,null],
+    ["MRVE3","MRVE3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["MSFT",null,"Offshore US","Big Tech (Ação)","Big Tech (Ação)","US","USD",null,null],
+    ["MSFT34","MSFT34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["MSOS",null,"Offshore US","Cannabis EUA","Cannabis EUA","US","USD",null,null],
+    ["MTUM","iShares MSCI Momentum","Offshore US","Momentum EUA","Momentum EUA","US","USD",0.15,null],
+    ["MXRF11","MXRF11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["NASD11","It Now Nasdaq 100","Ações Internacionais","Acoes Internacionais","Nasdaq 100 em reais","B3","BRL",0.3,"etfs"],
+    ["NBIT11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["NBOV11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["NCDI11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["NDIA",null,"UCITS","Ações India","UCITS Ações India","IE","USD",null,null],
+    ["NDIV11",null,"Dividendos",null,null,"B3","BRL",null,null],
+    ["NEAR",null,"Offshore US","Ultra Curta","Ultra Curta","US","USD",null,null],
+    ["NFLX34","NFLX34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["NLFA11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["NOBL",null,"Offshore US","Dividendos Aristocratas","Dividendos Aristocratas","US","USD",null,null],
+    ["NSDV11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["NTES",null,"Offshore US","Gaming (Ação)","Gaming (Ação)","US","USD",null,null],
+    ["NTNS11",null,"RF Pós-Fixado",null,null,"B3","BRL",null,null],
+    ["NUCL11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["NVDA",null,"Offshore US","Semicondutores (Ação)","Semicondutores (Ação)","US","USD",null,null],
+    ["NVDC34","NVDC34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["NZAC",null,"Offshore US","Clima Paris","Clima Paris","US","USD",null,null],
+    ["OGI",null,"Offshore US","Cannabis (Ação)","Cannabis (Ação)","US","USD",null,null],
+    ["OKTA",null,"Offshore US","Identity (Ação)","Identity (Ação)","US","USD",null,null],
+    ["OURO11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["PACB11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["PACC11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["PACG11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["PACL11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["PANW",null,"Offshore US","Cibersegurança (Ação)","Cibersegurança (Ação)","US","USD",null,null],
+    ["PAVE","Global X US Infrastructure","Offshore US","Infraestrutura EUA","Infraestrutura EUA","US","USD",0.47,null],
+    ["PBD",null,"Offshore US","Energia Limpa Global","Energia Limpa Global","US","USD",null,null],
+    ["PBE",null,"Offshore US","Biotech & Genômica","Biotech & Genômica","US","USD",null,null],
+    ["PBW",null,"Offshore US","Energia Limpa","Energia Limpa","US","USD",null,null],
+    ["PDBC",null,"Offshore US","Commodities Broad","Commodities Broad","US","USD",null,null],
+    ["PETR3","PETR3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["PETR4","PETR4 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["PEVC11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["PFFD",null,"Offshore US","Preferreds","Preferreds","US","USD",null,null],
+    ["PGX",null,"Offshore US","Preferreds","Preferreds","US","USD",null,null],
+    ["PHIP11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["PIBB11","It Now IBrX-50","Ações BR","Acoes BR","ETF (B3)","B3","BRL",0.06,null],
+    ["PIPE11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["PKIN11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["PLTR",null,"Offshore US","IA & Data (Ação)","IA & Data (Ação)","US","USD",null,null],
+    ["POTX",null,"Offshore US","Cannabis","Cannabis","US","USD",null,null],
+    ["PPA",null,"Offshore US","Defesa & Aeroespacial","Defesa & Aeroespacial","US","USD",null,null],
+    ["PREX11",null,"RF Prefixado",null,null,"B3","BRL",null,null],
+    ["PRIO3","PRIO3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["PRNT",null,"Offshore US","3D Printing (ARK)","3D Printing (ARK)","US","USD",null,null],
+    ["PVBI11","PVBI11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["PYPL",null,"Offshore US","Pagamentos (Ação)","Pagamentos (Ação)","US","USD",null,null],
+    ["QBTC11","QR Bitcoin","Cripto","Bitcoin","ETF (B3)","B3","BRL",0.7,null],
+    ["QCLN",null,"Offshore US","Energia Limpa","Energia Limpa","US","USD",null,null],
+    ["QDFI11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["QETH11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["QLBR11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["QQQ","Invesco QQQ Trust","Offshore US","Ações EUA (Nasdaq)","Ações EUA (Nasdaq)","US","USD",0.2,null],
+    ["QQQI11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["QQQM",null,"Offshore US","Ações EUA (Nasdaq)","Ações EUA (Nasdaq)","US","USD",null,null],
+    ["QQQQ11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["QSOL11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["QTUM",null,"Offshore US","Computação Quântica","Computação Quântica","US","USD",null,null],
+    ["QUAL","iShares MSCI USA Quality","Offshore US","Quality EUA","Quality EUA","US","USD",0.15,null],
+    ["Quantitas Galapagos",null,"Fundos Abertos","RF Ativa","RF Ativa (CVM, come-cotas)","CVM","BRL",null,null],
+    ["QYLD","Global X Nasdaq Covered Call","Offshore US","Covered Call Nasdaq","Covered Call Nasdaq","US","USD",0.6,null],
+    ["R2US",null,"UCITS","Small Caps EUA","UCITS Small Caps EUA","IE","USD",null,null],
+    ["RADL3","RADL3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["RAIL3","RAIL3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["RBLX",null,"Offshore US","Metaverso (Ação)","Metaverso (Ação)","US","USD",null,null],
+    ["RBRF11","RBRF11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["RBRP11","RBRP11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["RBRR11","RBRR11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["RDOR3","RDOR3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["RECR11","RECR11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["RECT11","RECT11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["REET",null,"Offshore US","REITs Global","REITs Global","US","USD",null,null],
+    ["REM",null,"Offshore US","Mortgage REITs","Mortgage REITs","US","USD",null,null],
+    ["RENT3","RENT3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["REVE11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["RICO11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["Root High Yield",null,"Fundos Abertos","Crédito HY","Crédito HY (CVM, come-cotas)","CVM","BRL",null,null],
+    ["RRRP3","RRRP3 — ETF","Ações BR","ETFs","ETF (B3)","B3","BRL",null,null],
+    ["RSP","Invesco S&P 500 Equal Weight","Offshore US","Ações EUA (Equal Weight)","Ações EUA (Equal Weight)","US","USD",0.2,null],
+    ["RSSL",null,"Offshore US",null,"Offshore US","US","USD",null,null],
+    ["RURA11","RURA11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["RVMD",null,"Offshore US","Biotech (Ação)","Biotech (Ação)","US","USD",null,null],
+    ["RWR",null,"Offshore US","REITs EUA","REITs EUA","US","USD",null,null],
+    ["RYLD",null,"Offshore US","Covered Call Russell","Covered Call Russell","US","USD",null,null],
+    ["RZAG11","RZAG11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["RZTR11","RZTR11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["SAEM",null,"UCITS","Emergentes","UCITS Emergentes","IE","USD",null,null],
+    ["SANB11","SANB11 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["SAPR4","SAPR4 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["SASU",null,"UCITS","Ações EUA","UCITS Ações EUA","IE","USD",null,null],
+    ["SBIO",null,"Offshore US","Biotech Breakthroughs","Biotech Breakthroughs","US","USD",null,null],
+    ["SBSP3","SBSP3 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["SCHB",null,"Offshore US","Ações EUA","Ações EUA","US","USD",null,null],
+    ["SCHD","Schwab US Dividend Equity","Offshore US","Dividendos EUA","Dividendos EUA","US","USD",0.06,null],
+    ["SCHE",null,"Offshore US","Emergentes","Emergentes","US","USD",null,null],
+    ["SCHF",null,"Offshore US","Ações Internacionais","Ações Internacionais","US","USD",null,null],
+    ["SCHX",null,"Offshore US","Ações EUA","Ações EUA","US","USD",null,null],
+    ["SCHZ",null,"Offshore US","RF EUA","RF EUA","US","USD",null,null],
+    ["SCVB11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["SCZ",null,"Offshore US","Small Caps Internacional","Small Caps Internacional","US","USD",null,null],
+    ["SDIV",null,"Offshore US","Super Dividendos Global","Super Dividendos Global","US","USD",null,null],
+    ["SDY",null,"Offshore US","Dividendos Aristocratas","Dividendos Aristocratas","US","USD",null,null],
+    ["SFIX11",null,"RF Prefixado",null,null,"B3","BRL",null,null],
+    ["SGOL",null,"Offshore US","Ouro Físico","Ouro Físico","US","USD",null,null],
+    ["SHLD",null,"Offshore US",null,"Offshore US","US","USD",null,null],
+    ["SHOP",null,"Offshore US","E-commerce (Ação)","E-commerce (Ação)","US","USD",null,null],
+    ["SHV","iShares Short Treasury","Offshore US","Treasuries Curtos","Treasuries Curtos","US","USD",0.15,null],
+    ["SIL",null,"Offshore US","Mineração Prata","Mineração Prata","US","USD",null,null],
+    ["SILK11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["SIVR",null,"Offshore US","Prata Física","Prata Física","US","USD",null,null],
+    ["SIZE",null,"Offshore US","Size EUA","Size EUA","US","USD",null,null],
+    ["SLV","iShares Silver Trust","Offshore US","Prata","Prata","US","USD",0.5,null],
+    ["SLVR11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["SMAB11",null,"Mid/Small Caps",null,null,"B3","BRL",null,null],
+    ["SMAC11",null,"Mid/Small Caps",null,null,"B3","BRL",null,null],
+    ["SMAL11","iShares Small Cap","Mid/Small Caps","Small Caps BR","SMLL, small caps brasileiras","B3","BRL",0.5,"etfs"],
+    ["SMLL","SMLL — ETF","Mid/Small Caps","ETFs","ETF (B3)","B3","BRL",null,null],
+    ["SMOG",null,"Offshore US","Low Carbon","Low Carbon","US","USD",null,null],
+    ["SMTO3","SMTO3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["SNAG11","SNAG11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["SNDL",null,"Offshore US","Cannabis (Ação)","Cannabis (Ação)","US","USD",null,null],
+    ["SNSR",null,"Offshore US","IoT","IoT","US","USD",null,null],
+    ["SOCL",null,"Offshore US","Mídias Sociais","Mídias Sociais","US","USD",null,null],
+    ["SOLH11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["SPAB",null,"Offshore US","RF Aggregate","RF Aggregate","US","USD",null,null],
+    ["Sparta Top",null,"Fundos Abertos","Crédito HG","Crédito HG (CVM, come-cotas)","CVM","BRL",null,null],
+    ["Sparta Top Inflacao",null,"Fundos Abertos","RF Inflação","RF Inflação (CVM, come-cotas)","CVM","BRL",null,null],
+    ["SPBZ11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["SPDW",null,"Offshore US","Desenvolvidos ex-EUA","Desenvolvidos ex-EUA","US","USD",null,null],
+    ["SPEM",null,"Offshore US","Emergentes","Emergentes","US","USD",null,null],
+    ["SPHD",null,"Offshore US","High Div Low Vol","High Div Low Vol","US","USD",null,null],
+    ["SPHQ",null,"Offshore US","Quality EUA","Quality EUA","US","USD",null,null],
+    ["SPLV",null,"Offshore US","Low Vol EUA","Low Vol EUA","US","USD",null,null],
+    ["SPMV",null,"UCITS","Ações EUA Min Vol","UCITS Ações EUA Min Vol","IE","USD",null,null],
+    ["SPTL",null,"Offshore US","Treasuries Longos","Treasuries Longos","US","USD",null,null],
+    ["SPTS",null,"Offshore US","Treasuries Curtos","Treasuries Curtos","US","USD",null,null],
+    ["SPX Seahawk",null,"Fundos Abertos","Crédito HG","Crédito HG (CVM, come-cotas)","CVM","BRL",null,null],
+    ["SPXB11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["SPXH11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["SPXI11","It Now S&P 500","Ações Internacionais","Acoes Internacionais","ETF (B3)","B3","BRL",0.21,null],
+    ["SPXS",null,"UCITS","Ações EUA","UCITS Ações EUA","IE","USD",null,null],
+    ["SPY","SPDR S&P 500","Offshore US","Ações EUA","Ações EUA","US","USD",0.09,null],
+    ["SPY4",null,"UCITS","Ações EUA","UCITS Ações EUA","IE","USD",null,null],
+    ["SPYD",null,"Offshore US","High Div EUA","High Div EUA","US","USD",null,null],
+    ["SPYL",null,"UCITS","Ações EUA","UCITS Ações EUA","IE","USD",null,null],
+    ["SPYR11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["SRET",null,"Offshore US","REITs Global","REITs Global","US","USD",null,null],
+    ["SUZB3","SUZB3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["SVAL11",null,"Mid/Small Caps",null,null,"B3","BRL",null,null],
+    ["SWRD","SPDR MSCI World UCITS","UCITS","Ações Global","UCITS Ações Global","IE","USD",0.12,null],
+    ["T10R11",null,"RF Internacional",null,null,"B3","BRL",null,null],
+    ["TAEE11","TAEE11 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["TD3511",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["TD5011",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["TD6011",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["TECK11","It Now Top 10 Tech","Setorial","Tecnologia","Tecnologia","B3","BRL",0.25,null],
+    ["TECX11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["TEND3","TEND3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["TEPP11","TEPP11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["TFLO",null,"Offshore US","Floating Rate","Floating Rate","US","USD",null,null],
+    ["TGAR11","TGAR11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["TIMS3","TIMS3 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["TIP","iShares TIPS Bond","RF Internacional","TIPS (Inflação)","Treasury IPCA equivalente","US","USD",0.19,"offshore"],
+    ["TIRB11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["TLRY",null,"Offshore US","Cannabis (Ação)","Cannabis (Ação)","US","USD",null,null],
+    ["TLT","iShares 20+ Year Treasury","RF Internacional","Treasuries Longos","Treasuries longos","US","USD",0.15,"offshore"],
+    ["TOST",null,"Offshore US","Fintech (Ação)","Fintech (Ação)","US","USD",null,null],
+    ["TOTS3","TOTS3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["Trend DI Simples",null,"Fundos Abertos","DI Simples","DI Simples (CVM, come-cotas)","CVM","BRL",null,null],
+    ["TRIG11",null,"Alternativos",null,null,"B3","BRL",null,null],
+    ["TRXF11","TRXF11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["TSLA",null,"Offshore US","EV & Energia (Ação)","EV & Energia (Ação)","US","USD",null,null],
+    ["TSLA34","TSLA34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["TTWO",null,"Offshore US","Gaming (Ação)","Gaming (Ação)","US","USD",null,null],
+    ["U",null,"Offshore US","Gaming Engine (Ação)","Gaming Engine (Ação)","US","USD",null,null],
+    ["U03A",null,"UCITS","RF Curta USD","UCITS RF Curta USD","IE","USD",null,null],
+    ["UFO",null,"Offshore US","Espaço","Espaço","US","USD",null,null],
+    ["UGPA3","UGPA3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["UNG",null,"Offshore US","Gás Natural","Gás Natural","US","USD",null,null],
+    ["URA","Global X Uranium","Offshore US","Urânio","Urânio","US","USD",0.69,null],
+    ["USAL11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["USDB11",null,"RF Internacional",null,null,"B3","BRL",null,null],
+    ["USFR",null,"Offshore US","Floating Rate","Floating Rate","US","USD",null,null],
+    ["USIG",null,"Offshore US","Corporativo IG","Corporativo IG","US","USD",null,null],
+    ["USMV","iShares MSCI Min Vol USA","Offshore US","Min Vol EUA","Min Vol EUA","US","USD",0.15,null],
+    ["USO",null,"Offshore US","Petróleo","Petróleo","US","USD",null,null],
+    ["USTK11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["UTEC11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["UTLL11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["VALE3","VALE3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["VAMO3","VAMO3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null],
+    ["VB","Vanguard Small-Cap","Offshore US","Small Caps EUA","Small Caps EUA","US","USD",0.05,null],
+    ["VBBR3","VBBR3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["VCIT",null,"Offshore US","Corporativo IG Médio","Corporativo IG Médio","US","USD",null,null],
+    ["VCSH",null,"Offshore US","Corporativo IG Curto","Corporativo IG Curto","US","USD",null,null],
+    ["VDPA",null,"UCITS","RF Aggregate USD","UCITS RF Aggregate USD","IE","USD",null,null],
+    ["VEA","Vanguard FTSE Developed","Offshore US","Desenvolvidos ex-EUA","Desenvolvidos ex-EUA","US","USD",0.05,null],
+    ["VFF",null,"Offshore US","Cannabis (Ação)","Cannabis (Ação)","US","USD",null,null],
+    ["VGHF11","VGHF11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["VGIA11","VGIA11 — FIAgro","FIAgros","FIAgros","FIAgro (B3)","B3","BRL",null,null],
+    ["VGIR11","VGIR11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["VGK","Vanguard FTSE Europe","Offshore US","Europa","Europa","US","USD",0.06,null],
+    ["VHYA",null,"UCITS","Dividendos Global","UCITS Dividendos Global","IE","USD",null,null],
+    ["VIG","Vanguard Dividend Appreciation","Offshore US","Dividendos EUA","Dividendos EUA","US","USD",0.06,null],
+    ["VILG11","VILG11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["VINO11","VINO11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["VISA34","VISA34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["VISC11","VISC11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["VIVT3","VIVT3 — Dividendos","Dividendos","Dividendos/Utilities","Dividendos (B3)","B3","BRL",null,null],
+    ["VJPA",null,"UCITS","Ações Japão","UCITS Ações Japão","IE","USD",null,null],
+    ["VLUE",null,"Offshore US","Value EUA","Value EUA","US","USD",null,null],
+    ["VMBS",null,"Offshore US","Mortgage-Backed","Mortgage-Backed","US","USD",null,null],
+    ["VNQ","Vanguard Real Estate","Alternativos","REITs EUA","REITs US","US","USD",0.12,"offshore"],
+    ["VO","Vanguard Mid-Cap","Offshore US","Mid Caps EUA","Mid Caps EUA","US","USD",0.04,null],
+    ["VOO","Vanguard S&P 500","Ações Internacionais","Ações EUA","S&P 500, US-listed","US","USD",0.03,"offshore"],
+    ["VPL",null,"Offshore US","Pacífico","Pacífico","US","USD",null,null],
+    ["VRTA11","VRTA11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["VSLH11","VSLH11 — FII Papel/CRI","FIIs Papel","FIIs Papel","FII Papel/CRI (B3)","B3","BRL",null,null],
+    ["VSS",null,"Offshore US","Small Caps Internacional","Small Caps Internacional","US","USD",null,null],
+    ["VTI","Vanguard Total Market","Ações Internacionais","Ações EUA","Mercado total EUA","US","USD",0.03,"offshore"],
+    ["VTIP",null,"Offshore US","TIPS Curto","TIPS Curto","US","USD",null,null],
+    ["VTV","Vanguard Value","Offshore US","Value EUA","Value EUA","US","USD",0.04,null],
+    ["VUAA","Vanguard S&P 500 UCITS","UCITS","Ações EUA","UCITS Ações EUA","IE","USD",0.07,null],
+    ["VUG","Vanguard Growth","Offshore US","Growth EUA","Growth EUA","US","USD",0.04,null],
+    ["VWO","Vanguard Emerging Markets","Ações Internacionais","Emergentes","Emergentes","US","USD",0.08,"offshore"],
+    ["VWRA","Vanguard FTSE All-World UCITS","UCITS","Ações Global","UCITS Ações Global","IE","USD",0.22,null],
+    ["VWRA11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["VXUS",null,"Offshore US","Global ex-EUA","Global ex-EUA","US","USD",null,null],
+    ["VYM","Vanguard High Dividend","Offshore US","Dividendos EUA","Dividendos EUA","US","USD",0.06,null],
+    ["WALM34","WALM34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["WEB311",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["WEGE3","WEGE3 — Blue Chip","Ações BR","Ações BR","Blue Chip (B3)","B3","BRL",null,null],
+    ["WEJR11",null,"Setorial",null,null,"B3","BRL",null,null],
+    ["WMBY34","WMBY34 — BDR Big Tech","BDRs","BDRs","BDR Big Tech (B3)","B3","BRL",null,null],
+    ["WRLD11","Investo FTSE Global","Ações Internacionais","Acoes Globais","Acoes Globais","B3","BRL",0.3,null],
+    ["WSML",null,"UCITS","Small Caps Global","UCITS Small Caps Global","IE","USD",null,null],
+    ["XAR",null,"Offshore US","Defesa & Aeroespacial","Defesa & Aeroespacial","US","USD",null,null],
+    ["XB3011",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["XB3511",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["XB4511",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["XB5011",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["XB6011",null,"RF Inflação",null,null,"B3","BRL",null,null],
+    ["XBCI11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["XBI",null,"Offshore US","Biotech","Biotech","US","USD",null,null],
+    ["XBIT11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["XBOV11",null,"Ações BR",null,null,"B3","BRL",null,null],
+    ["XDEW",null,"UCITS","Ações EUA","UCITS Ações EUA","IE","USD",null,null],
+    ["XEOU",null,"UCITS","Ações Europa","UCITS Ações Europa","IE","USD",null,null],
+    ["XETH11",null,"Cripto",null,null,"B3","BRL",null,null],
+    ["XFIX11","iShares IFIX","FIIs Tijolo","FIIs","Índice de Fundos Imobiliários","B3","BRL",0.29,"etfs"],
+    ["XINA11","XINA11 — ETF","Ações Internacionais","ETFs","ETF (B3)","B3","BRL",null,null],
+    ["XLB",null,"Offshore US","Materiais EUA","Materiais EUA","US","USD",null,null],
+    ["XLC",null,"Offshore US","Comunicação EUA","Comunicação EUA","US","USD",null,null],
+    ["XLE","SPDR Energy Select","Offshore US","Energia EUA","Energia EUA","US","USD",0.09,null],
+    ["XLF","SPDR Financial Select","Offshore US","Financeiro EUA","Financeiro EUA","US","USD",0.09,null],
+    ["XLI",null,"Offshore US","Indústria EUA","Indústria EUA","US","USD",null,null],
+    ["XLK","SPDR Technology Select","Offshore US","Tecnologia EUA","Tecnologia EUA","US","USD",0.09,null],
+    ["XLP",null,"Offshore US","Consumo Básico EUA","Consumo Básico EUA","US","USD",null,null],
+    ["XLRE",null,"Offshore US","Imobiliário EUA","Imobiliário EUA","US","USD",null,null],
+    ["XLU",null,"Offshore US","Utilities EUA","Utilities EUA","US","USD",null,null],
+    ["XLV","SPDR Health Care Select","Offshore US","Saúde EUA","Saúde EUA","US","USD",0.09,null],
+    ["XLY",null,"Offshore US","Consumo Discricionário","Consumo Discricionário","US","USD",null,null],
+    ["XMED",null,"UCITS","Ações Europa","UCITS Ações Europa","IE","USD",null,null],
+    ["XPLG11","XPLG11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["XPML11","XPML11 — FII Tijolo","FIIs Tijolo","FIIs Tijolo","FII Tijolo (B3)","B3","BRL",null,null],
+    ["XSPI11",null,"Ações Internacionais",null,null,"B3","BRL",null,null],
+    ["XT",null,"Offshore US","Tecnologias Exponenciais","Tecnologias Exponenciais","US","USD",null,null],
+    ["XYLD",null,"Offshore US","Covered Call S&P","Covered Call S&P","US","USD",null,null],
+    ["XYZ",null,"Offshore US",null,"Offshore US","US","USD",null,null],
+    ["YDUQ3","YDUQ3 — Mid/Small Cap","Mid/Small Caps","Mid/Small Caps","Mid/Small Cap (B3)","B3","BRL",null,null]
+  ];
+
+  /* ---------------------------------------------------------------------------
+     Construcao dos registros
+     --------------------------------------------------------------------------- */
+  var ativos = [];
+  var porTickerMap = {};
+
+  for (var i = 0; i < LINHAS.length; i++) {
+    var L = LINHAS[i];
+    var reg = {
+      ticker: L[0],
+      nome: L[1] || L[0],
+      classe: L[2] || "Não classificado",
+      subclasse: L[3] || null,
+      descricao: L[4] || null,
+      custodia: L[5] || null,
+      moeda: L[6] || null,
+      taxa: (typeof L[7] === "number") ? L[7] : null,
+      universo: L[8] || null,
+      temSerie: !!L[8]
     };
+    // chave de busca pre-calculada: ticker + nome + classe + subclasse + descricao
+    reg._chave = (reg.ticker + " " + reg.nome + " " + reg.classe + " " +
+                  (reg.subclasse || "") + " " + (reg.descricao || "")).toLowerCase();
+    ativos.push(reg);
+    porTickerMap[reg.ticker] = reg;
+  }
 
-    function porClasse(classe) {
-        return ativos.filter(function(a) { return a.classe === classe; });
+  /* ---------------------------------------------------------------------------
+     API
+     --------------------------------------------------------------------------- */
+  function porTicker(ticker) {
+    if (!ticker) return null;
+    return porTickerMap[String(ticker).toUpperCase()] || null;
+  }
+
+  function porClasse(classe) {
+    return ativos.filter(function (a) { return a.classe === classe; });
+  }
+
+  function simulaveis() {
+    return ativos.filter(function (a) { return a.temSerie; });
+  }
+
+  function temSerie(ticker) {
+    var r = porTicker(ticker);
+    return !!(r && r.temSerie);
+  }
+
+  function universoDe(ticker) {
+    var r = porTicker(ticker);
+    return r ? r.universo : null;
+  }
+
+  /* Busca por relevancia. Ordem: ticker exato > ticker comeca com >
+     nome comeca com > qualquer campo contem. Dentro de cada faixa, quem tem
+     serie historica vem antes — e o que o simulador consegue de fato rodar. */
+  function buscar(termo, opcoes) {
+    opcoes = opcoes || {};
+    var limite = opcoes.limite || 40;
+    var base = opcoes.somenteSimulaveis ? simulaveis() : ativos;
+
+    var t = String(termo || "").trim().toLowerCase();
+    if (!t) {
+      // sem termo: devolve os simulaveis primeiro, que e o universo util aqui
+      return base.slice().sort(ordenar).slice(0, limite);
     }
 
-    function porTicker(ticker) {
-        return ativos.find(function(a) { return a.ticker === ticker; }) || null;
+    var achados = [];
+    for (var i = 0; i < base.length; i++) {
+      var a = base[i];
+      var tk = a.ticker.toLowerCase();
+      var nm = a.nome.toLowerCase();
+      var peso = -1;
+      if (tk === t) peso = 0;
+      else if (tk.indexOf(t) === 0) peso = 1;
+      else if (nm.indexOf(t) === 0) peso = 2;
+      else if (a._chave.indexOf(t) !== -1) peso = 3;
+      if (peso >= 0) achados.push({ reg: a, peso: peso });
     }
 
-    return { ativos: ativos, benchmarks: benchmarks, classes: classes, porClasse: porClasse, porTicker: porTicker };
+    achados.sort(function (x, y) {
+      if (x.peso !== y.peso) return x.peso - y.peso;
+      if (x.reg.temSerie !== y.reg.temSerie) return x.reg.temSerie ? -1 : 1;
+      return x.reg.ticker.localeCompare(y.reg.ticker);
+    });
+
+    return achados.slice(0, limite).map(function (x) { return x.reg; });
+  }
+
+  function ordenar(a, b) {
+    if (a.temSerie !== b.temSerie) return a.temSerie ? -1 : 1;
+    return a.ticker.localeCompare(b.ticker);
+  }
+
+  function resumo() {
+    var porCl = {};
+    for (var i = 0; i < ativos.length; i++) {
+      porCl[ativos[i].classe] = (porCl[ativos[i].classe] || 0) + 1;
+    }
+    return { total: ativos.length, simulaveis: simulaveis().length, porClasse: porCl };
+  }
+
+  function corDaClasse(classe) {
+    var c = CLASSES[classe];
+    return c ? c.cor : "#64748b";
+  }
+
+  return {
+    ativos: ativos,
+    classes: CLASSES,
+    porTicker: porTicker,
+    porClasse: porClasse,
+    simulaveis: simulaveis,
+    temSerie: temSerie,
+    universoDe: universoDe,
+    buscar: buscar,
+    resumo: resumo,
+    corDaClasse: corDaClasse
+  };
 })();
+
+if (typeof window !== "undefined") window.Catalogo = Catalogo;

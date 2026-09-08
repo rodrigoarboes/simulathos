@@ -42,6 +42,39 @@ var AIDASim = (function () {
   // inicial acompanha o aporte da Tela 3 / o aporte sugerido do case.
   var premissasTocadas = false;
 
+  // Defaults das premissas, para restaurar ao trocar de case.
+  var PREMISSAS_PADRAO = {
+    valorInicial: PREMISSAS.valorInicial,
+    aporteMensal: PREMISSAS.aporteMensal,
+    rebalanceamento: PREMISSAS.rebalanceamento,
+    janela: PREMISSAS.janela
+  };
+
+  // Identidade do último case renderizado, para não vazar premissas de um
+  // cliente no outro (o valor inicial de um case é o patrimônio DAQUELE case).
+  var casoAtualId = undefined;
+
+  /** Chave estável do case (string), 'livre' quando não há case. */
+  function chaveCase(caseObj) {
+    if (!caseObj) return 'livre';
+    if (caseObj.id != null) return String(caseObj.id);
+    if (caseObj.titulo) return String(caseObj.titulo);
+    return 'case';
+  }
+
+  /** Ao trocar de case, as premissas voltam ao padrão e reencostam no aporte. */
+  function sincronizarCase(caseObj) {
+    var chave = chaveCase(caseObj);
+    if (casoAtualId === chave) return;
+    casoAtualId = chave;
+    PREMISSAS.valorInicial = PREMISSAS_PADRAO.valorInicial;
+    PREMISSAS.aporteMensal = PREMISSAS_PADRAO.aporteMensal;
+    PREMISSAS.rebalanceamento = PREMISSAS_PADRAO.rebalanceamento;
+    PREMISSAS.janela = PREMISSAS_PADRAO.janela;
+    premissasTocadas = false;
+    abaAtiva = 'patrimonio';
+  }
+
   var REBAL_OPCOES = [
     { valor: 0,   rotulo: 'Nunca' },
     { valor: 21,  rotulo: 'Mensal' },
@@ -502,10 +535,15 @@ var AIDASim = (function () {
     var attrs = ' class="metric"';
     if (m.estado) attrs += ' data-estado="' + m.estado + '"';
     if (m.trend) attrs += ' data-trend="' + m.trend + '"';
+    var ctx = '<div class="metric__ctx">' + escapeHtml(m.ctx);
+    if (m.faixa) {
+      ctx += ' <span class="metric__faixa">Referência: ' + escapeHtml(m.faixa) + '</span>';
+    }
+    ctx += '</div>';
     return '<div' + attrs + '>' +
       '<div class="metric__label">' + escapeHtml(m.label) + '</div>' +
       '<div class="metric__value">' + escapeHtml(m.valor) + '</div>' +
-      '<div class="metric__ctx">' + escapeHtml(m.ctx) + '</div>' +
+      ctx +
       '</div>';
   }
 
@@ -629,47 +667,89 @@ var AIDASim = (function () {
       '</div>';
   }
 
+  /** Rótulo do perfil usado na régua de drawdown (o do case, ou o padrão). */
+  function rotuloPerfilDD(perfil) {
+    var p = (perfil || '').toLowerCase();
+    return DD_POR_PERFIL.hasOwnProperty(p) ? p : 'moderado';
+  }
+
   function htmlMetricas(resumo, perfil) {
+    var lim = limiteDD(perfil);
+    var anualOk = (typeof resumo.retornoAnualizado === 'number' && isFinite(resumo.retornoAnualizado));
+
+    // Janela abaixo de um ano: o motor não anualiza (e anualizar seria inventar).
+    // Em vez de mostrar um traço, o card assume o retorno do período.
+    var cardRetorno = anualOk ? {
+      label: 'Retorno anualizado', valor: fmtPct(resumo.retornoAnualizado, 1),
+      ctx: 'Quanto a carteira rendeu por ano, em média composta.',
+      faixa: 'acima de zero a carteira ganhou dinheiro; abaixo, perdeu.',
+      estado: semaforo('retornoAnualizado', resumo.retornoAnualizado, perfil),
+      trend: tendencia(resumo.retornoAnualizado)
+    } : {
+      label: 'Retorno do período', valor: fmtPctAssinado(resumo.retornoAcumulado, 1),
+      ctx: 'A janela tem menos de um ano (' + NF0.format(resumo.diasUteis || 0) +
+        ' pregões), então não dá para anualizar sem inventar. Este é o retorno cheio do período.',
+      estado: semaforo('retornoAnualizado', resumo.retornoAcumulado, perfil),
+      trend: tendencia(resumo.retornoAcumulado)
+    };
+
+    // % do CDI só existe quando carteira e CDI renderam positivo no período.
+    // Sem isso, a comparação honesta é a diferença em pontos percentuais.
+    var pctCDI = resumo.percentualCDI;
+    var temPctCDI = (typeof pctCDI === 'number' && isFinite(pctCDI));
+    var difCDI = (typeof resumo.retornoAcumulado === 'number' && typeof resumo.retornoCDI === 'number')
+      ? (resumo.retornoAcumulado - resumo.retornoCDI) * 100 : null;
+    var cardCDI = temPctCDI ? {
+      label: '% do CDI', valor: fmtNum(pctCDI, 1) + '%',
+      ctx: 'Quanto do rendimento do CDI a carteira entregou.',
+      faixa: 'acima de 100% ganha do CDI; de 80% a 100% empata; abaixo de 80% perde para a renda fixa básica.',
+      estado: semaforo('percentualCDI', pctCDI, perfil)
+    } : {
+      label: 'Carteira vs CDI', valor: fmtPP(difCDI, 1),
+      ctx: 'Nesta janela a razão carteira/CDI não faz sentido (carteira ou CDI sem retorno positivo), ' +
+        'então a comparação é a diferença direta: carteira ' + fmtPctAssinado(resumo.retornoAcumulado, 1) +
+        ' contra CDI ' + fmtPctAssinado(resumo.retornoCDI, 1) + '.',
+      faixa: 'acima de zero p.p. a carteira ficou à frente do CDI no período.',
+      estado: (typeof difCDI === 'number') ? (difCDI >= 0 ? 'ok' : 'bad') : null,
+      trend: tendencia(difCDI)
+    };
+
     var lista = [
-      {
-        label: 'Retorno anualizado', valor: fmtPct(resumo.retornoAnualizado, 1),
-        ctx: 'Quanto a carteira rendeu por ano, em média composta.',
-        estado: semaforo('retornoAnualizado', resumo.retornoAnualizado, perfil),
-        trend: tendencia(resumo.retornoAnualizado)
-      },
-      {
-        label: '% do CDI',
-        valor: (typeof resumo.percentualCDI === 'number' && isFinite(resumo.percentualCDI))
-          ? fmtNum(resumo.percentualCDI, 1) + '%' : '—',
-        ctx: 'Quanto do rendimento do CDI a carteira entregou. Acima de 100% é ganhar da renda fixa básica.',
-        estado: semaforo('percentualCDI', resumo.percentualCDI, perfil)
-      },
+      cardRetorno,
+      cardCDI,
       {
         label: 'Volatilidade', valor: fmtPct(resumo.volatilidade, 1),
-        ctx: 'O tamanho médio do sobe e desce em um ano. Quanto maior, mais o extrato balança.'
+        ctx: 'O tamanho médio do sobe e desce em um ano. Quanto maior, mais o extrato balança.',
+        faixa: 'não tem nota isolada — o que é oscilação demais depende do perfil e do prazo do cliente.'
       },
       {
         label: 'Sharpe', valor: fmtNum(resumo.sharpe, 2),
         ctx: 'Quanto de retorno acima do CDI a carteira entregou por unidade de balanço.',
+        faixa: 'a partir de 0,50 é bom; de 0,00 a 0,50 é fraco; negativo significa balançar sem ganhar do CDI.',
         estado: semaforo('sharpe', resumo.sharpe, perfil)
       },
       {
         label: 'Drawdown máximo', valor: fmtPct(resumo.drawdownMaximo, 1),
         ctx: 'A maior queda do topo ao fundo. É o susto que o cliente teria vivido.',
+        faixa: 'no perfil ' + rotuloPerfilDD(perfil) + ', até ' + fmtPct(lim, 0) +
+          ' é tolerável; abaixo de ' + fmtPct(lim * 1.5, 0) + ' é queda difícil de segurar.',
         estado: semaforo('drawdownMaximo', resumo.drawdownMaximo, perfil)
       },
       {
         label: 'Beta (vs Ibovespa)', valor: fmtNum(resumo.beta, 2),
-        ctx: 'Sensibilidade à bolsa brasileira. 1,00 significa andar junto com o Ibovespa.'
+        ctx: 'Sensibilidade à bolsa brasileira.',
+        faixa: '1,00 anda junto com o Ibovespa; 0,50 sente metade; perto de zero quase não depende da bolsa.'
       },
       {
         label: 'Sortino', valor: fmtNum(resumo.sortino, 2),
         ctx: 'Como o Sharpe, mas só penaliza a oscilação das quedas — ignora as altas.',
+        faixa: 'a partir de 1,00 é bom; de 0,30 a 1,00 é mediano; abaixo disso as quedas não foram pagas.',
         estado: semaforo('sortino', resumo.sortino, perfil)
       },
       {
         label: 'Ulcer Index', valor: fmtNum(resumo.ulcerIndex, 2),
         ctx: 'Profundidade somada à duração das quedas. Quanto menor, menos tempo no vermelho.',
+        faixa: 'até 5 é tranquilo; de 5 a 10 incomoda; acima de 10 é muito tempo abaixo do topo.',
         estado: semaforo('ulcerIndex', resumo.ulcerIndex, perfil)
       }
     ];
@@ -893,6 +973,7 @@ var AIDASim = (function () {
       mensagem('Backtest histórico indisponível: motor ou dados não carregados.');
       return;
     }
+    sincronizarCase(caseObj);
     if (!premissasTocadas) PREMISSAS.valorInicial = valorInicialSugerido(caseObj);
 
     var etfs = construirUniverso();

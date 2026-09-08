@@ -7,11 +7,15 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0;
   font-family: var(--font-body);
+  /* Simulador de números: todo algarismo tem a mesma largura, então coluna de
+     valores alinha e o número não "dança" quando o texto muda. */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
   background: var(--bg);
   color: var(--text);
   font-size: var(--text-base);
   line-height: 1.5;
-  transition: background 0.3s, color 0.3s;
+  transition: background var(--motion-base), color var(--motion-base);
   min-height: 100vh;
 }
 
@@ -36,7 +40,7 @@ body {
   height: 36px;
   width: auto;
   display: block;
-  transition: opacity 0.3s;
+  transition: opacity var(--motion-base);
 }
 .brand-divider {
   width: 1px;
@@ -110,20 +114,20 @@ button {
   background: var(--bg-card);
   color: var(--text);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--motion-fast);
 }
 button:hover {
   border-color: var(--brand-blue);
   color: var(--brand-blue);
 }
 button.primary {
-  background: var(--brand-blue);
-  color: white;
+  background: var(--accent-solid);
+  color: var(--on-accent);
   border-color: var(--brand-blue);
 }
 button.primary:hover {
-  background: #006fa6;
-  color: white;
+  background: var(--accent-solid-hover);
+  color: var(--on-accent);
 }
 button.danger {
   background: transparent;
@@ -132,7 +136,7 @@ button.danger {
 }
 button.danger:hover {
   background: var(--brand-red);
-  color: white;
+  color: var(--on-accent);
 }
 button.icon {
   padding: 6px 10px;
@@ -185,7 +189,7 @@ button.icon {
   border-radius: var(--radius-md);
   padding: 20px;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--motion-fast);
   position: relative;
   overflow: hidden;
 }
@@ -200,12 +204,12 @@ button.icon {
   top: 0; left: 0;
   width: 4px;
   height: 100%;
-  background: var(--brand-blue);
-  opacity: 0.7;
+  background: var(--accent-solid);
+  opacity: 0.85;
 }
 .case-card[data-ciclo="alta-selic"]::before { background: var(--brand-red); }
-.case-card[data-ciclo="queda-selic"]::before { background: var(--brand-blue); }
-.case-card[data-ciclo="crise"]::before { background: var(--brand-orange); }
+.case-card[data-ciclo="queda-selic"]::before { background: var(--accent-solid); }
+.case-card[data-ciclo="crise"]::before { background: var(--accent-warm); }
 .case-card[data-ciclo="estavel"]::before { background: var(--ok); }
 
 .case-numero {
@@ -258,7 +262,16 @@ button.icon {
 
 /* ============ TELA 2: BRIEFING ============ */
 .tela { display: none; }
-.tela.ativo { display: block; }
+/* CASE-01: o FAB "Ferramentas" é fixed no canto inferior direito e cobria a
+   coluna "Diferença" da tabela da tela 4. Toda tela reserva a faixa segura no
+   rodapé para que nenhum número fique embaixo dele. */
+.tela.ativo {
+  display: block;
+  padding-bottom: var(--fab-safe);
+}
+@media print {
+  .tela.ativo { padding-bottom: 0; }
+}
 
 .briefing {
   background: var(--bg-card);
@@ -621,7 +634,7 @@ button.icon {
   position: relative;
   border: 1px solid var(--border);
   background: var(--bg-card);
-  transition: transform 0.15s;
+  transition: transform var(--motion-fast);
 }
 .nivel-card.disponivel {
   border-color: var(--brand-blue);
@@ -674,8 +687,8 @@ button.icon {
   margin-top: var(--space-2);
 }
 .nivel-badge.aqui {
-  background: var(--brand-blue);
-  color: white;
+  background: var(--accent-solid);
+  color: var(--on-accent);
 }
 .nivel-badge.bloqueado {
   background: var(--bg-soft);
@@ -684,7 +697,7 @@ button.icon {
 }
 .nivel-card.travado .nivel-desc {
   /* preview levemente esmaecido — o "fominho" */
-  opacity: 0.7;
+  opacity: 0.85;
 }
 
 /* ---- Fase de nivelamento (FEA) — visual distinto dos níveis de maturidade ---- */
@@ -715,8 +728,8 @@ button.icon {
   margin: var(--space-2) 0 6px;
 }
 .nivel-badge.nivelamento-badge {
-  background: var(--brand-orange);
-  color: white;
+  background: var(--accent-warm);
+  color: var(--on-warm);
 }
 
 .trilha-cta {
@@ -743,11 +756,11 @@ button.icon {
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s;
+  transition: all var(--motion-fast);
 }
 .cat-pill:hover, .cat-pill.active {
-  background: var(--brand-blue);
-  color: white;
+  background: var(--accent-solid);
+  color: var(--on-accent);
   border-color: var(--brand-blue);
 }
 
@@ -777,9 +790,9 @@ button.icon {
 }
 .ticker-autocomplete input:focus {
   border-color: var(--brand-blue);
-  outline: none;
-  box-shadow: 0 0 0 3px var(--accent-bg);
+  box-shadow: var(--ring-accent);
 }
+.ticker-autocomplete input:focus:not(:focus-visible) { outline: none; }
 .ticker-autocomplete .ac-dropdown {
   position: absolute;
   top: 100%;
@@ -817,7 +830,7 @@ button.icon {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  transition: background 0.15s;
+  transition: background var(--motion-fast);
 }
 .ticker-autocomplete .ac-item:hover {
   background: var(--accent-bg);
@@ -838,7 +851,7 @@ button.icon {
   padding: 2px 6px;
   border-radius: var(--radius-sm);
   opacity: 0.5;
-  transition: opacity 0.15s;
+  transition: opacity var(--motion-fast);
   flex-shrink: 0;
 }
 .ac-info-btn:hover {
@@ -937,7 +950,7 @@ button.icon {
   z-index: 200;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s, visibility 0.25s;
+  transition: opacity var(--motion-base), visibility var(--motion-base);
 }
 .drawer-overlay.open {
   opacity: 1;
@@ -955,7 +968,7 @@ button.icon {
   box-shadow: var(--elev-2);
   z-index: 201;
   transform: translateX(100%);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform var(--motion-slow) var(--motion-ease);
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -1051,7 +1064,7 @@ button.icon {
   border-radius: var(--radius-md);
   cursor: pointer;
   text-align: left;
-  transition: all 0.2s;
+  transition: all var(--motion-fast);
   font-family: var(--font-body);
 }
 .framework-btn:hover {
@@ -1080,8 +1093,8 @@ button.icon {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: var(--brand-orange);
-  color: white;
+  background: var(--accent-warm);
+  color: var(--on-warm);
   padding: 2px var(--space-2);
   border-radius: var(--radius-sm);
 }
@@ -1142,7 +1155,7 @@ button.icon {
   border-radius: var(--radius-md) 0 0 var(--radius-md);
 }
 .etapa-pitch[data-etapa="1"]::before { background: var(--brand-red); }
-.etapa-pitch[data-etapa="2"]::before { background: var(--brand-orange); }
+.etapa-pitch[data-etapa="2"]::before { background: var(--accent-warm); }
 .etapa-pitch[data-etapa="3"]::before { background: var(--brand-yellow); }
 .etapa-pitch[data-etapa="4"]::before { background: var(--ok); }
 
@@ -1226,13 +1239,13 @@ button.icon {
   font-size: var(--text-base);
   line-height: 1.55;
   resize: vertical;
-  transition: border-color 0.15s;
+  transition: border-color var(--motion-fast);
 }
 .etapa-textarea:focus {
-  outline: none;
   border-color: var(--brand-blue);
-  box-shadow: 0 0 0 3px var(--accent-bg);
+  box-shadow: var(--ring-accent);
 }
+.etapa-textarea:focus:not(:focus-visible) { outline: none; }
 .etapa-textarea.preenchido {
   border-color: var(--ok);
 }
@@ -1317,11 +1330,12 @@ button.icon {
 }
 .modo-opt:hover { color: var(--text); }
 .modo-opt.active {
-  background: var(--brand-blue);
-  color: white;
+  background: var(--accent-solid);
+  color: var(--on-accent);
 }
 .modo-opt.active[data-modo="FEA"] {
-  background: var(--brand-orange);
+  background: var(--accent-warm);
+  color: var(--on-warm);
 }
 
 .modo-banner {
@@ -1371,8 +1385,8 @@ button.icon {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 1px;
-  background: var(--brand-orange);
-  color: white;
+  background: var(--accent-warm);
+  color: var(--on-warm);
   padding: var(--space-1) var(--space-3);
   border-radius: var(--radius-pill);
 }
@@ -1407,7 +1421,7 @@ button.icon {
   background: var(--bg-card);
   cursor: pointer;
   text-align: left;
-  transition: all 0.15s;
+  transition: all var(--motion-fast);
   position: relative;
 }
 .cenario-modo-btn:hover { border-color: var(--brand-blue); }
@@ -1448,9 +1462,10 @@ button.icon {
   resize: vertical;
 }
 .cenario-editor textarea:focus {
-  outline: none;
   border-color: var(--brand-blue);
+  box-shadow: var(--ring-accent);
 }
+.cenario-editor textarea:focus:not(:focus-visible) { outline: none; }
 .cenario-display {
   background: var(--bg-soft);
   border-left: 3px solid var(--brand-orange);
@@ -1465,7 +1480,7 @@ button.icon {
   font-weight: 700;
   text-transform: uppercase;
   background: var(--ok);
-  color: white;
+  color: var(--on-accent);
   padding: 2px var(--space-2);
   border-radius: var(--radius-sm);
   margin-bottom: var(--space-2);
@@ -1565,8 +1580,8 @@ button.icon {
   cursor: pointer;
 }
 .apres-tema-opt.active {
-  background: var(--brand-blue);
-  color: white;
+  background: var(--accent-solid);
+  color: var(--on-accent);
   border-color: var(--brand-blue);
 }
 .btn-modo-apresentacao {
@@ -1578,48 +1593,50 @@ button.icon {
 /* Slides em tema claro — padrão */
 .slides-container[data-tema-slide="claro"] .slide-viewport,
 .slides-container[data-tema-slide="claro"] .slide {
-  background: #ffffff;
-  color: #1a1a1a;
+  background: var(--slide-claro-bg);
+  color: var(--slide-claro-fg);
 }
 .slides-container[data-tema-slide="claro"] .slide h1,
-.slides-container[data-tema-slide="claro"] .slide h2 { color: #1a1a1a; }
-.slides-container[data-tema-slide="claro"] .slide h3 { color: var(--brand-blue); }
+.slides-container[data-tema-slide="claro"] .slide h2 { color: var(--slide-claro-fg); }
+.slides-container[data-tema-slide="claro"] .slide h3 { color: var(--slide-claro-h3); }
 .slides-container[data-tema-slide="claro"] .slide p,
-.slides-container[data-tema-slide="claro"] .slide li { color: #2a2a2a; }
+.slides-container[data-tema-slide="claro"] .slide li { color: var(--slide-claro-corpo); }
 .slides-container[data-tema-slide="claro"] .slide-capa {
-  background: linear-gradient(135deg, #ffffff 0%, var(--accent-bg) 100%);
+  background: linear-gradient(135deg, var(--slide-claro-bg) 0%, rgba(0, 136, 204, 0.08) 100%);
 }
 .slides-container[data-tema-slide="claro"] .aluno-identidade {
   border-top-color: var(--border-subtle);
 }
 .slides-container[data-tema-slide="claro"] .slide-num,
 .slides-container[data-tema-slide="claro"] .slide-grafico-fonte {
-  color: var(--text-muted);
+  color: var(--slide-claro-nota);
 }
 
 /* Slides em tema escuro */
 .slides-container[data-tema-slide="escuro"] .slide-viewport,
 .slides-container[data-tema-slide="escuro"] .slide {
-  background: #14181f;
-  color: var(--surface-2);
+  background: var(--slide-escuro-bg);
+  color: var(--slide-escuro-fg);
 }
 .slides-container[data-tema-slide="escuro"] .slide h1,
-.slides-container[data-tema-slide="escuro"] .slide h2 { color: var(--surface-2); }
-.slides-container[data-tema-slide="escuro"] .slide h3 { color: #4db8e8; }
+.slides-container[data-tema-slide="escuro"] .slide h2 { color: var(--slide-escuro-fg); }
+.slides-container[data-tema-slide="escuro"] .slide h3 { color: var(--slide-escuro-h3); }
+/* NÃO usar --surface-2/--border-strong aqui: no tema escuro do app eles viram
+   quase pretos e o slide "escuro" fica ilegível. */
 .slides-container[data-tema-slide="escuro"] .slide p,
-.slides-container[data-tema-slide="escuro"] .slide li { color: var(--border-strong); }
+.slides-container[data-tema-slide="escuro"] .slide li { color: var(--slide-escuro-corpo); }
 .slides-container[data-tema-slide="escuro"] .slide-capa {
-  background: linear-gradient(135deg, #14181f 0%, rgba(0,136,204,0.15) 100%);
+  background: linear-gradient(135deg, var(--slide-escuro-bg) 0%, rgba(0, 136, 204, 0.15) 100%);
 }
 .slides-container[data-tema-slide="escuro"] .aluno-identidade {
-  border-top-color: #2a2f38;
+  border-top-color: var(--slide-escuro-linha);
 }
 .slides-container[data-tema-slide="escuro"] .slide-num,
 .slides-container[data-tema-slide="escuro"] .slide-grafico-fonte {
-  color: var(--text-faint);
+  color: var(--slide-escuro-nota);
 }
 .slides-container[data-tema-slide="escuro"] .capa-eyebrow {
-  color: #f0a040;
+  color: var(--slide-escuro-eyebrow);
 }
 
 /* ===== Modo apresentação (tela cheia) ===== */
@@ -1645,26 +1662,45 @@ button.icon {
 .slides-container.modo-apresentacao .slides-nav {
   padding: var(--space-4) var(--space-6);
 }
+/* APRESENTACAO-01 — o botão de sair precisa viver DENTRO de #slides-container.
+   entrarModoApresentacao() chama container.requestFullscreen(): o container vai
+   para a top layer do navegador, que fica acima de QUALQUER z-index. Um irmão
+   do container (posição atual no index.html) nunca recebe clique nem é pintado.
+   Estas regras já cobrem as duas posições: dentro do container ele é absoluto
+   sobre o palco (funciona em fullscreen); fora, o fixed antigo segue de pé como
+   degradação. Ver hook para index.html. */
 .btn-sair-apresentacao {
   display: none;
   position: fixed;
-  top: 20px;
-  right: 24px;
+  top: var(--space-5);
+  right: var(--space-5);
   z-index: 10000;
-  background: rgba(0,0,0,0.6);
-  color: white;
-  border: 1px solid rgba(255,255,255,0.3);
+  background: rgba(0, 0, 0, 0.62);
+  color: var(--on-accent);
+  border: 1px solid rgba(255, 255, 255, 0.32);
   border-radius: var(--radius-md);
   padding: var(--space-2) var(--space-4);
+  font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 600;
   cursor: pointer;
+  transition: background var(--motion-fast);
 }
 .btn-sair-apresentacao:hover {
-  background: rgba(0,0,0,0.85);
+  background: rgba(0, 0, 0, 0.85);
 }
 .btn-sair-apresentacao.visible {
   display: block;
+}
+/* Quando o botão for filho do container (fullscreen inclusive) */
+.slides-container.modo-apresentacao > .btn-sair-apresentacao {
+  position: absolute;
+  top: var(--space-5);
+  right: var(--space-5);
+}
+.btn-sair-apresentacao:focus-visible {
+  outline: 2px solid var(--on-accent);
+  outline-offset: 2px;
 }
 
 .slide-viewport {
@@ -1680,7 +1716,7 @@ button.icon {
   display: none;
   flex-direction: column;
   height: 100%;
-  animation: slideIn 0.3s ease;
+  animation: slideIn var(--motion-base) ease;
 }
 .slide.active { display: flex; }
 @keyframes slideIn {
@@ -1822,16 +1858,16 @@ button.icon {
   border-radius: 50%;
   background: var(--border);
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all var(--motion-fast);
   border: none;
   padding: 0;
 }
 .slide-dot:hover {
-  background: var(--brand-blue);
+  background: var(--accent-solid);
   opacity: 0.6;
 }
 .slide-dot.active {
-  background: var(--brand-blue);
+  background: var(--accent-solid);
   width: 28px;
   border-radius: var(--radius-sm);
 }
@@ -1998,8 +2034,8 @@ button.icon {
 .ajuda-etf-tabela th {
   text-align: left;
   padding: var(--space-2) 10px;
-  background: var(--brand-blue);
-  color: white;
+  background: var(--accent-solid);
+  color: var(--on-accent);
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -2051,11 +2087,11 @@ button.icon {
   margin-left: var(--space-1);
   vertical-align: middle;
   font-family: Georgia, serif;
-  transition: all 0.15s;
+  transition: all var(--motion-fast);
 }
 .info-tip:hover {
-  background: var(--brand-blue);
-  color: white;
+  background: var(--accent-solid);
+  color: var(--on-accent);
   border-color: var(--brand-blue);
 }
 .info-tip::after {
@@ -2077,7 +2113,7 @@ button.icon {
   text-align: left;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.15s, visibility 0.15s;
+  transition: opacity var(--motion-fast), visibility var(--motion-fast);
   z-index: 300;
   box-shadow: var(--shadow-lg);
   pointer-events: none;
@@ -2092,7 +2128,7 @@ button.icon {
   border-top-color: var(--text);
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.15s, visibility 0.15s;
+  transition: opacity var(--motion-fast), visibility var(--motion-fast);
   z-index: 300;
 }
 .info-tip:hover::after,
@@ -2171,9 +2207,9 @@ button.icon {
   cursor: pointer;
 }
 .grafico-periodo-btn.active {
-  background: var(--ok);
-  color: white;
-  border-color: var(--ok);
+  background: var(--accent-solid);
+  color: var(--on-accent);
+  border-color: var(--accent-solid);
 }
 .grafico-fonte {
   font-size: var(--text-xs);
@@ -2204,15 +2240,15 @@ button.icon {
   border: 1px solid var(--brand-blue);
   border-radius: var(--radius-md);
   cursor: pointer;
-  transition: all 0.15s;
+  transition: all var(--motion-fast);
 }
 .btn-inserir-slide:hover {
-  background: var(--brand-blue);
-  color: white;
+  background: var(--accent-solid);
+  color: var(--on-accent);
 }
 .btn-inserir-slide.inserido {
   background: var(--ok);
-  color: white;
+  color: var(--on-accent);
   border-color: var(--ok);
 }
 .graficos-inseridos-aviso {
@@ -2389,10 +2425,36 @@ button.icon {
    ======================================================================== */
 
 /* ---------- FOCO VISÍVEL GLOBAL ---------- */
-:focus-visible {
+:focus-visible,
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible,
+[contenteditable]:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: var(--radius-sm);
+}
+
+/* ---------- REDUÇÃO DE MOVIMENTO ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ---------- NÚMEROS TABULARES (reforço em tabelas e campos) ---------- */
+table, th, td, input, output, code, kbd, samp, .mono,
+[class*="valor"], [class*="metric"], [class*="score"], [class*="pct"] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
 }
 
 /* ---------- TOPBAR EM TRÊS ZONAS ---------- */
@@ -2459,7 +2521,7 @@ button.icon {
   background: var(--accent-bg);
 }
 .stepper li[aria-current="step"]::before {
-  background: var(--accent);
+  background: var(--accent-solid);
   border-color: var(--accent);
   color: var(--surface-1);
 }
@@ -2546,14 +2608,14 @@ button.icon {
   transition: background var(--motion-fast), color var(--motion-fast), border-color var(--motion-fast);
 }
 .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-.btn--primary { background: var(--brand-blue); color: #ffffff; }
-.btn--primary:hover:not(:disabled) { background: #006fa6; }
+.btn--primary { background: var(--accent-solid); color: var(--on-accent); }
+.btn--primary:hover:not(:disabled) { background: var(--accent-solid-hover); }
 .btn--secondary { border-color: var(--border-strong); background: var(--surface-1); }
 .btn--secondary:hover:not(:disabled) { background: var(--surface-2); }
 .btn--ghost { color: var(--text-muted); }
 .btn--ghost:hover:not(:disabled) { background: var(--accent-bg); color: var(--accent); }
 .btn--danger { border-color: var(--state-bad-border); background: var(--state-bad-bg); color: var(--state-bad-fg); }
-.btn--danger:hover:not(:disabled) { background: var(--brand-red); color: #ffffff; }
+.btn--danger:hover:not(:disabled) { background: var(--brand-red); color: var(--on-accent); }
 
 /* ---------- MÉTRICA ---------- */
 .metric {
@@ -2610,7 +2672,7 @@ button.icon {
 }
 .chip--ghost { background: transparent; }
 .chip--accent { background: var(--accent-bg); border-color: var(--accent); color: var(--accent); }
-.chip--active { background: var(--brand-blue); border-color: var(--brand-blue); color: #ffffff; }
+.chip--active { background: var(--accent-solid); border-color: var(--brand-blue); color: var(--on-accent); }
 
 /* ---------- SEGMENTED ---------- */
 .segmented {

@@ -11,6 +11,31 @@
    Construído UMA vez no carregamento (memoizado). Depende de globais já
    carregados nesta ordem: dados.js (window.DADOS), manifest.js (window.MANIFEST),
    app-dados.js (ETFs), app-programa.js (ETF_INFO, ETF_GUIA).
+
+   ---------------------------------------------------------------------------
+   API ESTÁVEL (window.Catalogo) — o que pode ser usado pelas telas
+   ---------------------------------------------------------------------------
+   Catalogo.get(ticker)        -> registro completo ou null
+   Catalogo.info(ticker)       -> FICHA ESTÁVEL do ticker (contrato abaixo) ou null
+   Catalogo.classeDe(ticker)   -> string da taxonomia fechada ("Não classificado" no pior caso)
+   Catalogo.janela(ticker)     -> { primeira, ultima, pontos, fonte } ou null
+   Catalogo.risco(ticker)      -> { fatorRisco, liquidezEfetiva, moedaExposicao, duration }
+   Catalogo.simulavel(ticker)  -> { temSerie, qualidadeOk, nivel: "ok"|"ressalva"|"sem" }
+   Catalogo.equivalentes(t)    -> array de tickers que replicam a mesma exposição
+   Catalogo.sobreposicoes(ts)  -> [{ a, b, motivo }] para uma lista de tickers
+   Catalogo.atributos(classe)  -> atributos de risco/liquidez daquela CLASSE
+   Catalogo.buscar(termo, cl)  -> registros que casam com o termo (e opcionalmente a classe)
+   Catalogo.all() / .classes() / .resumo() / .reconstruir()
+
+   Contrato de Catalogo.info(ticker) — todo campo desconhecido é null, NUNCA um
+   valor inventado (a tela mostra "—"):
+     { ticker, nome, classe, subclasse, custodia ("B3"|"US"|"IE"|"CVM"),
+       moeda, taxa (número em % a.a. ou null), benchmark, gestora, desc,
+       temSerie (bool), primeiraData, ultimaData, pontos, qualidadeOk (bool|null),
+       janela: { primeira, ultima, pontos, fonte:"manifest"|"serie" } | null,
+       risco: { fatorRisco, liquidezEfetiva, moedaExposicao, duration },
+       simulavel: { temSerie, qualidadeOk, nivel },
+       equivalentes: [ticker], papel, riscoTexto, pitch }
    ================================================================================= */
 (function () {
   "use strict";
@@ -376,6 +401,30 @@
     return ponto.data || ponto.date || null;
   }
 
+  // Janela de dados: o MANIFEST é a fonte preferida (é ele que audita a série);
+  // sem manifest, cai na própria série de dados.js. null quando não há nenhuma.
+  function janelaDe(ticker, serie) {
+    var man = (typeof window !== "undefined" && window.MANIFEST) ? window.MANIFEST : null;
+    var m = (man && man.porTicker) ? man.porTicker[ticker] : null;
+    if (m && (m.primeira || m.ultima)) {
+      return {
+        primeira: m.primeira || null,
+        ultima: m.ultima || null,
+        pontos: (typeof m.pontos === "number") ? m.pontos : null,
+        fonte: "manifest"
+      };
+    }
+    if (serie && serie.length) {
+      return {
+        primeira: dataDe(serie[0]),
+        ultima: dataDe(serie[serie.length - 1]),
+        pontos: serie.length,
+        fonte: "serie"
+      };
+    }
+    return null;
+  }
+
   function qualidadeDe(ticker) {
     var man = (typeof window !== "undefined" && window.MANIFEST) ? window.MANIFEST : null;
     if (!man || !man.porTicker || !man.porTicker[ticker]) return null;
@@ -475,6 +524,17 @@
     return [];
   }
 
+  // Atributos de risco/liquidez do ticker, herdados da classe (tabela ATRIBUTOS).
+  function atributosDaClasse(classe) {
+    var at = ATRIBUTOS[classe] || ATRIBUTOS[NAO_CLASSIFICADO];
+    return {
+      fatorRisco: at.fatorRisco,
+      liquidezEfetiva: at.liquidezEfetiva,
+      moedaExposicao: at.moeda,
+      duration: at.duration
+    };
+  }
+
   function registrar(indice, ticker, origem, baseETF) {
     if (!ticker || indice[ticker]) return;
     var info = fonteInfo()[ticker] || null;
@@ -482,6 +542,7 @@
     var classe = classificar(ticker, origem, baseETF, info);
     var custodia = custodiaDe(classe, origem, info);
     var serie = serieDe(ticker, (typeof window !== "undefined" ? window.DADOS : null));
+    var janela = janelaDe(ticker, serie);
     var nome = (info && info.nome) || (baseETF && baseETF.nome) || ticker;
     var desc = descricaoDe(ticker, origem, baseETF, info);
 
@@ -497,8 +558,11 @@
       benchmark: (info && info.benchmark) || null,
       desc: desc,
       temSerie: !!serie,
-      primeiraData: serie ? dataDe(serie[0]) : null,
-      ultimaData: serie ? dataDe(serie[serie.length - 1]) : null,
+      primeiraData: janela ? janela.primeira : null,
+      ultimaData: janela ? janela.ultima : null,
+      pontos: janela ? janela.pontos : null,
+      janela: janela,
+      risco: atributosDaClasse(classe),
       qualidadeOk: qualidadeDe(ticker),
       equivalentes: equivalentesBrutos(ticker),
       papel: (guia && guia.papel) || null,
@@ -566,6 +630,68 @@
       var reg = Catalogo.get(ticker);
       if (reg && reg.classe) return reg.classe;
       return NAO_CLASSIFICADO;
+    },
+
+    /* FICHA ESTÁVEL do ticker — o contrato documentado no topo do arquivo.
+       Devolve sempre um objeto novo (ninguém muta o índice por engano) e null
+       para ticker desconhecido. Campo sem fonte = null, nunca chute. */
+    info: function (ticker) {
+      var r = Catalogo.get(ticker);
+      if (!r) return null;
+      return {
+        ticker: r.ticker,
+        nome: r.nome || null,
+        classe: r.classe,
+        subclasse: r.subclasse || null,
+        custodia: r.custodia || null,
+        moeda: r.moeda || null,
+        taxa: (typeof r.taxa === "number" && isFinite(r.taxa)) ? r.taxa : null,
+        benchmark: r.benchmark || null,
+        gestora: r.gestora || null,
+        desc: r.desc || null,
+        temSerie: !!r.temSerie,
+        primeiraData: r.primeiraData || null,
+        ultimaData: r.ultimaData || null,
+        pontos: (typeof r.pontos === "number") ? r.pontos : null,
+        qualidadeOk: (typeof r.qualidadeOk === "boolean") ? r.qualidadeOk : null,
+        janela: r.janela ? {
+          primeira: r.janela.primeira, ultima: r.janela.ultima,
+          pontos: r.janela.pontos, fonte: r.janela.fonte
+        } : null,
+        risco: Catalogo.risco(r.ticker),
+        simulavel: Catalogo.simulavel(r.ticker),
+        equivalentes: r.equivalentes.slice(),
+        papel: r.papel || null,
+        riscoTexto: r.risco_texto || r.riscoTexto || null,
+        pitch: r.pitch || null
+      };
+    },
+
+    /* Janela de dados do ticker (do MANIFEST quando ele conhece o ticker). */
+    janela: function (ticker) {
+      var r = Catalogo.get(ticker);
+      if (!r || !r.janela) return null;
+      return {
+        primeira: r.janela.primeira, ultima: r.janela.ultima,
+        pontos: r.janela.pontos, fonte: r.janela.fonte
+      };
+    },
+
+    /* Atributos de risco/liquidez do ticker (herdados da classe). */
+    risco: function (ticker) {
+      var r = Catalogo.get(ticker);
+      return atributosDaClasse(r ? r.classe : NAO_CLASSIFICADO);
+    },
+
+    /* Dá para simular este ticker? "ok" = série auditada; "ressalva" = tem série
+       mas o manifest apontou problema; "sem" = não há série. */
+    simulavel: function (ticker) {
+      var r = Catalogo.get(ticker);
+      if (!r || !r.temSerie) {
+        return { temSerie: false, qualidadeOk: null, nivel: "sem" };
+      }
+      var q = (typeof r.qualidadeOk === "boolean") ? r.qualidadeOk : null;
+      return { temSerie: true, qualidadeOk: q, nivel: (q === false) ? "ressalva" : "ok" };
     },
 
     all: function () {

@@ -24,11 +24,23 @@
   /* ---------- TEXTO ---------- */
   --text-strong: #1a1a1a;
   --text-muted:  #5a5a5a;
-  --text-faint:  #767269;
+  --text-faint:  #6b675e;   /* 5,2:1 sobre --surface-0 */
 
   /* ---------- ACENTO ---------- */
-  --accent: #0088cc;
+  /* Azul de TEXTO: #0088cc dá só 3,9:1 sobre branco. O tom de leitura é o
+     #006fa6 (5,5:1 sobre branco, 4,7:1 sobre --surface-2). O #0088cc vivo da
+     marca continua vivo em gráfico/série (--series-carteira, --chart-*). */
+  --accent: #006fa6;
   --accent-bg: rgba(0, 136, 204, 0.08);
+  /* Preenchimento sólido (botão primário, pill ativa): branco por cima */
+  --accent-solid: #0077b3;      /* branco sobre ele = 4,9:1 */
+  --accent-solid-hover: #005f8f;
+  --on-accent: #ffffff;
+  /* Laranja de TEXTO/selo: #eb8105 dá 2,7:1 sobre branco. */
+  --accent-warm: #a35200;       /* 5,6:1 sobre branco */
+  --on-warm: #ffffff;           /* 5,6:1 sobre --accent-warm */
+  /* halo de foco/atenção — visível de verdade (o --accent-bg de 8% sumia) */
+  --ring-accent: 0 0 0 3px rgba(0, 136, 204, 0.30);
 
   /* ---------- ESTADOS (contraste >= 4,5:1 do -fg sobre --surface-1) ---------- */
   --state-ok-bg:     #e8f4ed;
@@ -96,11 +108,39 @@
   /* ---------- MOVIMENTO ---------- */
   --motion-fast: 120ms;
   --motion-base: 240ms;
+  --motion-slow: 320ms;
+  --motion-ease: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---------- PALETA DOS SLIDES (tela 6) ----------
+     O deck tem tema próprio (claro/escuro), independente do tema do app e do
+     sistema: o mesmo PDF precisa sair igual na tela do aluno e na do cliente.
+     Por isso estes valores são fixos nos três blocos de tema. */
+  --slide-claro-bg:     #ffffff;
+  --slide-claro-fg:     #1a1a1a;
+  --slide-claro-corpo:  #2a2a2a;
+  --slide-escuro-bg:    #14181f;
+  --slide-escuro-fg:    #efece5;
+  --slide-escuro-corpo: #c9ccd2;   /* 9,6:1 sobre --slide-escuro-bg */
+  --slide-escuro-linha: #2a2f38;
+  --slide-escuro-h3:    #4db8e8;
+  --slide-escuro-eyebrow: #f0a040;
+  --slide-escuro-nota:  #9aa1ad;   /* 5,7:1 sobre --slide-escuro-bg */
+  --slide-claro-h3:     #006fa6;   /* 5,5:1 sobre --slide-claro-bg */
+  --slide-claro-nota:   #5a5a5a;   /* 7,0:1 sobre --slide-claro-bg */
+
+  /* ---------- ÁREA SEGURA DO FAB ----------
+     O botão flutuante "Ferramentas" é position:fixed no canto inferior
+     direito. Toda tela reserva esta faixa no rodapé para que nenhum dado
+     (tabela de diferenças da tela 4, total alocado da tela 3) fique embaixo
+     dele. Valor = altura do FAB (~43px) + afastamento (24px) + folga. */
+  --fab-safe: 96px;
 
   /* ===================== ALIASES LEGADOS ===================== */
-  --brand-blue: #0088cc;
-  --brand-red: #a12026;
-  --brand-orange: #eb8105;
+  --brand-blue: var(--accent);
+  --brand-blue-vivo: #0088cc;   /* só decoração/gráfico */
+  --brand-red: var(--state-bad-fg);
+  --brand-orange: var(--accent-warm);
+  --brand-orange-vivo: #eb8105; /* só decoração/gráfico */
   --brand-yellow: #ebe310;
 
   --bg: var(--surface-0);
@@ -135,6 +175,12 @@ body.dark {
 
   --accent: #4db8e8;
   --accent-bg: rgba(77, 184, 232, 0.12);
+  --accent-solid: #0077b3;
+  --accent-solid-hover: #005f8f;
+  --on-accent: #ffffff;
+  --accent-warm: #f0a44e;       /* 8,3:1 sobre --surface-1 escuro */
+  --on-warm: #1a1a1a;           /* 8,3:1 sobre --accent-warm */
+  --ring-accent: 0 0 0 3px rgba(77, 184, 232, 0.38);
 
   --state-ok-bg:     #1a3024;
   --state-ok-fg:     #76c99a;
@@ -167,6 +213,9 @@ body.dark {
   --series-gabarito:  #b489e0;
 
   /* aliases legados que mudam no escuro */
+  --brand-blue: var(--accent);
+  --brand-orange: var(--accent-warm);
+  --brand-red: var(--state-bad-fg);
   --bg: var(--surface-0);
   --bg-card: var(--surface-1);
   --bg-soft: var(--surface-2);
@@ -197,6 +246,12 @@ body.dark {
 
     --accent: #4db8e8;
     --accent-bg: rgba(77, 184, 232, 0.12);
+    --accent-solid: #0077b3;
+    --accent-solid-hover: #005f8f;
+    --on-accent: #ffffff;
+    --accent-warm: #f0a44e;
+    --on-warm: #1a1a1a;
+    --ring-accent: 0 0 0 3px rgba(77, 184, 232, 0.38);
 
     --state-ok-bg:     #1a3024;
     --state-ok-fg:     #76c99a;
@@ -227,6 +282,10 @@ body.dark {
     --series-benchmark: #9aa1ad;
     --series-inflacao:  #f0a44e;
     --series-gabarito:  #b489e0;
+
+    --brand-blue: var(--accent);
+    --brand-orange: var(--accent-warm);
+    --brand-red: var(--state-bad-fg);
   }
 
   /* O toggle grava data-theme no <html>; enquanto ele não existir, o corpo
@@ -240,8 +299,17 @@ body.dark {
     --text-strong: #1a1a1a;
     --text-muted: #5a5a5a;
     --text-faint: #767269;
-    --accent: #0088cc;
+    --accent: #006fa6;
     --accent-bg: rgba(0, 136, 204, 0.08);
+    --accent-solid: #0077b3;
+    --accent-solid-hover: #005f8f;
+    --on-accent: #ffffff;
+    --accent-warm: #a35200;
+    --on-warm: #ffffff;
+    --ring-accent: 0 0 0 3px rgba(0, 136, 204, 0.30);
+    --brand-blue: var(--accent);
+    --brand-orange: var(--accent-warm);
+    --text-faint: #6b675e;
     --state-ok-bg: #e8f4ed;
     --state-ok-fg: #226e46;
     --state-ok-border: #c5e0d0;

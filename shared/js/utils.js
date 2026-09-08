@@ -56,50 +56,76 @@ var Simulathos = (function () {
     // Step wizard navigation
     // -----------------------------------------------------------------------
 
+    // AIDA-02 — goToStep precisa ser TOTALMENTE inerte quando o destino nao existe.
+    // Antes ela apagava a classe 'active' de todos os .zw-step ANTES de procurar o
+    // destino: um goToStep(NaN) (vindo de um botao que teve o data-next removido
+    // depois que o wizard ja tinha ligado o listener) deixava os quatro passos com
+    // display:none — a tela do wizard inteira sumia, em silencio.
+    // Agora: resolve o destino primeiro; sem destino valido, nao mexe em nada.
     function initStepWizard(opts) {
         var onStepChange = opts && opts.onStepChange;
 
         var steps = document.querySelectorAll('.zw-step');
         var navLinks = document.querySelectorAll('.zw-nav-link');
 
+        // Retorna o numero do passo ou null quando o valor nao aponta para um
+        // passo que exista no DOM.
+        function passoValido(n) {
+            var num = parseInt(n, 10);
+            if (!isFinite(num)) return null;
+            return document.querySelector('.zw-step[data-step="' + num + '"]') ? num : null;
+        }
+
         function goToStep(n) {
+            var num = passoValido(n);
+            if (num === null) return false;   // destino inexistente: nao apaga a tela
+
+            var target = document.querySelector('.zw-step[data-step="' + num + '"]');
+            var link = document.querySelector('.zw-nav-link[data-step="' + num + '"]');
+
             steps.forEach(function (s) { s.classList.remove('active'); });
             navLinks.forEach(function (l) { l.classList.remove('active'); });
 
-            var target = document.querySelector('.zw-step[data-step="' + n + '"]');
-            var link = document.querySelector('.zw-nav-link[data-step="' + n + '"]');
-            if (target) target.classList.add('active');
+            target.classList.add('active');
             if (link) link.classList.add('active');
 
             navLinks.forEach(function (l) {
-                if (parseInt(l.dataset.step) < n) l.classList.add('completed');
+                if (parseInt(l.dataset.step, 10) < num) l.classList.add('completed');
             });
 
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { /* jsdom/sandbox */ }
 
-            if (onStepChange) onStepChange(n);
+            if (onStepChange) onStepChange(num);
+            return true;
         }
 
+        // O atributo e lido NO CLIQUE (nao na hora de ligar o listener): quem
+        // remover data-next/data-prev depois — para assumir a navegacao com
+        // validacao propria — desliga este listener na pratica, sem sobra.
         document.querySelectorAll('[data-next]').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                goToStep(parseInt(this.dataset.next));
+                var alvo = this.getAttribute('data-next');
+                if (alvo === null || alvo === '') return;
+                goToStep(alvo);
             });
         });
 
         document.querySelectorAll('[data-prev]').forEach(function (btn) {
             btn.addEventListener('click', function () {
-                goToStep(parseInt(this.dataset.prev));
+                var alvo = this.getAttribute('data-prev');
+                if (alvo === null || alvo === '') return;
+                goToStep(alvo);
             });
         });
 
         navLinks.forEach(function (link) {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
-                goToStep(parseInt(this.dataset.step));
+                goToStep(this.getAttribute('data-step'));
             });
         });
 
-        return { goToStep: goToStep };
+        return { goToStep: goToStep, passoValido: passoValido };
     }
 
     // -----------------------------------------------------------------------
@@ -198,14 +224,66 @@ var Simulathos = (function () {
         }
     }
 
+    // CARTEIRA-06 — migração das chaves legadas 'aida_vo4_*'.
+    // Copia cada chave solta para 'simulathos:<app>:<chave>' (sem sobrescrever o
+    // que já existe no namespace) e apaga a legada. Idempotente: rodar duas vezes
+    // não faz nada na segunda. Retorna a lista de chaves migradas.
+    function storageMigrarLegado(app) {
+        if (!storageDisponivel()) return [];
+        var alvo = String(app || 'academia');
+        var legadas = [];
+        try {
+            for (var i = 0; i < localStorage.length; i++) {
+                var k = localStorage.key(i);
+                if (k && k.indexOf(STORAGE_LEGADO_PREFIXO) === 0) legadas.push(k);
+            }
+        } catch (e) {
+            return [];
+        }
+        var migradas = [];
+        legadas.forEach(function (k) {
+            var curta = k.slice(STORAGE_LEGADO_PREFIXO.length);
+            try {
+                var valor = localStorage.getItem(k);
+                var destino = storageChave(alvo, curta);
+                if (valor !== null && localStorage.getItem(destino) === null) {
+                    localStorage.setItem(destino, valor);
+                }
+                localStorage.removeItem(k);
+                migradas.push(curta);
+            } catch (e) { /* storage cheio/bloqueado: a legada fica, sem quebrar nada */ }
+        });
+        return migradas;
+    }
+
+    // Lista as chaves soltas (fora do namespace) que ainda restam — diagnóstico.
+    function storageLegadasRestantes() {
+        if (!storageDisponivel()) return [];
+        var out = [];
+        try {
+            for (var i = 0; i < localStorage.length; i++) {
+                var k = localStorage.key(i);
+                if (k && k.indexOf(STORAGE_LEGADO_PREFIXO) === 0) out.push(k);
+            }
+        } catch (e) { return []; }
+        return out;
+    }
+
     var storage = {
         prefixo: STORAGE_PREFIXO,
+        prefixoLegado: STORAGE_LEGADO_PREFIXO,
         chave: storageChave,
         get: storageGet,
         set: storageSet,
         remove: storageRemove,
         clearApp: storageClearApp,
+        migrarLegado: storageMigrarLegado,
+        legadasRestantes: storageLegadasRestantes,
     };
+
+    // Migração roda no carregamento do utils.js (antes de qualquer tela ler o
+    // storage), então ninguém precisa lembrar de chamá-la.
+    try { storageMigrarLegado('academia'); } catch (e) { /* nunca bloqueia o boot */ }
 
     // -----------------------------------------------------------------------
     // Theme loader

@@ -248,8 +248,18 @@ function montJanelaComum() {
    4. LINHAS DE ALOCAÇÃO
    ================================================================================= */
 function montLinhaValida(l) { return !!(l && l.ticker && (Number(l.pct) || 0) > 0); }
+
+/* MONTAGEM-04: normaliza o ruído de ponto flutuante da soma (0,1 + 0,2 e afins).
+   Os percentuais são digitados em passos de 0,1 p.p., então 4 casas decimais
+   preservam qualquer valor legítimo e eliminam o 99,99999999999999. */
+function montLimparFloat(n) {
+  var v = Number(n);
+  if (!isFinite(v)) return 0;
+  return Math.round(v * 10000) / 10000;
+}
+
 function montSoma() {
-  return montagemAtual.reduce(function (a, l) { return a + (Number(l.pct) || 0); }, 0);
+  return montLimparFloat(montagemAtual.reduce(function (a, l) { return a + (Number(l.pct) || 0); }, 0));
 }
 
 function renderLinhasAlocacao() {
@@ -411,7 +421,7 @@ function distribuirIgualmente() {
   var base = montArred1(restante / alvos.length);
   var acumulado = 0;
   alvos.forEach(function (i, k) {
-    if (k < alvos.length - 1) { montagemAtual[i].pct = base; acumulado += base; }
+    if (k < alvos.length - 1) { montagemAtual[i].pct = base; acumulado = montLimparFloat(acumulado + base); }
     else { montagemAtual[i].pct = montArred1(restante - acumulado); }
   });
   renderLinhasAlocacao();
@@ -433,7 +443,7 @@ function ajustarPara100() {
   alvos.forEach(function (i, k) {
     if (k < alvos.length - 1) {
       montagemAtual[i].pct = montArred1((Number(montagemAtual[i].pct) || 0) * fator);
-      acumulado += montagemAtual[i].pct;
+      acumulado = montLimparFloat(acumulado + montagemAtual[i].pct);
     } else {
       montagemAtual[i].pct = montArred1(alvo - acumulado);
     }
@@ -546,8 +556,8 @@ function onAutocompleteFocus(idx) {
 function montMostrarVazio(idx, query, catFilter) {
   var drop = montById("ac-drop-" + idx);
   if (!drop) return;
-  var html = '<div class="ac-empty">';
-  html += "<span>Nenhum resultado em <strong>" + montEsc(montRotuloCategoria(catFilter)) + "</strong> para &ldquo;" + montEsc(query) + "&rdquo;.</span>";
+  var html = '<div class="ac-empty empty-state">';
+  html += "<span>Nenhum ativo em <strong>" + montEsc(montRotuloCategoria(catFilter)) + "</strong> para &ldquo;" + montEsc(query) + "&rdquo;.</span>";
   html += '<button type="button" class="btn btn--ghost" onclick="montBuscarEmTodas(' + idx + ')">Buscar em todas as categorias</button>';
   html += "</div>";
   drop.innerHTML = html;
@@ -566,7 +576,8 @@ function montBuscarEmTodas(idx) {
 function montMostrarVazioTotal(idx, query) {
   var drop = montById("ac-drop-" + idx);
   if (!drop) return;
-  drop.innerHTML = '<div class="ac-empty"><span>Nenhum ativo encontrado para &ldquo;' + montEsc(query) + '&rdquo;.</span></div>';
+  drop.innerHTML = '<div class="ac-empty empty-state"><span>Nenhum ativo encontrado para &ldquo;' + montEsc(query) +
+    '&rdquo; em nenhuma categoria.</span><span>Tente o ticker (BOVA11), o nome do índice ou a tese (ouro, EUA, dividendos).</span></div>';
   drop.classList.add("open");
 }
 
@@ -583,6 +594,8 @@ function showAutocompleteResults(idx, results) {
   });
 
   var html = "";
+  var chip = montChipFiltroHtml(window._acCategoryFilter || "");
+  if (chip) html += '<div class="ac-filtro">' + chip + "</div>";
   var pos = 0;
   Object.keys(grupos).sort().forEach(function (g) {
     html += '<div class="ac-group-label">' + montEsc(g) + "</div>";
@@ -665,9 +678,23 @@ function montPesoKeydown(idx, ev) {
   if (prox) prox.focus();
 }
 
+/* MONTAGEM-01: escolhido o ativo, o passo seguinte é o percentual — o foco vai
+   para o campo de % da mesma linha (e seleciona o valor, para já poder digitar). */
+function montFocarPeso(idx) {
+  var linha = document.querySelector('.alloc-row[data-idx="' + idx + '"]');
+  var peso = linha ? linha.querySelector(".alloc-row__peso input") : null;
+  if (peso && !peso.readOnly) {
+    peso.focus();
+    if (typeof peso.select === "function") { try { peso.select(); } catch (e) { /* ignorado */ } }
+    return true;
+  }
+  return false;
+}
+
 function selectAutocomplete(idx, ticker) {
   closeAutocomplete(idx);
   onTickerSelect(idx, ticker);
+  if (montFocarPeso(idx)) return;
   var input = document.querySelector("#ac-" + idx + " input");
   if (input) input.focus();
 }
@@ -683,31 +710,52 @@ document.addEventListener("click", function (e) {
   }
 });
 
-/* MONTAGEM-04: chip removível do filtro de categoria. */
+/* MONTAGEM-04: chip removível do filtro de categoria (barra de ferramentas e
+   cabeçalho do dropdown, para o filtro ficar visível dentro do próprio campo). */
+function montChipFiltroHtml(cat) {
+  if (!cat) return "";
+  return '<span class="chip chip--accent" data-filtro="' + montEsc(cat) + '">Categoria: ' +
+    montEsc(montRotuloCategoria(cat)) +
+    ' <button type="button" class="chip__remover btn-x" onclick="limparFiltroCategoria()" title="Remover filtro de categoria" aria-label="Remover filtro de categoria">&times;</button></span>';
+}
+
 function montRenderChipFiltro() {
   var alvo = montById("alloc-filtro-chip");
   if (!alvo) return;
-  var cat = window._acCategoryFilter || "";
-  if (!cat) { alvo.innerHTML = ""; return; }
-  alvo.innerHTML = '<span class="chip chip--accent" data-filtro="' + montEsc(cat) + '">Categoria: ' +
-    montEsc(montRotuloCategoria(cat)) +
-    ' <button type="button" class="chip__remover" onclick="limparFiltroCategoria()" aria-label="Remover filtro de categoria">&times;</button></span>';
+  alvo.innerHTML = montChipFiltroHtml(window._acCategoryFilter || "");
+}
+
+/* MONTAGEM-03: a pill é um toggle-button — a classe visual e o aria-pressed andam
+   juntos. Deduz a categoria de cada pill do data-cat (quando existir) ou do onclick,
+   em vez de confiar no event.target (que pode ser um filho do botão). */
+function montCategoriaDaPill(pill) {
+  if (!pill) return "";
+  if (pill.hasAttribute && pill.hasAttribute("data-cat")) return pill.getAttribute("data-cat") || "";
+  var attr = pill.getAttribute("onclick") || "";
+  var m = attr.match(/filtrarCategoria\(\s*'([^']*)'\s*\)/);
+  return m ? m[1] : "";
+}
+
+function montSincronizarPills(cat) {
+  var alvo = String(cat || "");
+  var pills = document.querySelectorAll(".cat-pill");
+  for (var i = 0; i < pills.length; i++) {
+    var ativo = (montCategoriaDaPill(pills[i]) === alvo);
+    if (ativo) pills[i].classList.add("active");
+    else pills[i].classList.remove("active");
+    pills[i].setAttribute("aria-pressed", ativo ? "true" : "false");
+  }
 }
 
 function limparFiltroCategoria() {
   window._acCategoryFilter = "";
-  document.querySelectorAll(".cat-pill").forEach(function (p) { p.classList.remove("active"); });
-  var todos = document.querySelector('.cat-pill[onclick*="filtrarCategoria(\'\')"]');
-  if (todos) todos.classList.add("active");
+  montSincronizarPills("");
   montRenderChipFiltro();
 }
 
 function filtrarCategoria(cat) {
-  document.querySelectorAll(".cat-pill").forEach(function (p) { p.classList.remove("active"); });
-  if (typeof event !== "undefined" && event && event.target && event.target.classList) {
-    event.target.classList.add("active");
-  }
   window._acCategoryFilter = cat || "";
+  montSincronizarPills(window._acCategoryFilter);
   montRenderChipFiltro();
 
   var filtrados = cat ? montPool().filter(function (e) { return _matchesCategory(e, cat); }).slice(0, 50) : [];
@@ -733,9 +781,9 @@ function mostrarFichaETF(ticker) {
 
   var eqMap = window._eqMap || {};
   var eqs = eqMap[ticker] ? eqMap[ticker] : [];
-  var eqHtml = eqs.length > 0 ? '<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);"><span style="font-size:11px;color:var(--text-soft);">Equivalentes:</span> ' + eqs.map(function (t) {
-    return '<span style="display:inline-block;padding:2px 8px;background:rgba(0,136,204,0.08);border-radius:4px;font-size:12px;margin:2px;font-family:var(--font-mono);">' + t + "</span>";
-  }).join("") + "</div>" : "";
+  var eqHtml = eqs.length > 0 ? '<div class="ficha-etf__eq"><span class="ficha-etf__eq-rotulo">Equivalentes:</span> ' + eqs.map(function (t) {
+    return '<span class="chip chip--ghost">' + montEsc(t) + "</span>";
+  }).join(" ") + "</div>" : "";
 
   var dataInfo = "";
   var serie = montSerieBruta(ticker);
@@ -745,7 +793,7 @@ function mostrarFichaETF(ticker) {
 
   var custFlag = info.custodia === "B3" ? "B3" : info.custodia === "Irlanda" ? "UCITS" : "US";
 
-  var html = '<div style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)this.remove()">';
+  var html = '<div class="modal-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:20px;" onclick="if(event.target===this)montFecharFichaETF()">';
   html += '<div style="background:var(--bg-card);border-radius:16px;max-width:460px;width:100%;padding:24px;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-height:88vh;overflow-y:auto;">';
   html += '<div style="display:flex;justify-content:space-between;align-items:flex-start;">';
   html += "<div>";
@@ -755,11 +803,15 @@ function mostrarFichaETF(ticker) {
   html += '<span style="font-size:12px;padding:4px 10px;border-radius:20px;background:rgba(0,136,204,0.1);color:var(--brand-blue);white-space:nowrap;">' + custFlag + "</span>";
   html += "</div>";
 
-  html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">';
-  html += '<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);margin-bottom:2px;">Gestora</div><div style="font-size:13px;font-weight:600;">' + info.gestora + "</div></div>";
-  html += '<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);margin-bottom:2px;">Taxa Adm.</div><div style="font-size:13px;font-weight:600;">' + info.taxa + "</div></div>";
-  html += '<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);margin-bottom:2px;">Categoria</div><div style="font-size:13px;font-weight:600;">' + info.categoria + "</div></div>";
-  html += '<div><div style="font-size:10px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-soft);margin-bottom:2px;">Benchmark</div><div style="font-size:13px;font-weight:600;">' + info.benchmark + "</div></div>";
+  function fichaMetric(rotulo, valor) {
+    return '<div class="metric"><div class="metric__label">' + montEsc(rotulo) + '</div>' +
+      '<div class="metric__value" style="font-size:13px;">' + montEsc(valor == null || valor === "" ? "\u2014" : valor) + "</div></div>";
+  }
+  html += '<div class="ficha-etf__grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px;">';
+  html += fichaMetric("Gestora", info.gestora);
+  html += fichaMetric("Taxa adm.", info.taxa);
+  html += fichaMetric("Categoria", info.categoria);
+  html += fichaMetric("Benchmark", info.benchmark);
   html += "</div>";
 
   html += eqHtml;
@@ -781,14 +833,29 @@ function mostrarFichaETF(ticker) {
     html += "</div>";
   }
 
-  html += '<button onclick="this.closest(\'div[style*=fixed]\').remove();adicionarDaLista(\'' + ticker + '\')" style="margin-top:16px;width:100%;padding:10px;border:none;border-radius:8px;background:var(--brand-blue);color:white;font-weight:600;cursor:pointer;font-size:14px;">+ Adicionar à carteira</button>';
+  html += '<button type="button" class="btn btn--primary" style="margin-top:16px;width:100%;justify-content:center;" onclick="montFecharFichaETF();adicionarDaLista(\'' + ticker + '\')">+ Adicionar à carteira</button>';
   html += "</div></div>";
 
-  document.querySelectorAll("[data-ficha-etf]").forEach(function (el) { el.remove(); });
+  montFecharFichaETF();
   var div = document.createElement("div");
-  div.setAttribute("data-ficha-etf", "true");
   div.innerHTML = html;
-  document.body.appendChild(div.firstChild);
+  // MONTAGEM-02: o atributo tem de ir no nó que entra no DOM (o overlay), não no
+  // <div> temporário usado só para montar o HTML — senão a limpeza acima é código morto.
+  var overlay = div.firstElementChild;
+  if (!overlay) return;
+  overlay.setAttribute("data-ficha-etf", ticker || "true");
+  document.body.appendChild(overlay);
+  document.addEventListener("keydown", montFichaEsc);
+}
+
+function montFecharFichaETF() {
+  var abertas = document.querySelectorAll("[data-ficha-etf]");
+  for (var i = 0; i < abertas.length; i++) abertas[i].remove();
+  document.removeEventListener("keydown", montFichaEsc);
+}
+
+function montFichaEsc(ev) {
+  if (ev && ev.key === "Escape") montFecharFichaETF();
 }
 
 function abrirTutorial() {
@@ -889,6 +956,7 @@ function calcularMontagem() {
     var el = montById("valor-" + idx);
     if (el) el.textContent = montFmtBRL(((Number(linha.pct) || 0) / 100) * aporte);
   });
+  soma = montLimparFloat(soma);
 
   montRenderTotal(soma);
   montAtualizarSubmeter(soma);

@@ -27,12 +27,12 @@
   </div>
 
   <ol class="stepper" id="stepper" aria-label="Etapas do simulador">
-    <li data-tela="tela1" data-passo="1" aria-current="step">Cases</li>
-    <li data-tela="tela2" data-passo="2">Briefing</li>
-    <li data-tela="tela3" data-passo="3">Montagem</li>
-    <li data-tela="tela4" data-passo="4">Gabarito</li>
-    <li data-tela="tela5" data-passo="5">Pitch</li>
-    <li data-tela="tela6" data-passo="6">Apresentação</li>
+    <li data-tela="tela1" data-passo="1" aria-current="step" role="button" tabindex="-1" aria-disabled="true">Cases</li>
+    <li data-tela="tela2" data-passo="2" role="button" tabindex="-1" aria-disabled="true">Briefing</li>
+    <li data-tela="tela3" data-passo="3" role="button" tabindex="-1" aria-disabled="true">Montagem</li>
+    <li data-tela="tela4" data-passo="4" role="button" tabindex="-1" aria-disabled="true">Gabarito</li>
+    <li data-tela="tela5" data-passo="5" role="button" tabindex="-1" aria-disabled="true">Pitch</li>
+    <li data-tela="tela6" data-passo="6" role="button" tabindex="-1" aria-disabled="true">Apresentação</li>
   </ol>
 
   <div class="topbar__zona-fim">
@@ -84,7 +84,7 @@
 
   <!-- ANALYTICS -->
   <div class="analytics-card">
-    <h5>📊 Seu progresso</h5>
+    <h5><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M3 21h18"/><path d="M6.5 21V11M12 21V4M17.5 21v-6"/></svg> Seu progresso</h5>
     <div class="analytics-stats">
       <div class="stat-item">
         <span class="stat-num" id="stat-tentados">0</span>
@@ -145,7 +145,7 @@
       </select>
     </div>
     <div class="filtro-group" id="filtro-grupo-entrevista" style="display:none;">
-      <label>🎯 Origem (interno)</label>
+      <label><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 11.9v.2"/></svg> Origem (interno)</label>
       <select id="filtro-entrevista" onchange="filtrarCases()">
         <option value="">Todos os cases</option>
         <option value="sim">Só os que caíram em entrevista</option>
@@ -156,7 +156,7 @@
 
   <div class="painel" id="card-modo-livre" style="margin-bottom:24px; cursor:pointer; border:2px solid var(--brand-blue); transition:all 0.2s;" onclick="iniciarModoLivre()">
     <div style="display:flex; align-items:center; gap:16px;">
-      <div style="font-size:32px;">🧪</div>
+      <div style="font-size:32px;"><svg class="ico" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M10 3v6.2L4.8 18A2 2 0 0 0 6.5 21h11a2 2 0 0 0 1.7-3L14 9.2V3"/><path d="M9 3h6M7.6 14h8.8"/></svg></div>
       <div>
         <h3 style="color:var(--brand-blue); margin-bottom:4px;">Modo Livre — Simular minha carteira</h3>
         <p style="font-size:13px; color:var(--text-soft); margin:0;">Monte qualquer carteira de ETFs (B3 ou offshore) e veja o desempenho histórico real. Sem case, sem nota, sem gabarito.</p>
@@ -179,33 +179,33 @@
 
     <div class="briefing-grid">
       <div class="briefing-secao">
-        <h4>👤 Perfil do Cliente</h4>
+        <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5"/></svg> Perfil do Cliente</h4>
         <div id="brief-cliente"></div>
 
-        <h4 style="margin-top:24px;">🎯 Objetivos</h4>
+        <h4 style="margin-top:24px;"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 11.9v.2"/></svg> Objetivos</h4>
         <ul id="brief-objetivos"></ul>
 
-        <h4 style="margin-top:24px;">⚠️ Restrições / Atenção</h4>
+        <h4 style="margin-top:24px;"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 4 2.8 20h18.4z"/><path d="M12 10v4M12 17.1v.1"/></svg> Restrições / Atenção</h4>
         <ul id="brief-restricoes"></ul>
       </div>
 
       <div class="briefing-secao">
-        <h4>💼 Situação Patrimonial</h4>
+        <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><rect x="3" y="7.5" width="18" height="12" rx="2"/><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5"/><path d="M3 12.5h18"/></svg> Situação Patrimonial</h4>
         <div id="brief-dados"></div>
 
         <div class="macro-box" style="padding-bottom:18px;">
-          <h4>📈 Cenário Macroeconômico</h4>
+          <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M3 17.5 9.5 11l3.5 3.5L21 6"/><path d="M15 6h6v6"/></svg> Cenário Macroeconômico</h4>
           <div class="cenario-modos">
             <button class="cenario-modo-btn active" data-cmodo="case" onclick="selecionarCenarioModo('case')">
-              <div class="cm-titulo">📋 Cenário do case</div>
+              <div class="cm-titulo"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4h6v3H9z"/><path d="M9 12h6M9 16h4"/></svg> Cenário do case</div>
               <div class="cm-sub">Pré-definido. Treina resolução em qualquer conjuntura.</div>
             </button>
             <button class="cenario-modo-btn" data-cmodo="atual" onclick="selecionarCenarioModo('atual')">
-              <div class="cm-titulo">✏️ Cenário atual</div>
+              <div class="cm-titulo"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M4 20h4L20 8l-4-4L4 16z"/><path d="m14 6 4 4"/></svg> Cenário atual</div>
               <div class="cm-sub">Cole a conjuntura de hoje. Mantém o treino sempre atualizado.</div>
             </button>
             <button class="cenario-modo-btn" data-cmodo="ia" onclick="selecionarCenarioModo('ia')">
-              <div class="cm-titulo">✨ Gerar com IA <span class="cm-lock" id="cm-lock-ia">🔒</span></div>
+              <div class="cm-titulo"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="m12 3 1.8 4.7L18.5 9.5l-4.7 1.8L12 16l-1.8-4.7L5.5 9.5l4.7-1.8z"/><path d="m18.6 15.6.8 1.9 1.9.8-1.9.8-.8 1.9-.8-1.9-1.9-.8 1.9-.8z"/></svg> Gerar com IA <span class="cm-lock" id="cm-lock-ia"><svg class="ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8.5 10.5V7.8a3.5 3.5 0 0 1 7 0v2.7"/></svg></span></div>
               <div class="cm-sub">A IA cria cenários variados automaticamente.</div>
             </button>
           </div>
@@ -415,7 +415,7 @@
 
   <!-- CONTEXTO RESUMIDO -->
   <div class="contexto-resumo">
-    <h5>📌 Contexto deste case</h5>
+    <h5><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 21v-6"/><path d="M8 3h8l-1 6 3 3.5H6L9 9z"/></svg> Contexto deste case</h5>
     <div class="contexto-grid" id="contexto-grid-tela5"></div>
   </div>
 
@@ -426,19 +426,19 @@
       <div class="fw-titulo">AIDA</div>
       <div class="fw-sub">Atenção · Interesse · Desejo · Ação</div>
       <div class="fw-sub" style="margin-top:6px;">Clássico de resposta direta. Use para qualquer perfil — funciona como esqueleto universal.</div>
-      <span class="fw-suger" id="suger-AIDA" style="display:none;">⭐ Sugerido</span>
+      <span class="fw-suger" id="suger-AIDA" style="display:none;"><svg class="ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="m12 3.6 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg> Sugerido</span>
     </button>
     <button class="framework-btn" data-framework="PASA" onclick="selecionarFramework('PASA')">
       <div class="fw-titulo">PASA</div>
       <div class="fw-sub">Problema · Argumentos · Solução · Ação</div>
       <div class="fw-sub" style="margin-top:6px;">Ideal quando o cliente já SENTE a dor (perdeu dinheiro, frustrado). Vai direto à ferida.</div>
-      <span class="fw-suger" id="suger-PASA" style="display:none;">⭐ Sugerido</span>
+      <span class="fw-suger" id="suger-PASA" style="display:none;"><svg class="ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="m12 3.6 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg> Sugerido</span>
     </button>
     <button class="framework-btn" data-framework="GBGA" onclick="selecionarFramework('GBGA')">
       <div class="fw-titulo">GBGA</div>
       <div class="fw-sub">Ganância · Benefícios · Ganhos · Ação</div>
       <div class="fw-sub" style="margin-top:6px;">Para clientes ambiciosos, agressivos, em crescimento. Foca em oportunidade, não em dor.</div>
-      <span class="fw-suger" id="suger-GBGA" style="display:none;">⭐ Sugerido</span>
+      <span class="fw-suger" id="suger-GBGA" style="display:none;"><svg class="ico" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="m12 3.6 2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 17l-5.2 2.7 1-5.8L3.5 9.8l5.9-.9z"/></svg> Sugerido</span>
     </button>
   </div>
 
@@ -461,8 +461,8 @@
       </div>
     </div>
     <div class="cronometro-actions">
-      <button class="primary" id="crono-btn" onclick="toggleCronometro()">▶ Iniciar leitura</button>
-      <button onclick="resetCronometro()">↺ Zerar</button>
+      <button class="primary" id="crono-btn" onclick="toggleCronometro()"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M8 5.5 19 12 8 18.5z"/></svg> Iniciar leitura</button>
+      <button onclick="resetCronometro()"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M4 12a8 8 0 1 0 2.3-5.6"/><path d="M4 4v4.5h4.5"/></svg> Zerar</button>
     </div>
   </div>
   <div class="crono-resultado" id="crono-resultado"></div>
@@ -609,12 +609,12 @@
   <div class="apresentacao-controles">
     <div class="apres-tema-switch">
       <span class="apres-tema-label">Tema da apresentação:</span>
-      <button class="apres-tema-opt" data-tema="claro" onclick="trocarTemaApresentacao('claro')">☀️ Claro</button>
-      <button class="apres-tema-opt" data-tema="escuro" onclick="trocarTemaApresentacao('escuro')">🌙 Escuro</button>
+      <button class="apres-tema-opt" data-tema="claro" onclick="trocarTemaApresentacao('claro')"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg> Claro</button>
+      <button class="apres-tema-opt" data-tema="escuro" onclick="trocarTemaApresentacao('escuro')"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z"/></svg> Escuro</button>
       <span class="info-tip" data-tip="O tema da apresentação é independente do tema do app e fica salvo. O PDF impresso sempre sai em tema claro, para ficar limpo."></span>
     </div>
     <button class="primary btn-modo-apresentacao" onclick="entrarModoApresentacao()">
-      ⛶ Modo apresentação
+      <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg> Modo apresentação
     </button>
   </div>
 
@@ -631,18 +631,20 @@
         <button class="slide-nav-btn" onclick="slideNext()">Próximo →</button>
       </div>
     </div>
-  </div>
 
-  <!-- BOTÃO SAIR DO MODO APRESENTAÇÃO (só visível em tela cheia) -->
-  <button class="btn-sair-apresentacao" id="btn-sair-apresentacao" onclick="sairModoApresentacao()">
-    ✕ Sair (Esc)
-  </button>
+    <!-- BOTÃO SAIR DO MODO APRESENTAÇÃO (só visível em tela cheia).
+         APRESENTACAO-01: precisa ser DESCENDENTE de #slides-container — é ele que
+         entra em fullscreen (top layer), e nada fora dele é pintado nem clicável. -->
+    <button type="button" class="btn-sair-apresentacao" id="btn-sair-apresentacao" onclick="sairModoApresentacao()">
+      <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="m6 6 12 12M18 6 6 18"/></svg> Sair (Esc)
+    </button>
+  </div>
 
   <div class="pitch-actions" style="margin-top:20px;">
     <button onclick="irTela5()">← Editar estrutura</button>
     <div class="actions-right">
       <button onclick="copiarPitch(this)">Copiar texto do pitch</button>
-      <button onclick="window.print()">🖨️ Imprimir / PDF</button>
+      <button onclick="window.print()"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M7 9V4h10v5"/><rect x="3" y="9" width="18" height="7" rx="2"/><path d="M7 14h10v6H7z"/></svg> Imprimir / PDF</button>
       <button class="primary" onclick="voltarTela1()">Próximo case →</button>
     </div>
   </div>
@@ -652,21 +654,21 @@
 
 <!-- ============================== FAB ÚNICO — FERRAMENTAS DA TELA ============================== -->
 <div class="fab-menu" id="fab-menu">
-  <div class="fab-menu__itens">
-    <button type="button" class="fab-item" id="fab-case" onclick="abrirDrawer()">
+  <div class="fab-menu__itens" id="fab-menu-itens" role="menu" aria-label="Ferramentas desta tela">
+    <button type="button" class="fab-item" id="fab-case" role="menuitem" tabindex="-1" onclick="abrirDrawer()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3h6v3H9z"/><path d="M9 11h6M9 15h4"/></svg>
       Consultar case
     </button>
-    <button type="button" class="fab-item" id="fab-ajuda" onclick="abrirAjudaMacro()">
+    <button type="button" class="fab-item" id="fab-ajuda" role="menuitem" tabindex="-1" onclick="abrirAjudaMacro()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 3 8.5 12 13l9-4.5z"/><path d="M7 10.5V15c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4.5"/></svg>
       Ajuda Macroalocação
     </button>
-    <button type="button" class="fab-item" id="fab-graficos" onclick="abrirGraficos()">
+    <button type="button" class="fab-item" id="fab-graficos" role="menuitem" tabindex="-1" onclick="abrirGraficos()">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h16"/><path d="M7.5 15.5 11 11l3 2.5 4-6"/></svg>
       Gráficos de mercado
     </button>
   </div>
-  <button type="button" class="fab" id="fab-toggle" aria-expanded="false" onclick="var m=document.getElementById('fab-menu');var a=m.classList.toggle('aberto');this.setAttribute('aria-expanded', a ? 'true' : 'false');">
+  <button type="button" class="fab" id="fab-toggle" aria-expanded="false" aria-haspopup="true" aria-controls="fab-menu-itens">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/></svg>
     Ferramentas
   </button>
@@ -674,23 +676,23 @@
 
 <!-- ============================== DRAWER GRÁFICOS DE MERCADO ============================== -->
 <div class="drawer-overlay" id="graficos-overlay" onclick="fecharGraficos()"></div>
-<aside class="drawer drawer-graficos" id="drawer-graficos">
+<aside class="drawer drawer-graficos" id="drawer-graficos" role="dialog" aria-modal="true" aria-labelledby="drawer-graficos-titulo" aria-hidden="true">
   <div class="drawer-header">
     <div>
       <span class="case-numero">DADOS DE MERCADO</span>
-      <h3>Gráficos de referência</h3>
+      <h3 id="drawer-graficos-titulo">Gráficos de referência</h3>
     </div>
-    <button class="drawer-close" onclick="fecharGraficos()" aria-label="Fechar">×</button>
+    <button type="button" class="drawer-close" onclick="fecharGraficos()" aria-label="Fechar"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
   </div>
   <div class="drawer-body">
     <div class="grafico-uso-hint">
-      💡 Use estes gráficos como prova visual no seu pitch. O argumento da desvalorização do real
+      <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M9.6 18h4.8M10.2 21h3.6"/><path d="M12 3a6 6 0 0 0-3.5 10.9c.6.4.9 1.1.9 1.8v.3h5.2v-.3c0-.7.3-1.4.9-1.8A6 6 0 0 0 12 3z"/></svg> Use estes gráficos como prova visual no seu pitch. O argumento da desvalorização do real
       e o "poupança perde da inflação" são clássicos — agora você tem o dado para sustentar.
     </div>
 
     <!-- GRÁFICO 1: R$100 EM DÓLAR (conceito Avenue, versão VocêBancário) -->
     <div class="grafico-card">
-      <h4>💸 Quanto vale R$100 em dólar</h4>
+      <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 3v18"/><path d="M16.5 7.5c0-1.9-2-3-4.5-3s-4.5 1.1-4.5 3S9.5 11 12 11s4.5 1.1 4.5 3-2 3-4.5 3-4.5-1.1-4.5-3"/></svg> Quanto vale R$100 em dólar</h4>
       <div class="grafico-sub">
         O argumento mais forte da dolarização: em 1994, R$100 valiam US$100. Hoje, valem uma fração disso.
         A linha despencando é a desvalorização do real, visível.
@@ -701,7 +703,7 @@
       <div class="grafico-destaque" id="destaque-r100"></div>
       <div class="grafico-acao">
         <button class="btn-inserir-slide" onclick="inserirGraficoNoSlide('r100')">
-          ➕ Inserir nos slides do pitch
+          <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 5v14M5 12h14"/></svg> Inserir nos slides do pitch
         </button>
       </div>
       <div class="grafico-fonte">Fonte: Banco Central do Brasil (SGS série 1) · congelado em 14/05/2026</div>
@@ -709,7 +711,7 @@
 
     <!-- GRÁFICO 2: DÓLAR (USD/BRL) -->
     <div class="grafico-card">
-      <h4>📊 Dólar (USD/BRL) — a cotação ao longo do tempo</h4>
+      <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M3 21h18"/><path d="M6.5 21V11M12 21V4M17.5 21v-6"/></svg> Dólar (USD/BRL) — a cotação ao longo do tempo</h4>
       <div class="grafico-sub">
         Quanto custa 1 dólar em reais. A mesma história do gráfico acima, na leitura tradicional.
       </div>
@@ -724,7 +726,7 @@
       <div class="grafico-destaque" id="destaque-dolar"></div>
       <div class="grafico-acao">
         <button class="btn-inserir-slide" onclick="inserirGraficoNoSlide('dolar')">
-          ➕ Inserir nos slides do pitch
+          <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 5v14M5 12h14"/></svg> Inserir nos slides do pitch
         </button>
       </div>
       <div class="grafico-fonte">Fonte: Banco Central do Brasil (SGS série 1) · congelado em 14/05/2026</div>
@@ -732,7 +734,7 @@
 
     <!-- GRÁFICO 3: CDI x IPCA x POUPANÇA -->
     <div class="grafico-card">
-      <h4>📈 CDI vs IPCA vs Poupança — quem ganha da inflação</h4>
+      <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M3 17.5 9.5 11l3.5 3.5L21 6"/><path d="M15 6h6v6"/></svg> CDI vs IPCA vs Poupança — quem ganha da inflação</h4>
       <div class="grafico-sub">
         R$ 100 investidos em 2016, corrigidos por cada índice. Mostra quem protege (e quem corrói) o poder de compra.
       </div>
@@ -742,7 +744,7 @@
       <div class="grafico-destaque" id="destaque-indices"></div>
       <div class="grafico-acao">
         <button class="btn-inserir-slide" onclick="inserirGraficoNoSlide('indices')">
-          ➕ Inserir nos slides do pitch
+          <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 5v14M5 12h14"/></svg> Inserir nos slides do pitch
         </button>
       </div>
       <div class="grafico-fonte">Fonte: Banco Central do Brasil (SGS séries 4391, 433, 196) · congelado em 14/05/2026</div>
@@ -750,7 +752,7 @@
 
     <!-- GRÁFICO 4: IMA-B x CDI x IPCA -->
     <div class="grafico-card" id="card-grafico-imab">
-      <h4>🛡️ IMA-B vs CDI vs IPCA — os títulos IPCA+ na prática</h4>
+      <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 3.2 5 6v5.4c0 4.2 2.9 7.6 7 9.4 4.1-1.8 7-5.2 7-9.4V6z"/></svg> IMA-B vs CDI vs IPCA — os títulos IPCA+ na prática</h4>
       <div class="grafico-sub">
         R$ 100 em mai/2021 corrigidos pelo IMA-B (índice ANBIMA da cesta de Tesouro IPCA+/NTN-B,
         aqui via ETF IMAB11), pelo CDI e pela inflação. Mostra a marcação a mercado no curto prazo
@@ -762,7 +764,7 @@
       <div class="grafico-destaque" id="destaque-imab"></div>
       <div class="grafico-acao">
         <button class="btn-inserir-slide" onclick="inserirGraficoNoSlide('imab')">
-          ➕ Inserir nos slides do pitch
+          <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 5v14M5 12h14"/></svg> Inserir nos slides do pitch
         </button>
       </div>
       <div class="grafico-fonte">Fonte: IMA-B via ETF IMAB11 (iShares, B3) · CDI/IPCA: Banco Central do Brasil (SGS 4391, 433) · série até 04/2026</div>
@@ -770,7 +772,7 @@
 
     <!-- GRÁFICO 5: IMA-B x CDI — O LONGO PRAZO (série oficial SGS, busca ao vivo) -->
     <div class="grafico-card" id="card-grafico-imablongo">
-      <h4>🏆 IMA-B vs CDI — o longo prazo</h4>
+      <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M7 4h10v5a5 5 0 0 1-10 0z"/><path d="M7 6H4.6a3 3 0 0 0 3 3M17 6h2.4a3 3 0 0 1-3 3"/><path d="M12 14v3M8.5 20h7"/></svg> IMA-B vs CDI — o longo prazo</h4>
       <div class="grafico-sub">
         A série oficial ANBIMA completa, direto do Banco Central: R$ 100 corrigidos pelo IMA-B,
         pelo CDI e pela inflação desde o início do índice (2004). O gráfico de cima mostra a
@@ -785,7 +787,7 @@
       <div class="grafico-destaque" id="destaque-imablongo" style="display:none;"></div>
       <div class="grafico-acao" id="acao-imablongo" style="display:none;">
         <button class="btn-inserir-slide" onclick="inserirGraficoNoSlide('imablongo')">
-          ➕ Inserir nos slides do pitch
+          <svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M12 5v14M5 12h14"/></svg> Inserir nos slides do pitch
         </button>
       </div>
       <div class="grafico-fonte">
@@ -809,13 +811,13 @@
 
 <!-- ============================== DRAWER LATERAL (CASE) ============================== -->
 <div class="drawer-overlay" id="drawer-overlay" onclick="fecharDrawer()"></div>
-<aside class="drawer" id="drawer">
+<aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-titulo" aria-hidden="true">
   <div class="drawer-header">
     <div>
       <span class="case-numero" id="drawer-numero">CASE 00</span>
       <h3 id="drawer-titulo">—</h3>
     </div>
-    <button class="drawer-close" onclick="fecharDrawer()" aria-label="Fechar">×</button>
+    <button type="button" class="drawer-close" onclick="fecharDrawer()" aria-label="Fechar"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
   </div>
   <div class="drawer-body" id="drawer-body">
     <!-- Conteúdo populado via JS -->
@@ -824,13 +826,13 @@
 
 <!-- ============================== DRAWER AJUDA MACROALOCAÇÃO ============================== -->
 <div class="drawer-overlay" id="ajuda-overlay" onclick="fecharAjudaMacro()"></div>
-<aside class="drawer drawer-ajuda" id="drawer-ajuda">
+<aside class="drawer drawer-ajuda" id="drawer-ajuda" role="dialog" aria-modal="true" aria-labelledby="drawer-ajuda-titulo" aria-hidden="true">
   <div class="drawer-header">
     <div>
       <span class="case-numero">GUIA DIDÁTICO</span>
-      <h3>Ajuda Macroalocação</h3>
+      <h3 id="drawer-ajuda-titulo">Ajuda Macroalocação</h3>
     </div>
-    <button class="drawer-close" onclick="fecharAjudaMacro()" aria-label="Fechar">×</button>
+    <button type="button" class="drawer-close" onclick="fecharAjudaMacro()" aria-label="Fechar"><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
   </div>
   <div class="drawer-body">
     <p style="font-size:13px; color:var(--text-soft); margin-bottom:4px;">
@@ -845,7 +847,7 @@
       <em>subir</em> (política mais restritiva). Os exemplos ilustram possibilidades, não recomendações.
     </div>
 
-    <h4>📊 Como cada classe reage ao ciclo de juros</h4>
+    <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><path d="M3 21h18"/><path d="M6.5 21V11M12 21V4M17.5 21v-6"/></svg> Como cada classe reage ao ciclo de juros</h4>
 
     <div class="ajuda-classe">
       <div class="ajuda-classe-head">Renda Fixa Pós-Fixada <span class="ajuda-tag">CDI / Selic</span></div>
@@ -955,7 +957,7 @@
       </div>
     </div>
 
-    <h4>🎯 Qual ETF serve em cada cenário</h4>
+    <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.5"/><path d="M12 11.9v.2"/></svg> Qual ETF serve em cada cenário</h4>
     <p style="font-size:12px; color:var(--text-soft); margin-bottom:12px;">
       Mapa rápido dos ETFs disponíveis no simulador. Lembre: o ETF é o veículo —
       a tese vem do cenário + objetivo do cliente.
@@ -1001,7 +1003,7 @@
       </tbody>
     </table>
 
-    <h4>🧭 Os 4 erros mais comuns na montagem</h4>
+    <h4><svg class="ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px"><circle cx="12" cy="12" r="8.5"/><path d="m15 9-1.7 4.3L9 15l1.7-4.3z"/></svg> Os 4 erros mais comuns na montagem</h4>
     <ul class="ajuda-erros">
       <li><strong>Conservadorismo excessivo:</strong> alocar demais em pós-fixado por medo, quando o horizonte do cliente permitiria mais. Custo de oportunidade silencioso.</li>
       <li><strong>Ignorar o comportamento real:</strong> o suitability diz "moderado", mas o cliente liga aflito na primeira marcação negativa. Aderência comportamental &gt; teoria.</li>
@@ -1016,6 +1018,10 @@
     </div>
   </div>
 </aside>
+
+<!-- CASE-01 — respiro no fim do conteúdo: o FAB é fixo no canto inferior direito
+     e cobria a última linha da tabela de diferenças quando a página chegava ao fim. -->
+<div class="fab-espaco" aria-hidden="true" style="height:96px"></div>
 
 <!-- ============================== RODAPÉ ============================== -->
 <footer class="site-footer">

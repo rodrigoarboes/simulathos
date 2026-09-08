@@ -139,6 +139,33 @@ function exposicaoMoeda(porClasse, moeda) {
   return total;
 }
 
+/* ACADEMIA — quem são, com nome e peso, os ativos de uma classe / de uma moeda.
+   Os erros nomeados precisam citar o ATIVO real do aluno, não só a classe. */
+function tickersDaClasse(alloc, classe) {
+  var porTicker = pesosPorTicker(alloc);
+  return Object.keys(porTicker)
+    .filter(function (t) { return scoreClasseDoTicker(t) === classe; })
+    .sort(function (a, b) { return porTicker[b] - porTicker[a]; })
+    .map(function (t) { return { ticker: t, pct: porTicker[t] }; });
+}
+function tickersDaMoeda(alloc, moeda) {
+  var porTicker = pesosPorTicker(alloc);
+  return Object.keys(porTicker)
+    .filter(function (t) { return scoreAtributos(scoreClasseDoTicker(t)).moeda === moeda; })
+    .sort(function (a, b) { return porTicker[b] - porTicker[a]; })
+    .map(function (t) { return { ticker: t, pct: porTicker[t] }; });
+}
+/* "BOVA11 (40,0%) e SMAL11 (15,0%)" — no máximo `limite` nomes, sem inventar nada. */
+function listarTickers(lista, limite) {
+  var max = limite || 3;
+  var nomes = lista.slice(0, max).map(function (i) { return i.ticker + " (" + fmtPct(i.pct) + ")"; });
+  var texto = nomes.length > 1
+    ? nomes.slice(0, -1).join(", ") + " e " + nomes[nomes.length - 1]
+    : (nomes[0] || "");
+  if (lista.length > max) texto += " (+" + (lista.length - max) + ")";
+  return texto;
+}
+
 /* Soma peso × atributo da classe (fatorRisco ou liquidezEfetiva). */
 function somaPonderadaPorClasse(porClasse, atributo) {
   var total = 0;
@@ -320,13 +347,17 @@ function detectarErros(montagem, caso) {
   Object.keys(porClasse).forEach(function (c) {
     var teto = (gabClasse[c] || 0) + SCORE_FOLGA_CONC_CLASSE;
     if (porClasse[c] > teto) {
+      var daClasse = tickersDaClasse(montagem, c);
+      var puxadores = daClasse.length ? " Quem puxa: " + listarTickers(daClasse, 3) + "." : "";
+      var maior = daClasse.length ? daClasse[0] : null;
       erros.push({
         codigo: "CONCENTRACAO_CLASSE",
         nome: "Concentração por classe",
         gravidade: porClasse[c] - teto > 20 ? "alta" : "media",
         evidencia: c + " ficou com " + fmtPct(porClasse[c]) + " contra " + fmtPct(gabClasse[c] || 0) +
-                   " do gabarito (" + fmtDelta(porClasse[c] - (gabClasse[c] || 0)) + ").",
+                   " do gabarito (" + fmtDelta(porClasse[c] - (gabClasse[c] || 0)) + ")." + puxadores,
         comoCorrigir: "Traga " + c + " para perto de " + fmtPct(gabClasse[c] || 0) +
+                      (maior ? ", começando por reduzir " + maior.ticker : "") +
                       " e devolva o excedente às classes em que você ficou abaixo do modelo."
       });
     }
@@ -334,15 +365,20 @@ function detectarErros(montagem, caso) {
 
   // --- SOMA_FORA ---------------------------------------------------------------
   var soma = (montagem || []).reduce(function (acc, l) { return acc + (l.pct || 0); }, 0);
+  var ordenadas = tickers.map(function (t) { return { ticker: t, pct: porTicker[t] }; })
+    .sort(function (a, b) { return b.pct - a.pct; });
+  var maiorPos = ordenadas.length ? ordenadas[0] : null;
   if (Math.abs(soma - 100) > 0.05) {
     erros.push({
       codigo: "SOMA_FORA",
       nome: "Soma fora de 100%",
       gravidade: "alta",
-      evidencia: "A carteira soma " + fmtPct(soma) + " em " + linhas.length + " posição(ões).",
+      evidencia: "A carteira soma " + fmtPct(soma) + " em " + linhas.length + " posição(ões)" +
+                 (maiorPos ? ": a maior é " + maiorPos.ticker + " com " + fmtPct(maiorPos.pct) + "." : "."),
       comoCorrigir: soma > 100
-        ? "Retire " + fmtPct(soma - 100) + " das posições mais pesadas."
-        : "Aloque os " + fmtPct(100 - soma) + " que faltam."
+        ? "Retire " + fmtPct(soma - 100) + (maiorPos ? " de " + maiorPos.ticker : " das posições mais pesadas") + "."
+        : "Aloque os " + fmtPct(100 - soma) + " que faltam" +
+          (maiorPos ? " — ou some tudo em " + maiorPos.ticker + ", se a tese for essa." : ".")
     });
   }
 
@@ -352,14 +388,19 @@ function detectarErros(montagem, caso) {
     var usdSua = exposicaoMoeda(porClasse, "USD");
     var usdGab = exposicaoMoeda(gabClasse, "USD");
     var tetoUSD = Math.max(SCORE_LIMIAR_CAMBIO, usdGab);
+    var dolarizados = tickersDaMoeda(montagem, "USD");
     if (usdSua > tetoUSD) {
       erros.push({
         codigo: "CAMBIO_SEM_HEDGE",
         nome: "Câmbio sem hedge",
         gravidade: "alta",
-        evidencia: fmtPct(usdSua) + " da carteira está em ativos dolarizados, num case de perfil " +
-                   caso.perfil + " (limite: " + fmtPct(tetoUSD) + "; gabarito: " + fmtPct(usdGab) + ").",
-        comoCorrigir: "Reduza a parcela em dólar para até " + fmtPct(tetoUSD) +
+        evidencia: fmtPct(usdSua) + " da carteira está em ativos dolarizados" +
+                   (dolarizados.length ? " (" + listarTickers(dolarizados, 3) + ")" : "") +
+                   ", num case de perfil " + caso.perfil +
+                   " (limite: " + fmtPct(tetoUSD) + "; gabarito: " + fmtPct(usdGab) + ").",
+        comoCorrigir: "Reduza a parcela em dólar" +
+                      (dolarizados.length ? ", a começar por " + dolarizados[0].ticker + "," : "") +
+                      " para até " + fmtPct(tetoUSD) +
                       " ou explique no pitch como o cliente conservador convive com a variação cambial."
       });
     }
@@ -492,6 +533,8 @@ function renderTela4(score) {
   renderComposeEm("compose-sua", score.sua);
   renderComposeEm("compose-gabarito", score.gab);
   renderDiferencasClasse(score.sua, score.gab);
+  renderDiferencasTicker(pesosPorTicker(montagemAtual), pesosPorTicker(carteiraDoGabarito(caseAtual)));
+  renderMetricasChave(score);
 
   // Perfil de risco do gabarito (sugestão do Rodrigo na call: deixar o perfil visível)
   document.getElementById("gabarito-perfil-tag").innerHTML =
@@ -647,6 +690,130 @@ function renderComposeEm(containerId, mapa) {
   legenda.querySelectorAll(".compose__ponto").forEach(function (p) {
     p.style.setProperty("--c", "var(--chart-" + (p.getAttribute("data-chart") || 8) + ")");
   });
+}
+
+/* =================================================================================
+   CASE-02 — MÉTRICAS-CHAVE DO VEREDITO (#metricas-chave)
+   ---------------------------------------------------------------------------------
+   Até 3 cartões .metric com o resumo do que decidiu o score. Só entram números que
+   já foram calculados: nada aqui é estimado. Sem dado, o cartão nem aparece.
+   ================================================================================= */
+function metricasChave(score) {
+  var itens = [];
+
+  // 1) O maior desvio por classe — o que mais custou pontos na coerência macro.
+  var difClasses = linhasDeDiferenca(score.sua, score.gab);
+  var maior = difClasses.length && Math.abs(difClasses[0].delta) >= 0.05 ? difClasses[0] : null;
+  if (maior) {
+    var absC = Math.abs(maior.delta);
+    itens.push({
+      label: "Maior desvio por classe",
+      valor: fmtDelta(maior.delta),
+      contexto: maior.chave + " — você " + fmtPct(maior.sua) + " · modelo " + fmtPct(maior.gab),
+      estado: absC < 5 ? "ok" : absC < 15 ? "warn" : "bad"
+    });
+  } else {
+    itens.push({
+      label: "Maior desvio por classe",
+      valor: fmtDelta(0),
+      contexto: "Alocação por classe idêntica à do modelo.",
+      estado: "ok"
+    });
+  }
+
+  // 2) O ativo que mais destoa do gabarito — feedback com ticker real.
+  var difTickers = linhasDeDiferenca(pesosPorTicker(montagemAtual), pesosPorTicker(carteiraDoGabarito(caseAtual)));
+  var ativo = difTickers.length && Math.abs(difTickers[0].delta) >= 0.05 ? difTickers[0] : null;
+  if (ativo) {
+    var absA = Math.abs(ativo.delta);
+    itens.push({
+      label: "Ativo que mais destoa",
+      valor: ativo.chave,
+      contexto: "você " + fmtPct(ativo.sua) + " · modelo " + fmtPct(ativo.gab) + " · " + fmtDelta(ativo.delta),
+      estado: absA < 5 ? "ok" : absA < 15 ? "warn" : "bad"
+    });
+  }
+
+  // 3) Concentração por ativo contra o limiar efetivo do case.
+  if (typeof score.concentracaoAtivo === "number") {
+    var limiar = (typeof score.limiarConcentracaoAtivo === "number") ? score.limiarConcentracaoAtivo : null;
+    itens.push({
+      label: "Concentração por ativo",
+      valor: fmtPct(score.concentracaoAtivo),
+      contexto: limiar !== null
+        ? "limite deste case: " + fmtPct(limiar)
+        : "maior peso num único ticker",
+      estado: (limiar !== null && score.concentracaoAtivo > limiar) ? "bad" : "ok"
+    });
+  }
+
+  // 4) Erros nomeados — só entra se ainda houver espaço e existir erro.
+  var erros = score.erros || [];
+  if (erros.length && itens.length < 3) {
+    itens.push({
+      label: "Erros nomeados",
+      valor: String(erros.length),
+      contexto: erros.map(function (e) { return e.codigo; }).slice(0, 3).join(" · "),
+      estado: erros.some(function (e) { return e.gravidade === "alta"; }) ? "bad" : "warn"
+    });
+  }
+
+  return itens.slice(0, 3);
+}
+
+function renderMetricasChave(score) {
+  var alvo = document.getElementById("metricas-chave");
+  if (!alvo) return;
+  var esc = function (t) {
+    return String(t).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  };
+  var itens = metricasChave(score);
+  alvo.innerHTML = itens.map(function (m) {
+    return '<div class="metric" data-estado="' + esc(m.estado || "ok") + '">' +
+      '<span class="metric__label">' + esc(m.label) + '</span>' +
+      '<span class="metric__value">' + esc(m.valor) + '</span>' +
+      (m.contexto ? '<span class="metric__ctx">' + esc(m.contexto) + '</span>' : '') +
+      '</div>';
+  }).join("");
+}
+
+/* Tabela de diferenças POR TICKER na tela 4, irmã de #diferencas-classe.
+   O markup não existe no HTML — é criado aqui, dentro do mesmo bloco de
+   diferenças, e reaproveita a classe .tabela-diferencas. */
+function renderDiferencasTicker(sua, gab) {
+  var irma = document.getElementById("diferencas-classe");
+  if (!irma) return;
+  var caixa = irma.parentNode;
+  if (!caixa) return;
+  var tabela = document.getElementById("diferencas-ticker");
+  var linhas = linhasDeDiferenca(sua, gab);
+  if (!linhas.length) { if (tabela) tabela.remove(); return; }
+  if (!tabela) {
+    tabela = document.createElement("table");
+    tabela.className = "tabela-diferencas";
+    tabela.id = "diferencas-ticker";
+    tabela.innerHTML =
+      '<caption>Diferença por ativo</caption>' +
+      '<thead><tr>' +
+        '<th scope="col">Ativo</th>' +
+        '<th scope="col">Sua proposta</th>' +
+        '<th scope="col">Gabarito</th>' +
+        '<th scope="col">Diferença</th>' +
+      '</tr></thead><tbody></tbody>';
+    caixa.appendChild(tabela);
+  }
+  var fmt = function (v) {
+    return (Math.round(v * 10) / 10).toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + "%";
+  };
+  tabela.querySelector("tbody").innerHTML = linhas.map(function (l) {
+    var sinal = l.delta > 0.05 ? "+" : "";
+    var estado = Math.abs(l.delta) < 5 ? "ok" : Math.abs(l.delta) < 15 ? "warn" : "bad";
+    return '<tr data-estado="' + estado + '"><th scope="row">' + l.chave + '</th><td>' +
+      fmt(l.sua) + "</td><td>" + fmt(l.gab) + "</td><td>" +
+      sinal + fmt(l.delta).replace("%", " p.p.") + "</td></tr>";
+  }).join("");
 }
 
 /* Tabela #diferencas-classe (tela 4): você × modelo × delta, ordenada pelo maior desvio. */

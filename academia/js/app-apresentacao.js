@@ -364,6 +364,34 @@ let frameworkAtual = null;
 let pitchData = {}; // { etapaId: "texto..." }
 
 /* =================================================================================
+   STORAGE NAMESPACED (CARTEIRA-06)
+   Todas as chaves desta tela passam a viver sob "simulathos:academia:". O helper de
+   shared/js/utils.js já lê a chave legada "aida_vo4_<chave>" como fallback, então
+   quem tinha tema/identidade salvos não perde nada — a próxima escrita já grava no
+   namespace certo.
+   ================================================================================= */
+function apresStorageGet(chave) {
+  try {
+    if (window.Simulathos && window.Simulathos.storage &&
+        typeof window.Simulathos.storage.get === "function") {
+      return window.Simulathos.storage.get("academia", chave);
+    }
+  } catch (e) {}
+  try { return localStorage.getItem("aida_vo4_" + chave); } catch (e) { return null; }
+}
+
+function apresStorageSet(chave, valor) {
+  try {
+    if (window.Simulathos && window.Simulathos.storage &&
+        typeof window.Simulathos.storage.set === "function") {
+      window.Simulathos.storage.set("academia", chave, valor);
+      return;
+    }
+  } catch (e) {}
+  try { localStorage.setItem("aida_vo4_" + chave, String(valor)); } catch (e) {}
+}
+
+/* =================================================================================
    PERSISTÊNCIA DO PITCH POR CASE (APRESENTACAO-03)
    Antes, pitchData/framework/graficosInseridos viviam só em memória: um F5 (ou um
    fechar de aba sem querer) apagava um pitch inteiro. Agora tudo é salvo por case,
@@ -453,6 +481,44 @@ function restaurarPitchPersistido() {
   return true;
 }
 
+/* =================================================================================
+   ISOLAMENTO DE PITCH POR CASE (CARTEIRA-04)
+   pitchData / frameworkAtual / graficosInseridos e o nome do cliente são variáveis de
+   módulo. Ao trocar de case dentro da mesma sessão, elas continuavam com o conteúdo do
+   case anterior e o texto do cliente A vazava para a tela do cliente B. Agora todo
+   ponto de entrada da tela 5/6 chama sincronizarPitchComCase(): se o case mudou, o
+   estado é zerado ANTES de tentar restaurar o pitch salvo do novo case.
+   ================================================================================= */
+let pitchCaseCarregado = null;
+
+function resetarEstadoPitch() {
+  pitchData = {};
+  frameworkAtual = null;
+  if (Array.isArray(graficosInseridos)) graficosInseridos.length = 0;
+  // Cliente e título são do case/cliente, não do aluno: não podem atravessar.
+  if (typeof alunoIdentidade === "object" && alunoIdentidade) {
+    alunoIdentidade.nomeCliente = "";
+    alunoIdentidade.tituloApresentacao = "";
+  }
+  const elCli = document.getElementById("id-cliente");
+  if (elCli) elCli.value = "";
+  const elTit = document.getElementById("id-titulo-apres");
+  if (elTit) elTit.value = "";
+  resetCronometro();
+}
+
+// Retorna true se houve troca de case (e portanto reset).
+function sincronizarPitchComCase() {
+  const id = pitchCaseId();
+  if (pitchCaseCarregado !== null && pitchCaseCarregado !== id) {
+    resetarEstadoPitch();
+    pitchCaseCarregado = id;
+    return true;
+  }
+  pitchCaseCarregado = id;
+  return false;
+}
+
 function limparPitchPersistido() {
   const id = pitchCaseId();
   if (window.Estado && typeof window.Estado.limparPitch === "function") {
@@ -473,6 +539,8 @@ function sugerirFramework() {
 }
 
 function irTela5() {
+  // Case mudou desde o último pitch em memória? Zera antes de qualquer render.
+  sincronizarPitchComCase();
   // Inicializa contexto (Modo Livre usa o pseudo-case "Carteira própria")
   document.getElementById("tela5-titulo").textContent = `Estruturar pitch — ${caseParaPitch().titulo}`;
   renderContextoResumo();
@@ -577,9 +645,12 @@ function renderEtapasPitch() {
             ${iconeEtapa(et.icone)}
             ${et.titulo}
           </div>
-          <div class="etapa-header-dir">
+          <div class="etapa-header-dir" style="display:flex;align-items:center;gap:10px;">
             <span class="etapa-numero">ETAPA ${idx + 1}/4</span>
-            <button type="button" class="btn-copiar-bloco" onclick="copiarBlocoPitch('${et.id}', this)">Copiar</button>
+            <button type="button" class="btn btn--secondary btn-rascunho-bloco"
+                    onclick="gerarRascunhoEtapa('${et.id}', this)"
+                    title="Monta um rascunho com os dados reais deste case e da sua carteira">Gerar rascunho</button>
+            <button type="button" class="btn btn--ghost btn-copiar-bloco" onclick="copiarBlocoPitch('${et.id}', this)">Copiar</button>
           </div>
         </div>
         <div class="etapa-descricao">${et.desc}</div>
@@ -663,6 +734,209 @@ function gerarConectores(idx, etapa) {
       <span>${c.txt}</span>
     </div>
   `).join("");
+}
+
+/* =================================================================================
+   GERAR RASCUNHO DA ETAPA (tela 5)
+   Determinístico: mesma carteira + mesmo case = mesmo texto, sempre. Nada é
+   inventado — toda frase sai do briefing do case, da carteira montada ou do
+   backtest já calculado. Onde não há dado, a frase simplesmente não entra.
+   ================================================================================= */
+
+// Primeira frase de um texto, sem ponto final duplicado.
+function _fraseInicial(txt) {
+  const t = String(txt || "").trim();
+  if (!t) return "";
+  const corte = t.split(/(?<=[.!?])\s/)[0].trim();
+  return corte.replace(/[.;,]+$/, "") + ".";
+}
+
+function _pitchPrimeiroNome() {
+  const cli = (alunoIdentidade && alunoIdentidade.nomeCliente ? String(alunoIdentidade.nomeCliente) : "").trim();
+  if (cli) return cli.split(/[\s,]+/)[0];
+  const c = caseParaPitch();
+  const bruto = (c && c.cliente) ? String(c.cliente).trim() : "";
+  if (!bruto) return "";
+  const primeiro = bruto.split(",")[0].trim().split(/\s+/)[0];
+  return /^[A-Za-zÀ-ÿ]/.test(primeiro) ? primeiro : "";
+}
+
+function _pitchVocativo() {
+  const n = _pitchPrimeiroNome();
+  return n ? n + ", " : "";
+}
+
+// Junta vocativo + frase sem deixar maiúscula no meio da frase ("Pedro, Antes de...").
+function _pitchAbrirCom(voc, frase) {
+  if (!voc) return frase;
+  const f = String(frase || "");
+  if (!f) return voc.replace(/,\s*$/, "");
+  const resto = f.slice(1);
+  // Só rebaixa a inicial se a palavra não for um nome próprio/sigla (2+ maiúsculas seguidas).
+  const ehSigla = /^[A-ZÀ-Ý]{2,}/.test(f);
+  return voc + (ehSigla ? f : f.charAt(0).toLowerCase() + resto);
+}
+
+// Pega um dado do briefing por trecho de chave (case-insensitive). null se não houver.
+function _pitchDado(trechos) {
+  const c = caseParaPitch();
+  if (!c || !c.dados) return null;
+  const chaves = Object.keys(c.dados);
+  for (let i = 0; i < trechos.length; i++) {
+    const alvo = trechos[i].toLowerCase();
+    for (let j = 0; j < chaves.length; j++) {
+      if (chaves[j].toLowerCase().indexOf(alvo) !== -1) {
+        return { chave: chaves[j], valor: String(c.dados[chaves[j]]) };
+      }
+    }
+  }
+  return null;
+}
+
+function _pitchTopAtivos(n) {
+  return montagemAtual
+    .filter(l => l.ticker && l.pct > 0)
+    .sort((a, b) => b.pct - a.pct)
+    .slice(0, n || 3);
+}
+
+function _pitchLinhaAtivo(linha) {
+  const aporte = aporteApresentacao();
+  const desc = descricaoAtivo(linha.ticker);
+  const classe = classeAtivo(linha.ticker);
+  const reais = (aporte !== null) ? " (" + apresBRL(aporte * ((Number(linha.pct) || 0) / 100)) + ")" : "";
+  return "- " + linha.ticker + " · " + apresNum(Number(linha.pct) || 0, 1) + "%" + reais +
+         " — " + (desc || classe);
+}
+
+const RASCUNHO_ABERTURA = {
+  AIDA: [
+    "Antes de falar de produto, quero te mostrar um número.",
+    "Por que isso é sobre você, e não sobre o mercado:",
+    "O que muda na prática se a gente fizer isso agora:",
+    "O próximo passo é curto e é hoje:"
+  ],
+  PASA: [
+    "O problema não é quanto você tem. É onde está.",
+    "Deixa eu dimensionar isso com número, não com opinião:",
+    "A proposta responde exatamente a esse problema:",
+    "Para resolver, o passo é este:"
+  ],
+  GBGA: [
+    "Tem um ganho que hoje passa ao lado da sua carteira.",
+    "O que essa estrutura te entrega, item por item:",
+    "Onde isso te coloca daqui pra frente:",
+    "Para começar a capturar isso:"
+  ]
+};
+
+function rascunhoTextoEtapa(idx) {
+  const fw = FRAMEWORKS[frameworkAtual];
+  if (!fw) return "";
+  const c = caseParaPitch();
+  const aberturas = RASCUNHO_ABERTURA[frameworkAtual] || RASCUNHO_ABERTURA.AIDA;
+  const partes = [];
+  const voc = _pitchVocativo();
+  const tops = _pitchTopAtivos(3);
+  const aporte = aporteApresentacao();
+  const bt = backtestParaSlides();
+
+  if (idx === 0) {
+    partes.push(_pitchAbrirCom(voc, aberturas[0]));
+    const comp = _pitchDado(["composição atual", "composicao atual", "composição", "patrimônio total", "patrimonio total"]);
+    if (comp) partes.push(comp.chave + ": " + comp.valor + ". É daqui que a gente parte.");
+    const macro = _fraseInicial(getCenarioAtivo());
+    if (macro) partes.push(macro + " Esse é o pano de fundo da conversa de hoje.");
+    if (c && c.objetivos && c.objetivos[0]) {
+      partes.push("O que você me colocou como prioridade foi: " + _fraseInicial(c.objetivos[0]));
+    }
+    if (c && c.restricoes && c.restricoes[0]) {
+      partes.push("E o que não pode acontecer: " + _fraseInicial(c.restricoes[0]));
+    }
+  }
+  else if (idx === 1) {
+    partes.push(aberturas[1]);
+    const renda = _pitchDado(["renda", "aporte mensal", "custo mensal"]);
+    const horiz = _pitchDado(["horizonte", "reserva"]);
+    if (renda) partes.push(renda.chave + ": " + renda.valor + ".");
+    if (horiz) partes.push(horiz.chave + ": " + horiz.valor + ".");
+    if (c && c.objetivos && c.objetivos[1]) {
+      partes.push("Isso conversa direto com o seu segundo objetivo: " + _fraseInicial(c.objetivos[1]));
+    }
+    if (tops[0]) {
+      const d = descricaoAtivo(tops[0].ticker);
+      partes.push("A maior posição da proposta é " + tops[0].ticker + " com " +
+        apresNum(Number(tops[0].pct) || 0, 1) + "%" +
+        (aporte !== null ? " (" + apresBRL(aporte * ((Number(tops[0].pct) || 0) / 100)) + ")" : "") +
+        (d ? " — " + d + "." : "."));
+    }
+  }
+  else if (idx === 2) {
+    partes.push(aberturas[2]);
+    if (tops.length) {
+      partes.push("A carteira proposta fica assim:\n" + tops.map(_pitchLinhaAtivo).join("\n"));
+    }
+    if (c && c.justificativa) partes.push(_fraseInicial(c.justificativa));
+    if (bt && bt.resumo) {
+      const r = bt.resumo;
+      const anos = isFinite(r.diasCorridos) && r.diasCorridos > 0 ? r.diasCorridos / 365.25 : null;
+      const usaAnual = anos !== null && anos >= 1.5;
+      const val = usaAnual ? r.retornoAnualizado : r.retornoAcumulado;
+      if (isFinite(val)) {
+        partes.push("No histórico simulado desta carteira, o " +
+          (usaAnual ? "retorno anualizado" : "retorno do período") + " foi de " + apresPct(val, 1) +
+          (isFinite(r.drawdownMaximo)
+            ? ", com uma pior queda de " + apresPct(Math.abs(r.drawdownMaximo), 1) +
+              (aporte !== null ? " (o equivalente a " + apresBRL(aporte * Math.abs(r.drawdownMaximo)) + " sobre o seu aporte)" : "")
+            : "") +
+          ". Rentabilidade passada não garante rentabilidade futura; é referência de comportamento, não promessa.");
+      }
+    }
+    if (c && c.objetivos && c.objetivos[2]) {
+      partes.push("Onde isso te coloca: " + _fraseInicial(c.objetivos[2]));
+    }
+  }
+  else {
+    partes.push(aberturas[3]);
+    partes.push(aporte !== null
+      ? "1) Confirmar hoje o aporte de " + apresBRL(aporte) + " na distribuição que acabei de mostrar."
+      : "1) Confirmar o valor do aporte e a distribuição que acabei de mostrar.");
+    partes.push("2) Assinar o suitability e as ordens dos ativos da proposta.");
+    partes.push("3) Agendar a revisão da carteira em 90 dias — data marcada agora, comigo.");
+    if (c && c.restricoes && c.restricoes.length) {
+      partes.push("Cuidado que eu já deixo combinado: " + _fraseInicial(c.restricoes[c.restricoes.length - 1]));
+    }
+    partes.push("Se cair no meio do caminho, quem liga primeiro sou eu — e a decisão de venda em queda espera 72 horas.");
+  }
+
+  return partes.filter(p => p && String(p).trim()).join("\n\n");
+}
+
+function gerarRascunhoEtapa(etapaId, btn) {
+  if (!frameworkAtual) return;
+  const fw = FRAMEWORKS[frameworkAtual];
+  const idx = fw.etapas.findIndex(e => e.id === etapaId);
+  if (idx === -1) return;
+
+  const ta = document.getElementById("textarea-" + etapaId);
+  const atual = ta ? String(ta.value || "").trim() : String(pitchData[etapaId] || "").trim();
+  if (atual && !confirm("Já existe texto nesta etapa. Substituir pelo rascunho gerado?")) return;
+
+  const txt = rascunhoTextoEtapa(idx);
+  if (!txt) return;
+  if (ta) {
+    ta.value = txt;
+    ta.focus();
+    try { ta.setSelectionRange(txt.length, txt.length); } catch (e) {}
+  }
+  atualizarPitch(etapaId, txt);
+
+  if (btn) {
+    const original = btn.dataset.rotuloOriginal || btn.textContent;
+    btn.dataset.rotuloOriginal = original;
+    btn.textContent = "Rascunho gerado";
+    setTimeout(() => { btn.textContent = original; }, 1800);
+  }
 }
 
 function atualizarPitch(etapaId, valor) {
@@ -771,6 +1045,7 @@ function avaliarTempoLeitura() {
    TELA 6 — Apresentação em Slides + Identidade do Aluno
    ================================================================================= */
 function irTela6() {
+  sincronizarPitchComCase();
   if (!frameworkAtual) {
     alert("Selecione um framework primeiro.");
     return;
@@ -784,7 +1059,7 @@ function irTela6() {
 
 /* ---- Tema da apresentação (claro/escuro, salvo, independente do tema do app) ---- */
 function carregarTemaApresentacao() {
-  const salvo = localStorage.getItem("aida_vo4_tema_apres");
+  const salvo = apresStorageGet("tema_apres");
   if (salvo === "claro" || salvo === "escuro") {
     temaApresentacao = salvo;
   }
@@ -803,7 +1078,7 @@ function aplicarTemaApresentacao() {
 
 function trocarTemaApresentacao(tema) {
   temaApresentacao = tema;
-  localStorage.setItem("aida_vo4_tema_apres", tema);
+  apresStorageSet("tema_apres", tema);
   aplicarTemaApresentacao();
   // Os Chart.js herdam cores do tema: re-renderiza (com destroy) para não
   // deixar gráfico do tema anterior preso no canvas.
@@ -851,7 +1126,7 @@ document.addEventListener("fullscreenchange", () => {
 /* ---- Identidade do aluno (no AdvisorPro virá do perfil Supabase) ---- */
 function carregarIdentidadeNoForm() {
   // Carrega do localStorage se existir
-  const salvo = localStorage.getItem("aida_vo4_identidade");
+  const salvo = apresStorageGet("identidade");
   if (salvo) {
     try { alunoIdentidade = { ...alunoIdentidade, ...JSON.parse(salvo) }; } catch(e) {}
   }
@@ -885,7 +1160,7 @@ function atualizarIdentidade() {
   alunoIdentidade.mostrarFoto = chk("tg-foto");
   alunoIdentidade.mostrarArroba = chk("tg-arroba");
   alunoIdentidade.mostrarPrograma = chk("tg-programa");
-  localStorage.setItem("aida_vo4_identidade", JSON.stringify(alunoIdentidade));
+  apresStorageSet("identidade", JSON.stringify(alunoIdentidade));
   salvarPitchDebounce();
   renderSlides(); // re-renderiza para refletir na capa/próximos passos
 }
@@ -1223,6 +1498,16 @@ function slidesDoBacktest(aporte) {
   return slides;
 }
 
+// Data da apresentação (hoje, no fuso do navegador) — usada no slide de fechamento.
+function dataDeHojeExtenso() {
+  try {
+    return new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "long", year: "numeric" })
+      .format(new Date());
+  } catch (e) {
+    return new Date().toLocaleDateString("pt-BR");
+  }
+}
+
 /* ---- APRESENTACAO-19 + NOVO-04: próximos passos ---- */
 function slideProximosPassos(aporte) {
   const fw = FRAMEWORKS[frameworkAtual];
@@ -1252,12 +1537,20 @@ function slideProximosPassos(aporte) {
     ? `<div class="slide-contato"><strong>${escapeHtml(alunoIdentidade.nome || "Seu assessor")}</strong><span>${contatos.join(" · ")}</span></div>`
     : `<div class="slide-contato slide-contato-vazio">Preencha WhatsApp e e-mail no formulário para publicar seu contato aqui.</div>`;
 
+  const metas = [];
+  if (aporte !== null) metas.push(`<span><strong>Valor da proposta</strong> ${escapeHtml(apresBRL(aporte))}</span>`);
+  metas.push(`<span><strong>Apresentada em</strong> ${escapeHtml(dataDeHojeExtenso())}</span>`);
+  if (nomeClienteApresentacao()) {
+    metas.push(`<span><strong>Cliente</strong> ${escapeHtml(nomeClienteApresentacao())}</span>`);
+  }
+
   return montarSlide("slide-proximos", `
     <div class="slide-num">PRÓXIMOS PASSOS</div>
     <h2>O que acontece a partir de agora</h2>
     <ol class="slide-passos">
       ${passos.map(p => `<li>${escapeHtml(p)}</li>`).join("")}
     </ol>
+    <div class="slide-proximos-meta" style="display:flex;flex-wrap:wrap;gap:8px 22px;margin:14px 0 4px;font-size:0.95em;">${metas.join("")}</div>
     ${htmlContato}
   `, marcaCaseRodape());
 }
@@ -1614,7 +1907,7 @@ async function atualizarDadosBCB() {
 
 function toggleTheme() {
   document.body.classList.toggle("dark");
-  localStorage.setItem("aida_vo4_dark", document.body.classList.contains("dark"));
+  apresStorageSet("dark", document.body.classList.contains("dark"));
   aplicarLogo();
   // Re-render gráficos com nova cor de borda
   if (chartMontagem) calcularMontagem();
@@ -1662,7 +1955,7 @@ function aplicarTextosPrograma() {
    ================================================================================= */
 window.addEventListener("load", () => {
   // Tema
-  if (localStorage.getItem("aida_vo4_dark") === "true") document.body.classList.add("dark");
+  if (apresStorageGet("dark") === "true") document.body.classList.add("dark");
   aplicarLogo();
 
   // Monta as URLs dos logos a partir da config (padrão de URL + extensão)
@@ -1672,7 +1965,8 @@ window.addEventListener("load", () => {
   aplicarTextosPrograma();
 
   // Modo de acesso salvo (MAP/FEA)
-  const modoSalvo = localStorage.getItem("aida_vo4_modo");
+  // Lê no namespace atual (com fallback para a chave legada "aida_vo4_modo").
+  const modoSalvo = apresStorageGet("modo");
   if (modoSalvo === "FEA" || modoSalvo === "MAP") {
     trocarModo(modoSalvo);
   } else {

@@ -43,19 +43,94 @@ function trocarTela(idTela) {
     }
   }
 
-  // Stepper da topbar: passo atual + passos já percorridos
-  const passos = document.querySelectorAll("#stepper li");
-  let indiceAtual = -1;
-  passos.forEach((li, i) => { if (li.dataset.tela === idTela) indiceAtual = i; });
-  passos.forEach((li, i) => {
-    li.classList.toggle("done", indiceAtual > -1 && i < indiceAtual);
-    if (indiceAtual > -1 && i === indiceAtual) {
-      li.setAttribute("aria-current", "step");
+  // O menu do FAB nunca sobrevive a uma troca de tela aberto
+  fecharFabMenu(false);
+
+  passosVisitados[idTela] = true;
+  atualizarStepper(idTela);
+}
+
+/* =================================================================================
+   STEPPER DA TOPBAR — marca o passo atual e deixa voltar aos passos já concluídos
+   ================================================================================= */
+var passosVisitados = { tela1: true };
+
+// Como se volta para cada passo. Só é usado para passos JÁ concluídos.
+function navegarParaPasso(idTela) {
+  if (idTela === "tela1") { voltarTela1(); return; }
+  if (idTela === "tela2") {
+    if (!caseAtual || modoLivre) return;
+    irTela2();
+    return;
+  }
+  if (idTela === "tela3") {
+    if (typeof irTela3 === "function") irTela3(); else trocarTela("tela3");
+    return;
+  }
+  if (idTela === "tela4") { trocarTela("tela4"); return; }
+  if (idTela === "tela5") {
+    if (typeof irTela5 === "function") irTela5(); else trocarTela("tela5");
+    return;
+  }
+  if (idTela === "tela6") {
+    if (typeof irTela6 === "function") irTela6(); else trocarTela("tela6");
+  }
+}
+
+function atualizarStepper(idTela) {
+  var passos = document.querySelectorAll("#stepper li");
+  var indiceAtual = -1;
+  passos.forEach(function (li, i) { if (li.dataset.tela === idTela) indiceAtual = i; });
+  passos.forEach(function (li, i) {
+    var alvo = li.dataset.tela;
+    var concluido = indiceAtual > -1 && i < indiceAtual;
+    var atual = indiceAtual > -1 && i === indiceAtual;
+    // Só volta para trás, e só para tela que o aluno já viu nesta sessão.
+    var navegavel = concluido && passosVisitados[alvo] === true &&
+      !(alvo === "tela2" && (modoLivre || !caseAtual));
+
+    li.classList.toggle("done", concluido);
+    li.classList.toggle("navegavel", navegavel);
+    if (atual) li.setAttribute("aria-current", "step");
+    else li.removeAttribute("aria-current");
+
+    li.setAttribute("role", "button");
+    li.setAttribute("tabindex", navegavel ? "0" : "-1");
+    if (navegavel) {
+      li.removeAttribute("aria-disabled");
+      li.title = "Voltar para " + (li.textContent || "").trim();
     } else {
-      li.removeAttribute("aria-current");
+      li.setAttribute("aria-disabled", "true");
+      li.removeAttribute("title");
     }
   });
 }
+
+function stepperClique(ev) {
+  var li = ev.target.closest ? ev.target.closest("#stepper li") : null;
+  if (!li || li.getAttribute("aria-disabled") === "true") return;
+  navegarParaPasso(li.dataset.tela);
+}
+
+function stepperTecla(ev) {
+  if (ev.key !== "Enter" && ev.key !== " " && ev.key !== "Spacebar") return;
+  var li = ev.target.closest ? ev.target.closest("#stepper li") : null;
+  if (!li || li.getAttribute("aria-disabled") === "true") return;
+  ev.preventDefault();
+  navegarParaPasso(li.dataset.tela);
+}
+
+(function ligarStepper() {
+  function ligar() {
+    var ol = document.getElementById("stepper");
+    if (!ol) return;
+    ol.addEventListener("click", stepperClique);
+    ol.addEventListener("keydown", stepperTecla);
+    atualizarStepper("tela1");
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ligar);
+  else ligar();
+})();
 function voltarTela1() {
   modoLivre = false;
   montagemAtual = [];
@@ -78,6 +153,7 @@ function voltarTela1() {
   fecharDrawer();
   fecharAjudaMacro();
   fecharGraficos();
+  passosVisitados = { tela1: true };
   trocarTela("tela1");
   renderGrid();
   atualizarStatsHome();
@@ -111,50 +187,118 @@ function popularDrawer() {
 
   document.getElementById("drawer-body").innerHTML = `
     ${tagsHtml}
-    <h4>👤 Perfil do Cliente</h4>
+    <h4><svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><circle cx='12' cy='8' r='3.5'/><path d='M5 20c0-3.3 3.1-5.5 7-5.5s7 2.2 7 5.5'/></svg> Perfil do Cliente</h4>
     <p>${caseAtual.cliente}</p>
 
-    <h4>💼 Situação Patrimonial</h4>
+    <h4><svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><rect x='3' y='7.5' width='18' height='12' rx='2'/><path d='M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5'/><path d='M3 12.5h18'/></svg> Situação Patrimonial</h4>
     ${dadosHtml}
 
     <div class="macro-box">
-      <h4>📈 Cenário Macroeconômico</h4>
+      <h4><svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><path d='M3 17.5 9.5 11l3.5 3.5L21 6'/><path d='M15 6h6v6'/></svg> Cenário Macroeconômico</h4>
       ${cenarioFoiEditado() ? '<span class="cenario-editado-tag">Cenário atual (editado)</span><br/>' : ''}
       <p>${getCenarioAtivo()}</p>
     </div>
 
-    <h4>🎯 Objetivos</h4>
+    <h4><svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><circle cx='12' cy='12' r='8'/><circle cx='12' cy='12' r='3.5'/><path d='M12 11.9v.2'/></svg> Objetivos</h4>
     <ul>${objetivosHtml}</ul>
 
-    <h4>⚠️ Restrições / Atenção</h4>
+    <h4><svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><path d='M12 4 2.8 20h18.4z'/><path d='M12 10v4M12 17.1v.1'/></svg> Restrições / Atenção</h4>
     <ul>${restricoesHtml}</ul>
   `;
 }
 
+/* ---------------------------------------------------------------------------
+   Overlays acessíveis: role=dialog + aria-modal no markup, foco preso dentro
+   do drawer enquanto aberto, Esc fecha (handler global) e o foco volta para o
+   botão que abriu. Um drawer por vez.
+   --------------------------------------------------------------------------- */
+var _drawerAberto = null; // { drawer, overlay, gatilho }
+
+function _focaveisDe(raiz) {
+  var sel = 'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]),' +
+            ' textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+  return Array.prototype.filter.call(raiz.querySelectorAll(sel), function (el) {
+    return el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement;
+  });
+}
+
+function _drawerTab(e) {
+  if (!_drawerAberto || e.key !== "Tab") return;
+  var lista = _focaveisDe(_drawerAberto.drawer);
+  if (!lista.length) { e.preventDefault(); return; }
+  var primeiro = lista[0], ultimo = lista[lista.length - 1];
+  var ativo = document.activeElement;
+  if (!_drawerAberto.drawer.contains(ativo)) { e.preventDefault(); primeiro.focus(); return; }
+  if (e.shiftKey && ativo === primeiro) { e.preventDefault(); ultimo.focus(); }
+  else if (!e.shiftKey && ativo === ultimo) { e.preventDefault(); primeiro.focus(); }
+}
+
+function abrirOverlay(idDrawer, idOverlay) {
+  var drawer = document.getElementById(idDrawer);
+  if (!drawer) return;
+  var overlay = idOverlay ? document.getElementById(idOverlay) : null;
+  if (_drawerAberto && _drawerAberto.drawer !== drawer) {
+    fecharOverlay(_drawerAberto.drawer.id, _drawerAberto.overlay ? _drawerAberto.overlay.id : "");
+  }
+  var gatilho = document.activeElement;
+  if (!gatilho || gatilho === document.body || drawer.contains(gatilho)) gatilho = null;
+  // Aberto por um item do FAB? O menu recolhe, então o foco volta para o botão
+  // "Ferramentas" (o item some da tela e não pode receber foco de volta).
+  if (gatilho && gatilho.closest && gatilho.closest("#fab-menu")) {
+    gatilho = document.getElementById("fab-toggle") || gatilho;
+    fecharFabMenu(false);
+  }
+  drawer.classList.add("open");
+  if (overlay) overlay.classList.add("open");
+  drawer.removeAttribute("aria-hidden");
+  document.body.style.overflow = "hidden";
+  _drawerAberto = { drawer: drawer, overlay: overlay, gatilho: gatilho };
+  document.addEventListener("keydown", _drawerTab, true);
+  var alvo = drawer.querySelector(".drawer-close") || _focaveisDe(drawer)[0];
+  if (alvo) setTimeout(function () { if (drawer.classList.contains("open")) alvo.focus(); }, 60);
+}
+
+function fecharOverlay(idDrawer, idOverlay) {
+  var drawer = document.getElementById(idDrawer);
+  if (!drawer) return;
+  var overlay = idOverlay ? document.getElementById(idOverlay) : null;
+  var estavaAberto = drawer.classList.contains("open");
+  drawer.classList.remove("open");
+  if (overlay) overlay.classList.remove("open");
+  drawer.setAttribute("aria-hidden", "true");
+  if (!document.querySelector(".drawer.open")) document.body.style.overflow = "";
+  if (!estavaAberto) return;
+  var gatilho = null;
+  if (_drawerAberto && _drawerAberto.drawer === drawer) {
+    gatilho = _drawerAberto.gatilho;
+    _drawerAberto = null;
+    document.removeEventListener("keydown", _drawerTab, true);
+  }
+  if (gatilho && document.body.contains(gatilho)) {
+    var visivel = gatilho.offsetWidth > 0 || gatilho.offsetHeight > 0;
+    if (!visivel && gatilho.closest && gatilho.closest("#fab-menu")) {
+      gatilho = document.getElementById("fab-toggle");
+    }
+    if (gatilho) gatilho.focus();
+  }
+}
+
 function abrirDrawer() {
   popularDrawer();
-  document.getElementById("drawer").classList.add("open");
-  document.getElementById("drawer-overlay").classList.add("open");
-  document.body.style.overflow = "hidden";
+  abrirOverlay("drawer", "drawer-overlay");
 }
 
 function fecharDrawer() {
-  document.getElementById("drawer").classList.remove("open");
-  document.getElementById("drawer-overlay").classList.remove("open");
-  document.body.style.overflow = "";
+  fecharOverlay("drawer", "drawer-overlay");
 }
 
 /* ============ DRAWER AJUDA MACROALOCAÇÃO ============ */
 function abrirAjudaMacro() {
-  document.getElementById("drawer-ajuda").classList.add("open");
-  document.getElementById("ajuda-overlay").classList.add("open");
-  document.body.style.overflow = "hidden";
+  abrirOverlay("drawer-ajuda", "ajuda-overlay");
 }
 
 function fecharAjudaMacro() {
-  document.getElementById("drawer-ajuda").classList.remove("open");
-  document.getElementById("ajuda-overlay").classList.remove("open");
-  document.body.style.overflow = "";
+  fecharOverlay("drawer-ajuda", "ajuda-overlay");
 }
 
 /* ============ DRAWER GRÁFICOS DE MERCADO ============ */
@@ -169,9 +313,7 @@ let periodoDolarAtual = "tudo";
 let graficosInseridos = []; // ['r100', 'dolar', 'indices']
 
 function abrirGraficos() {
-  document.getElementById("drawer-graficos").classList.add("open");
-  document.getElementById("graficos-overlay").classList.add("open");
-  document.body.style.overflow = "hidden";
+  abrirOverlay("drawer-graficos", "graficos-overlay");
   // Renderiza com leve atraso para o drawer abrir antes do Chart.js medir o canvas
   setTimeout(() => {
     renderGraficoR100();
@@ -184,9 +326,7 @@ function abrirGraficos() {
 }
 
 function fecharGraficos() {
-  document.getElementById("drawer-graficos").classList.remove("open");
-  document.getElementById("graficos-overlay").classList.remove("open");
-  document.body.style.overflow = "";
+  fecharOverlay("drawer-graficos", "graficos-overlay");
 }
 
 function corCSS(nome) {
@@ -671,7 +811,7 @@ async function montarImabLongo(forcar) {
     if (gabarito.size < 36) throw new Error("gabarito IMAB11 indisponível no dados.js");
 
     // Fase 0: ping rápido — se o BCB não responde, avisa já com o motivo
-    status.innerHTML = "⏳ Conectando ao Banco Central (SGS)…";
+    status.innerHTML = "<svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><circle cx='12' cy='12' r='8.5'/><path d='M12 7.5V12l3 2'/></svg> Conectando ao Banco Central (SGS)…";
     await buscarSgs(SGS_CDI_MENSAL, { ultimos: 1 }, 8000);
 
     // Fase 1: descobrir QUAL série é o IMA-B. Pede o FIM de cada candidata
@@ -679,7 +819,7 @@ async function montarImabLongo(forcar) {
     // interpretações possíveis (número-índice e variação %): a validação
     // contra o IMAB11 decide. Se nada passar, o erro lista o que veio de
     // cada candidata — diagnóstico completo na tela.
-    status.innerHTML = "⏳ Identificando a série do IMA-B (validando contra o IMAB11)…";
+    status.innerHTML = "<svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><circle cx='12' cy='12' r='8.5'/><path d='M12 7.5V12l3 2'/></svg> Identificando a série do IMA-B (validando contra o IMAB11)…";
     const amostras = await Promise.allSettled(
       SGS_IMAB_CANDIDATOS.map(c => buscarSgs(c, { ultimos: 900 }, 15000)),
     );
@@ -712,7 +852,7 @@ async function montarImabLongo(forcar) {
     }
 
     // Fase 2: histórico completo do aprovado + CDI e IPCA mensais (em blocos)
-    status.innerHTML = "⏳ Baixando o histórico completo (desde 2004)…";
+    status.innerHTML = "<svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><circle cx='12' cy='12' r='8.5'/><path d='M12 7.5V12l3 2'/></svg> Baixando o histórico completo (desde 2004)…";
     const [imabFull, cdiFull, ipcaFull] = await Promise.all([
       buscarSgsLongo(escolhido.codigo, 2003),
       buscarSgsLongo(SGS_CDI_MENSAL, 2003),
@@ -771,7 +911,7 @@ async function montarImabLongo(forcar) {
     if (/Failed to fetch|NetworkError|Load failed/i.test(motivo)) {
       motivo = "o navegador não conseguiu falar com api.bcb.gov.br — bloqueio de rede/CORS ou BCB fora do ar";
     }
-    status.innerHTML = `⚠️ Não consegui montar a série longa agora (${motivo}).
+    status.innerHTML = `<svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><path d='M12 4 2.8 20h18.4z'/><path d='M12 10v4M12 17.1v.1'/></svg> Não consegui montar a série longa agora (${motivo}).
       <button class="grafico-periodo-btn" onclick="montarImabLongo(true)">Tentar de novo</button>`;
   } finally {
     imabLongoBuscando = false;
@@ -832,7 +972,7 @@ function renderImabLongo(payload) {
     const emenda = payload.emendaDesde
       ? ` · índice ANBIMA (SGS) até a descontinuação; de ${mesLabel(payload.emendaDesde)} em diante, ETF IMAB11`
       : "";
-    status.innerHTML = `✅ SGS série ${codigo}, validada contra o IMAB11 (correlação ${verif.corr.toFixed(3)}
+    status.innerHTML = `<svg class='ico' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true' style='vertical-align:-2px'><path d='m5 12.5 5 5 9-10.5'/></svg> SGS série ${codigo}, validada contra o IMAB11 (correlação ${verif.corr.toFixed(3)}
       em ${verif.meses} meses)${emenda} · buscado em ${dd}/${mm}/${data.getFullYear()}
       <button class="grafico-periodo-btn" onclick="montarImabLongo(true)">Atualizar</button>`;
   }
@@ -850,3 +990,149 @@ const GRAFICOS_META = {
 // graficosInseridos: array de { tipo, posicao }
 // posicao: "inicio" | "fim" | "etapa-0".."etapa-3" (depois da etapa N do framework)
 
+
+/* =================================================================================
+   FAB ÚNICO DE FERRAMENTAS — teclado, foco e fechamento previsível
+   O botão "Ferramentas" abre uma lista de atalhos da tela. Enquanto fechada, os
+   itens saem da ordem de tabulação (senão o Tab cai em botões invisíveis).
+   ================================================================================= */
+function _fabEls() {
+  return {
+    menu: document.getElementById("fab-menu"),
+    toggle: document.getElementById("fab-toggle"),
+    itens: Array.prototype.slice.call(document.querySelectorAll("#fab-menu .fab-item"))
+  };
+}
+
+function fabMenuAberto() {
+  var m = document.getElementById("fab-menu");
+  return !!m && m.classList.contains("aberto");
+}
+
+function _sincronizarTabIndexFab(aberto) {
+  var e = _fabEls();
+  e.itens.forEach(function (b) {
+    var disponivel = aberto && b.classList.contains("visible");
+    b.setAttribute("tabindex", disponivel ? "0" : "-1");
+    b.setAttribute("aria-hidden", disponivel ? "false" : "true");
+  });
+}
+
+function abrirFabMenu() {
+  var e = _fabEls();
+  if (!e.menu || !e.toggle) return;
+  e.menu.classList.add("aberto");
+  e.toggle.setAttribute("aria-expanded", "true");
+  _sincronizarTabIndexFab(true);
+  var primeiro = e.itens.filter(function (b) { return b.classList.contains("visible"); })[0];
+  if (primeiro) setTimeout(function () { if (fabMenuAberto()) primeiro.focus(); }, 40);
+}
+
+function fecharFabMenu(devolverFoco) {
+  var e = _fabEls();
+  if (!e.menu) return;
+  var estava = e.menu.classList.contains("aberto");
+  e.menu.classList.remove("aberto");
+  if (e.toggle) e.toggle.setAttribute("aria-expanded", "false");
+  _sincronizarTabIndexFab(false);
+  if (estava && devolverFoco && e.toggle) e.toggle.focus();
+}
+
+function toggleFabMenu() {
+  if (fabMenuAberto()) fecharFabMenu(true); else abrirFabMenu();
+}
+
+function fabMenuTeclado(ev) {
+  var e = _fabEls();
+  if (!e.menu) return;
+  var dentro = e.menu.contains(ev.target);
+  if (ev.key === "Escape" && fabMenuAberto() && dentro) {
+    ev.stopPropagation();
+    fecharFabMenu(true);
+    return;
+  }
+  if (!fabMenuAberto() || !dentro) return;
+  var lista = e.itens.filter(function (b) { return b.classList.contains("visible"); });
+  if (!lista.length) return;
+  var i = lista.indexOf(document.activeElement);
+  if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+    ev.preventDefault();
+    var passo = ev.key === "ArrowDown" ? 1 : -1;
+    var prox = i < 0 ? (passo > 0 ? 0 : lista.length - 1) : (i + passo + lista.length) % lista.length;
+    lista[prox].focus();
+  } else if (ev.key === "Home") { ev.preventDefault(); lista[0].focus(); }
+  else if (ev.key === "End") { ev.preventDefault(); lista[lista.length - 1].focus(); }
+  else if (ev.key === "Tab") {
+    // Tab sai do menu: fecha sem prender o foco (o menu é um atalho, não um diálogo)
+    setTimeout(function () {
+      var m = document.getElementById("fab-menu");
+      if (m && !m.contains(document.activeElement)) fecharFabMenu(false);
+    }, 0);
+  }
+}
+
+/* =================================================================================
+   MENU DE UTILIDADES DA TOPBAR (<details class="menu">) — Esc fecha e devolve o
+   foco ao gatilho; clique fora fecha; setas percorrem os itens.
+   ================================================================================= */
+function fecharMenuTopbar(devolverFoco) {
+  var d = document.getElementById("menu-topbar");
+  if (!d || !d.open) return;
+  d.open = false;
+  if (devolverFoco) {
+    var sum = d.querySelector("summary");
+    if (sum) sum.focus();
+  }
+}
+
+function menuTopbarTeclado(ev) {
+  var d = document.getElementById("menu-topbar");
+  if (!d || !d.open || !d.contains(ev.target)) return;
+  if (ev.key === "Escape") { ev.stopPropagation(); fecharMenuTopbar(true); return; }
+  var itens = Array.prototype.slice.call(d.querySelectorAll(".menu__painel button"));
+  if (!itens.length) return;
+  if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+    ev.preventDefault();
+    var i = itens.indexOf(document.activeElement);
+    var passo = ev.key === "ArrowDown" ? 1 : -1;
+    var prox = i < 0 ? (passo > 0 ? 0 : itens.length - 1) : (i + passo + itens.length) % itens.length;
+    itens[prox].focus();
+  }
+}
+
+(function ligarMenusDeFerramentas() {
+  function ligar() {
+    var toggle = document.getElementById("fab-toggle");
+    if (toggle) toggle.addEventListener("click", function (ev) { ev.preventDefault(); toggleFabMenu(); });
+    _sincronizarTabIndexFab(fabMenuAberto());
+
+    document.addEventListener("keydown", function (ev) {
+      fabMenuTeclado(ev);
+      menuTopbarTeclado(ev);
+    });
+
+    document.addEventListener("click", function (ev) {
+      var menu = document.getElementById("fab-menu");
+      if (menu && fabMenuAberto() && !menu.contains(ev.target)) fecharFabMenu(false);
+      var d = document.getElementById("menu-topbar");
+      if (d && d.open && !d.contains(ev.target)) d.open = false;
+    });
+
+    var d = document.getElementById("menu-topbar");
+    if (d) {
+      d.addEventListener("toggle", function () {
+        if (!d.open) return;
+        var primeiro = d.querySelector(".menu__painel button");
+        if (primeiro) setTimeout(function () { if (d.open) primeiro.focus(); }, 40);
+      });
+      // Clicar num item do menu executa a ação e fecha o painel
+      d.addEventListener("click", function (ev) {
+        if (ev.target.closest && ev.target.closest(".menu__painel button")) {
+          setTimeout(function () { fecharMenuTopbar(false); }, 0);
+        }
+      });
+    }
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", ligar);
+  else ligar();
+})();
