@@ -29,13 +29,28 @@
     function el(id) { return document.getElementById(id); }
 
     function fmtPct(v, decimals) {
+        if (v === null || v === undefined || isNaN(v)) return '—';
         decimals = decimals !== undefined ? decimals : 2;
         return (v * 100).toFixed(decimals).replace('.', ',') + '%';
     }
 
     function fmtNum(v, decimals) {
+        if (v === null || v === undefined || isNaN(v)) return '—';
         decimals = decimals !== undefined ? decimals : 2;
         return v.toFixed(decimals).replace('.', ',');
+    }
+
+    // Valor que JA vem na escala de porcentagem (0-100): so formata e cola o
+    // sinal, sem multiplicar por 100 de novo. null/NaN viram "—".
+    function pctDireto(v, decimals) {
+        if (v === null || v === undefined || isNaN(v)) return '—';
+        decimals = decimals !== undefined ? decimals : 2;
+        return v.toFixed(decimals).replace('.', ',') + '%';
+    }
+
+    function fmtData(dataStr) {
+        if (!dataStr) return '—';
+        return formatDateBR(dataStr);
     }
 
     function todayStr() {
@@ -54,64 +69,287 @@
     }
 
     // -----------------------------------------------------------------------
-    // Step 1: Render ETF Catalog
+    // Step 1: Busca de ativos (autocomplete) + sugestoes
+    //
+    // ANTES: 15 cartoes fixos, um para cada ETF escrito a mao em catalogo.js.
+    // AGORA: o catalogo tem 670 ativos (mesmo da Academia) e cartao fixo nao
+    // escala — a busca por ticker/nome/classe virou a porta de entrada, e os
+    // ativos que TEM serie historica nesta pagina continuam a um clique, como
+    // chips de sugestao. Quem nao tem serie aparece na busca marcado "sem serie"
+    // e nao entra na carteira: e melhor recusar do que simular no vazio.
     // -----------------------------------------------------------------------
 
+    var busca = {
+        aberta: false,
+        indice: -1,      // item destacado pelo teclado
+        itens: []        // registros do catalogo atualmente listados
+    };
+
+    function escapar(txt) {
+        return String(txt === null || txt === undefined ? '' : txt)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+    }
+
+    // Linha descritiva de um ativo: classe + subclasse/descricao, sem inventar.
+    function linhaDescricao(reg) {
+        var partes = [reg.classe];
+        var detalhe = reg.subclasse || reg.descricao;
+        if (detalhe && detalhe !== reg.classe) partes.push(detalhe);
+        return partes.join(' · ');
+    }
+
     function renderCatalog() {
-        var container = el('etf-catalog');
+        renderSugestoes();
+        initBusca();
+        renderSelecionados();
+    }
+
+    // Chips com os ativos que o motor consegue simular nesta pagina.
+    function renderSugestoes() {
+        var container = el('etf-sugestoes');
         if (!container) return;
 
-        var classes = Catalogo.classes;
-        var html = '';
+        var lista = Catalogo.simulaveis();
+        var html = '<div class="zw-sugestoes__titulo">Com serie historica disponivel (' +
+            lista.length + ' de ' + Catalogo.resumo().total + ' do catalogo)</div>' +
+            '<div class="zw-sugestoes__chips">';
 
-        var classKeys = Object.keys(classes);
-        for (var c = 0; c < classKeys.length; c++) {
-            var classId = classKeys[c];
-            var classInfo = classes[classId];
-            var etfs = Catalogo.porClasse(classId);
-            if (etfs.length === 0) continue;
-
-            html += '<div class="zw-etf-group">';
-            html += '<div class="zw-etf-group__title">' + classInfo.nome + '</div>';
-            html += '<div class="zw-etf-grid">';
-
-            for (var i = 0; i < etfs.length; i++) {
-                var etf = etfs[i];
-                html += '<div class="zw-etf-card" data-ticker="' + etf.ticker + '">';
-                html += '<div class="zw-etf-card__ticker">' + etf.ticker + '</div>';
-                html += '<div class="zw-etf-card__name">' + etf.nome + '</div>';
-                html += '<div class="zw-etf-card__desc">' + etf.descricao + '</div>';
-                html += '</div>';
-            }
-
-            html += '</div></div>';
+        for (var i = 0; i < lista.length; i++) {
+            var a = lista[i];
+            html += '<button type="button" class="zw-chip" data-ticker="' + escapar(a.ticker) + '"' +
+                ' title="' + escapar(a.nome + ' — ' + linhaDescricao(a)) + '"' +
+                ' aria-pressed="' + (state.selected[a.ticker] !== undefined ? 'true' : 'false') + '">' +
+                escapar(a.ticker) + '</button>';
         }
-
+        html += '</div>';
         container.innerHTML = html;
 
-        // Attach click handlers
-        var cards = container.querySelectorAll('.zw-etf-card');
-        for (var j = 0; j < cards.length; j++) {
-            cards[j].addEventListener('click', onEtfCardClick);
+        var chips = container.querySelectorAll('.zw-chip');
+        for (var c = 0; c < chips.length; c++) {
+            chips[c].addEventListener('click', function () {
+                alternarAtivo(this.getAttribute('data-ticker'));
+            });
         }
     }
 
-    function onEtfCardClick(e) {
-        var card = e.currentTarget;
-        var ticker = card.getAttribute('data-ticker');
+    function sincronizarChips() {
+        var chips = $$('#etf-sugestoes .zw-chip');
+        for (var i = 0; i < chips.length; i++) {
+            var t = chips[i].getAttribute('data-ticker');
+            var on = state.selected[t] !== undefined;
+            chips[i].classList.toggle('is-on', on);
+            chips[i].setAttribute('aria-pressed', on ? 'true' : 'false');
+        }
+    }
 
-        if (state.selected[ticker] !== undefined) {
-            // Deselect
-            delete state.selected[ticker];
-            card.classList.remove('selected');
+    function initBusca() {
+        var input = el('busca-ativo');
+        var lista = el('busca-resultados');
+        if (!input || !lista) return;
+
+        input.addEventListener('input', function () {
+            abrirBusca(this.value);
+        });
+
+        input.addEventListener('focus', function () {
+            if (this.value) abrirBusca(this.value);
+        });
+
+        input.addEventListener('keydown', function (ev) {
+            if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
+                if (!busca.aberta) { abrirBusca(this.value || ''); }
+                if (!busca.itens.length) return;
+                ev.preventDefault();
+                busca.indice += (ev.key === 'ArrowDown' ? 1 : -1);
+                if (busca.indice < 0) busca.indice = busca.itens.length - 1;
+                if (busca.indice >= busca.itens.length) busca.indice = 0;
+                destacarItem();
+            } else if (ev.key === 'Enter') {
+                if (busca.aberta && busca.indice >= 0 && busca.itens[busca.indice]) {
+                    ev.preventDefault();
+                    escolherDaBusca(busca.itens[busca.indice].ticker);
+                }
+            } else if (ev.key === 'Escape') {
+                fecharBusca();
+            }
+        });
+
+        document.addEventListener('click', function (ev) {
+            if (!busca.aberta) return;
+            if (ev.target === input) return;
+            if (lista.contains(ev.target)) return;
+            fecharBusca();
+        });
+    }
+
+    function abrirBusca(termo) {
+        var lista = el('busca-resultados');
+        var input = el('busca-ativo');
+        if (!lista || !input) return;
+
+        busca.itens = Catalogo.buscar(termo, { limite: 30 });
+        busca.indice = busca.itens.length ? 0 : -1;
+
+        if (!busca.itens.length) {
+            lista.innerHTML = '<div class="zw-busca__vazio">Nenhum ativo do catalogo casa com "' +
+                escapar(termo) + '".</div>';
         } else {
-            // Select with default weight 0
-            state.selected[ticker] = 0;
-            card.classList.add('selected');
+            var html = '';
+            for (var i = 0; i < busca.itens.length; i++) {
+                var a = busca.itens[i];
+                var jaEsta = state.selected[a.ticker] !== undefined;
+                html += '<div class="zw-busca__item' + (i === 0 ? ' is-ativo' : '') +
+                    (a.temSerie ? '' : ' is-sem-serie') + '" role="option" data-idx="' + i +
+                    '" data-ticker="' + escapar(a.ticker) + '" aria-selected="' + (i === 0 ? 'true' : 'false') + '">';
+                html += '<span class="zw-busca__ticker">' + escapar(a.ticker) + '</span>';
+                html += '<span class="zw-busca__nome">' + escapar(a.nome) + '</span>';
+                html += '<span class="zw-busca__meta">' + escapar(linhaDescricao(a)) + '</span>';
+                html += '<span class="zw-busca__badge">' +
+                    (a.temSerie ? (jaEsta ? 'na carteira' : 'simulavel') : 'sem serie') + '</span>';
+                html += '</div>';
+            }
+            lista.innerHTML = html;
+
+            var itens = lista.querySelectorAll('.zw-busca__item');
+            for (var j = 0; j < itens.length; j++) {
+                // 'mousedown' com preventDefault segura o foco no campo de busca
+                // (senao o blur fecha a lista antes do clique virar 'click');
+                // 'click' e quem de fato escolhe, para que clique de teclado,
+                // toque e clique programatico tambem funcionem.
+                itens[j].addEventListener('mousedown', function (ev) { ev.preventDefault(); });
+                itens[j].addEventListener('click', function () {
+                    escolherDaBusca(this.getAttribute('data-ticker'));
+                });
+            }
         }
 
+        lista.hidden = false;
+        busca.aberta = true;
+        input.setAttribute('aria-expanded', 'true');
+    }
+
+    function destacarItem() {
+        var lista = el('busca-resultados');
+        if (!lista) return;
+        var itens = lista.querySelectorAll('.zw-busca__item');
+        for (var i = 0; i < itens.length; i++) {
+            var on = (parseInt(itens[i].getAttribute('data-idx'), 10) === busca.indice);
+            itens[i].classList.toggle('is-ativo', on);
+            itens[i].setAttribute('aria-selected', on ? 'true' : 'false');
+            if (on && itens[i].scrollIntoView) {
+                itens[i].scrollIntoView({ block: 'nearest' });
+            }
+        }
+    }
+
+    function fecharBusca() {
+        var lista = el('busca-resultados');
+        var input = el('busca-ativo');
+        if (lista) lista.hidden = true;
+        if (input) input.setAttribute('aria-expanded', 'false');
+        busca.aberta = false;
+        busca.indice = -1;
+    }
+
+    function avisoBusca(texto, tipo) {
+        var aviso = el('busca-aviso');
+        if (!aviso) return;
+        aviso.textContent = texto || '';
+        aviso.className = 'zw-busca__aviso' + (texto ? ' is-' + (tipo || 'info') : '');
+    }
+
+    // Escolha vinda da lista: recusa quem nao tem serie, com motivo na tela.
+    function escolherDaBusca(ticker) {
+        var reg = Catalogo.porTicker(ticker);
+        if (!reg) return;
+
+        if (!reg.temSerie) {
+            avisoBusca(reg.ticker + ' esta no catalogo, mas nao tem serie historica nesta pagina — ' +
+                'sem serie nao da para simular, entao ele nao entra na carteira.', 'erro');
+            return;
+        }
+
+        if (state.selected[reg.ticker] !== undefined) {
+            avisoBusca(reg.ticker + ' ja esta na carteira.', 'info');
+        } else {
+            adicionarAtivo(reg.ticker);
+            avisoBusca(reg.ticker + ' adicionado. Defina o peso abaixo.', 'ok');
+        }
+
+        var input = el('busca-ativo');
+        if (input) { input.value = ''; input.focus(); }
+        fecharBusca();
+    }
+
+    function adicionarAtivo(ticker) {
+        if (state.selected[ticker] !== undefined) return;
+        state.selected[ticker] = 0;
+        aposMudarSelecao();
+    }
+
+    function removerAtivo(ticker) {
+        if (state.selected[ticker] === undefined) return;
+        delete state.selected[ticker];
+        aposMudarSelecao();
+    }
+
+    function alternarAtivo(ticker) {
+        if (state.selected[ticker] === undefined) {
+            var reg = Catalogo.porTicker(ticker);
+            if (!reg || !reg.temSerie) {
+                avisoBusca((ticker || '') + ' nao tem serie historica nesta pagina.', 'erro');
+                return;
+            }
+            adicionarAtivo(ticker);
+        } else {
+            removerAtivo(ticker);
+        }
+    }
+
+    function aposMudarSelecao() {
+        sincronizarChips();
+        renderSelecionados();
         renderWeightSliders();
         updateTotal();
+    }
+
+    // Resumo do que ja esta na carteira (com botao de remover em cada item).
+    function renderSelecionados() {
+        var box = el('etf-catalog');
+        if (!box) return;
+
+        var tickers = Object.keys(state.selected);
+        if (!tickers.length) {
+            box.innerHTML = '<p class="zw-selecionados__vazio">Nenhum ativo escolhido ainda. ' +
+                'Busque acima ou clique numa das sugestoes.</p>';
+            return;
+        }
+
+        var html = '<div class="zw-selecionados__titulo">Na carteira (' + tickers.length + ')</div>' +
+            '<div class="zw-selecionados__lista">';
+        for (var i = 0; i < tickers.length; i++) {
+            var reg = Catalogo.porTicker(tickers[i]);
+            var nome = reg ? reg.nome : tickers[i];
+            var meta = reg ? linhaDescricao(reg) : '—';
+            html += '<div class="zw-selecionado" data-ticker="' + escapar(tickers[i]) + '">';
+            html += '<div><span class="zw-selecionado__ticker">' + escapar(tickers[i]) + '</span>' +
+                '<span class="zw-selecionado__nome">' + escapar(nome) + '</span>' +
+                '<span class="zw-selecionado__meta">' + escapar(meta) + '</span></div>';
+            html += '<button type="button" class="zw-selecionado__remover" data-ticker="' +
+                escapar(tickers[i]) + '" aria-label="Remover ' + escapar(tickers[i]) +
+                ' da carteira" title="Remover">&times;</button>';
+            html += '</div>';
+        }
+        html += '</div>';
+        box.innerHTML = html;
+
+        var botoes = box.querySelectorAll('.zw-selecionado__remover');
+        for (var b = 0; b < botoes.length; b++) {
+            botoes[b].addEventListener('click', function () {
+                removerAtivo(this.getAttribute('data-ticker'));
+            });
+        }
     }
 
     // -----------------------------------------------------------------------
@@ -134,12 +372,14 @@
             var ticker = tickers[i];
             var weight = state.selected[ticker] || 0;
             var etfInfo = Catalogo.porTicker(ticker);
-            var label = etfInfo ? ticker : ticker;
+            // Rotulo com nome: com 670 ativos no catalogo, ticker sozinho vira sopa de letras.
+            var label = '<span class="zw-weight-row__ticker">' + escapar(ticker) + '</span>' +
+                (etfInfo ? '<span class="zw-weight-row__nome">' + escapar(etfInfo.nome) + '</span>' : '');
 
-            html += '<div class="zw-weight-row" data-ticker="' + ticker + '">';
+            html += '<div class="zw-weight-row" data-ticker="' + escapar(ticker) + '">';
             html += '<span class="zw-weight-row__label">' + label + '</span>';
-            html += '<input type="range" class="zw-weight-row__slider" min="0" max="100" step="1" value="' + weight + '" data-ticker="' + ticker + '">';
-            html += '<input type="number" class="zw-weight-row__input zw-field" min="0" max="100" step="1" value="' + weight + '" data-ticker="' + ticker + '">';
+            html += '<input type="range" class="zw-weight-row__slider" min="0" max="100" step="0.1" value="' + weight + '" data-ticker="' + ticker + '">';
+            html += '<input type="number" class="zw-weight-row__input zw-field" min="0" max="100" step="0.1" value="' + weight + '" data-ticker="' + ticker + '">';
             html += '<span class="zw-weight-row__pct">%</span>';
             html += '</div>';
         }
@@ -160,7 +400,7 @@
 
     function onSliderChange(e) {
         var ticker = e.target.getAttribute('data-ticker');
-        var val = parseInt(e.target.value, 10) || 0;
+        var val = parseFloat(e.target.value) || 0;
         state.selected[ticker] = val;
 
         // Sync the number input
@@ -173,7 +413,7 @@
 
     function onWeightInputChange(e) {
         var ticker = e.target.getAttribute('data-ticker');
-        var val = parseInt(e.target.value, 10) || 0;
+        var val = parseFloat(e.target.value) || 0;
         if (val < 0) val = 0;
         if (val > 100) val = 100;
         state.selected[ticker] = val;
@@ -198,12 +438,17 @@
         var pctLabel = el('total-pct');
         var validationMsg = el('step1-validation');
 
-        pctLabel.textContent = total + '%';
+        // Tolerância de ±0,1 p.p. para acomodar arredondamento de decimais
+        var TOLERANCIA = 0.1;
+        var totalTexto = fmtNum(total, 1);
+        pctLabel.textContent = totalTexto + '%';
 
         var pctWidth = Math.min(total, 100);
         fill.style.width = pctWidth + '%';
 
-        if (total === 100 && tickers.length >= 2) {
+        var somaOk = Math.abs(total - 100) <= TOLERANCIA;
+
+        if (somaOk && tickers.length >= 2) {
             bar.className = 'zw-total-bar is-valid';
             fill.style.background = '#14B550';
             validationMsg.textContent = 'Carteira válida: ' + tickers.length + ' ativos, soma 100%.';
@@ -214,7 +459,7 @@
 
             var msgs = [];
             if (tickers.length < 2) msgs.push('Selecione pelo menos 2 ativos');
-            if (total !== 100) msgs.push('A soma dos pesos deve ser exatamente 100% (atual: ' + total + '%)');
+            if (!somaOk) msgs.push('A soma dos pesos deve ser 100% ± 0,1 p.p. (atual: ' + totalTexto + '%)');
             validationMsg.textContent = msgs.join('. ') + '.';
             validationMsg.className = 'zw-validation-msg is-error';
         }
@@ -226,7 +471,7 @@
         for (var i = 0; i < tickers.length; i++) {
             total += state.selected[tickers[i]] || 0;
         }
-        return tickers.length >= 2 && total === 100;
+        return tickers.length >= 2 && Math.abs(total - 100) <= 0.1;
     }
 
     // -----------------------------------------------------------------------
@@ -274,7 +519,7 @@
         var aporteMensal = Simulathos.parseCurrency(el('aporte-mensal').value);
         var dataInicio = el('data-inicio').value;
         var dataFim = el('data-fim').value;
-        var rebalDias = parseInt(el('rebalanceamento').value, 10);
+        var rebalDias = Number(el('rebalanceamento').value) || 0;
 
         // Build pesos map (fraction 0-1)
         var pesos = {};
@@ -289,9 +534,12 @@
         if (window.DADOS && window.DADOS.etfs) {
             var dataMapEmbed = {};
             for (var te = 0; te < tickers.length; te++) {
-                if (window.DADOS.etfs[tickers[te]]) {
-                    dataMapEmbed[tickers[te]] = window.DADOS.etfs[tickers[te]];
-                }
+                // A serie pode estar no universo "etfs" (B3) ou "offshore" (US/IE).
+                // Antes so o primeiro era lido: escolher GLD/IWDA passava adiante
+                // uma serie undefined em vez de dado.
+                var serie = window.DADOS.etfs[tickers[te]] ||
+                    (window.DADOS.offshore && window.DADOS.offshore[tickers[te]]) || null;
+                if (serie) dataMapEmbed[tickers[te]] = serie;
             }
             dataMapEmbed['_cdi'] = window.DADOS.cdi;
             dataMapEmbed['_ibov'] = window.DADOS.ibov;
@@ -461,6 +709,7 @@
         var curvas = bruto.curvas || {};
         var corr = bruto.correlacao || { labels: [], matrix: [] };
         var comp = bruto.composicao || { labels: [], pesos: [] };
+        var compAlvo = bruto.composicaoAlvo || { labels: [], pesos: [] };
         var datas = curvas.datas || [];
 
         function zip(valores) {
@@ -477,21 +726,31 @@
             pesosFinais[comp.labels[i]] = comp.pesos[i];
         }
 
+        var pesosAlvo = {};
+        for (var j = 0; j < compAlvo.labels.length; j++) {
+            pesosAlvo[compAlvo.labels[j]] = compAlvo.pesos[j];
+        }
+
         return {
             retornoAcumulado:  resumo.retornoAcumulado,
             retornoAnualizado: resumo.retornoAnualizado,
             volatilidade:      resumo.volatilidade,
             sharpe:            resumo.sharpe,
+            sortino:           resumo.sortino,
+            ulcerIndex:        resumo.ulcerIndex,
             drawdownMaximo:    resumo.drawdownMaximo,
             beta:              resumo.beta,
             percentualCDI:     resumo.percentualCDI,
             diasUteis:         resumo.diasUteis,
+            diasCorridos:      resumo.diasCorridos,
+            diagnostico:       resumo.diagnostico,
             curvaCarteira:     zip(curvas.carteira),
             curvaCdi:          zip(curvas.cdi),
             curvaIbov:         zip(curvas.ibov),
             curvaIpca5:        zip(curvas.ipcaMais5),
             matrizCorrelacao:  { labels: corr.labels, matrix: corr.matrix },
-            pesosFinais:       pesosFinais
+            pesosFinais:       pesosFinais,
+            pesosAlvo:         pesosAlvo
         };
     }
 
@@ -500,12 +759,30 @@
         el('res-retorno-acum').textContent = fmtPct(res.retornoAcumulado);
 
         // Metric cards
-        el('res-retorno-anual').textContent = fmtPct(res.retornoAnualizado);
+        var labelAnual = el('res-retorno-anual-label');
+        if (res.retornoAnualizado === null || res.retornoAnualizado === undefined) {
+            if (labelAnual) labelAnual.textContent = 'Retorno do Período';
+            el('res-retorno-anual').textContent = fmtPct(res.retornoAcumulado);
+        } else {
+            if (labelAnual) labelAnual.textContent = 'Retorno Anualizado';
+            el('res-retorno-anual').textContent = fmtPct(res.retornoAnualizado);
+        }
         el('res-volatilidade').textContent = fmtPct(res.volatilidade);
         el('res-sharpe').textContent = fmtNum(res.sharpe);
         el('res-drawdown').textContent = fmtPct(res.drawdownMaximo);
         el('res-beta').textContent = fmtNum(res.beta);
-        el('res-pct-cdi').textContent = fmtNum(res.percentualCDI) + '%';
+        el('res-pct-cdi').textContent = res.percentualCDI === null || res.percentualCDI === undefined ? '—' : fmtNum(res.percentualCDI) + '%';
+        var elSortino = el('res-sortino');
+        if (elSortino) elSortino.textContent = fmtNum(res.sortino);
+        // AIDA-01 — Ulcer Index ja vem do motor NA ESCALA DE PORCENTAGEM
+        // (metricas.js:ulcerIndex devolve 9.57 para "9,57%"). Passar isso por
+        // fmtPct(), que multiplica por 100, mostrava 956,67% — 100x o valor real.
+        // Aqui formata o numero e cola o "%", sem segunda conversao de escala.
+        var elUlcer = el('res-ulcer');
+        if (elUlcer) elUlcer.textContent = pctDireto(res.ulcerIndex);
+
+        // Diagnostico da janela de dados
+        renderDiagnostico(res.diagnostico);
 
         // Charts
         renderChartPatrimonio(res, config);
@@ -516,6 +793,39 @@
 
         // Status box
         renderStatusBox(res);
+    }
+
+    // Monta a frase do diagnostico do motor (janela real, pregoes, corte de
+    // dados, CDI faltante, ativo que limitou). Devolve '' quando o motor nao
+    // mandou diagnostico — nada de frase generica sem lastro.
+    function textoDiagnostico(diag) {
+        if (!diag) return '';
+
+        var partes = [];
+        partes.push('Janela: ' + fmtData(diag.primeiraData) + ' a ' + fmtData(diag.ultimaData));
+        if (typeof diag.diasUteis === 'number') {
+            partes.push(diag.diasUteis + ' pregões');
+        }
+        if (diag.dataCorteDados) {
+            partes.push('dados até ' + fmtData(diag.dataCorteDados));
+        }
+        if (diag.cdiFaltante) {
+            partes.push('CDI faltante em ' + diag.cdiFaltante + ' dias');
+        }
+
+        var texto = partes.join(' · ');
+        if (diag.ativoLimitante) {
+            texto += ' — janela limitada por ' + diag.ativoLimitante;
+        }
+        return texto;
+    }
+
+    function renderDiagnostico(diag) {
+        var diagEl = el('res-diagnostico');
+        if (!diagEl) return;
+        var texto = textoDiagnostico(diag);
+        diagEl.textContent = texto;
+        diagEl.style.display = texto ? '' : 'none';
     }
 
     // -----------------------------------------------------------------------
@@ -703,36 +1013,54 @@
             state.charts.composicao = null;
         }
 
-        // Use final weights from the backtest result, or fall back to original allocation
+        // Composição final (após drift/rebalanceamento) vs composição alvo (entrada)
         var pesosFinais = res.pesosFinais || config.pesos;
-        var tickers = Object.keys(pesosFinais);
+        var pesosAlvo = res.pesosAlvo || config.pesos;
+
+        // União dos tickers presentes em qualquer um dos dois conjuntos
+        var tickersSet = {};
+        var t;
+        for (t in pesosAlvo) { if (pesosAlvo.hasOwnProperty(t)) tickersSet[t] = true; }
+        for (t in pesosFinais) { if (pesosFinais.hasOwnProperty(t)) tickersSet[t] = true; }
+        var tickers = Object.keys(tickersSet).sort();
+
         var labels = [];
-        var data = [];
-        var colors = [
-            '#010E30', '#2980B9', '#27AE60', '#E67E22', '#8E44AD',
-            '#E74C3C', '#1ABC9C', '#F39C12', '#34495E', '#D35400',
-            '#16A085', '#C0392B', '#7F8C8D', '#2C3E50', '#9B59B6'
-        ];
+        var dataAlvo = [];
+        var dataFinal = [];
 
         for (var i = 0; i < tickers.length; i++) {
             labels.push(tickers[i]);
-            data.push(Math.round(pesosFinais[tickers[i]] * 10000) / 100); // to % with 2 decimals
+            var alvo = pesosAlvo[tickers[i]] || 0;
+            var final = pesosFinais[tickers[i]] || 0;
+            dataAlvo.push(Math.round(alvo * 10000) / 100); // % com 2 casas
+            dataFinal.push(Math.round(final * 10000) / 100);
         }
 
         state.charts.composicao = new Chart(canvas, {
-            type: 'doughnut',
+            type: 'bar',
             data: {
                 labels: labels,
-                datasets: [{
-                    data: data,
-                    backgroundColor: colors.slice(0, tickers.length),
-                    borderWidth: 2,
-                    borderColor: '#fff'
-                }]
+                datasets: [
+                    {
+                        label: 'Alocação alvo',
+                        data: dataAlvo,
+                        backgroundColor: 'rgba(1, 14, 48, 0.35)',
+                        borderColor: '#010E30',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Composição final',
+                        data: dataFinal,
+                        backgroundColor: '#14B550',
+                        borderColor: '#14B550',
+                        borderWidth: 1
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
+                indexAxis: 'y',
                 plugins: {
                     legend: {
                         position: 'bottom',
@@ -741,9 +1069,23 @@
                     tooltip: {
                         callbacks: {
                             label: function (ctx) {
-                                return ctx.label + ': ' + ctx.parsed.toFixed(1) + '%';
+                                return ctx.dataset.label + ': ' + ctx.parsed.x.toFixed(1) + '%';
                             }
                         }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function (val) { return val + '%'; },
+                            font: { size: 11 }
+                        },
+                        grid: { color: 'rgba(0,0,0,0.04)' }
+                    },
+                    y: {
+                        grid: { display: false },
+                        ticks: { font: { size: 12 } }
                     }
                 }
             }
@@ -868,7 +1210,7 @@
         for (var i = 0; i < tickers.length; i++) {
             var etfInfo = Catalogo.porTicker(tickers[i]);
             var nome = etfInfo ? etfInfo.nome : tickers[i];
-            var peso = (config.pesos[tickers[i]] * 100).toFixed(0);
+            var peso = fmtNum(config.pesos[tickers[i]] * 100, 1);
             carteiraHtml += '<div class="zw-relatorio-item"><span>' + tickers[i] + ' — ' + nome + '</span><span>' + peso + '%</span></div>';
         }
         el('rel-carteira').innerHTML = carteiraHtml;
@@ -891,8 +1233,25 @@
         metricasHtml += '<div class="zw-relatorio-item"><span>Índice Sharpe</span><span>' + fmtNum(res.sharpe) + '</span></div>';
         metricasHtml += '<div class="zw-relatorio-item"><span>Drawdown máximo</span><span>' + fmtPct(res.drawdownMaximo) + '</span></div>';
         metricasHtml += '<div class="zw-relatorio-item"><span>Beta (vs Ibovespa)</span><span>' + fmtNum(res.beta) + '</span></div>';
-        metricasHtml += '<div class="zw-relatorio-item"><span>% do CDI</span><span>' + fmtNum(res.percentualCDI) + '%</span></div>';
+        // % do CDI: quando o motor nao consegue calcular (sem sobreposicao de
+        // CDI na janela) o valor e null — mostrar "—%" era meio numero. Agora "—".
+        metricasHtml += '<div class="zw-relatorio-item"><span>% do CDI</span><span>' +
+            (res.percentualCDI === null || res.percentualCDI === undefined ? '—' : fmtNum(res.percentualCDI) + '%') +
+            '</span></div>';
+        // Sortino e Ulcer existem no resultado e apareciam so no Passo 3 —
+        // o relatorio, que e o que o assessor imprime, ficava sem eles.
+        metricasHtml += '<div class="zw-relatorio-item"><span>Índice Sortino</span><span>' + fmtNum(res.sortino) + '</span></div>';
+        metricasHtml += '<div class="zw-relatorio-item"><span>Índice de Úlcera</span><span>' + pctDireto(res.ulcerIndex) + '</span></div>';
         el('rel-metricas').innerHTML = metricasHtml;
+
+        // Diagnostico da janela tambem no relatorio: o numero so significa algo
+        // junto com o periodo que ele cobre e o ativo que limitou esse periodo.
+        var relDiag = el('rel-diagnostico');
+        if (relDiag) {
+            var textoDiag = textoDiagnostico(res.diagnostico);
+            relDiag.textContent = textoDiag || '';
+            relDiag.style.display = textoDiag ? '' : 'none';
+        }
 
         // Analise (reuse status box logic)
         var analiseBox = el('rel-analise');

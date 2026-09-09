@@ -1,0 +1,69 @@
+name: Atualizar dados de mercado (academia)
+
+# Roda todo dia às 09:00 UTC, busca as cotações mais recentes via
+# tools/fetch-dados.mjs (Yahoo Finance + BCB SGS) para academia/data/,
+# regenera o manifesto de procedência (academia/data/manifest.js) e
+# abre commit direto na branch se algo mudou.
+#
+# Falha o job se a última data global do manifesto ficar com mais de 7
+# dias — sinal de que a fonte parou de responder ou o fetch está quebrado.
+
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-dados:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Buscar dados (academia)
+        run: node tools/fetch-dados.mjs --target=academia
+
+      - name: Checar frescor dos dados (falha se > 7 dias)
+        run: |
+          node -e '
+            const fs = require("fs");
+            const vm = require("vm");
+            const src = fs.readFileSync("academia/data/manifest.js", "utf8");
+            const sandbox = {};
+            sandbox.window = sandbox;
+            vm.createContext(sandbox);
+            vm.runInContext(src, sandbox);
+            const manifest = sandbox.MANIFEST;
+            if (!manifest || !manifest.ultimaDataGlobal) {
+              console.error("Manifesto sem ultimaDataGlobal — fetch falhou.");
+              process.exit(1);
+            }
+            const ultima = new Date(manifest.ultimaDataGlobal + "T00:00:00Z");
+            const hoje = new Date();
+            const diasAtras = (hoje - ultima) / (1000 * 60 * 60 * 24);
+            console.log(`Última data global: ${manifest.ultimaDataGlobal} (${diasAtras.toFixed(1)} dias atrás)`);
+            if (diasAtras > 7) {
+              console.error("Dados desatualizados há mais de 7 dias — falhando o job.");
+              process.exit(1);
+            }
+          '
+
+      - name: Commitar mudanças
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add academia/data/dados.js academia/data/manifest.js academia/data/etfs academia/data/offshore academia/data/indices academia/data/cdi.json academia/data/ibov.json academia/data/ipca.json 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "Nada mudou, sem commit."
+          else
+            git commit -m "chore(dados): atualização diária automática (academia)"
+            git push
+          fi

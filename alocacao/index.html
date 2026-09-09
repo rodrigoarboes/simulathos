@@ -90,6 +90,173 @@
             margin-top: 4px;
         }
 
+        /* --- Busca de ativos (autocomplete) --- */
+        .zw-busca { margin-bottom: 20px; }
+
+        .zw-busca__label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--zw-text-muted);
+            margin-bottom: 6px;
+        }
+
+        .zw-busca__campo { position: relative; }
+
+        .zw-busca__input { width: 100%; }
+
+        .zw-busca__lista {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            z-index: 40;
+            max-height: 320px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid var(--zw-border);
+            border-radius: var(--zw-radius-sm);
+            box-shadow: 0 12px 32px rgba(16, 24, 40, 0.16);
+        }
+
+        .zw-busca__item {
+            display: grid;
+            grid-template-columns: 92px 1fr auto;
+            grid-template-areas: "ticker nome badge" "ticker meta badge";
+            align-items: center;
+            gap: 2px 12px;
+            padding: 10px 14px;
+            cursor: pointer;
+            border-bottom: 1px solid #f1f2f4;
+        }
+
+        .zw-busca__item:last-child { border-bottom: none; }
+        .zw-busca__item.is-ativo { background: #EEF4FB; }
+        .zw-busca__item.is-sem-serie { opacity: 0.62; cursor: not-allowed; }
+
+        .zw-busca__ticker {
+            grid-area: ticker;
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: -0.01em;
+        }
+
+        .zw-busca__nome { grid-area: nome; font-size: 13px; }
+
+        .zw-busca__meta {
+            grid-area: meta;
+            font-size: 11px;
+            color: var(--zw-text-muted);
+        }
+
+        .zw-busca__badge {
+            grid-area: badge;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #E8F8EE;
+            color: #0D7A33;
+            white-space: nowrap;
+        }
+
+        .zw-busca__item.is-sem-serie .zw-busca__badge { background: #F1F2F4; color: #6B7280; }
+
+        .zw-busca__vazio {
+            padding: 14px;
+            font-size: 13px;
+            color: var(--zw-text-muted);
+        }
+
+        .zw-busca__aviso { min-height: 18px; margin: 8px 0 0; font-size: 12.5px; }
+        .zw-busca__aviso.is-ok { color: #0D7A33; }
+        .zw-busca__aviso.is-erro { color: #A32020; }
+        .zw-busca__aviso.is-info { color: var(--zw-text-muted); }
+
+        /* --- Chips de sugestão (ativos com série) --- */
+        .zw-sugestoes { margin-bottom: 20px; }
+
+        .zw-sugestoes__titulo {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--zw-text-muted);
+            margin-bottom: 8px;
+        }
+
+        .zw-sugestoes__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+        .zw-chip {
+            font: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: -0.01em;
+            padding: 5px 11px;
+            border-radius: 999px;
+            border: 1px solid var(--zw-border);
+            background: #F6F7F9;
+            color: inherit;
+            cursor: pointer;
+            transition: var(--zw-transition);
+        }
+
+        .zw-chip:hover { border-color: var(--zw-primary); }
+        .zw-chip.is-on { background: var(--zw-primary); border-color: var(--zw-primary); color: #fff; }
+
+        /* --- Ativos escolhidos --- */
+        .zw-selecionados__titulo {
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--zw-text-muted);
+            margin-bottom: 8px;
+        }
+
+        .zw-selecionados__vazio { font-size: 13px; color: var(--zw-text-muted); margin: 0; }
+
+        .zw-selecionados__lista {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 8px;
+        }
+
+        .zw-selecionado {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--zw-border);
+            border-radius: var(--zw-radius-sm);
+            background: #F6F7F9;
+        }
+
+        .zw-selecionado__ticker { display: block; font-weight: 700; font-size: 13px; }
+        .zw-selecionado__nome { display: block; font-size: 12px; }
+        .zw-selecionado__meta { display: block; font-size: 11px; color: var(--zw-text-muted); }
+
+        .zw-selecionado__remover {
+            font: inherit;
+            font-size: 18px;
+            line-height: 1;
+            width: 28px;
+            height: 28px;
+            flex: none;
+            border-radius: 6px;
+            border: 1px solid var(--zw-border);
+            background: #fff;
+            color: var(--zw-text-muted);
+            cursor: pointer;
+        }
+
+        .zw-selecionado__remover:hover { border-color: #DB222A; color: #A32020; }
+
         /* --- Weight Sliders --- */
         .zw-weights-section {
             margin-top: 28px;
@@ -115,9 +282,22 @@
         }
 
         .zw-weight-row__label {
-            min-width: 90px;
+            min-width: 150px;
+            max-width: 150px;
             font-size: 14px;
             font-weight: 600;
+        }
+
+        .zw-weight-row__ticker { display: block; }
+
+        .zw-weight-row__nome {
+            display: block;
+            font-size: 11px;
+            font-weight: 400;
+            color: var(--zw-text-muted);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .zw-weight-row__slider {
@@ -356,6 +536,13 @@
             color: var(--zw-success, #14B550);
         }
 
+        .zw-diagnostico {
+            margin: -8px 0 20px;
+            font-size: 12px;
+            color: var(--zw-text-muted, #888);
+            text-align: center;
+        }
+
         /* --- Print styles --- */
         @media print {
             .zw-header, .zw-header__nav, .zw-card__footer, .zw-footer { display: none !important; }
@@ -414,11 +601,27 @@
                     </div>
                     <div class="zw-card__body">
                         <p style="font-size:14px; color:var(--zw-text-muted); margin-bottom:20px;">
-                            Selecione os ETFs que deseja incluir na carteira e defina o peso (%) de cada um. A soma dos pesos deve ser exatamente 100%.
+                            Busque os ativos que deseja incluir e defina o peso (%) de cada um. A soma dos pesos deve fechar 100% (tolerância de 0,1 p.p. para decimais).
                         </p>
 
-                        <!-- ETF catalog cards are rendered here by JS -->
-                        <div id="etf-catalog"></div>
+                        <!-- Busca com autocomplete sobre o catálogo completo -->
+                        <div class="zw-busca">
+                            <label class="zw-busca__label" for="busca-ativo">Buscar ativo no catálogo</label>
+                            <div class="zw-busca__campo">
+                                <input type="text" id="busca-ativo" class="zw-field zw-busca__input"
+                                       autocomplete="off" role="combobox" aria-expanded="false"
+                                       aria-autocomplete="list" aria-controls="busca-resultados"
+                                       placeholder="Ticker, nome ou classe — ex.: BOVA11, ouro, inflação, S&amp;P">
+                                <div id="busca-resultados" class="zw-busca__lista" role="listbox" hidden></div>
+                            </div>
+                            <p id="busca-aviso" class="zw-busca__aviso" role="status" aria-live="polite"></p>
+                        </div>
+
+                        <!-- Chips dos ativos com série histórica (renderizados por JS) -->
+                        <div id="etf-sugestoes" class="zw-sugestoes"></div>
+
+                        <!-- Ativos já escolhidos (renderizados por JS) -->
+                        <div id="etf-catalog" class="zw-selecionados"></div>
 
                         <!-- Weight sliders appear here when ETFs are selected -->
                         <div id="weight-sliders" class="zw-weights-section" style="display:none;">
@@ -436,7 +639,12 @@
                     </div>
                     <div class="zw-card__footer">
                         <span></span>
-                        <button type="button" class="zw-btn zw-btn--primary" data-next="2" id="btn-step1-next">
+                        <!-- AIDA-02: SEM data-next. Este botao tem navegacao propria (com validacao
+                             da soma dos pesos) em alocacao.js/initNavigation. Com data-next aqui,
+                             o listener generico do wizard tambem disparava e, depois que o JS
+                             removia o atributo, chamava goToStep(NaN) — o que apagava a classe
+                             "active" dos quatro passos e deixava o wizard inteiro em branco. -->
+                        <button type="button" class="zw-btn zw-btn--primary" id="btn-step1-next">
                             Pr&oacute;ximo
                             <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
                         </button>
@@ -542,7 +750,7 @@
                             <!-- Metric cards -->
                             <div class="zw-result-grid">
                                 <div class="zw-result-card">
-                                    <span class="zw-result-card__label">Retorno Anualizado</span>
+                                    <span class="zw-result-card__label" id="res-retorno-anual-label">Retorno Anualizado</span>
                                     <span class="zw-result-card__value" id="res-retorno-anual">0,00%</span>
                                 </div>
                                 <div class="zw-result-card">
@@ -565,7 +773,18 @@
                                     <span class="zw-result-card__label">% do CDI</span>
                                     <span class="zw-result-card__value" id="res-pct-cdi">0,00%</span>
                                 </div>
+                                <div class="zw-result-card">
+                                    <span class="zw-result-card__label">&Iacute;ndice Sortino</span>
+                                    <span class="zw-result-card__value" id="res-sortino">0,00</span>
+                                </div>
+                                <div class="zw-result-card">
+                                    <span class="zw-result-card__label">&Iacute;ndice de &Uacute;lcera</span>
+                                    <span class="zw-result-card__value" id="res-ulcer">0,00%</span>
+                                </div>
                             </div>
+
+                            <!-- Diagnostico da janela de dados -->
+                            <p class="zw-diagnostico" id="res-diagnostico" style="display:none;"></p>
 
                             <!-- Chart 1: Evolucao Patrimonial -->
                             <div class="zw-chart-container">
@@ -576,7 +795,7 @@
                             <!-- Chart 2: Composicao Final -->
                             <div class="zw-chart-container">
                                 <h3>Composi&ccedil;&atilde;o Final da Carteira</h3>
-                                <div style="max-width:360px; margin:0 auto;">
+                                <div style="max-width:560px; margin:0 auto;">
                                     <canvas id="chart-composicao" height="360"></canvas>
                                 </div>
                             </div>
@@ -631,6 +850,7 @@
                         <div class="zw-relatorio-section">
                             <h3>M&eacute;tricas de Desempenho</h3>
                             <div id="rel-metricas" class="zw-relatorio-grid"></div>
+                            <p class="zw-diagnostico" id="rel-diagnostico" style="display:none;"></p>
                         </div>
 
                         <div class="zw-relatorio-section">
@@ -668,8 +888,8 @@
     <script src="../shared/js/utils.js"></script>
     <script src="data/dados.js"></script>
     <script src="js/catalogo.js"></script>
-    <script src="js/metricas.js"></script>
-    <script src="js/backtest.js"></script>
+    <script src="../shared/js/motor/metricas.js"></script>
+    <script src="../shared/js/motor/backtest.js"></script>
     <script src="js/alocacao.js"></script>
     <script>
     async function atualizarDadosBCB() {
