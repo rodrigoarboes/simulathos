@@ -221,8 +221,17 @@
   background: var(--surface-1);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-md);
-  overflow: hidden;
+  /* NUNCA usar overflow:hidden aqui — o dropdown do autocomplete é
+     position:absolute dentro da linha e seria cortado (ficava só um fiapo
+     visível ao digitar). Quem arredonda a faixa de classe é ela mesma. */
+  overflow: visible;
   transition: border-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
+}
+
+/* A linha que está com o autocomplete aberto fica por cima das de baixo. */
+.alloc-row:focus-within {
+  position: relative;
+  z-index: 20;
 }
 
 .alloc-row:hover {
@@ -245,6 +254,8 @@
   width: var(--space-1);
   min-height: var(--space-6);
   background: var(--c, var(--border-subtle));
+  /* Arredonda sozinha, já que a linha não corta mais (ver .alloc-row). */
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
 }
 
 .alloc-row__ativo {
