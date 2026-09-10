@@ -2,25 +2,201 @@
 // Procedência e qualidade das séries de academia/data/dados.js.
 // Ver tools/README-dados.md para as regras de qualidade.
 window.MANIFEST = {
-  "geradoEm": "2026-09-08T15:35:57.961Z",
-  "ultimaDataGlobal": "2026-06-12",
-  "totalSeries": 669,
+  "geradoEm": "2026-09-10T13:50:19.386Z",
+  "ultimaDataGlobal": "2026-09-10",
+  "totalSeries": 637,
   "porTicker": {
-    "ACWI11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
+    "5PRE11": {
+      "primeira": "2026-02-24",
+      "ultima": "2026-09-10",
+      "pontos": 137,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "AAPL34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ABEV3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ACWI11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
         "motivos": [
           "gap_congelado"
         ]
+      }
+    },
+    "AGRI11": {
+      "primeira": "2022-05-24",
+      "ultima": "2026-09-08",
+      "pontos": 1072,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "ALPA4": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ALUG11": {
+      "primeira": "2021-10-29",
+      "ultima": "2026-09-10",
+      "pontos": 1212,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "ALUP11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ALZR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "AMZO34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "AREA11": {
+      "primeira": "2025-10-27",
+      "ultima": "2026-09-10",
+      "pontos": 209,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ARGE11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-08",
+      "pontos": 240,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ARGT39": {
+      "primeira": "2026-05-29",
+      "ultima": "2026-09-09",
+      "pontos": 72,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ASAI3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "AUPO11": {
+      "primeira": "2026-05-18",
+      "ultima": "2026-09-10",
+      "pontos": 81,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "AURO11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 241,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "AUVP11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 240,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "B3SA3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
       }
     },
     "B5P211": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -30,10 +206,334 @@ window.MANIFEST = {
         ]
       }
     },
-    "BOVA11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
+    "BAIQ39": {
+      "primeira": "2026-05-29",
+      "ultima": "2026-09-09",
+      "pontos": 72,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BBAS3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BBDC3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BBDC4": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "BBOI11": {
+      "primeira": "2022-11-28",
+      "ultima": "2026-09-10",
+      "pontos": 944,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "BBOV11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BBSD11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1245,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "BBSE3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BBUG39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-07-17",
+      "pontos": 1,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BCIC11": {
+      "primeira": "2023-02-14",
+      "ultima": "2026-09-08",
+      "pontos": 697,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BCLO39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-07-17",
+      "pontos": 1,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BCPX39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-09-10",
+      "pontos": 2,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BDAP11": {
+      "primeira": "2025-07-07",
+      "ultima": "2026-09-08",
+      "pontos": 276,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "BDEF11": {
+      "primeira": "2023-02-14",
+      "ultima": "2026-09-08",
+      "pontos": 697,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BDOM11": {
+      "primeira": "2022-09-21",
+      "ultima": "2026-09-08",
+      "pontos": 988,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "BDRI39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-09-10",
+      "pontos": 2,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BEST11": {
+      "primeira": "2025-10-27",
+      "ultima": "2026-09-10",
+      "pontos": 216,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BFNX39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-07-17",
+      "pontos": 1,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BHER39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-07-17",
+      "pontos": 1,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BITC11": {
+      "primeira": "2025-09-18",
+      "ultima": "2026-09-10",
+      "pontos": 244,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BITH11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BITI11": {
+      "primeira": "2022-11-09",
+      "ultima": "2026-09-10",
+      "pontos": 957,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito"
+        ]
+      }
+    },
+    "BKCH39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-07-17",
+      "pontos": 1,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BLBT39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-09-10",
+      "pontos": 2,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BLFT11": {
+      "primeira": "2025-10-17",
+      "ultima": "2026-09-09",
+      "pontos": 222,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BMMT11": {
+      "primeira": "2023-02-14",
+      "ultima": "2026-09-08",
+      "pontos": 697,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BNDX11": {
+      "primeira": "2022-07-13",
+      "ultima": "2026-09-10",
+      "pontos": 1038,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BOL511": {
+      "primeira": "2025-10-17",
+      "ultima": "2026-09-09",
+      "pontos": 222,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "BOTZ39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-09-10",
+      "pontos": 2,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BOVA11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BOVB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BOVS11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -41,8 +541,8 @@ window.MANIFEST = {
       }
     },
     "BOVV11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -50,10 +550,10 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "DIVO11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1247,
+    "BOVX11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -62,282 +562,90 @@ window.MANIFEST = {
         ]
       }
     },
-    "FIXA11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1242,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "HASH11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "IB5M11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1243,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "IMAB11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "IRFM11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1244,
+    "BPAC11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "IVVB11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1247,
+    "BPRE11": {
+      "primeira": "2025-10-17",
+      "ultima": "2026-09-09",
+      "pontos": 222,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "LFTS11": {
-      "primeira": "2024-02-20",
-      "ultima": "2026-05-29",
-      "pontos": 569,
+    "BQYL39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-07-17",
+      "pontos": 1,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "MATB11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1247,
+    "BRAX11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "NASD11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SMAL11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1247,
+    "BRCR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "XFIX11": {
-      "primeira": "2021-05-31",
-      "ultima": "2026-05-29",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "KNRI11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "BREW11": {
+      "primeira": "2023-02-14",
+      "ultima": "2026-09-08",
+      "pontos": 757,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "HGLG11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "BRXC11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-08",
+      "pontos": 239,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "MXRF11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "XPLG11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "HGRE11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "BSDV39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-07-17",
+      "pontos": 1,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "KNCR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "XPML11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito",
-          "gap_congelado",
-          "serie_quebrada"
-        ]
-      }
-    },
-    "VISC11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "HGBS11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "KNIP11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "IRDM11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-03-06",
-      "pontos": 1181,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "RECR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "HGRU11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "VILG11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "BSIL39": {
+      "primeira": "2022-04-18",
+      "ultima": "2026-09-10",
+      "pontos": 1100,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -347,8 +655,8 @@ window.MANIFEST = {
       }
     },
     "BTLG11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -358,9 +666,63 @@ window.MANIFEST = {
         ]
       }
     },
-    "RBRR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "BURA39": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-09-10",
+      "pontos": 2,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BVBR11": {
+      "primeira": "2026-05-18",
+      "ultima": "2026-09-08",
+      "pontos": 80,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BXPO11": {
+      "primeira": "2022-09-20",
+      "ultima": "2026-09-08",
+      "pontos": 989,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CAPE11": {
+      "primeira": "2025-07-14",
+      "ultima": "2026-09-10",
+      "pontos": 290,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CASA11": {
+      "primeira": "2025-06-02",
+      "ultima": "2026-09-10",
+      "pontos": 321,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "CASH3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -370,10 +732,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "VGHF11": {
-      "primeira": "2024-02-06",
-      "ultima": "2026-06-12",
-      "pontos": 586,
+    "CGAS5": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -382,9 +744,607 @@ window.MANIFEST = {
         ]
       }
     },
-    "HSML11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "CHIP11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 240,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito"
+        ]
+      }
+    },
+    "CLOB11": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-08",
+      "pontos": 85,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CMDB11": {
+      "primeira": "2021-11-29",
+      "ultima": "2026-09-10",
+      "pontos": 1194,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CMIG4": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "CMIN3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "COCA34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "COGN3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "COIN11": {
+      "primeira": "2024-12-13",
+      "ultima": "2026-09-10",
+      "pontos": 433,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "CORN11": {
+      "primeira": "2022-10-24",
+      "ultima": "2026-09-10",
+      "pontos": 967,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CPFE3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "CPTR11": {
+      "primeira": "2022-06-22",
+      "ultima": "2026-09-10",
+      "pontos": 1055,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CPTS11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CRPT11": {
+      "primeira": "2022-05-06",
+      "ultima": "2026-09-10",
+      "pontos": 1086,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CSAN3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "CSMG3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CVCB3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CXSE3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CYRE3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DEBB11": {
+      "primeira": "2022-06-22",
+      "ultima": "2026-09-10",
+      "pontos": 860,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "DEFI11": {
+      "primeira": "2022-02-17",
+      "ultima": "2026-09-10",
+      "pontos": 1137,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DEVA11": {
+      "primeira": "2024-02-01",
+      "ultima": "2026-09-10",
+      "pontos": 651,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "DISB34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DIVD11": {
+      "primeira": "2024-06-11",
+      "ultima": "2026-09-10",
+      "pontos": 564,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DIVO11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "DOLA11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 240,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "DOLB11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-08",
+      "pontos": 239,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DOLX11": {
+      "primeira": "2026-06-22",
+      "ultima": "2026-09-10",
+      "pontos": 57,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DVER11": {
+      "primeira": "2024-02-19",
+      "ultima": "2026-09-09",
+      "pontos": 526,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DXCO3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "EBIT11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-08",
+      "pontos": 239,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "ECOO11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1245,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "EETH11": {
+      "primeira": "2025-09-18",
+      "ultima": "2026-09-09",
+      "pontos": 243,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EGAF11": {
+      "primeira": "2022-01-28",
+      "ultima": "2026-09-10",
+      "pontos": 1150,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "EGIE3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ELAS11": {
+      "primeira": "2022-03-07",
+      "ultima": "2026-09-08",
+      "pontos": 1127,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ENEV3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EQTL3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ESGB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "ETHE11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ETHY11": {
+      "primeira": "2026-05-18",
+      "ultima": "2026-09-10",
+      "pontos": 81,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EWBZ11": {
+      "primeira": "2025-07-14",
+      "ultima": "2026-09-08",
+      "pontos": 289,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "EZTC3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FGAA11": {
+      "primeira": "2023-02-14",
+      "ultima": "2026-09-10",
+      "pontos": 891,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "FIND11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FIXA11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito",
+          "gap_congelado"
+        ]
+      }
+    },
+    "FIXX11": {
+      "primeira": "2026-02-02",
+      "ultima": "2026-09-08",
+      "pontos": 148,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FLRY3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "FOMO11": {
+      "primeira": "2025-05-19",
+      "ultima": "2026-09-08",
+      "pontos": 328,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GBIT11": {
+      "primeira": "2026-05-18",
+      "ultima": "2026-09-08",
+      "pontos": 80,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "GBTC11": {
+      "primeira": "2025-09-01",
+      "ultima": "2026-09-10",
+      "pontos": 255,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GCRA11": {
+      "primeira": "2023-11-29",
+      "ultima": "2026-09-10",
+      "pontos": 695,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GDIV11": {
+      "primeira": "2026-05-18",
+      "ultima": "2026-09-10",
+      "pontos": 81,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GENB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "GFSA3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito",
+          "gap_congelado"
+        ]
+      }
+    },
+    "GGBR4": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -393,8 +1353,8 @@ window.MANIFEST = {
       }
     },
     "GGRC11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -404,9 +1364,528 @@ window.MANIFEST = {
         ]
       }
     },
-    "RBRF11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "GICP11": {
+      "primeira": "2025-10-09",
+      "ultima": "2026-09-10",
+      "pontos": 229,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "GLDI11": {
+      "primeira": "2025-11-06",
+      "ultima": "2026-09-10",
+      "pontos": 209,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GLDX11": {
+      "primeira": "2025-06-30",
+      "ultima": "2026-09-10",
+      "pontos": 300,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GLFT11": {
+      "primeira": "2025-10-09",
+      "ultima": "2026-09-09",
+      "pontos": 225,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GOGL34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GOLB11": {
+      "primeira": "2026-06-22",
+      "ultima": "2026-09-10",
+      "pontos": 57,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GOLD11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "GOLX11": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-10",
+      "pontos": 86,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GOVE11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1244,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "GPCA11": {
+      "primeira": "2026-07-13",
+      "ultima": "2026-09-10",
+      "pontos": 42,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GPUS11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 241,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GXUS11": {
+      "primeira": "2026-05-18",
+      "ultima": "2026-09-10",
+      "pontos": 81,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HAPV3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HASH11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HCTR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HERT11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-08",
+      "pontos": 239,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HGBR11": {
+      "primeira": "2025-09-18",
+      "ultima": "2026-09-10",
+      "pontos": 244,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HGBS11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HGCR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HGLG11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HGRE11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HGRU11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HODL11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 240,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HSML11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HTEK11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HYBR11": {
+      "primeira": "2025-09-18",
+      "ultima": "2026-09-09",
+      "pontos": 243,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "IB5M11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "IBOB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IDIV": {
+      "primeira": "2026-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IMAB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "IMBB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "INTB3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "IRDM11": {
+      "primeira": "2026-03-06",
+      "ultima": "2026-03-06",
+      "pontos": 1,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IRFM11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito",
+          "gap_congelado"
+        ]
+      }
+    },
+    "ISUS11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ITSA4": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "ITUB4": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IVVB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IVWO11": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-10",
+      "pontos": 86,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWMI11": {
+      "primeira": "2024-12-13",
+      "ultima": "2026-09-10",
+      "pontos": 433,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "JGPX11": {
+      "primeira": "2021-11-29",
+      "ultima": "2026-09-10",
+      "pontos": 1195,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "JHSF3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "JNJB34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "JPMC34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "JSRE11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "KLBN11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "KNCA11": {
+      "primeira": "2022-01-18",
+      "ultima": "2026-09-10",
+      "pontos": 1161,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "KNCR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -418,8 +1897,8 @@ window.MANIFEST = {
     },
     "KNHF11": {
       "primeira": "2023-08-22",
-      "ultima": "2026-06-12",
-      "pontos": 699,
+      "ultima": "2026-09-10",
+      "pontos": 762,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -428,10 +1907,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "CPTS11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "KNIP11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -440,10 +1919,20 @@ window.MANIFEST = {
         ]
       }
     },
-    "TGAR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "KNRI11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "KNSC11": {
+      "primeira": "2022-02-17",
+      "ultima": "2026-09-10",
+      "pontos": 1138,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -452,10 +1941,20 @@ window.MANIFEST = {
         ]
       }
     },
-    "MFII11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "LFIN11": {
+      "primeira": "2025-10-27",
+      "ultima": "2026-09-08",
+      "pontos": 208,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "LFIX11": {
+      "primeira": "2026-02-11",
+      "ultima": "2026-09-10",
+      "pontos": 145,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -464,298 +1963,40 @@ window.MANIFEST = {
         ]
       }
     },
-    "DEVA11": {
-      "primeira": "2024-02-01",
-      "ultima": "2026-06-12",
-      "pontos": 589,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "HGCR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "RZTR11": {
-      "primeira": "2024-01-30",
-      "ultima": "2026-06-12",
-      "pontos": 591,
+    "LFTI11": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-10",
+      "pontos": 86,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VINO11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "PETR4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "LFTS11": {
+      "primeira": "2022-11-08",
+      "ultima": "2026-09-10",
+      "pontos": 746,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "PETR3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "LFTX11": {
+      "primeira": "2026-03-27",
+      "ultima": "2026-09-10",
+      "pontos": 115,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VALE3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ITUB4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BBDC4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BBAS3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ABEV3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "WEGE3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "B3SA3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ITSA4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BPAC11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SUZB3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RENT3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RDOR3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RADL3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PRIO3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EQTL3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GGBR4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VBBR3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RAIL3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CSAN3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "UGPA3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito"
-        ]
-      }
-    },
-    "HAPV3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "TOTS3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "LLFT11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 171,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -763,8 +2004,8 @@ window.MANIFEST = {
       }
     },
     "LREN3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -772,10 +2013,10 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "MGLU3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "LTBX11": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-10",
+      "pontos": 86,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -784,340 +2025,19 @@ window.MANIFEST = {
         ]
       }
     },
-    "CMIG4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SBSP3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "LTNB11": {
+      "primeira": "2025-09-01",
+      "ultima": "2026-09-08",
+      "pontos": 245,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
-      }
-    },
-    "VIVT3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "TIMS3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "KLBN11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ENEV3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CMIN3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ASAI3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CYRE3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BBDC3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "TAEE11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EGIE3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CPFE3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BBSE3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CXSE3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SANB11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SAPR4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CSMG3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CGAS5": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ALUP11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ALPA4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CASH3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "COGN3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CVCB3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "DXCO3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "EZTC3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "FLRY3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "GFSA3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito",
-          "gap_congelado"
-        ]
-      }
-    },
-    "JHSF3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
       }
     },
     "LWSA3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1125,467 +2045,31 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "MRVE3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "M1TA34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "MATB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
-      }
-    },
-    "YDUQ3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SMTO3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "TEND3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "VAMO3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "INTB3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ALZR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BRCR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "JSRE11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "PVBI11": {
-      "primeira": "2024-01-30",
-      "ultima": "2026-06-12",
-      "pontos": 591,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RBRP11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "RECT11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TEPP11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "TRXF11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "VRTA11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "HCTR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "KNSC11": {
-      "primeira": "2022-02-17",
-      "ultima": "2026-06-12",
-      "pontos": 1076,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
       }
     },
     "MCCI11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "VGIR11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "VSLH11": {
-      "primeira": "2024-01-31",
-      "ultima": "2026-06-12",
-      "pontos": 590,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "VGIA11": {
-      "primeira": "2021-12-15",
-      "ultima": "2026-06-12",
-      "pontos": 1120,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SNAG11": {
-      "primeira": "2022-08-08",
-      "ultima": "2026-06-12",
-      "pontos": 942,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "RZAG11": {
-      "primeira": "2021-10-14",
-      "ultima": "2026-06-12",
-      "pontos": 1162,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "KNCA11": {
-      "primeira": "2022-01-18",
-      "ultima": "2026-06-12",
-      "pontos": 1098,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CPTR11": {
-      "primeira": "2022-06-22",
-      "ultima": "2026-06-12",
-      "pontos": 992,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "EGAF11": {
-      "primeira": "2022-01-28",
-      "ultima": "2026-06-12",
-      "pontos": 1087,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "FGAA11": {
-      "primeira": "2023-02-14",
-      "ultima": "2026-06-12",
-      "pontos": 828,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "GCRA11": {
-      "primeira": "2023-11-29",
-      "ultima": "2026-06-12",
-      "pontos": 632,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "JGPX11": {
-      "primeira": "2021-11-29",
-      "ultima": "2026-06-12",
-      "pontos": 1132,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "RURA11": {
-      "primeira": "2022-03-09",
-      "ultima": "2026-06-12",
-      "pontos": 1064,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "PIBB11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GOVE11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1244,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SPXI11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XINA11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "GOLD11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "QBTC11": {
-      "primeira": "2021-06-23",
-      "ultima": "2026-06-12",
-      "pontos": 1240,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "AAPL34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MSFT34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "AMZO34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TSLA34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "NFLX34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1596,8 +2080,8 @@ window.MANIFEST = {
       }
     },
     "MELI34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1605,19 +2089,33 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "DISB34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "META11": {
+      "primeira": "2022-05-31",
+      "ultima": "2026-09-10",
+      "pontos": 1068,
       "universo": "etfs",
       "qualidade": {
-        "ok": true,
-        "motivos": []
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
       }
     },
-    "NVDC34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "MFII11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "MGLU3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1627,226 +2125,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "COCA34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "JPMC34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VISA34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "JNJB34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "WALM34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SMLL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IDIV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "RRRP3": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GOGL34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "M1TA34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "WMBY34": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TD3511": {
-      "primeira": "2026-02-24",
-      "ultima": "2026-06-12",
-      "pontos": 75,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TD5011": {
-      "primeira": "2026-02-24",
-      "ultima": "2026-06-12",
-      "pontos": 73,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TD6011": {
-      "primeira": "2026-02-24",
-      "ultima": "2026-06-12",
-      "pontos": 73,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "5PRE11": {
-      "primeira": "2026-02-24",
-      "ultima": "2026-06-12",
-      "pontos": 74,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "T10R11": {
-      "primeira": "2025-08-27",
-      "ultima": "2026-06-12",
-      "pontos": 191,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DIVD11": {
-      "primeira": "2024-06-11",
-      "ultima": "2026-06-12",
-      "pontos": 501,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SMAC11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "FIND11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1246,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ISUS11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1245,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SILK11": {
-      "primeira": "2025-07-11",
-      "ultima": "2026-06-12",
-      "pontos": 213,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TECK11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
+    "MIDB11": {
+      "primeira": "2026-02-18",
+      "ultima": "2026-09-09",
+      "pontos": 140,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1854,19 +2136,39 @@ window.MANIFEST = {
       }
     },
     "MILL11": {
-      "primeira": "2021-06-16",
-      "ultima": "2026-06-12",
-      "pontos": 1223,
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "HTEK11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1229,
+    "MRVE3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "MSFT34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "MXRF11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1875,50 +2177,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "REVE11": {
-      "primeira": "2021-07-15",
-      "ultima": "2026-06-12",
-      "pontos": 1160,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BITI11": {
-      "primeira": "2022-11-10",
-      "ultima": "2026-06-12",
-      "pontos": 891,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GLDI11": {
-      "primeira": "2025-11-06",
-      "ultima": "2026-06-12",
-      "pontos": 146,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CLOB11": {
-      "primeira": "2025-12-19",
-      "ultima": "2026-06-12",
-      "pontos": 116,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GICP11": {
-      "primeira": "2025-10-09",
-      "ultima": "2026-06-12",
-      "pontos": 166,
+    "NASD11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1927,22 +2189,82 @@ window.MANIFEST = {
         ]
       }
     },
-    "DEBB11": {
-      "primeira": "2022-06-28",
-      "ultima": "2026-06-12",
-      "pontos": 971,
+    "NBIT11": {
+      "primeira": "2025-08-20",
+      "ultima": "2026-09-10",
+      "pontos": 265,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NBOV11": {
+      "primeira": "2024-09-24",
+      "ultima": "2026-09-10",
+      "pontos": 489,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NCDI11": {
+      "primeira": "2025-10-17",
+      "ultima": "2026-09-09",
+      "pontos": 222,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NDIV11": {
+      "primeira": "2023-09-29",
+      "ultima": "2026-09-10",
+      "pontos": 733,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NFLX34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
         "motivos": [
           "gap_congelado"
         ]
+      }
+    },
+    "NLFA11": {
+      "primeira": "2026-06-22",
+      "ultima": "2026-09-10",
+      "pontos": 57,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NSDV11": {
+      "primeira": "2023-09-29",
+      "ultima": "2026-09-10",
+      "pontos": 729,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
       }
     },
     "NTNS11": {
-      "primeira": "2024-02-26",
-      "ultima": "2026-06-12",
-      "pontos": 574,
+      "primeira": "2023-06-19",
+      "ultima": "2026-09-10",
+      "pontos": 597,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1951,10 +2273,104 @@ window.MANIFEST = {
         ]
       }
     },
+    "NUCL11": {
+      "primeira": "2021-12-15",
+      "ultima": "2026-09-10",
+      "pontos": 1181,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "NVDC34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "OURO11": {
+      "primeira": "2026-01-14",
+      "ultima": "2026-09-10",
+      "pontos": 165,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
     "PACB11": {
-      "primeira": "2025-05-05",
-      "ultima": "2026-06-12",
-      "pontos": 278,
+      "primeira": "2025-02-24",
+      "ultima": "2026-09-08",
+      "pontos": 328,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "PACC11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 232,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PACG11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 232,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PACL11": {
+      "primeira": "2025-09-01",
+      "ultima": "2026-09-08",
+      "pontos": 245,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PETR3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PETR4": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PEVC11": {
+      "primeira": "2022-08-29",
+      "ultima": "2026-09-10",
+      "pontos": 1006,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1964,59 +2380,89 @@ window.MANIFEST = {
       }
     },
     "PHIP11": {
-      "primeira": "2025-03-07",
-      "ultima": "2026-06-12",
-      "pontos": 237,
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-08",
+      "pontos": 169,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "AREA11": {
-      "primeira": "2025-09-23",
-      "ultima": "2026-06-12",
-      "pontos": 176,
+    "PIBB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "AUPO11": {
-      "primeira": "2025-12-16",
-      "ultima": "2026-06-12",
-      "pontos": 119,
+    "PIPE11": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-10",
+      "pontos": 86,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "BLFT11": {
-      "primeira": "2025-10-17",
-      "ultima": "2026-06-12",
-      "pontos": 160,
+    "PKIN11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 240,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "GLFT11": {
-      "primeira": "2025-10-09",
-      "ultima": "2026-06-12",
-      "pontos": 163,
+    "PREX11": {
+      "primeira": "2026-07-13",
+      "ultima": "2026-09-08",
+      "pontos": 41,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "GPCA11": {
-      "primeira": "2026-05-19",
-      "ultima": "2026-06-12",
-      "pontos": 18,
+    "PRIO3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PVBI11": {
+      "primeira": "2024-01-30",
+      "ultima": "2026-09-10",
+      "pontos": 654,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "QBTC11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "QDFI11": {
+      "primeira": "2022-02-07",
+      "ultima": "2026-09-10",
+      "pontos": 1146,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2025,60 +2471,80 @@ window.MANIFEST = {
         ]
       }
     },
-    "LFIN11": {
-      "primeira": "2025-09-30",
-      "ultima": "2026-06-12",
-      "pontos": 173,
+    "QETH11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "LFTI11": {
-      "primeira": "2025-12-23",
-      "ultima": "2026-06-12",
-      "pontos": 113,
+    "QLBR11": {
+      "primeira": "2026-06-22",
+      "ultima": "2026-09-10",
+      "pontos": 57,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "LLFT11": {
-      "primeira": "2025-06-13",
-      "ultima": "2026-06-12",
-      "pontos": 248,
+    "QQQI11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 241,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "LTBX11": {
-      "primeira": "2026-03-27",
-      "ultima": "2026-06-12",
-      "pontos": 52,
+    "QQQQ11": {
+      "primeira": "2024-12-19",
+      "ultima": "2026-09-10",
+      "pontos": 429,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "MIDB11": {
-      "primeira": "2026-02-18",
-      "ultima": "2026-06-12",
-      "pontos": 78,
+    "QSOL11": {
+      "primeira": "2024-08-29",
+      "ultima": "2026-09-10",
+      "pontos": 507,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "SFIX11": {
-      "primeira": "2025-09-04",
-      "ultima": "2026-06-12",
-      "pontos": 191,
+    "RADL3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RAIL3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RBRF11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2087,20 +2553,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "WEJR11": {
-      "primeira": "2025-10-20",
-      "ultima": "2026-06-12",
-      "pontos": 141,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PACC11": {
-      "primeira": "2024-11-01",
-      "ultima": "2026-06-12",
-      "pontos": 398,
+    "RBRP11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2109,9 +2565,61 @@ window.MANIFEST = {
         ]
       }
     },
-    "IMBB11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "RBRR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RDOR3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RECR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "RECT11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RENT3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "REVE11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -2121,10 +2629,20 @@ window.MANIFEST = {
         ]
       }
     },
-    "PACG11": {
-      "primeira": "2024-11-01",
-      "ultima": "2026-06-12",
-      "pontos": 397,
+    "RICO11": {
+      "primeira": "2025-07-03",
+      "ultima": "2026-09-09",
+      "pontos": 298,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RURA11": {
+      "primeira": "2022-03-09",
+      "ultima": "2026-09-10",
+      "pontos": 1127,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2133,10 +2651,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "BDAP11": {
-      "primeira": "2025-05-05",
-      "ultima": "2026-06-12",
-      "pontos": 237,
+    "RZAG11": {
+      "primeira": "2021-10-14",
+      "ultima": "2026-09-10",
+      "pontos": 1225,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2145,10 +2663,30 @@ window.MANIFEST = {
         ]
       }
     },
-    "BOL511": {
-      "primeira": "2025-10-17",
-      "ultima": "2026-06-12",
-      "pontos": 160,
+    "RZTR11": {
+      "primeira": "2024-01-30",
+      "ultima": "2026-09-10",
+      "pontos": 653,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SANB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SAPR4": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2157,60 +2695,30 @@ window.MANIFEST = {
         ]
       }
     },
-    "BPRE11": {
-      "primeira": "2025-10-17",
-      "ultima": "2026-06-12",
-      "pontos": 160,
+    "SBSP3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "NCDI11": {
-      "primeira": "2025-10-17",
-      "ultima": "2026-06-12",
-      "pontos": 160,
+    "SCVB11": {
+      "primeira": "2022-10-03",
+      "ultima": "2026-09-08",
+      "pontos": 980,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "NLFA11": {
-      "primeira": "2025-12-17",
-      "ultima": "2026-06-12",
-      "pontos": 118,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PACL11": {
-      "primeira": "2025-07-21",
-      "ultima": "2026-06-12",
-      "pontos": 224,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PREX11": {
-      "primeira": "2026-05-05",
-      "ultima": "2026-06-11",
-      "pontos": 27,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "LTNB11": {
-      "primeira": "2025-07-16",
-      "ultima": "2026-06-12",
-      "pontos": 225,
+    "SFIX11": {
+      "primeira": "2025-09-04",
+      "ultima": "2026-09-09",
+      "pontos": 253,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2219,10 +2727,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "HGBR11": {
-      "primeira": "2025-09-18",
-      "ultima": "2026-06-12",
-      "pontos": 181,
+    "SILK11": {
+      "primeira": "2025-08-04",
+      "ultima": "2026-09-08",
+      "pontos": 275,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2231,10 +2739,20 @@ window.MANIFEST = {
         ]
       }
     },
-    "HYBR11": {
-      "primeira": "2025-09-18",
-      "ultima": "2026-06-12",
-      "pontos": 181,
+    "SLVR11": {
+      "primeira": "2026-06-22",
+      "ultima": "2026-09-10",
+      "pontos": 57,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SMAB11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2243,10 +2761,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "LFIX11": {
-      "primeira": "2026-02-11",
-      "ultima": "2026-06-12",
-      "pontos": 82,
+    "SMAC11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2255,131 +2773,29 @@ window.MANIFEST = {
         ]
       }
     },
-    "LFTX11": {
-      "primeira": "2026-03-27",
-      "ultima": "2026-06-12",
-      "pontos": 52,
+    "SMAL11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "XB3011": {
-      "primeira": "2026-02-24",
-      "ultima": "2026-06-12",
-      "pontos": 75,
+    "SMLL": {
+      "primeira": "2026-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "XB3511": {
-      "primeira": "2025-12-11",
-      "ultima": "2026-06-12",
-      "pontos": 122,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XB4511": {
-      "primeira": "2026-02-24",
-      "ultima": "2026-06-12",
-      "pontos": 75,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XB5011": {
-      "primeira": "2025-12-11",
-      "ultima": "2026-06-12",
-      "pontos": 122,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XB6011": {
-      "primeira": "2026-02-24",
-      "ultima": "2026-06-12",
-      "pontos": 75,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TIRB11": {
-      "primeira": "2024-10-16",
-      "ultima": "2026-06-12",
-      "pontos": 410,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ELAS11": {
-      "primeira": "2022-03-08",
-      "ultima": "2026-06-12",
-      "pontos": 1046,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CMDB11": {
-      "primeira": "2021-11-30",
-      "ultima": "2026-06-12",
-      "pontos": 1131,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BRXC11": {
-      "primeira": "2025-03-11",
-      "ultima": "2026-06-12",
-      "pontos": 313,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TRIG11": {
-      "primeira": "2021-11-12",
-      "ultima": "2026-06-12",
-      "pontos": 1142,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "AUVP11": {
-      "primeira": "2025-06-25",
-      "ultima": "2026-06-12",
-      "pontos": 242,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BRAX11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "SMTO3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2387,9 +2803,41 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "BOVX11": {
-      "primeira": "2021-06-21",
-      "ultima": "2026-06-12",
+    "SNAG11": {
+      "primeira": "2022-08-08",
+      "ultima": "2026-09-10",
+      "pontos": 1005,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SOLH11": {
+      "primeira": "2024-12-09",
+      "ultima": "2026-09-10",
+      "pontos": 423,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPBZ11": {
+      "primeira": "2026-05-18",
+      "ultima": "2026-09-10",
+      "pontos": 81,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPXB11": {
+      "primeira": "2021-09-17",
+      "ultima": "2026-09-10",
       "pontos": 1242,
       "universo": "etfs",
       "qualidade": {
@@ -2399,9 +2847,41 @@ window.MANIFEST = {
         ]
       }
     },
-    "BOVB11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "SPXH11": {
+      "primeira": "2026-06-22",
+      "ultima": "2026-09-10",
+      "pontos": 57,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPXI11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito"
+        ]
+      }
+    },
+    "SPYR11": {
+      "primeira": "2026-06-08",
+      "ultima": "2026-09-08",
+      "pontos": 66,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SUZB3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2409,278 +2889,70 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "BBOV11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "SVAL11": {
+      "primeira": "2022-07-12",
+      "ultima": "2026-09-10",
+      "pontos": 1039,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "T10R11": {
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-08",
+      "pontos": 233,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TAEE11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TD3511": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-08",
+      "pontos": 85,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TD5011": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-08",
+      "pontos": 85,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TD6011": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-08",
+      "pontos": 85,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TECK11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IBOB11": {
-      "primeira": "2021-07-26",
-      "ultima": "2026-06-12",
-      "pontos": 1209,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BOVS11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1246,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BMMT11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 579,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "NSDV11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 579,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "NDIV11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 579,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BBSD11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1238,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BDEF11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 579,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BREW11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 578,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ECOO11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1209,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BCIC11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 578,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DVER11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 464,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BXPO11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 579,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BDOM11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 579,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SCVB11": {
-      "primeira": "2022-09-22",
-      "ultima": "2026-06-12",
-      "pontos": 927,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "AGRI11": {
-      "primeira": "2022-05-24",
-      "ultima": "2026-06-12",
-      "pontos": 992,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "NBOV11": {
-      "primeira": "2024-09-24",
-      "ultima": "2026-06-12",
-      "pontos": 426,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BEST11": {
-      "primeira": "2025-09-09",
-      "ultima": "2026-06-12",
-      "pontos": 188,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BVBR11": {
-      "primeira": "2025-12-04",
-      "ultima": "2026-06-12",
-      "pontos": 127,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CAPE11": {
-      "primeira": "2025-06-30",
-      "ultima": "2026-06-12",
-      "pontos": 181,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EWBZ11": {
-      "primeira": "2025-06-30",
-      "ultima": "2026-06-12",
-      "pontos": 228,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "QLBR11": {
-      "primeira": "2025-10-22",
-      "ultima": "2026-06-12",
-      "pontos": 157,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "UTLL11": {
-      "primeira": "2025-09-19",
-      "ultima": "2026-06-12",
-      "pontos": 180,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SMAB11": {
-      "primeira": "2021-09-13",
-      "ultima": "2026-06-12",
-      "pontos": 1167,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "XBOV11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1247,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ESGB11": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1219,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CHIP11": {
-      "primeira": "2022-02-03",
-      "ultima": "2026-06-12",
-      "pontos": 1085,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2688,19 +2960,139 @@ window.MANIFEST = {
       }
     },
     "TECX11": {
-      "primeira": "2025-06-02",
-      "ultima": "2026-06-12",
-      "pontos": 257,
+      "primeira": "2025-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 240,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "QQQQ11": {
-      "primeira": "2024-12-19",
-      "ultima": "2026-06-12",
-      "pontos": 366,
+    "TEND3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "TEPP11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "TGAR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "TIMS3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TIRB11": {
+      "primeira": "2025-05-19",
+      "ultima": "2026-09-08",
+      "pontos": 322,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "TOTS3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TRIG11": {
+      "primeira": "2021-11-11",
+      "ultima": "2026-09-10",
+      "pontos": 1205,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TRXF11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "TSLA34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "UGPA3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "USDB11": {
+      "primeira": "2022-07-13",
+      "ultima": "2026-09-10",
+      "pontos": 882,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "USTK11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2709,519 +3101,7 @@ window.MANIFEST = {
     },
     "UTEC11": {
       "primeira": "2022-05-19",
-      "ultima": "2026-06-12",
-      "pontos": 1015,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "USTK11": {
-      "primeira": "2021-07-28",
-      "ultima": "2026-06-12",
-      "pontos": 1216,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SVAL11": {
-      "primeira": "2022-07-13",
-      "ultima": "2026-06-12",
-      "pontos": 976,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "WRLD11": {
-      "primeira": "2021-10-20",
-      "ultima": "2026-06-12",
-      "pontos": 1158,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "QQQI11": {
-      "primeira": "2024-06-28",
-      "ultima": "2026-06-12",
-      "pontos": 488,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "USAL11": {
-      "primeira": "2022-02-10",
-      "ultima": "2026-06-12",
-      "pontos": 1081,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "GPUS11": {
-      "primeira": "2025-06-02",
-      "ultima": "2026-06-12",
-      "pontos": 258,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPXB11": {
-      "primeira": "2021-09-20",
-      "ultima": "2026-06-12",
-      "pontos": 1179,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "PKIN11": {
-      "primeira": "2025-05-27",
-      "ultima": "2026-06-12",
-      "pontos": 261,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWMI11": {
-      "primeira": "2024-12-13",
-      "ultima": "2026-06-12",
-      "pontos": 370,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "NUCL11": {
-      "primeira": "2021-12-16",
-      "ultima": "2026-06-12",
-      "pontos": 1110,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PEVC11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 576,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GENB11": {
-      "primeira": "2021-07-26",
-      "ultima": "2026-06-12",
-      "pontos": 1206,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ARGE11": {
-      "primeira": "2025-08-27",
-      "ultima": "2026-06-12",
-      "pontos": 197,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GDIV11": {
-      "primeira": "2025-10-30",
-      "ultima": "2026-06-12",
-      "pontos": 151,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GXUS11": {
-      "primeira": "2025-11-27",
-      "ultima": "2026-06-12",
-      "pontos": 132,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IVWO11": {
-      "primeira": "2026-04-14",
-      "ultima": "2026-06-12",
-      "pontos": 41,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RICO11": {
-      "primeira": "2025-07-03",
-      "ultima": "2026-06-12",
-      "pontos": 236,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DOLX11": {
-      "primeira": "2025-12-29",
-      "ultima": "2026-06-12",
-      "pontos": 111,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PIPE11": {
-      "primeira": "2026-02-13",
-      "ultima": "2026-06-12",
-      "pontos": 80,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPBZ11": {
-      "primeira": "2025-11-05",
-      "ultima": "2026-06-12",
-      "pontos": 147,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SPYR11": {
-      "primeira": "2026-01-14",
-      "ultima": "2026-06-12",
-      "pontos": 101,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VWRA11": {
-      "primeira": "2025-09-30",
-      "ultima": "2026-06-12",
-      "pontos": 173,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XSPI11": {
-      "primeira": "2026-04-07",
-      "ultima": "2026-06-12",
-      "pontos": 46,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GLDX11": {
-      "primeira": "2022-07-05",
-      "ultima": "2026-06-12",
-      "pontos": 979,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BBOI11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 579,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "DOLB11": {
-      "primeira": "2025-04-29",
-      "ultima": "2026-06-12",
-      "pontos": 281,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DOLA11": {
-      "primeira": "2025-05-05",
-      "ultima": "2026-06-12",
-      "pontos": 278,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CORN11": {
-      "primeira": "2024-02-19",
-      "ultima": "2026-06-12",
-      "pontos": 579,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "AURO11": {
-      "primeira": "2025-08-28",
-      "ultima": "2026-06-12",
-      "pontos": 196,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GOLB11": {
-      "primeira": "2025-10-24",
-      "ultima": "2026-06-12",
-      "pontos": 155,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GOLX11": {
-      "primeira": "2025-12-22",
-      "ultima": "2026-06-12",
-      "pontos": 115,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SLVR11": {
-      "primeira": "2026-04-20",
-      "ultima": "2026-06-12",
-      "pontos": 37,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPXH11": {
-      "primeira": "2025-12-29",
-      "ultima": "2026-06-12",
-      "pontos": 112,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "OURO11": {
-      "primeira": "2026-01-14",
-      "ultima": "2026-06-12",
-      "pontos": 102,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CRPT11": {
-      "primeira": "2022-05-12",
-      "ultima": "2026-06-12",
-      "pontos": 1020,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BITC11": {
-      "primeira": "2025-09-18",
-      "ultima": "2026-06-12",
-      "pontos": 181,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EBIT11": {
-      "primeira": "2025-07-04",
-      "ultima": "2026-06-10",
-      "pontos": 220,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EETH11": {
-      "primeira": "2025-09-18",
-      "ultima": "2026-06-12",
-      "pontos": 181,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "COIN11": {
-      "primeira": "2024-12-13",
-      "ultima": "2026-06-12",
-      "pontos": 370,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "QETH11": {
-      "primeira": "2021-08-04",
-      "ultima": "2026-06-12",
-      "pontos": 1211,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ETHE11": {
-      "primeira": "2021-08-18",
-      "ultima": "2026-06-12",
-      "pontos": 1201,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "HODL11": {
-      "primeira": "2025-02-04",
-      "ultima": "2026-06-12",
-      "pontos": 337,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BITH11": {
-      "primeira": "2021-08-05",
-      "ultima": "2026-06-12",
-      "pontos": 1210,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FOMO11": {
-      "primeira": "2025-04-16",
-      "ultima": "2026-06-12",
-      "pontos": 288,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SOLH11": {
-      "primeira": "2024-09-13",
-      "ultima": "2026-06-12",
-      "pontos": 433,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "QSOL11": {
-      "primeira": "2024-08-29",
-      "ultima": "2026-06-12",
-      "pontos": 444,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "QDFI11": {
-      "primeira": "2022-02-08",
-      "ultima": "2026-06-12",
-      "pontos": 1083,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "WEB311": {
-      "primeira": "2022-03-30",
-      "ultima": "2026-06-12",
-      "pontos": 1049,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "DEFI11": {
-      "primeira": "2022-02-17",
-      "ultima": "2026-06-12",
+      "ultima": "2026-09-10",
       "pontos": 1076,
       "universo": "etfs",
       "qualidade": {
@@ -3229,10 +3109,30 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "META11": {
-      "primeira": "2022-06-03",
-      "ultima": "2026-06-12",
-      "pontos": 1004,
+    "UTLL11": {
+      "primeira": "2025-09-19",
+      "ultima": "2026-09-10",
+      "pontos": 243,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VALE3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VAMO3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3241,39 +3141,175 @@ window.MANIFEST = {
         ]
       }
     },
-    "ETHY11": {
-      "primeira": "2025-12-16",
-      "ultima": "2026-06-12",
-      "pontos": 119,
+    "VBBR3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "GBIT11": {
-      "primeira": "2025-12-10",
-      "ultima": "2026-06-12",
-      "pontos": 103,
+    "VGHF11": {
+      "primeira": "2024-02-06",
+      "ultima": "2026-09-10",
+      "pontos": 648,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VGIA11": {
+      "primeira": "2021-12-15",
+      "ultima": "2026-09-10",
+      "pontos": 1183,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VGIR11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VILG11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VINO11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VISA34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "GBTC11": {
-      "primeira": "2025-07-30",
-      "ultima": "2026-06-12",
-      "pontos": 217,
+    "VISC11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "NBIT11": {
-      "primeira": "2025-08-20",
-      "ultima": "2026-06-12",
+    "VIVT3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VRTA11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1248,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VSLH11": {
+      "primeira": "2024-01-31",
+      "ultima": "2026-09-10",
+      "pontos": 653,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VWRA11": {
+      "primeira": "2025-09-30",
+      "ultima": "2026-09-10",
+      "pontos": 236,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "WALM34": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "WEB311": {
+      "primeira": "2022-03-29",
+      "ultima": "2026-09-10",
+      "pontos": 1111,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "WEGE3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "WEJR11": {
+      "primeira": "2025-10-20",
+      "ultima": "2026-09-09",
       "pontos": 202,
       "universo": "etfs",
       "qualidade": {
@@ -3281,20 +3317,94 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "XBCI11": {
-      "primeira": "2026-03-31",
-      "ultima": "2026-06-12",
-      "pontos": 50,
+    "WRLD11": {
+      "primeira": "2021-10-19",
+      "ultima": "2026-09-10",
+      "pontos": 1220,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "XB3011": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-08",
+      "pontos": 85,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
+    "XB3511": {
+      "primeira": "2025-12-11",
+      "ultima": "2026-09-10",
+      "pontos": 185,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XB4511": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-08",
+      "pontos": 85,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XB5011": {
+      "primeira": "2025-12-11",
+      "ultima": "2026-09-09",
+      "pontos": 184,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XB6011": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-08",
+      "pontos": 85,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XBCI11": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-10",
+      "pontos": 56,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito"
+        ]
+      }
+    },
     "XBIT11": {
-      "primeira": "2025-12-12",
-      "ultima": "2026-06-12",
-      "pontos": 121,
+      "primeira": "2026-06-08",
+      "ultima": "2026-09-08",
+      "pontos": 66,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XBOV11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-08",
+      "pontos": 1245,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3302,19 +3412,19 @@ window.MANIFEST = {
       }
     },
     "XETH11": {
-      "primeira": "2025-12-12",
-      "ultima": "2026-06-12",
-      "pontos": 121,
+      "primeira": "2026-06-08",
+      "ultima": "2026-09-08",
+      "pontos": 66,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "ALUG11": {
-      "primeira": "2021-10-29",
-      "ultima": "2026-06-12",
-      "pontos": 1151,
+    "XFIX11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3323,237 +3433,66 @@ window.MANIFEST = {
         ]
       }
     },
-    "CASA11": {
-      "primeira": "2025-06-02",
-      "ultima": "2026-06-12",
-      "pontos": 258,
+    "XINA11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1246,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "XPLG11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "XPML11": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "etfs",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito",
+          "serie_quebrada"
+        ]
+      }
+    },
+    "XSPI11": {
+      "primeira": "2026-05-11",
+      "ultima": "2026-09-10",
+      "pontos": 86,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "HERT11": {
-      "primeira": "2025-06-10",
-      "ultima": "2026-06-12",
-      "pontos": 245,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "USDB11": {
-      "primeira": "2022-07-20",
-      "ultima": "2026-06-12",
-      "pontos": 972,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "FIXX11": {
-      "primeira": "2025-11-21",
-      "ultima": "2026-06-12",
-      "pontos": 135,
+    "YDUQ3": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "BNDX11": {
-      "primeira": "2022-07-13",
-      "ultima": "2026-06-12",
-      "pontos": 976,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BOTZ39": {
-      "primeira": "2022-04-19",
-      "ultima": "2026-06-12",
-      "pontos": 1036,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BAIQ39": {
-      "primeira": "2026-05-29",
-      "ultima": "2026-06-12",
-      "pontos": 10,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BQYL39": {
-      "primeira": "2022-04-20",
-      "ultima": "2026-06-12",
-      "pontos": 1035,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BURA39": {
-      "primeira": "2022-04-18",
-      "ultima": "2026-06-12",
-      "pontos": 1037,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BSIL39": {
-      "primeira": "2022-04-18",
-      "ultima": "2026-06-12",
-      "pontos": 1037,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ARGT39": {
-      "primeira": "2026-05-29",
-      "ultima": "2026-06-12",
-      "pontos": 10,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BBUG39": {
-      "primeira": "2022-04-19",
-      "ultima": "2026-06-12",
-      "pontos": 1036,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BKCH39": {
-      "primeira": "2024-10-10",
-      "ultima": "2026-06-12",
-      "pontos": 414,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BCLO39": {
-      "primeira": "2022-04-18",
-      "ultima": "2026-06-12",
-      "pontos": 1037,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BFNX39": {
-      "primeira": "2022-04-18",
-      "ultima": "2026-06-12",
-      "pontos": 1037,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BCPX39": {
-      "primeira": "2022-04-18",
-      "ultima": "2026-06-12",
-      "pontos": 1037,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BLBT39": {
-      "primeira": "2022-04-18",
-      "ultima": "2026-06-12",
-      "pontos": 1037,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BSDV39": {
-      "primeira": "2022-04-18",
-      "ultima": "2026-06-12",
-      "pontos": 1037,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BDRI39": {
-      "primeira": "2022-04-19",
-      "ultima": "2026-06-12",
-      "pontos": 1036,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BHER39": {
-      "primeira": "2022-04-19",
-      "ultima": "2026-06-12",
-      "pontos": 1036,
-      "universo": "etfs",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "AGG": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
+    "AAPL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
@@ -3561,1188 +3500,23 @@ window.MANIFEST = {
         "motivos": []
       }
     },
-    "BND": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
+    "ACB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
-        "ok": true,
-        "motivos": []
+        "ok": false,
+        "motivos": [
+          "salto_suspeito",
+          "gap_congelado"
+        ]
       }
     },
-    "CSPX": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-28",
-      "pontos": 1258,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EIMI": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-28",
-      "pontos": 1260,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GLD": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
+    "ACES": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IEF": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
-      "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWDA": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-28",
-      "pontos": 1260,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TIP": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
-      "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TLT": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
-      "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VNQ": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
-      "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VOO": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
-      "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VTI": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
-      "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VWO": {
-      "primeira": "2021-06-01",
-      "ultima": "2026-05-29",
-      "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VUAA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPXS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SPYL": {
-      "primeira": "2023-10-31",
-      "ultima": "2026-06-12",
-      "pontos": 660,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CNDX": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SASU": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "XDEW": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SPY4": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "R2US": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CSUS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1260,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IUVL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SPMV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ISFD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "XMED": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XEOU": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1260,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "HEDK": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IJPA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VJPA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CPXJ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1260,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IEMA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SAEM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "NDIA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CNYA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "VWRA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ISAC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SWRD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VHYA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ACWD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "WSML": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "IB01": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "U03A": {
-      "primeira": "2025-03-03",
-      "ultima": "2026-06-12",
-      "pontos": 323,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "FLOA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BBTR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VDPA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1261,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DPYA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1262,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "QQQ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPY": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IVV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "LQD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SHV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BIL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "USFR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "TFLO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "GOVT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BOTZ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "AIQ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "QYLD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "COPX": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SDIV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "DIV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "PAVE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "URA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SIL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MLPX": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MLP": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "LIT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BUG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "DRIV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CLOU": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SNSR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FINX": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SOCL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "HERO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GNOM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CTEC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "XYLD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "RYLD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "PFFD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SRET": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "MLPA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "POTX": {
-      "primeira": "2021-06-14",
-      "ultima": "2024-02-21",
-      "pontos": 677,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BKCH": {
-      "primeira": "2021-07-14",
-      "ultima": "2026-06-12",
-      "pontos": 1235,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DTCR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SHLD": {
-      "primeira": "2023-09-14",
-      "ultima": "2026-06-12",
-      "pontos": 689,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RSSL": {
-      "primeira": "2024-06-05",
-      "ultima": "2026-06-12",
-      "pontos": 507,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ARKK": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ARKW": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ARKG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ARKF": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ARKQ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ARKX": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PRNT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "QQQM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RSP": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPHD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPHQ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPLV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "KBWB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "KBWY": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PGX": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "IWM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWF": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IWP": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EFA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EEM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IEMG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
@@ -4750,159 +3524,59 @@ window.MANIFEST = {
       }
     },
     "ACWI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "IEFA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "AGG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "SCZ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "AIQ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "INDA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "AKAM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "MCHI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "AMGN": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "FXI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EWZ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "HDV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DVY": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DGRO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "QUAL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "USMV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MTUM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VLUE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SIZE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "HYG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "AMZN": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -4911,236 +3585,90 @@ window.MANIFEST = {
         ]
       }
     },
-    "EMB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MBB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IGIB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IGSB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "USIG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FLOT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "NEAR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "IAU": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SLV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IBIT": {
+    "ARKB": {
       "primeira": "2024-01-11",
-      "ultima": "2026-06-12",
-      "pontos": 607,
+      "ultima": "2026-09-10",
+      "pontos": 668,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VIG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "ARKF": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VYM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "ARKG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VUG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "ARKK": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VTV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "ARKQ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "ARKW": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "ARKX": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VEA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "AVGO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "VGK": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VPL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VXUS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VSS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VCIT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "VCSH": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "BB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -5149,10 +3677,42 @@ window.MANIFEST = {
         ]
       }
     },
-    "VTIP": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "BBCA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BBH": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito"
+        ]
+      }
+    },
+    "BIL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -5161,476 +3721,10 @@ window.MANIFEST = {
         ]
       }
     },
-    "VMBS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BSV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "BIV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BLV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLK": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLF": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLRE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "XLU": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLP": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XLB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "XLY": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SDY": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPYD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPDW": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPEM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SPTL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SPTS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SPAB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SCHD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SCHX": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SCHB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SCHF": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SCHE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SCHZ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "DGS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DEM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DLS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EPI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DGRW": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DFAC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DFAI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DFAT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DFAX": {
-      "primeira": "2021-09-13",
-      "ultima": "2026-06-12",
-      "pontos": 1193,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "DFUS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "DFLV": {
-      "primeira": "2022-12-07",
-      "ultima": "2026-06-12",
-      "pontos": 881,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "JEPI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "JEPQ": {
-      "primeira": "2022-05-04",
-      "ultima": "2026-06-12",
-      "pontos": 1031,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "JPST": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "FBTC": {
+    "BITB": {
       "primeira": "2024-01-11",
-      "ultima": "2026-06-12",
-      "pontos": 607,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GBTC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ETHA": {
-      "primeira": "2024-07-23",
-      "ultima": "2026-06-12",
-      "pontos": 475,
+      "ultima": "2026-09-10",
+      "pontos": 668,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
@@ -5639,8 +3733,68 @@ window.MANIFEST = {
     },
     "BITO": {
       "primeira": "2021-10-20",
-      "ultima": "2026-06-12",
-      "pontos": 1166,
+      "ultima": "2026-09-10",
+      "pontos": 1227,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BIV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BKCH": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BLV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BND": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BOTZ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "BSV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -5649,294 +3803,32 @@ window.MANIFEST = {
         ]
       }
     },
-    "DBC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "BTC": {
+      "primeira": "2024-07-31",
+      "ultima": "2026-09-10",
+      "pontos": 530,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "DBA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "USO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "UNG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PDBC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "BUG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
         "motivos": [
           "gap_congelado"
         ]
-      }
-    },
-    "GSG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CPER": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RWR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IYR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "REET": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "REM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MOAT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "COWZ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "NOBL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ITA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PPA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XAR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IDEF": {
-      "primeira": "2025-05-21",
-      "ultima": "2026-06-12",
-      "pontos": 267,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "UFO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "EUAD": {
-      "primeira": "2024-10-22",
-      "ultima": "2026-06-12",
-      "pontos": 411,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MISL": {
-      "primeira": "2022-10-26",
-      "ultima": "2026-06-12",
-      "pontos": 910,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "JEDI": {
-      "primeira": "2025-09-26",
-      "ultima": "2026-06-12",
-      "pontos": 179,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FITE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XBI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IBB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FBT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BBH": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PBE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
       }
     },
     "CANC": {
       "primeira": "2023-08-14",
-      "ultima": "2026-06-12",
-      "pontos": 711,
+      "ultima": "2026-09-10",
+      "pontos": 772,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -5945,40 +3837,82 @@ window.MANIFEST = {
         ]
       }
     },
-    "IDNA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "CHAT": {
+      "primeira": "2023-05-18",
+      "ultima": "2026-09-10",
+      "pontos": 831,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "SBIO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "CIBR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "RVMD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "CLOU": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "AMGN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "CNRG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "CNYA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "COIN": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "COMT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "COPX": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
@@ -5986,9 +3920,9 @@ window.MANIFEST = {
       }
     },
     "CORT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -5997,417 +3931,20 @@ window.MANIFEST = {
         ]
       }
     },
-    "NVDA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "COWZ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "AAPL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MSFT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "AMZN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "GOOGL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "AVGO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "META": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TSLA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BRKB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IYW": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FTEC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IGM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IXN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "QTUM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FDN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "KOMP": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CHAT": {
-      "primeira": "2023-05-18",
-      "ultima": "2026-06-12",
-      "pontos": 770,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "MSOS": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito",
-          "gap_congelado"
-        ]
-      }
-    },
-    "MJ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "VFF": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "TLRY": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito",
-          "gap_congelado"
-        ]
-      }
-    },
-    "CRON": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "SNDL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ACB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito",
-          "gap_congelado"
-        ]
-      }
-    },
-    "HITI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "OGI": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "CIBR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "HACK": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "IHAK": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CRWD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FTNT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "BB": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "PANW": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "CSCO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "OKTA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "AKAM": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SHOP": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "XYZ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "CPER": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
@@ -6416,90 +3953,18 @@ window.MANIFEST = {
     },
     "CRCL": {
       "primeira": "2025-06-05",
-      "ultima": "2026-06-12",
-      "pontos": 257,
+      "ultima": "2026-09-10",
+      "pontos": 318,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "HOOD": {
-      "primeira": "2021-07-29",
-      "ultima": "2026-06-12",
-      "pontos": 1224,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito"
-        ]
-      }
-    },
-    "COIN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PYPL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "PLTR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "FISV": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
+    "CRON": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
       "pontos": 1255,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TOST": {
-      "primeira": "2021-09-22",
-      "ultima": "2026-06-12",
-      "pontos": 1186,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "INTU": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "ICLN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -6508,60 +3973,482 @@ window.MANIFEST = {
         ]
       }
     },
-    "QCLN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "CRWD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "PBW": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "CSCO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "CSPX": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1259,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "CNRG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "CTEC": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "DBA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "LCTD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "DBC": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "PBD": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "DEM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "NZAC": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "DFAC": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DFAI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DFAT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DFAX": {
+      "primeira": "2021-09-13",
+      "ultima": "2026-09-10",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "DFLV": {
+      "primeira": "2022-12-07",
+      "ultima": "2026-09-10",
+      "pontos": 942,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DFUS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DGRO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DGRW": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DGS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DIV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "DJP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DLS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DRIV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "DTCR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "DVY": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EA": {
+      "primeira": "2026-07-17",
+      "ultima": "2026-08-10",
+      "pontos": 6,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "EEM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EFA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EIMI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1261,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EMB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EPI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ESPO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ETH": {
+      "primeira": "2024-07-23",
+      "ultima": "2026-09-10",
+      "pontos": 536,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ETHA": {
+      "primeira": "2024-07-23",
+      "ultima": "2026-09-10",
+      "pontos": 536,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ETHE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EUAD": {
+      "primeira": "2024-10-22",
+      "ultima": "2026-09-10",
+      "pontos": 472,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EWG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EWJ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EWQ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EWU": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EWW": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EWZ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "EZA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FBT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FBTC": {
+      "primeira": "2024-01-11",
+      "ultima": "2026-09-10",
+      "pontos": 668,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FDN": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FINX": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FISV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FITE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "FLOT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -6572,156 +4459,58 @@ window.MANIFEST = {
     },
     "FRNW": {
       "primeira": "2021-10-07",
-      "ultima": "2026-06-12",
-      "pontos": 1175,
+      "ultima": "2026-09-10",
+      "pontos": 1236,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "HYDR": {
-      "primeira": "2021-07-14",
-      "ultima": "2026-06-12",
-      "pontos": 1235,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "ACES": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "FTEC": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "SMOG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "FTNT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "BE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito"
-        ]
-      }
-    },
-    "ESPO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "FXI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "NTES": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "GBTC": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "U": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "TTWO": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "RBLX": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "GME": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "salto_suspeito"
-        ]
-      }
-    },
-    "SGOL": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": false,
-        "motivos": [
-          "gap_congelado"
-        ]
-      }
-    },
-    "COMT": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "SIVR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "GLD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
@@ -6729,19 +4518,507 @@ window.MANIFEST = {
       }
     },
     "GLTR": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "DJP": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "GME": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito"
+        ]
+      }
+    },
+    "GNOM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GOOGL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "GOVT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "GSG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HACK": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HDV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HERO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HITI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HOOD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "HYDR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "HYG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "IAU": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IBB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IBIT": {
+      "primeira": "2024-01-11",
+      "ultima": "2026-09-10",
+      "pontos": 668,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ICLN": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "IDEF": {
+      "primeira": "2025-05-21",
+      "ultima": "2026-09-10",
+      "pontos": 328,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IDNA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IEF": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IEFA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IEMG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IGIB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IGM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IGSB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "IHAK": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "INDA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "INTU": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "ITA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IVV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWDA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1261,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWF": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWN": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IWS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IXN": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IYR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "IYW": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "JEDI": {
+      "primeira": "2025-09-26",
+      "ultima": "2026-09-10",
+      "pontos": 240,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "JEPI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "JEPQ": {
+      "primeira": "2022-05-04",
+      "ultima": "2026-09-10",
+      "pontos": 1092,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "JPST": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "KBWB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "KBWY": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "KOMP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
@@ -6749,19 +5026,9 @@ window.MANIFEST = {
       }
     },
     "KRBN": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
-      "universo": "offshore",
-      "qualidade": {
-        "ok": true,
-        "motivos": []
-      }
-    },
-    "EWJ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
@@ -6769,119 +5036,1460 @@ window.MANIFEST = {
       }
     },
     "KSA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "BBCA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "LCTD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "EWW": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "LIT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "EWQ": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "LQD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "EWG": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "MBB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "EWU": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "MCHI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "EZA": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "META": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "BTC": {
-      "primeira": "2024-07-31",
-      "ultima": "2026-06-12",
-      "pontos": 469,
+    "MISL": {
+      "primeira": "2022-10-26",
+      "ultima": "2026-09-10",
+      "pontos": 971,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "BITB": {
-      "primeira": "2024-01-11",
-      "ultima": "2026-06-12",
-      "pontos": 607,
+    "MJ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "MLP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "MLPA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "ARKB": {
-      "primeira": "2024-01-11",
-      "ultima": "2026-06-12",
-      "pontos": 607,
+    "MLPX": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "ETH": {
-      "primeira": "2024-07-23",
-      "ultima": "2026-06-12",
-      "pontos": 475,
+    "MOAT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
         "motivos": []
       }
     },
-    "ETHE": {
-      "primeira": "2021-06-14",
-      "ultima": "2026-06-12",
-      "pontos": 1256,
+    "MSFT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "MSOS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito",
+          "gap_congelado"
+        ]
+      }
+    },
+    "MTUM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NDIA": {
+      "primeira": "2023-08-18",
+      "ultima": "2026-09-09",
+      "pontos": 767,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NEAR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "NOBL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NTES": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NVDA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "NZAC": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "OGI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "OKTA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PANW": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PAVE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PBD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PBE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PBW": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PDBC": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "PFFD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "PGX": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "PLTR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "POTX": {
+      "primeira": "2021-09-10",
+      "ultima": "2024-02-21",
+      "pontos": 615,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "PPA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PRNT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "PYPL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "QCLN": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "QQQ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "QQQM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "QTUM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "QUAL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "QYLD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "RBLX": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "REET": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "REM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RSP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RSSL": {
+      "primeira": "2024-06-05",
+      "ultima": "2026-09-09",
+      "pontos": 567,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RVMD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RWR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "RYLD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SBIO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SCHB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SCHD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SCHE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SCHF": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SCHX": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SCHZ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SCZ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SDIV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SDY": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SGOL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SHLD": {
+      "primeira": "2023-09-14",
+      "ultima": "2026-09-10",
+      "pontos": 750,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SHOP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SHV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SIL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SIVR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SIZE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SLV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SMOG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SNDL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SNSR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SOCL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPAB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SPDW": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPEM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SPHD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPHQ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPLV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPMV": {
+      "primeira": "2026-02-23",
+      "ultima": "2026-02-23",
+      "pontos": 1,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPTL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPTS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SPXS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPY": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SPYD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "SRET": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "SWRD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito",
+          "gap_congelado"
+        ]
+      }
+    },
+    "TFLO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "TIP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TLRY": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "salto_suspeito",
+          "gap_congelado"
+        ]
+      }
+    },
+    "TLT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TOST": {
+      "primeira": "2021-09-22",
+      "ultima": "2026-09-10",
+      "pontos": 1247,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TSLA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "TTWO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "U": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "UFO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "UNG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "URA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "USFR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "USIG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "USMV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "USO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VCIT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VCSH": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VEA": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VFF": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VGK": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VIG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VLUE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VMBS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VNQ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VOO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VPL": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VSS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VTI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VTIP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "VTV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VUG": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VWO": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VXUS": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "VYM": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "WSML": {
+      "primeira": "2025-04-03",
+      "ultima": "2026-09-10",
+      "pontos": 361,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XAR": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XBI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLB": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLC": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLF": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLI": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLK": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLP": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLRE": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLU": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLV": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XLY": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XT": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-09",
+      "pontos": 1254,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": true,
+        "motivos": []
+      }
+    },
+    "XYLD": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
+      "universo": "offshore",
+      "qualidade": {
+        "ok": false,
+        "motivos": [
+          "gap_congelado"
+        ]
+      }
+    },
+    "XYZ": {
+      "primeira": "2021-09-10",
+      "ultima": "2026-09-10",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
