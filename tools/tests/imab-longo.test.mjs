@@ -7,6 +7,7 @@ import path from "path";
 import {
   parseValor, mensalizaComoIndice, mensalizaComoVariacao,
   retornosMensaisImab11, validaContraImab11, escolherSerie, montarSeries, gerarImabLongo,
+  blocosSgs, buscarSgsLongo, janelaDeSondagem,
 } from "../imab-longo.mjs";
 
 let passou = 0;
@@ -171,6 +172,113 @@ await testeAsync("a esteira diária COMMITA o arquivo que o gerador escreve", as
   assert.ok(linha, "o job precisa ter a linha de git add");
   assert.ok(linha.includes("academia/data/imab-longo.json"),
     "imab-longo.json precisa estar no git add, senão o robô gera e descarta");
+});
+
+// ── o que o log da run #2 (11/09/2026) mostrou: HTTP 400 nos quatro códigos ──
+
+teste("blocosSgs NUNCA pede data futura", () => {
+  const hoje = new Date(2026, 8, 11); // 11/09/2026
+  const bs = blocosSgs(2004, hoje);
+  assert.strictEqual(bs[bs.length - 1].dataFinal, "11/09/2026",
+    "o último bloco tem que terminar hoje, não em 31/12 do ano corrente");
+  for (const b of bs) {
+    const [dd, mm, yyyy] = b.dataFinal.split("/").map(Number);
+    assert.ok(new Date(yyyy, mm - 1, dd) <= hoje, `bloco pedindo futuro: ${b.dataFinal}`);
+  }
+});
+
+await testeAsync("um bloco que falha não derruba os outros", async () => {
+  const hoje = new Date(2026, 8, 11);
+  const buscar = async (codigo, params) => {
+    // o bloco recente falha, como faz uma série descontinuada
+    if (params.dataInicial === "01/01/2022") throw new Error("HTTP 400");
+    return [{ data: `01/01/${params.dataInicial.slice(-4)}`, valor: "1000" }];
+  };
+  const rows = await buscarSgsLongo(12466, 2004, buscar, hoje);
+  assert.strictEqual(rows.length, 2, "os dois blocos antigos têm que sobreviver");
+  assert.strictEqual(rows.falhasDeBloco.length, 1);
+  assert.ok(/01\/01\/2022/.test(rows.falhasDeBloco[0]), rows.falhasDeBloco[0]);
+});
+
+await testeAsync("se NENHUM bloco responder, o erro diz qual bloco deu o quê", async () => {
+  const hoje = new Date(2026, 8, 11);
+  const buscar = async () => { throw new Error("HTTP 400"); };
+  await assert.rejects(
+    () => buscarSgsLongo(12466, 2004, buscar, hoje),
+    (e) => /nenhum bloco respondeu/.test(e.message) && /01\/01\/2004/.test(e.message) && /HTTP 400/.test(e.message),
+  );
+});
+
+teste("trecho congelado do IMAB11 sai do gabarito", () => {
+  // 6 meses reais, 12 meses travados no mesmo preço, 6 meses reais
+  const pontos = [];
+  let preco = 100;
+  const push = (mes, v) => pontos.push({ data: `${mes}-28`, close: v });
+  const meses = [];
+  for (let a = 2022; a <= 2023; a++) for (let m = 1; m <= 12; m++) meses.push(`${a}-${String(m).padStart(2, "0")}`);
+  meses.slice(0, 6).forEach((mes) => { preco *= 1.01; push(mes, preco); });
+  meses.slice(6, 18).forEach((mes) => { for (let d = 0; d < 20; d++) pontos.push({ data: `${mes}-${String(d + 1).padStart(2, "0")}`, close: 79.5 }); });
+  meses.slice(18).forEach((mes) => { preco *= 1.01; push(mes, preco); });
+
+  const g = retornosMensaisImab11(pontos);
+  for (const mes of meses.slice(6, 18)) {
+    assert.ok(!g.has(mes), `${mes} está dentro do trecho congelado e não podia virar gabarito`);
+  }
+  assert.ok(g.size > 0, "os meses bons continuam valendo");
+  for (const [, r] of g) assert.ok(Math.abs(r) > 1e-9, "nenhum retorno zero forjado sobra");
+});
+
+teste("mês pulado NÃO vira retorno de vários meses", () => {
+  const pontos = [
+    { data: "2024-01-31", close: 100 },
+    { data: "2024-02-29", close: 101 },
+    // março inteiro ausente
+    { data: "2024-04-30", close: 130 },
+  ];
+  const g = retornosMensaisImab11(pontos);
+  assert.ok(g.has("2024-02"), "fevereiro segue fevereiro de janeiro");
+  assert.ok(!g.has("2024-04"), "abril não pode herdar o salto de dois meses");
+});
+
+teste("na série REAL do IMAB11 o trecho congelado é descartado", () => {
+  // O diagnóstico do bug, preso em teste: academia/data/etfs/IMAB11.json tem
+  // 910 pregões parados em 79,50 (2022-03-08 a 2025-10-23). Sem descartar esse
+  // trecho, 47 meses viram retorno zero forjado e reprovam toda candidata.
+  const raiz = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..", "..");
+  const arq = path.join(raiz, "academia/data/etfs/IMAB11.json");
+  if (!fs.existsSync(arq)) return; // repo sem os dados, nada a afirmar
+  const serie = JSON.parse(fs.readFileSync(arq, "utf8"));
+
+  const util = retornosMensaisImab11(serie);
+  const congelados = [...util.keys()].filter((m) => m >= "2022-04" && m <= "2025-10");
+  assert.strictEqual(congelados.length, 0,
+    `meses do trecho congelado vazaram para o gabarito: ${congelados.join(", ")}`);
+  assert.ok(util.size >= 12, `sobraram só ${util.size} meses limpos, abaixo do mínimo`);
+  for (const [mes, r] of util) {
+    assert.ok(Math.abs(r) > 1e-9, `${mes} passou com retorno zero, cheiro de congelamento`);
+  }
+});
+
+teste("a sondagem usa INTERVALO DE DATA, nunca /ultimos/N grande", () => {
+  const g = new Map([["2021-10", 0.01], ["2026-09", 0.01]]);
+  const j = janelaDeSondagem(g, new Date(2026, 8, 11));
+  assert.strictEqual(j.dataInicial, "01/01/2020", "um ano antes do gabarito");
+  assert.strictEqual(j.dataFinal, "11/09/2026", "termina hoje, nunca no futuro");
+  assert.ok(!("ultimos" in j), "/ultimos/N foi o que levou HTTP 400 nos quatro códigos");
+});
+
+await testeAsync("escolherSerie sonda por data e repassa a janela ao SGS", async () => {
+  const vistos = [];
+  const buscar = async (codigo, params) => { vistos.push({ codigo, params }); throw new Error("HTTP 400"); };
+  const g = new Map([["2021-10", 0.01], ["2026-09", 0.01]]);
+  const { escolhido, diag } = await escolherSerie(g, buscar, new Date(2026, 8, 11));
+  assert.strictEqual(escolhido, null);
+  assert.strictEqual(vistos.length, 4, "as quatro candidatas são sondadas");
+  for (const v of vistos) {
+    assert.ok(v.params.dataInicial && v.params.dataFinal, `candidata ${v.codigo} sondada sem intervalo`);
+    assert.ok(!v.params.ultimos, `candidata ${v.codigo} voltou a usar /ultimos/N`);
+  }
+  assert.ok(diag.every((d) => /HTTP 400/.test(d)), "o diagnóstico guarda o erro de cada candidata");
 });
 
 console.log(`\n${passou} testes passaram.`);

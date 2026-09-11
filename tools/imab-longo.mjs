@@ -20,6 +20,15 @@ import fs from "fs";
 import path from "path";
 
 const SGS_IMAB_CANDIDATOS = [12466, 12467, 12468, 12462];
+
+// Mínimo de meses de sobreposição com o ETF para validar uma candidata.
+// Era 36. Com o IMAB11 congelado na fonte (910 pregões parados), sobraram 14
+// meses REAIS — e 36 passou a ser um portão que nada atravessa. Baixar só é
+// seguro porque os meses agora são limpos: retorno zero forjado de trecho
+// congelado é descartado antes de chegar aqui. A verificação (correlação,
+// erro médio e razão de volatilidade) continua a mesma, e o número de meses
+// usados vai no JSON para aparecer na legenda do gráfico.
+const MIN_MESES_GABARITO = 12;
 const SGS_CDI_MENSAL = 4391;
 const SGS_IPCA_MENSAL = 433;
 
@@ -54,21 +63,62 @@ async function buscarSgs(codigo, params, timeoutMs) {
   return rows;
 }
 
-/** A API do BCB limita séries diárias a ~10 anos — busca em blocos e junta. */
-export async function buscarSgsLongo(codigo, anoInicial, buscar = buscarSgs) {
-  const hoje = new Date();
+/** Data de hoje no formato que o SGS espera (DD/MM/AAAA). */
+function hojeSgs(hoje) {
+  const dd = String(hoje.getDate()).padStart(2, "0");
+  const mm = String(hoje.getMonth() + 1).padStart(2, "0");
+  return `${dd}/${mm}/${hoje.getFullYear()}`;
+}
+
+/**
+ * Divide o período em blocos aceitos pelo SGS (limite de ~10 anos por consulta
+ * em série diária). O último bloco termina HOJE, nunca em 31/12 do ano corrente:
+ * pedir data futura é uma das formas de levar HTTP 400 do Banco Central.
+ */
+export function blocosSgs(anoInicial, hoje = new Date()) {
+  const anoFinal = hoje.getFullYear();
   const blocos = [];
-  for (let a = anoInicial; a <= hoje.getFullYear(); a += 9) {
-    const fimAno = Math.min(a + 8, hoje.getFullYear());
-    blocos.push({ dataInicial: `01/01/${a}`, dataFinal: `31/12/${fimAno}` });
+  for (let a = anoInicial; a <= anoFinal; a += 9) {
+    const fimAno = Math.min(a + 8, anoFinal);
+    blocos.push({
+      dataInicial: `01/01/${a}`,
+      dataFinal: fimAno === anoFinal ? hojeSgs(hoje) : `31/12/${fimAno}`,
+    });
   }
+  return blocos;
+}
+
+/**
+ * Busca a série inteira em blocos e junta. Um bloco que falha NÃO derruba os
+ * outros: séries descontinuadas respondem erro justamente no bloco que cai
+ * depois do último dado que elas têm, e o histórico anterior continua válido.
+ * Só desiste se nenhum bloco vier, e aí diz exatamente qual bloco deu o quê.
+ */
+export async function buscarSgsLongo(codigo, anoInicial, buscar = buscarSgs, hoje = new Date()) {
+  const blocos = blocosSgs(anoInicial, hoje);
   const partes = [];
-  for (const b of blocos) partes.push(await buscar(codigo, b, 30000));
+  const falhas = [];
+  for (const b of blocos) {
+    try {
+      partes.push(await buscar(codigo, b, 30000));
+    } catch (e) {
+      falhas.push(`${b.dataInicial}..${b.dataFinal}: ${e.message}`);
+    }
+  }
+  if (partes.length === 0) {
+    throw new Error(`SGS ${codigo}: nenhum bloco respondeu (${falhas.join(" · ")})`);
+  }
   const vistos = new Set();
   const rows = [];
   for (const parte of partes) {
     for (const r of parte) if (!vistos.has(r.data)) { vistos.add(r.data); rows.push(r); }
   }
+  rows.sort((a, b) => {
+    const [da, ma, ya] = String(a.data).split("/");
+    const [db, mb, yb] = String(b.data).split("/");
+    return `${ya}${ma}${da}`.localeCompare(`${yb}${mb}${db}`);
+  });
+  Object.defineProperty(rows, "falhasDeBloco", { value: falhas, enumerable: false });
   return rows;
 }
 
@@ -114,14 +164,51 @@ export function mensalizaComoIndice(rows) {
 }
 
 /** Retornos mensais reais do ETF IMAB11 — o gabarito da validação. */
-export function retornosMensaisImab11(serieImab11) {
+/** "2024-03" -> "2024-04" */
+function mesSeguinte(mes) {
+  const [y, m] = mes.split("-").map(Number);
+  return m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, "0")}`;
+}
+
+/**
+ * Retornos mensais REAIS do ETF IMAB11, usados como gabarito.
+ *
+ * Dois cuidados que a versão anterior não tinha:
+ *
+ * 1. TRECHO CONGELADO. A Yahoo devolve preço repetido para ETF de renda fixa
+ *    pouco líquido — o IMAB11 ficou 910 pregões parado em 79,50 (2022-03-08 a
+ *    2025-10-23, 73% da série). Mês dentro de trecho congelado vira retorno
+ *    zero forjado, que destrói qualquer correlação e faz TODA candidata ser
+ *    reprovada. Esses meses saem do gabarito.
+ * 2. MÊS PULADO. O retorno só é calculado entre meses vizinhos no calendário.
+ *    Antes, se um mês faltasse, o código comparava um salto de vários meses
+ *    contra o retorno de um mês só do SGS.
+ */
+export function retornosMensaisImab11(serieImab11, minRunCongelado = 10) {
+  const serie = (serieImab11 || []).slice();
+
+  // marca os pontos que estão dentro de um trecho de preço repetido
+  const congelado = new Array(serie.length).fill(false);
+  let i = 0;
+  while (i < serie.length) {
+    let j = i + 1;
+    while (j < serie.length && serie[j].close === serie[i].close) j++;
+    if (j - i >= minRunCongelado) for (let k = i; k < j; k++) congelado[k] = true;
+    i = j;
+  }
+
   const fimDeMes = new Map();
-  (serieImab11 || []).forEach((p) => fimDeMes.set(String(p.data).slice(0, 7), p.close));
+  serie.forEach((p, idx) => {
+    if (congelado[idx]) return;
+    fimDeMes.set(String(p.data).slice(0, 7), p.close);
+  });
+
   const meses = [...fimDeMes.keys()].sort();
   const out = new Map();
-  for (let i = 1; i < meses.length; i++) {
-    const prev = fimDeMes.get(meses[i - 1]);
-    if (prev > 0) out.set(meses[i], fimDeMes.get(meses[i]) / prev - 1);
+  for (let k = 1; k < meses.length; k++) {
+    if (meses[k] !== mesSeguinte(meses[k - 1])) continue;
+    const prev = fimDeMes.get(meses[k - 1]);
+    if (prev > 0) out.set(meses[k], fimDeMes.get(meses[k]) / prev - 1);
   }
   return out;
 }
@@ -153,12 +240,34 @@ export function validaContraImab11(mensalSgs, gabarito) {
 }
 
 /** Descobre qual código do SGS é o IMA-B, testando as duas interpretações. */
-export async function escolherSerie(gabarito, buscar = buscarSgs) {
+/**
+ * Janela de sondagem das candidatas.
+ *
+ * ANTES ERA `/ultimos/900`, e os quatro códigos voltaram HTTP 400 — no
+ * navegador do dono E no runner do GitHub, em 11/09/2026. Só que o mesmo
+ * Banco Central responde todo dia para o robô diário, que pede POR INTERVALO
+ * DE DATA (fetch-dados.mjs:245 e :256, séries 12 e 433, de 01/01/2020 até
+ * hoje). Ou seja: o SGS está de pé e a forma por intervalo tem histórico de
+ * funcionar; quem nunca teve track record é o `/ultimos/N` com N grande.
+ * A sondagem passa a usar a forma comprovada. Se ainda assim vier erro, aí
+ * sim a conclusão é que as séries do bloco ANBIMA saíram do ar, e o
+ * diagnóstico por candidata diz isso com todas as letras.
+ */
+export function janelaDeSondagem(gabarito, hoje = new Date()) {
+  const meses = [...gabarito.keys()].sort();
+  const anoIni = meses.length ? Number(meses[0].slice(0, 4)) - 1 : hoje.getFullYear() - 5;
+  const dd = String(hoje.getDate()).padStart(2, "0");
+  const mm = String(hoje.getMonth() + 1).padStart(2, "0");
+  return { dataInicial: `01/01/${anoIni}`, dataFinal: `${dd}/${mm}/${hoje.getFullYear()}` };
+}
+
+export async function escolherSerie(gabarito, buscar = buscarSgs, hoje = new Date()) {
   const diag = [];
+  const janela = janelaDeSondagem(gabarito, hoje);
   for (const codigo of SGS_IMAB_CANDIDATOS) {
     let rows;
     try {
-      rows = await buscar(codigo, { ultimos: 900 }, 20000);
+      rows = await buscar(codigo, janela, 20000);
     } catch (e) {
       diag.push(`${codigo}: falha na busca (${e.message})`);
       continue;
@@ -218,17 +327,23 @@ export function montarSeries({ imabM, cdiM, ipcaM, gabarito }) {
  * a esteira seguir mesmo se o BCB estiver fora do ar (o arquivo do dia anterior
  * continua valendo).
  */
-export async function gerarImabLongo(ROOT, serieImab11, buscar = buscarSgs) {
+export async function gerarImabLongo(ROOT, serieImab11, buscar = buscarSgs, hoje = new Date()) {
   const gabarito = retornosMensaisImab11(serieImab11);
-  if (gabarito.size < 36) return { ok: false, motivo: `gabarito IMAB11 curto (${gabarito.size} meses)` };
+  if (gabarito.size < MIN_MESES_GABARITO) {
+    return {
+      ok: false,
+      motivo: `gabarito IMAB11 curto (${gabarito.size} meses utilizáveis, mínimo ${MIN_MESES_GABARITO}) — a série do ETF ` +
+        `provavelmente está congelada na fonte; sem referência boa não dá para validar candidata`,
+    };
+  }
 
-  const { escolhido, diag } = await escolherSerie(gabarito, buscar);
+  const { escolhido, diag } = await escolherSerie(gabarito, buscar, hoje);
   if (!escolhido) return { ok: false, motivo: `nenhuma candidata validou contra o IMAB11 — ${diag.join(" · ")}` };
 
   const [imabFull, cdiFull, ipcaFull] = [
-    await buscarSgsLongo(escolhido.codigo, 2003, buscar),
-    await buscarSgsLongo(SGS_CDI_MENSAL, 2003, buscar),
-    await buscarSgsLongo(SGS_IPCA_MENSAL, 2003, buscar),
+    await buscarSgsLongo(escolhido.codigo, 2003, buscar, hoje),
+    await buscarSgsLongo(SGS_CDI_MENSAL, 2003, buscar, hoje),
+    await buscarSgsLongo(SGS_IPCA_MENSAL, 2003, buscar, hoje),
   ];
 
   const imabM = escolhido.modo === "indice" ? mensalizaComoIndice(imabFull) : mensalizaComoVariacao(imabFull);
