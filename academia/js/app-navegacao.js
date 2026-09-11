@@ -815,6 +815,28 @@ function leCacheImabLongo() {
 
 let imabLongoBuscando = false;
 
+/**
+ * Série pronta, gerada uma vez por dia pela esteira (tools/imab-longo.mjs) e
+ * versionada em data/imab-longo.json.
+ *
+ * ESTE É O CAMINHO NORMAL. A busca ao vivo no BCB, abaixo, virou plano B: a rede
+ * do banco (que é onde o aluno está) bloqueia api.bcb.gov.br, e o gráfico morria
+ * com "não consegui montar a série longa agora". Nenhum outro gráfico do app
+ * depende de rede externa — este era o único.
+ */
+async function leArquivoImabLongo() {
+  try {
+    const res = await fetch("data/imab-longo.json", { cache: "no-cache" });
+    if (!res.ok) return null;
+    const j = await res.json();
+    if (!j || !j.series || !Array.isArray(j.series.meses) || j.series.meses.length < 120) return null;
+    // O render mostra a data com new Date(buscadoEm); a esteira grava geradoEm
+    // em ISO. Sem esta ponte, o rodapé do gráfico dizia "NaN/NaN/NaN".
+    const quando = Date.parse(j.geradoEm);
+    return { ...j, buscadoEm: isFinite(quando) ? quando : Date.now() };
+  } catch { return null; }
+}
+
 async function montarImabLongo(forcar) {
   const status = document.getElementById("status-imablongo");
   const card = document.getElementById("card-grafico-imablongo");
@@ -825,6 +847,14 @@ async function montarImabLongo(forcar) {
   if (imabLongoBuscando) return;
   imabLongoBuscando = true;
   status.style.display = "";
+
+  // Caminho normal: arquivo local. Instantâneo, funciona atrás de firewall.
+  const pronto = await leArquivoImabLongo();
+  if (pronto) {
+    imabLongoBuscando = false;
+    renderImabLongo(pronto);
+    return;
+  }
 
   try {
     const gabarito = retornosMensaisImab11();
