@@ -79,6 +79,26 @@ function navegarParaPasso(idTela) {
 
 function atualizarStepper(idTela) {
   var passos = document.querySelectorAll("#stepper li");
+
+  // O Modo Livre não tem briefing nem gabarito: o stepper mostra só o que
+  // existe (Montagem · Resultado · Apresentação) em vez de seis passos com
+  // metade morta. Os rótulos também mudam — "Gabarito" vira "Resultado".
+  var ROTULOS_LIVRE = { tela3: "Montagem", tela4: "Resultado", tela6: "Apresentação" };
+  passos.forEach(function (li) {
+    var alvo = li.dataset.tela;
+    if (modoLivre) {
+      var visivel = ROTULOS_LIVRE.hasOwnProperty(alvo);
+      li.hidden = !visivel;
+      if (visivel) li.textContent = ROTULOS_LIVRE[alvo];
+    } else {
+      li.hidden = false;
+      if (li.dataset.rotulo) li.textContent = li.dataset.rotulo;
+    }
+  });
+  // Renumera o que ficou visível, para o contador não pular (1, 2, 3).
+  var n = 0;
+  passos.forEach(function (li) { if (!li.hidden) { n++; li.dataset.passo = String(n); } });
+
   var indiceAtual = -1;
   passos.forEach(function (li, i) { if (li.dataset.tela === idTela) indiceAtual = i; });
   passos.forEach(function (li, i) {

@@ -1976,6 +1976,16 @@ window.addEventListener("load", () => {
   renderTrilhaNiveis();
   renderGrid();
   atualizarStatsHome();
+
+  // O padrão do app é o Modo Livre: quem abre quer montar carteira, não escolher
+  // exercício. O treino com cases fica a um clique, no card "Modo Case".
+  // Exceção: link compartilhado de um case (#case=NN) abre o case direto.
+  var caseNoHash = (location.hash || "").match(/case=(\d+)/);
+  if (caseNoHash && typeof abrirCase === "function") {
+    abrirCase(Number(caseNoHash[1]));
+  } else if (typeof iniciarModoLivre === "function") {
+    iniciarModoLivre();
+  }
 });
 
 // Navegação dos slides por teclado quando a Tela 6 está ativa

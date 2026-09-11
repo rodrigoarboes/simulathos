@@ -641,7 +641,10 @@ function iniciarModoLivre() {
   document.getElementById("aporte").value = 100000;
   document.getElementById("montagem-titulo").textContent = "Modo Livre — Monte sua carteira";
   document.getElementById("montagem-subtitulo").textContent = "Escolha ETFs da lista ou digite qualquer ticker. A simulação roda com dados históricos reais.";
-  document.getElementById("modo-livre-info").style.display = "";
+  var infoLivre = document.getElementById("modo-livre-info");
+  if (infoLivre) infoLivre.hidden = true;   // o card "Modo Case" já explica o contexto
+  var cardCase = document.getElementById("btn-modo-case");
+  if (cardCase) cardCase.hidden = false;    // no Livre, oferecemos o treino
   document.getElementById("btn-voltar-briefing").style.display = "none";
   document.getElementById("btn-submeter").textContent = "Simular →";
   // irTela3() é o único lugar que restaura rascunho (localStorage + hash #c=).
@@ -657,7 +660,10 @@ function abrirCase(id) {
   montagemAtual = [];
   document.getElementById("btn-voltar-briefing").style.display = "";
   document.getElementById("btn-submeter").textContent = "Submeter proposta para avaliação →";
-  document.getElementById("modo-livre-info").style.display = "none";
+  var infoLivreCase = document.getElementById("modo-livre-info");
+  if (infoLivreCase) infoLivreCase.hidden = true;
+  var cardCaseAtivo = document.getElementById("btn-modo-case");
+  if (cardCaseAtivo) cardCaseAtivo.hidden = true;  // já estamos num case: o caminho de volta é o stepper
   document.getElementById("montagem-subtitulo").textContent = "Selecione os ETFs e defina os percentuais. A lista é fechada por ETFs adequados ao mercado brasileiro e/ou offshore.";
   registrarTentativa(id);
 

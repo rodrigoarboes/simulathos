@@ -27,12 +27,12 @@
   </div>
 
   <ol class="stepper" id="stepper" aria-label="Etapas do simulador">
-    <li data-tela="tela1" data-passo="1" aria-current="step" role="button" tabindex="-1" aria-disabled="true">Cases</li>
-    <li data-tela="tela2" data-passo="2" role="button" tabindex="-1" aria-disabled="true">Briefing</li>
-    <li data-tela="tela3" data-passo="3" role="button" tabindex="-1" aria-disabled="true">Montagem</li>
-    <li data-tela="tela4" data-passo="4" role="button" tabindex="-1" aria-disabled="true">Gabarito</li>
-    <li data-tela="tela5" data-passo="5" role="button" tabindex="-1" aria-disabled="true">Pitch</li>
-    <li data-tela="tela6" data-passo="6" role="button" tabindex="-1" aria-disabled="true">Apresentação</li>
+    <li data-tela="tela1" data-rotulo="Cases" data-passo="1" aria-current="step" role="button" tabindex="-1" aria-disabled="true">Cases</li>
+    <li data-tela="tela2" data-rotulo="Briefing" data-passo="2" role="button" tabindex="-1" aria-disabled="true">Briefing</li>
+    <li data-tela="tela3" data-rotulo="Montagem" data-passo="3" role="button" tabindex="-1" aria-disabled="true">Montagem</li>
+    <li data-tela="tela4" data-rotulo="Gabarito" data-passo="4" role="button" tabindex="-1" aria-disabled="true">Gabarito</li>
+    <li data-tela="tela5" data-rotulo="Pitch" data-passo="5" role="button" tabindex="-1" aria-disabled="true">Pitch</li>
+    <li data-tela="tela6" data-rotulo="Apresentação" data-passo="6" role="button" tabindex="-1" aria-disabled="true">Apresentação</li>
   </ol>
 
   <div class="topbar__zona-fim">
@@ -78,8 +78,17 @@
 <!-- ============================== TELA 1: GRID DE CASES ============================== -->
 <div class="tela ativo" id="tela1">
   <div class="hero">
-    <h1>Simulador de <em>Macroalocação com ETFs</em></h1>
-    <p id="hero-subtitulo">15 cases reais para você treinar diagnóstico, montagem de carteira e justificativa técnica. Material exclusivo para alunos FEA e mentorados MAP®.</p>
+    <div class="tela3-hero__linha">
+      <div class="tela3-hero__texto">
+        <h1>Simulador de <em>Macroalocação com ETFs</em></h1>
+        <p id="hero-subtitulo">15 cases reais para você treinar diagnóstico, montagem de carteira e justificativa técnica. Material exclusivo para alunos FEA e mentorados MAP®.</p>
+      </div>
+      <button type="button" class="cartao-modo" onclick="iniciarModoLivre()">
+        <span class="cartao-modo__eyebrow">Modo Livre</span>
+        <span class="cartao-modo__titulo">Montar minha carteira</span>
+        <span class="cartao-modo__sub">Sem case, sem nota — direto ao ponto</span>
+      </button>
+    </div>
   </div>
 
   <!-- ANALYTICS -->
@@ -224,13 +233,20 @@
 <!-- ============================== TELA 3: MONTAGEM ============================== -->
 <div class="tela" id="tela3">
   <div class="hero tela3-hero">
-    <h2 id="montagem-titulo"></h2>
-    <p id="montagem-subtitulo" class="tela3-hero__sub">Digite o ticker ou nome no campo de busca e selecione. Defina os percentuais. Catálogo inclui ETFs B3 e offshore.</p>
-    <!-- O modo livre é ligado/desligado por style.display no app-programa.js;
-         por isso este display:none inline continua aqui (ver hooks pendentes). -->
-    <div id="modo-livre-info" class="tela3-modo-livre" style="display:none;">
-      <strong>Modo Livre</strong> — Monte sua carteira com qualquer combinação de ativos. Digite o ticker ou nome em cada linha para buscar ETFs, ações, FIIs e mais.
+    <div class="tela3-hero__linha">
+      <div class="tela3-hero__texto">
+        <h2 id="montagem-titulo"></h2>
+        <p id="montagem-subtitulo" class="tela3-hero__sub">Digite o ticker ou nome no campo de busca e selecione. Defina os percentuais. Catálogo inclui ETFs B3 e offshore.</p>
+      </div>
+      <!-- Modo Case: o treino com briefing, gabarito e nota. Some quando já
+           estamos dentro de um case (aí o caminho de volta é o stepper). -->
+      <button type="button" class="cartao-modo" id="btn-modo-case" onclick="voltarTela1()">
+        <span class="cartao-modo__eyebrow">Modo Case</span>
+        <span class="cartao-modo__titulo">Treinar com 15 clientes</span>
+        <span class="cartao-modo__sub">Briefing, gabarito e nota</span>
+      </button>
     </div>
+    <div id="modo-livre-info" class="tela3-modo-livre" hidden></div>
   </div>
 
   <div class="montagem-grid tela3-grid">

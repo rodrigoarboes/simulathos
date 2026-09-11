@@ -2495,6 +2495,10 @@ table, th, td, input, output, code, kbd, samp, .mono,
   border-radius: var(--radius-pill);
   white-space: nowrap;
 }
+/* O Modo Livre esconde os passos que não existem nele (Cases, Briefing, Pitch).
+   Vem depois de `.stepper li` para vencer o display:flex. */
+.stepper li[hidden] { display: none !important; }
+
 .stepper li::before {
   content: attr(data-passo);
   display: inline-flex;

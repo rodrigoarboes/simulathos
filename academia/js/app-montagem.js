@@ -979,7 +979,13 @@ function montValidarMontagem(soma) {
   if (soma > 100.1) {
     return { ok: false, estado: soma <= 105 ? "warn" : "bad", msg: "Passou " + montFmtPct(soma - 100) + " de 100%" };
   }
-  return { ok: true, estado: "ok", msg: "Carteira fechada em 100% — pronta para avaliação" };
+  // No Modo Livre não há gabarito nem nota: o próximo passo é simular, não ser avaliado.
+  var emLivre = (typeof modoLivre !== "undefined" && modoLivre);
+  return {
+    ok: true, estado: "ok",
+    msg: emLivre ? "Carteira fechada em 100% — pronta para simular"
+                 : "Carteira fechada em 100% — pronta para avaliação"
+  };
 }
 
 function montRenderTotal(soma) {
