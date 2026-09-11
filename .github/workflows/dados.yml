@@ -60,7 +60,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add academia/data/dados.js academia/data/manifest.js academia/data/etfs academia/data/offshore academia/data/indices academia/data/cdi.json academia/data/ibov.json academia/data/ipca.json 2>/dev/null || true
+          git add academia/data/dados.js academia/data/manifest.js academia/data/etfs academia/data/offshore academia/data/indices academia/data/cdi.json academia/data/ibov.json academia/data/ipca.json academia/data/imab-longo.json 2>/dev/null || true
           if git diff --cached --quiet; then
             echo "Nada mudou, sem commit."
           else

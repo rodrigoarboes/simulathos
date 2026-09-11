@@ -160,4 +160,17 @@ await testeAsync("BCB fora do ar NÃO quebra a esteira: devolve motivo, não exc
   fs.rmSync(dir, { recursive: true, force: true });
 });
 
+await testeAsync("a esteira diária COMMITA o arquivo que o gerador escreve", async () => {
+  // O gerador escreve academia/data/imab-longo.json, mas o job do Actions dá
+  // `git add` numa lista explícita de caminhos. Quando o arquivo ficou fora da
+  // lista, o robô gerava e jogava fora — o gráfico nunca aparecia. Este teste
+  // amarra os dois lados para não acontecer de novo.
+  const raiz = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..", "..");
+  const yml = fs.readFileSync(path.join(raiz, ".github/workflows/dados.yml"), "utf8");
+  const linha = yml.split("\n").find((l) => l.includes("git add academia/data"));
+  assert.ok(linha, "o job precisa ter a linha de git add");
+  assert.ok(linha.includes("academia/data/imab-longo.json"),
+    "imab-longo.json precisa estar no git add, senão o robô gera e descarta");
+});
+
 console.log(`\n${passou} testes passaram.`);
