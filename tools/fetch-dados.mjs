@@ -28,6 +28,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import vm from "vm";
+import { gerarImabLongo } from "./imab-longo.mjs";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -596,6 +597,23 @@ async function main() {
             fs.writeFileSync(path.join(ROOT, "manifest.js"), manifestParaJs(manifest));
             const semOk = Object.values(manifest.porTicker).filter((t) => !t.qualidade.ok).length;
             console.log(`OK (${manifest.totalSeries} séries, ${semOk} com alerta de qualidade)`);
+        } catch (err) {
+            console.log(`FALHOU — ${err.message}`);
+        }
+    }
+
+    // ── Série longa IMA-B × CDI × IPCA (academia) ────────────────
+    // Esse gráfico buscava o BCB AO VIVO no navegador do aluno. Como o público
+    // é bancário, a rede do banco bloqueia api.bcb.gov.br e o gráfico morria na
+    // cara dele. Agora a busca acontece aqui, uma vez por dia, e o app só lê o
+    // JSON. Se o BCB estiver fora do ar, o arquivo de ontem continua valendo.
+    if (target === "academia" && dadosFinal) {
+        try {
+            process.stdout.write("  Montando imab-longo.json... ");
+            const r = await gerarImabLongo(ROOT, dadosFinal.etfs && dadosFinal.etfs.IMAB11);
+            console.log(r.ok
+                ? `OK (${r.meses} meses, SGS ${r.codigo}${r.emendaDesde ? `, ETF a partir de ${r.emendaDesde}` : ""})`
+                : `PULADO — ${r.motivo}`);
         } catch (err) {
             console.log(`FALHOU — ${err.message}`);
         }
