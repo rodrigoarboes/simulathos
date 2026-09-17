@@ -80,6 +80,84 @@
     "Não classificado":     { fatorRisco: 1.00, liquidezEfetiva: 0.50, moeda: "BRL", duration: null }
   };
 
+  /* ---------------------------------------------------------------------------
+     TRIBUTAÇÃO DE RENDA FIXA — POR ATIVO, não por classe.
+
+     O campo que decide a faixa de IR de um ETF de renda fixa (25/20/15%) é o
+     PRAZO MÉDIO DE REPACTUAÇÃO da carteira do índice — e ele NÃO é a duration.
+
+     O caso LFTS11 é a prova viva: ETF de Tesouro Selic com títulos de
+     vencimento longo, mas a STN definiu que a repactuação de fundo de índice
+     lastreado em LFT é de UM dia. O ETF saiu de 15% para 25%. Quem deduz a
+     alíquota da duration erra por 10 pontos percentuais.
+
+     Nome, gestora e classe NÃO ficam aqui: já vêm do ETF_INFO. Esta tabela
+     guarda só o dado que não existia em lugar nenhum — o prazo.
+
+     `fonte` diz o quanto confiar no número, e a tela mostra isso:
+       'gestora'   → publicado pela gestora/índice (confiável)
+       'vencimento'→ derivado do vencimento do título-alvo; o número é
+                     aproximado, mas a FAIXA é inequívoca (2045 é > 720 dias)
+       null        → não cadastrado. A tela NÃO mostra alíquota: prefere dizer
+                     "prazo não cadastrado" a chutar um número otimista.
+     --------------------------------------------------------------------------- */
+  var RF_TRIBUTACAO = {
+    "LFTS11": {
+      prazoRepactuacao: 1, fonte: "gestora",
+      nota: "A STN definiu repactuação de 1 dia para fundo de índice lastreado em LFT — o ETF passou de 15% para 25%."
+    },
+    "LFTB11": {
+      prazoRepactuacao: 760, fonte: "gestora",
+      indice: "MarketVector Brazil Treasury 760 Day Target Duration",
+      nota: "91% Tesouro Selic + 9% Tesouro IPCA+ 2060: o pedaço longo puxa o prazo médio para 760 dias e trava os 15%."
+    },
+    // Índices cujo prazo médio a gestora publica e muda com o tempo. Ficam sem
+    // número DE PROPÓSITO: ver o comentário acima.
+    "IMAB11": { prazoRepactuacao: null, fonte: null, indice: "IMA-B" },
+    "IMBB11": { prazoRepactuacao: null, fonte: null, indice: "IMA-B" },
+    "B5P211": { prazoRepactuacao: null, fonte: null, indice: "IMA-B 5 P2" },
+    "IB5M11": { prazoRepactuacao: null, fonte: null, indice: "IMA-B 5" },
+    "IRFM11": { prazoRepactuacao: null, fonte: null, indice: "IRF-M" },
+    "FIXA11": { prazoRepactuacao: null, fonte: null }
+  };
+
+  /* ETFs de NTN-B com vencimento-alvo no ticker (XB3011 = IPCA+ 2030,
+     TD6011 = IPCA+ 2060...). O prazo é aproximado, mas a FAIXA é inequívoca:
+     qualquer vencimento a mais de 2 anos já está nos 15%. */
+  var RE_NTNB_VENCIMENTO = /^(XB|TD)(\d{2})11$/;
+
+  function prazoPorVencimento(ticker) {
+    var m = RE_NTNB_VENCIMENTO.exec(ticker);
+    if (!m) return null;
+    var ano = 2000 + parseInt(m[2], 10);
+    var anoAtual = new Date().getFullYear();
+    var anosAteVencer = ano - anoAtual;
+    if (anosAteVencer <= 0) return null;
+    // Duration de NTN-B fica bem abaixo do prazo até o vencimento por causa dos
+    // cupons semestrais. 0,6 é um piso conservador: subestima o prazo, então
+    // nunca promove o ativo para uma faixa melhor do que a real.
+    return Math.round(anosAteVencer * 365 * 0.6);
+  }
+
+  function tributacaoDe(ticker, classe) {
+    var fixo = RF_TRIBUTACAO[ticker];
+    if (fixo) {
+      return {
+        prazoRepactuacao: (typeof fixo.prazoRepactuacao === "number") ? fixo.prazoRepactuacao : null,
+        fonte: fixo.fonte || null,
+        indice: fixo.indice || null,
+        nota: fixo.nota || null
+      };
+    }
+    var derivado = prazoPorVencimento(ticker);
+    if (derivado !== null) {
+      return { prazoRepactuacao: derivado, fonte: "vencimento", indice: null, nota: null };
+    }
+    // Só renda fixa tem faixa por prazo. Ação, FII e cripto seguem outra regra.
+    var ehRF = typeof classe === "string" && classe.indexOf("RF ") === 0;
+    return { prazoRepactuacao: null, fonte: null, indice: null, nota: ehRF ? null : "não é renda fixa" };
+  }
+
   /* Custódia e moeda derivadas da classe (fallback quando a fonte não informa). */
   var CUSTODIA_POR_CLASSE = {
     "Offshore US": "US", "UCITS": "IE", "Fundos Abertos": "CVM"
@@ -540,10 +618,10 @@
     var info = fonteInfo()[ticker] || null;
     var guia = fonteGuia()[ticker] || null;
     var classe = classificar(ticker, origem, baseETF, info);
-    var custodia = custodiaDe(classe, origem, info);
     var serie = serieDe(ticker, (typeof window !== "undefined" ? window.DADOS : null));
     var janela = janelaDe(ticker, serie);
     var nome = (info && info.nome) || (baseETF && baseETF.nome) || ticker;
+    var custodia = custodiaDe(classe, origem, info);
     var desc = descricaoDe(ticker, origem, baseETF, info);
 
     indice[ticker] = {
@@ -562,11 +640,15 @@
       ultimaData: janela ? janela.ultima : null,
       pontos: janela ? janela.pontos : null,
       janela: janela,
-      risco: atributosDaClasse(classe),
+      // Era 'risco' aqui e 'risco' de novo 4 linhas abaixo, no MESMO objeto: o
+      // segundo vencia e os atributos da classe (fatorRisco, liquidez, duration)
+      // eram descartados em silêncio. Renomeado pra 'atributos'.
+      atributos: atributosDaClasse(classe),
       qualidadeOk: qualidadeDe(ticker),
       equivalentes: equivalentesBrutos(ticker),
       papel: (guia && guia.papel) || null,
       risco: (guia && guia.risco) || null,
+      tributacao: tributacaoDe(ticker, classe),
       pitch: (guia && guia.pitch) || null,
       _origem: origem
     };
@@ -654,6 +736,14 @@
         ultimaData: r.ultimaData || null,
         pontos: (typeof r.pontos === "number") ? r.pontos : null,
         qualidadeOk: (typeof r.qualidadeOk === "boolean") ? r.qualidadeOk : null,
+        atributos: r.atributos ? {
+          fatorRisco: r.atributos.fatorRisco, liquidezEfetiva: r.atributos.liquidezEfetiva,
+          moeda: r.atributos.moeda, duration: r.atributos.duration
+        } : null,
+        tributacao: r.tributacao ? {
+          prazoRepactuacao: r.tributacao.prazoRepactuacao, fonte: r.tributacao.fonte,
+          indice: r.tributacao.indice, nota: r.tributacao.nota
+        } : null,
         janela: r.janela ? {
           primeira: r.janela.primeira, ultima: r.janela.ultima,
           pontos: r.janela.pontos, fonte: r.janela.fonte

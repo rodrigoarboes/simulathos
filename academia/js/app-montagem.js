@@ -315,6 +315,7 @@ function renderLinhasAlocacao() {
       html += montBadgeSim(reg);
       html += '<span class="alloc-row__nome">' + montEsc((reg && reg.nome) || linha.ticker) + "</span>";
       if (classe) html += '<span class="alloc-row__classe-nome">' + montEsc(classe) + "</span>";
+      html += montBadgeIR(linha.ticker);
     }
     html += "</div>";
     html += "</div>";
@@ -1113,6 +1114,126 @@ function agruparPorClasse(alloc) {
   return out;
 }
 
+/* ---------------------------------------------------------------------------
+   TRIBUTAÇÃO DE RENDA FIXA NA TELA
+
+   O que decide a faixa de IR de um ETF de RF (25/20/15%) é o prazo médio de
+   repactuação do índice — que NÃO é a duration. O catálogo guarda o prazo por
+   ativo e o motor (Tributacao) aplica a regra; aqui só desenhamos.
+
+   Ativo sem prazo cadastrado mostra "prazo não cadastrado" em vez de uma
+   alíquota chutada: o caso LFTS11 (reclassificado de 15% para 25% pela STN)
+   mostrou o custo de supor.
+   --------------------------------------------------------------------------- */
+function montTribDe(ticker) {
+  if (typeof Tributacao === "undefined" || !ticker) return null;
+  var info = (typeof Catalogo !== "undefined" && Catalogo.info) ? Catalogo.info(ticker) : null;
+  var tr = info && info.tributacao;
+  if (!tr) return null;
+  var ehRF = typeof info.classe === "string" && info.classe.indexOf("RF ") === 0;
+  if (!ehRF) return null;
+  var ir = Tributacao.aliquotaEtfRf(tr.prazoRepactuacao);
+  return {
+    prazo: tr.prazoRepactuacao, fonte: tr.fonte, indice: tr.indice, nota: tr.nota,
+    aliquota: ir.aliquota, faixa: ir.faixa, aplicavel: ir.aplicavel
+  };
+}
+
+function montBadgeIR(ticker) {
+  var t = montTribDe(ticker);
+  if (!t) return "";
+  if (!t.aplicavel) {
+    return '<span class="alloc-row__ir alloc-row__ir--sem" title="Sem o prazo médio de repactuação do índice não dá pra dizer a faixa de IR. Confira a lâmina da gestora.">IR ?</span>';
+  }
+  var pct = Math.round(t.aliquota * 100);
+  var titulo = "IR de " + pct + "% — prazo médio de repactuação de " +
+    t.prazo + " dias (" + t.faixa + ")" +
+    (t.fonte === "vencimento" ? ". Prazo aproximado pelo vencimento do título-alvo." : "") +
+    (t.nota ? " " + t.nota : "");
+  var cls = pct <= 15 ? "bom" : (pct >= 25 ? "caro" : "medio");
+  return '<span class="alloc-row__ir alloc-row__ir--' + cls + '" title="' + montEsc(titulo) + '">IR ' + pct + "%</span>";
+}
+
+/* Itens de RF da carteira no formato que o motor espera. */
+function montItensRF(alloc) {
+  var itens = [];
+  (alloc || []).forEach(function (linha) {
+    if (!linha || !linha.ticker) return;
+    var pct = Number(linha.pct) || 0;
+    if (pct <= 0) return;
+    var t = montTribDe(linha.ticker);
+    if (!t) return;
+    itens.push({ ticker: linha.ticker, peso: pct, prazoDias: t.prazo });
+  });
+  return itens;
+}
+
+/* O bloco que prova a tese: prazo médio da parte de RF, em que faixa cai e
+   quanto de ativo longo falta pra passar dos 720 dias. */
+/* Prazo do ativo longo usado como referência no conselho "quanto falta".
+   Sai do catálogo, não de constante: o número que aconselha tem que ser o mesmo
+   que a tela vai calcular quando o ativo entrar na carteira. */
+function montPrazoLongoDeReferencia() {
+  var candidatos = ["TD6011", "XB6011", "TD5011", "XB5011", "XB4511"];
+  for (var i = 0; i < candidatos.length; i++) {
+    var t = montTribDe(candidatos[i]);
+    if (t && typeof t.prazo === "number" && t.prazo > Tributacao.LIMITE_LONGO_PRAZO_DIAS) {
+      return { prazo: t.prazo, rotulo: candidatos[i] };
+    }
+  }
+  return { prazo: 8435, rotulo: "IPCA+ 2060" }; // duration ~23 anos
+}
+
+function montBlocoTributario(alloc) {
+  if (typeof Tributacao === "undefined") return "";
+  var itens = montItensRF(alloc);
+  if (!itens.length) return "";
+
+  var medio = Tributacao.prazoMedioPonderado(itens);
+  var semPrazo = itens.filter(function (i) { return i.prazoDias === null; });
+
+  var html = '<div class="tribbox">';
+  html += '<div class="tribbox__tit">Renda fixa · prazo médio e faixa de IR</div>';
+
+  if (!medio.aplicavel) {
+    html += '<div class="tribbox__aviso">Nenhum ativo de renda fixa da carteira tem prazo médio cadastrado — ' +
+      'sem isso não dá pra dizer a faixa de IR.</div></div>';
+    return html;
+  }
+
+  var dias = Math.round(medio.prazoDias);
+  var fundo = Tributacao.aliquotaFundoRf(medio.prazoDias);
+  html += '<div class="tribbox__linha"><span>Prazo médio ponderado</span><b>' + dias + ' dias</b></div>';
+  html += '<div class="tribbox__linha"><span>Como FUNDO, a carteira seria</span><b>' +
+    fundo.classe + ' · IR ' + Math.round(fundo.aliquota * 100) + '%</b></div>';
+
+  if (dias <= Tributacao.LIMITE_LONGO_PRAZO_DIAS) {
+    // A pergunta prática: quanto de NTN-B longa resolve? O prazo tem que vir do
+    // MESMO lugar que a tela usa pro ativo, senão o conselho não fecha: com uma
+    // constante própria eu dizia "bote 9 pontos" e, aplicados, a carteira
+    // continuava em curto prazo (o navegador pegou isso).
+    var ref = montPrazoLongoDeReferencia();
+    var falta = Tributacao.pesoParaVirarLongoPrazo(itens, ref.prazo);
+    if (falta.necessario && typeof falta.pesoExtra === "number") {
+      html += '<div class="tribbox__tese">Faltam <b>' + falta.pesoExtra.toFixed(1) +
+        ' pontos</b> de NTN-B longa (' + montEsc(ref.rotulo) + ') pra passar dos 720 dias ' +
+        'e cair nos 15%. É a mesma engenharia do <b>LFTB11</b>: 91% Tesouro Selic + 9% IPCA+ 2060.</div>';
+    }
+  } else {
+    html += '<div class="tribbox__tese tribbox__tese--ok">A carteira já passa dos 720 dias — ' +
+      'faixa de <b>15%</b>, a menor da renda fixa.</div>';
+  }
+
+  if (semPrazo.length) {
+    html += '<div class="tribbox__aviso">Fora da conta por falta de prazo cadastrado: <b>' +
+      semPrazo.map(function (i) { return montEsc(i.ticker); }).join(", ") + '</b>.</div>';
+  }
+  html += '<div class="tribbox__nota">Prazo médio de repactuação não é duration. ' +
+    'ETF de RF não tem come-cotas e a alíquota vale da compra à venda.</div>';
+  html += "</div>";
+  return html;
+}
+
 function renderComposicao(aporte, soma) {
   var alvo = montById("carteira-composicao") || montById("resumo-classes");
   if (!alvo) return;
@@ -1152,6 +1273,8 @@ function renderComposicao(aporte, soma) {
         '<span class="compose__pct">' + montFmtPct(e.pct) + "</span></li>";
     });
     html += "</ul>";
+    // Bloco de tributação: só aparece quando existe renda fixa na carteira.
+    html += montBlocoTributario(montagemAtual);
   }
 
   alvo.innerHTML = html;
