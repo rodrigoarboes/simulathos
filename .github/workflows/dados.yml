@@ -5,8 +5,15 @@ name: Atualizar dados de mercado (academia)
 # regenera o manifesto de procedência (academia/data/manifest.js) e
 # abre commit direto na branch se algo mudou.
 #
-# Falha o job se a última data global do manifesto ficar com mais de 7
-# dias — sinal de que a fonte parou de responder ou o fetch está quebrado.
+# O JOB FALHA — de vermelho, visível — quando:
+#   · algum arquivo obrigatório não foi gerado;
+#   · alguma pasta de séries encolheu (fonte caindo);
+#   · sobrou arquivo gerado fora do commit;
+#   · o dado JÁ COMMITADO está parado há mais de 7 dias.
+#
+# A regra dessa esteira é uma só: nada de `|| true`, nada de `2>/dev/null`,
+# nada que deixe o robô terminar verde com dado velho. Ver o histórico do
+# estrago em tools/checar-dados.mjs.
 
 on:
   schedule:
@@ -31,39 +38,35 @@ jobs:
       - name: Buscar dados (academia)
         run: node tools/fetch-dados.mjs --target=academia
 
-      - name: Checar frescor dos dados (falha se > 7 dias)
-        run: |
-          node -e '
-            const fs = require("fs");
-            const vm = require("vm");
-            const src = fs.readFileSync("academia/data/manifest.js", "utf8");
-            const sandbox = {};
-            sandbox.window = sandbox;
-            vm.createContext(sandbox);
-            vm.runInContext(src, sandbox);
-            const manifest = sandbox.MANIFEST;
-            if (!manifest || !manifest.ultimaDataGlobal) {
-              console.error("Manifesto sem ultimaDataGlobal — fetch falhou.");
-              process.exit(1);
-            }
-            const ultima = new Date(manifest.ultimaDataGlobal + "T00:00:00Z");
-            const hoje = new Date();
-            const diasAtras = (hoje - ultima) / (1000 * 60 * 60 * 24);
-            console.log(`Última data global: ${manifest.ultimaDataGlobal} (${diasAtras.toFixed(1)} dias atrás)`);
-            if (diasAtras > 7) {
-              console.error("Dados desatualizados há mais de 7 dias — falhando o job.");
-              process.exit(1);
-            }
-          '
+      - name: Conferir o que o fetch gerou
+        run: node tools/checar-dados.mjs --modo=gerados
 
       - name: Commitar mudanças
         run: |
+          set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add academia/data/dados.js academia/data/manifest.js academia/data/etfs academia/data/offshore academia/data/indices academia/data/cdi.json academia/data/ibov.json academia/data/ipca.json academia/data/imab-longo.json 2>/dev/null || true
+
+          # `git add -A <pasta>` em vez da lista de caminhos de antes: a lista
+          # tinha um arquivo que nunca é gerado (imab-longo.json), e o git
+          # aborta o add INTEIRO quando um pathspec não casa. Resultado: índice
+          # vazio, "nada mudou" e nove dias de dado velho no ar.
+          git add -A academia/data
+
           if git diff --cached --quiet; then
             echo "Nada mudou, sem commit."
-          else
-            git commit -m "chore(dados): atualização diária automática (academia)"
-            git push
+            exit 0
           fi
+
+          git commit -m "chore(dados): atualização diária automática (academia)"
+
+          # Push com uma segunda tentativa: se alguém commitou na branch no meio
+          # do caminho, reintegra e empurra de novo em vez de morrer.
+          git push || {
+            echo "push recusado — reintegrando a branch e tentando de novo"
+            git pull --rebase origin "${GITHUB_REF_NAME}"
+            git push
+          }
+
+      - name: Provar que o dado novo está commitado
+        run: node tools/checar-dados.mjs --modo=commitado
