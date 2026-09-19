@@ -2,7 +2,7 @@
 // Procedência e qualidade das séries de academia/data/dados.js.
 // Ver tools/README-dados.md para as regras de qualidade.
 window.MANIFEST = {
-  "geradoEm": "2026-09-19T04:40:50.129Z",
+  "geradoEm": "2026-09-19T13:20:32.623Z",
   "ultimaDataGlobal": "2026-09-18",
   "totalSeries": 637,
   "porTicker": {
@@ -18,8 +18,8 @@ window.MANIFEST = {
     },
     "AAPL34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -28,8 +28,8 @@ window.MANIFEST = {
     },
     "ABEV3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -62,8 +62,8 @@ window.MANIFEST = {
     },
     "ALPA4": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -84,8 +84,8 @@ window.MANIFEST = {
     },
     "ALUP11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -94,8 +94,8 @@ window.MANIFEST = {
     },
     "ALZR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -106,8 +106,8 @@ window.MANIFEST = {
     },
     "AMZO34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -136,8 +136,8 @@ window.MANIFEST = {
     },
     "ARGT39": {
       "primeira": "2026-05-29",
-      "ultima": "2026-09-17",
-      "pontos": 78,
+      "ultima": "2026-09-18",
+      "pontos": 79,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -146,8 +146,8 @@ window.MANIFEST = {
     },
     "ASAI3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -186,8 +186,8 @@ window.MANIFEST = {
     },
     "B3SA3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -208,8 +208,8 @@ window.MANIFEST = {
     },
     "BAIQ39": {
       "primeira": "2026-05-29",
-      "ultima": "2026-09-17",
-      "pontos": 78,
+      "ultima": "2026-09-18",
+      "pontos": 79,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -218,8 +218,8 @@ window.MANIFEST = {
     },
     "BBAS3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -228,8 +228,8 @@ window.MANIFEST = {
     },
     "BBDC3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -238,8 +238,8 @@ window.MANIFEST = {
     },
     "BBDC4": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -284,8 +284,8 @@ window.MANIFEST = {
     },
     "BBSE3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -564,8 +564,8 @@ window.MANIFEST = {
     },
     "BPAC11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -604,8 +604,8 @@ window.MANIFEST = {
     },
     "BRCR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -644,8 +644,8 @@ window.MANIFEST = {
     },
     "BSIL39": {
       "primeira": "2022-04-18",
-      "ultima": "2026-09-16",
-      "pontos": 1104,
+      "ultima": "2026-09-18",
+      "pontos": 1105,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -656,8 +656,8 @@ window.MANIFEST = {
     },
     "BTLG11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -722,8 +722,8 @@ window.MANIFEST = {
     },
     "CASH3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -734,8 +734,8 @@ window.MANIFEST = {
     },
     "CGAS5": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -782,8 +782,8 @@ window.MANIFEST = {
     },
     "CMIG4": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -792,8 +792,8 @@ window.MANIFEST = {
     },
     "CMIN3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -804,8 +804,8 @@ window.MANIFEST = {
     },
     "COCA34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -814,8 +814,8 @@ window.MANIFEST = {
     },
     "COGN3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -848,8 +848,8 @@ window.MANIFEST = {
     },
     "CPFE3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -870,8 +870,8 @@ window.MANIFEST = {
     },
     "CPTS11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -894,8 +894,8 @@ window.MANIFEST = {
     },
     "CSAN3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -904,8 +904,8 @@ window.MANIFEST = {
     },
     "CSMG3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -916,8 +916,8 @@ window.MANIFEST = {
     },
     "CVCB3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -928,8 +928,8 @@ window.MANIFEST = {
     },
     "CXSE3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -940,8 +940,8 @@ window.MANIFEST = {
     },
     "CYRE3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -972,8 +972,8 @@ window.MANIFEST = {
     },
     "DEVA11": {
       "primeira": "2024-02-01",
-      "ultima": "2026-09-16",
-      "pontos": 655,
+      "ultima": "2026-09-18",
+      "pontos": 657,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -984,8 +984,8 @@ window.MANIFEST = {
     },
     "DISB34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1058,8 +1058,8 @@ window.MANIFEST = {
     },
     "DXCO3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1116,8 +1116,8 @@ window.MANIFEST = {
     },
     "EGIE3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1136,8 +1136,8 @@ window.MANIFEST = {
     },
     "ENEV3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1146,8 +1146,8 @@ window.MANIFEST = {
     },
     "EQTL3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1200,8 +1200,8 @@ window.MANIFEST = {
     },
     "EZTC3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1255,8 +1255,8 @@ window.MANIFEST = {
     },
     "FLRY3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1331,8 +1331,8 @@ window.MANIFEST = {
     },
     "GFSA3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1344,8 +1344,8 @@ window.MANIFEST = {
     },
     "GGBR4": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1354,8 +1354,8 @@ window.MANIFEST = {
     },
     "GGRC11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1408,8 +1408,8 @@ window.MANIFEST = {
     },
     "GOGL34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1494,8 +1494,8 @@ window.MANIFEST = {
     },
     "HAPV3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1518,8 +1518,8 @@ window.MANIFEST = {
     },
     "HCTR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1554,8 +1554,8 @@ window.MANIFEST = {
     },
     "HGBS11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1566,8 +1566,8 @@ window.MANIFEST = {
     },
     "HGCR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1578,8 +1578,8 @@ window.MANIFEST = {
     },
     "HGLG11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1588,8 +1588,8 @@ window.MANIFEST = {
     },
     "HGRE11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1598,8 +1598,8 @@ window.MANIFEST = {
     },
     "HGRU11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1620,8 +1620,8 @@ window.MANIFEST = {
     },
     "HSML11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1710,8 +1710,8 @@ window.MANIFEST = {
     },
     "INTB3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1755,8 +1755,8 @@ window.MANIFEST = {
     },
     "ITSA4": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1767,8 +1767,8 @@ window.MANIFEST = {
     },
     "ITUB4": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1819,8 +1819,8 @@ window.MANIFEST = {
     },
     "JHSF3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1831,8 +1831,8 @@ window.MANIFEST = {
     },
     "JNJB34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1841,8 +1841,8 @@ window.MANIFEST = {
     },
     "JPMC34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1851,8 +1851,8 @@ window.MANIFEST = {
     },
     "JSRE11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1863,8 +1863,8 @@ window.MANIFEST = {
     },
     "KLBN11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1885,8 +1885,8 @@ window.MANIFEST = {
     },
     "KNCR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1897,8 +1897,8 @@ window.MANIFEST = {
     },
     "KNHF11": {
       "primeira": "2023-08-22",
-      "ultima": "2026-09-16",
-      "pontos": 766,
+      "ultima": "2026-09-18",
+      "pontos": 767,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1909,8 +1909,8 @@ window.MANIFEST = {
     },
     "KNIP11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1921,8 +1921,8 @@ window.MANIFEST = {
     },
     "KNRI11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1931,8 +1931,8 @@ window.MANIFEST = {
     },
     "KNSC11": {
       "primeira": "2022-02-17",
-      "ultima": "2026-09-16",
-      "pontos": 1142,
+      "ultima": "2026-09-18",
+      "pontos": 1144,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2005,8 +2005,8 @@ window.MANIFEST = {
     },
     "LREN3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2037,8 +2037,8 @@ window.MANIFEST = {
     },
     "LWSA3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2047,8 +2047,8 @@ window.MANIFEST = {
     },
     "M1TA34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2069,8 +2069,8 @@ window.MANIFEST = {
     },
     "MCCI11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2081,8 +2081,8 @@ window.MANIFEST = {
     },
     "MELI34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2103,8 +2103,8 @@ window.MANIFEST = {
     },
     "MFII11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2115,8 +2115,8 @@ window.MANIFEST = {
     },
     "MGLU3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2147,8 +2147,8 @@ window.MANIFEST = {
     },
     "MRVE3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2157,8 +2157,8 @@ window.MANIFEST = {
     },
     "MSFT34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2167,8 +2167,8 @@ window.MANIFEST = {
     },
     "MXRF11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2231,8 +2231,8 @@ window.MANIFEST = {
     },
     "NFLX34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2287,8 +2287,8 @@ window.MANIFEST = {
     },
     "NVDC34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2349,8 +2349,8 @@ window.MANIFEST = {
     },
     "PETR3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2359,8 +2359,8 @@ window.MANIFEST = {
     },
     "PETR4": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2431,8 +2431,8 @@ window.MANIFEST = {
     },
     "PRIO3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2441,8 +2441,8 @@ window.MANIFEST = {
     },
     "PVBI11": {
       "primeira": "2024-01-30",
-      "ultima": "2026-09-16",
-      "pontos": 658,
+      "ultima": "2026-09-18",
+      "pontos": 659,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2523,8 +2523,8 @@ window.MANIFEST = {
     },
     "RADL3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2533,8 +2533,8 @@ window.MANIFEST = {
     },
     "RAIL3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2543,8 +2543,8 @@ window.MANIFEST = {
     },
     "RBRF11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2555,8 +2555,8 @@ window.MANIFEST = {
     },
     "RBRP11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2567,8 +2567,8 @@ window.MANIFEST = {
     },
     "RBRR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2577,8 +2577,8 @@ window.MANIFEST = {
     },
     "RDOR3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2587,8 +2587,8 @@ window.MANIFEST = {
     },
     "RECR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2599,8 +2599,8 @@ window.MANIFEST = {
     },
     "RECT11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2609,8 +2609,8 @@ window.MANIFEST = {
     },
     "RENT3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2665,8 +2665,8 @@ window.MANIFEST = {
     },
     "RZTR11": {
       "primeira": "2024-01-30",
-      "ultima": "2026-09-16",
-      "pontos": 657,
+      "ultima": "2026-09-18",
+      "pontos": 659,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2675,8 +2675,8 @@ window.MANIFEST = {
     },
     "SANB11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2685,8 +2685,8 @@ window.MANIFEST = {
     },
     "SAPR4": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2697,8 +2697,8 @@ window.MANIFEST = {
     },
     "SBSP3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2795,8 +2795,8 @@ window.MANIFEST = {
     },
     "SMTO3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2881,8 +2881,8 @@ window.MANIFEST = {
     },
     "SUZB3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2911,8 +2911,8 @@ window.MANIFEST = {
     },
     "TAEE11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2971,8 +2971,8 @@ window.MANIFEST = {
     },
     "TEND3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2983,8 +2983,8 @@ window.MANIFEST = {
     },
     "TEPP11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2995,8 +2995,8 @@ window.MANIFEST = {
     },
     "TGAR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3007,8 +3007,8 @@ window.MANIFEST = {
     },
     "TIMS3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3029,8 +3029,8 @@ window.MANIFEST = {
     },
     "TOTS3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3049,8 +3049,8 @@ window.MANIFEST = {
     },
     "TRXF11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3061,8 +3061,8 @@ window.MANIFEST = {
     },
     "TSLA34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3071,8 +3071,8 @@ window.MANIFEST = {
     },
     "UGPA3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3121,8 +3121,8 @@ window.MANIFEST = {
     },
     "VALE3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3131,8 +3131,8 @@ window.MANIFEST = {
     },
     "VAMO3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3143,8 +3143,8 @@ window.MANIFEST = {
     },
     "VBBR3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3153,8 +3153,8 @@ window.MANIFEST = {
     },
     "VGHF11": {
       "primeira": "2024-02-06",
-      "ultima": "2026-09-16",
-      "pontos": 652,
+      "ultima": "2026-09-18",
+      "pontos": 654,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3177,8 +3177,8 @@ window.MANIFEST = {
     },
     "VGIR11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3189,8 +3189,8 @@ window.MANIFEST = {
     },
     "VILG11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3201,8 +3201,8 @@ window.MANIFEST = {
     },
     "VINO11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3213,8 +3213,8 @@ window.MANIFEST = {
     },
     "VISA34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3223,8 +3223,8 @@ window.MANIFEST = {
     },
     "VISC11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3233,8 +3233,8 @@ window.MANIFEST = {
     },
     "VIVT3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3243,8 +3243,8 @@ window.MANIFEST = {
     },
     "VRTA11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3255,8 +3255,8 @@ window.MANIFEST = {
     },
     "VSLH11": {
       "primeira": "2024-01-31",
-      "ultima": "2026-09-16",
-      "pontos": 657,
+      "ultima": "2026-09-18",
+      "pontos": 658,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3277,8 +3277,8 @@ window.MANIFEST = {
     },
     "WALM34": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3299,8 +3299,8 @@ window.MANIFEST = {
     },
     "WEGE3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3447,8 +3447,8 @@ window.MANIFEST = {
     },
     "XPLG11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3459,8 +3459,8 @@ window.MANIFEST = {
     },
     "XPML11": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-17",
-      "pontos": 1246,
+      "ultima": "2026-09-18",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3482,8 +3482,8 @@ window.MANIFEST = {
     },
     "YDUQ3": {
       "primeira": "2021-09-20",
-      "ultima": "2026-09-16",
-      "pontos": 1245,
+      "ultima": "2026-09-18",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
