@@ -2,7 +2,7 @@
 // Procedência e qualidade das séries de academia/data/dados.js.
 // Ver tools/README-dados.md para as regras de qualidade.
 window.MANIFEST = {
-  "geradoEm": "2026-09-25T14:52:44.302Z",
+  "geradoEm": "2026-09-26T14:03:32.794Z",
   "ultimaDataGlobal": "2026-09-25",
   "totalSeries": 637,
   "porTicker": {
@@ -19,7 +19,7 @@ window.MANIFEST = {
     "AAPL34": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -38,7 +38,7 @@ window.MANIFEST = {
     },
     "ACWI11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -50,7 +50,7 @@ window.MANIFEST = {
     },
     "AGRI11": {
       "primeira": "2022-05-24",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1084,
       "universo": "etfs",
       "qualidade": {
@@ -63,7 +63,7 @@ window.MANIFEST = {
     "ALPA4": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -72,7 +72,7 @@ window.MANIFEST = {
     },
     "ALUG11": {
       "primeira": "2021-10-29",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1223,
       "universo": "etfs",
       "qualidade": {
@@ -116,7 +116,7 @@ window.MANIFEST = {
     },
     "AREA11": {
       "primeira": "2025-10-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 220,
       "universo": "etfs",
       "qualidade": {
@@ -126,7 +126,7 @@ window.MANIFEST = {
     },
     "ARGE11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 252,
       "universo": "etfs",
       "qualidade": {
@@ -147,7 +147,7 @@ window.MANIFEST = {
     "ASAI3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -156,7 +156,7 @@ window.MANIFEST = {
     },
     "AUPO11": {
       "primeira": "2026-05-18",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 92,
       "universo": "etfs",
       "qualidade": {
@@ -166,7 +166,7 @@ window.MANIFEST = {
     },
     "AURO11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 252,
       "universo": "etfs",
       "qualidade": {
@@ -176,7 +176,7 @@ window.MANIFEST = {
     },
     "AUVP11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -187,7 +187,7 @@ window.MANIFEST = {
     "B3SA3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -196,7 +196,7 @@ window.MANIFEST = {
     },
     "B5P211": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -219,7 +219,7 @@ window.MANIFEST = {
     "BBAS3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -229,7 +229,7 @@ window.MANIFEST = {
     "BBDC3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -239,7 +239,7 @@ window.MANIFEST = {
     "BBDC4": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -250,7 +250,7 @@ window.MANIFEST = {
     },
     "BBOI11": {
       "primeira": "2022-11-28",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 955,
       "universo": "etfs",
       "qualidade": {
@@ -262,7 +262,7 @@ window.MANIFEST = {
     },
     "BBOV11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -272,7 +272,7 @@ window.MANIFEST = {
     },
     "BBSD11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -285,7 +285,7 @@ window.MANIFEST = {
     "BBSE3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -304,7 +304,7 @@ window.MANIFEST = {
     },
     "BCIC11": {
       "primeira": "2023-02-14",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 709,
       "universo": "etfs",
       "qualidade": {
@@ -334,7 +334,7 @@ window.MANIFEST = {
     },
     "BDAP11": {
       "primeira": "2025-07-07",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 288,
       "universo": "etfs",
       "qualidade": {
@@ -346,7 +346,7 @@ window.MANIFEST = {
     },
     "BDEF11": {
       "primeira": "2023-02-14",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 709,
       "universo": "etfs",
       "qualidade": {
@@ -356,7 +356,7 @@ window.MANIFEST = {
     },
     "BDOM11": {
       "primeira": "2022-09-21",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1000,
       "universo": "etfs",
       "qualidade": {
@@ -378,7 +378,7 @@ window.MANIFEST = {
     },
     "BEST11": {
       "primeira": "2025-10-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 227,
       "universo": "etfs",
       "qualidade": {
@@ -418,7 +418,7 @@ window.MANIFEST = {
     },
     "BITH11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -428,7 +428,7 @@ window.MANIFEST = {
     },
     "BITI11": {
       "primeira": "2022-11-09",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 968,
       "universo": "etfs",
       "qualidade": {
@@ -449,8 +449,8 @@ window.MANIFEST = {
       }
     },
     "BLBT39": {
-      "primeira": "2026-09-24",
-      "ultima": "2026-09-24",
+      "primeira": "2026-09-25",
+      "ultima": "2026-09-25",
       "pontos": 1,
       "universo": "etfs",
       "qualidade": {
@@ -470,7 +470,7 @@ window.MANIFEST = {
     },
     "BMMT11": {
       "primeira": "2023-02-14",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 709,
       "universo": "etfs",
       "qualidade": {
@@ -480,7 +480,7 @@ window.MANIFEST = {
     },
     "BNDX11": {
       "primeira": "2022-07-13",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1049,
       "universo": "etfs",
       "qualidade": {
@@ -490,8 +490,8 @@ window.MANIFEST = {
     },
     "BOL511": {
       "primeira": "2025-10-17",
-      "ultima": "2026-09-24",
-      "pontos": 233,
+      "ultima": "2026-09-25",
+      "pontos": 234,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -512,7 +512,7 @@ window.MANIFEST = {
     },
     "BOVA11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -522,7 +522,7 @@ window.MANIFEST = {
     },
     "BOVB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -532,7 +532,7 @@ window.MANIFEST = {
     },
     "BOVS11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -542,7 +542,7 @@ window.MANIFEST = {
     },
     "BOVV11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -552,7 +552,7 @@ window.MANIFEST = {
     },
     "BOVX11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -574,8 +574,8 @@ window.MANIFEST = {
     },
     "BPRE11": {
       "primeira": "2025-10-17",
-      "ultima": "2026-09-24",
-      "pontos": 233,
+      "ultima": "2026-09-25",
+      "pontos": 234,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -594,7 +594,7 @@ window.MANIFEST = {
     },
     "BRAX11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -614,8 +614,8 @@ window.MANIFEST = {
     },
     "BREW11": {
       "primeira": "2023-02-14",
-      "ultima": "2026-09-23",
-      "pontos": 768,
+      "ultima": "2026-09-24",
+      "pontos": 769,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -624,7 +624,7 @@ window.MANIFEST = {
     },
     "BRXC11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -657,7 +657,7 @@ window.MANIFEST = {
     "BTLG11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -678,7 +678,7 @@ window.MANIFEST = {
     },
     "BVBR11": {
       "primeira": "2026-05-18",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 92,
       "universo": "etfs",
       "qualidade": {
@@ -688,7 +688,7 @@ window.MANIFEST = {
     },
     "BXPO11": {
       "primeira": "2022-09-20",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1001,
       "universo": "etfs",
       "qualidade": {
@@ -700,7 +700,7 @@ window.MANIFEST = {
     },
     "CAPE11": {
       "primeira": "2025-07-14",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 301,
       "universo": "etfs",
       "qualidade": {
@@ -723,7 +723,7 @@ window.MANIFEST = {
     "CASH3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -746,7 +746,7 @@ window.MANIFEST = {
     },
     "CHIP11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -758,8 +758,8 @@ window.MANIFEST = {
     },
     "CLOB11": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-23",
-      "pontos": 96,
+      "ultima": "2026-09-24",
+      "pontos": 97,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -770,7 +770,7 @@ window.MANIFEST = {
     },
     "CMDB11": {
       "primeira": "2021-11-29",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1205,
       "universo": "etfs",
       "qualidade": {
@@ -783,7 +783,7 @@ window.MANIFEST = {
     "CMIG4": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -793,7 +793,7 @@ window.MANIFEST = {
     "CMIN3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -815,7 +815,7 @@ window.MANIFEST = {
     "COGN3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -836,7 +836,7 @@ window.MANIFEST = {
     },
     "CORN11": {
       "primeira": "2022-10-24",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 978,
       "universo": "etfs",
       "qualidade": {
@@ -849,7 +849,7 @@ window.MANIFEST = {
     "CPFE3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -871,7 +871,7 @@ window.MANIFEST = {
     "CPTS11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -882,7 +882,7 @@ window.MANIFEST = {
     },
     "CRPT11": {
       "primeira": "2022-05-06",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1097,
       "universo": "etfs",
       "qualidade": {
@@ -895,7 +895,7 @@ window.MANIFEST = {
     "CSAN3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -905,7 +905,7 @@ window.MANIFEST = {
     "CSMG3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -917,7 +917,7 @@ window.MANIFEST = {
     "CVCB3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -929,7 +929,7 @@ window.MANIFEST = {
     "CXSE3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -941,7 +941,7 @@ window.MANIFEST = {
     "CYRE3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -950,7 +950,7 @@ window.MANIFEST = {
     },
     "DEBB11": {
       "primeira": "2022-06-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 871,
       "universo": "etfs",
       "qualidade": {
@@ -962,7 +962,7 @@ window.MANIFEST = {
     },
     "DEFI11": {
       "primeira": "2022-02-17",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1148,
       "universo": "etfs",
       "qualidade": {
@@ -973,7 +973,7 @@ window.MANIFEST = {
     "DEVA11": {
       "primeira": "2024-02-01",
       "ultima": "2026-09-25",
-      "pontos": 662,
+      "pontos": 663,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1004,7 +1004,7 @@ window.MANIFEST = {
     },
     "DIVO11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1016,7 +1016,7 @@ window.MANIFEST = {
     },
     "DOLA11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -1028,7 +1028,7 @@ window.MANIFEST = {
     },
     "DOLB11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -1038,7 +1038,7 @@ window.MANIFEST = {
     },
     "DOLX11": {
       "primeira": "2026-06-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 68,
       "universo": "etfs",
       "qualidade": {
@@ -1048,8 +1048,8 @@ window.MANIFEST = {
     },
     "DVER11": {
       "primeira": "2024-02-19",
-      "ultima": "2026-09-24",
-      "pontos": 537,
+      "ultima": "2026-09-25",
+      "pontos": 538,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1070,7 +1070,7 @@ window.MANIFEST = {
     },
     "EBIT11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -1082,7 +1082,7 @@ window.MANIFEST = {
     },
     "ECOO11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -1117,7 +1117,7 @@ window.MANIFEST = {
     "EGIE3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1126,8 +1126,8 @@ window.MANIFEST = {
     },
     "ELAS11": {
       "primeira": "2022-03-07",
-      "ultima": "2026-09-23",
-      "pontos": 1138,
+      "ultima": "2026-09-24",
+      "pontos": 1139,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1137,7 +1137,7 @@ window.MANIFEST = {
     "ENEV3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1147,7 +1147,7 @@ window.MANIFEST = {
     "EQTL3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1156,8 +1156,8 @@ window.MANIFEST = {
     },
     "ESGB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-23",
-      "pontos": 1246,
+      "ultima": "2026-09-24",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1168,7 +1168,7 @@ window.MANIFEST = {
     },
     "ETHE11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -1178,7 +1178,7 @@ window.MANIFEST = {
     },
     "ETHY11": {
       "primeira": "2026-05-18",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 92,
       "universo": "etfs",
       "qualidade": {
@@ -1188,7 +1188,7 @@ window.MANIFEST = {
     },
     "EWBZ11": {
       "primeira": "2025-07-14",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 301,
       "universo": "etfs",
       "qualidade": {
@@ -1222,7 +1222,7 @@ window.MANIFEST = {
     },
     "FIND11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1232,7 +1232,7 @@ window.MANIFEST = {
     },
     "FIXA11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -1245,7 +1245,7 @@ window.MANIFEST = {
     },
     "FIXX11": {
       "primeira": "2026-02-02",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 160,
       "universo": "etfs",
       "qualidade": {
@@ -1256,7 +1256,7 @@ window.MANIFEST = {
     "FLRY3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1267,7 +1267,7 @@ window.MANIFEST = {
     },
     "FOMO11": {
       "primeira": "2025-05-19",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 340,
       "universo": "etfs",
       "qualidade": {
@@ -1277,8 +1277,8 @@ window.MANIFEST = {
     },
     "GBIT11": {
       "primeira": "2026-05-18",
-      "ultima": "2026-09-23",
-      "pontos": 91,
+      "ultima": "2026-09-24",
+      "pontos": 92,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1289,7 +1289,7 @@ window.MANIFEST = {
     },
     "GBTC11": {
       "primeira": "2025-09-01",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 266,
       "universo": "etfs",
       "qualidade": {
@@ -1309,7 +1309,7 @@ window.MANIFEST = {
     },
     "GDIV11": {
       "primeira": "2026-05-18",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 92,
       "universo": "etfs",
       "qualidade": {
@@ -1319,7 +1319,7 @@ window.MANIFEST = {
     },
     "GENB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1345,7 +1345,7 @@ window.MANIFEST = {
     "GGBR4": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1355,7 +1355,7 @@ window.MANIFEST = {
     "GGRC11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1388,7 +1388,7 @@ window.MANIFEST = {
     },
     "GLDX11": {
       "primeira": "2025-06-30",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 311,
       "universo": "etfs",
       "qualidade": {
@@ -1418,7 +1418,7 @@ window.MANIFEST = {
     },
     "GOLB11": {
       "primeira": "2026-06-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 68,
       "universo": "etfs",
       "qualidade": {
@@ -1428,7 +1428,7 @@ window.MANIFEST = {
     },
     "GOLD11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -1440,7 +1440,7 @@ window.MANIFEST = {
     },
     "GOLX11": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -1462,7 +1462,7 @@ window.MANIFEST = {
     },
     "GPCA11": {
       "primeira": "2026-07-13",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 53,
       "universo": "etfs",
       "qualidade": {
@@ -1472,7 +1472,7 @@ window.MANIFEST = {
     },
     "GPUS11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 252,
       "universo": "etfs",
       "qualidade": {
@@ -1482,7 +1482,7 @@ window.MANIFEST = {
     },
     "GXUS11": {
       "primeira": "2026-05-18",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 92,
       "universo": "etfs",
       "qualidade": {
@@ -1495,7 +1495,7 @@ window.MANIFEST = {
     "HAPV3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1506,7 +1506,7 @@ window.MANIFEST = {
     },
     "HASH11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -1519,7 +1519,7 @@ window.MANIFEST = {
     "HCTR11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1530,8 +1530,8 @@ window.MANIFEST = {
     },
     "HERT11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-23",
-      "pontos": 250,
+      "ultima": "2026-09-24",
+      "pontos": 251,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1579,7 +1579,7 @@ window.MANIFEST = {
     "HGLG11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1599,7 +1599,7 @@ window.MANIFEST = {
     "HGRU11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1610,7 +1610,7 @@ window.MANIFEST = {
     },
     "HODL11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -1621,7 +1621,7 @@ window.MANIFEST = {
     "HSML11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1630,7 +1630,7 @@ window.MANIFEST = {
     },
     "HTEK11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1654,7 +1654,7 @@ window.MANIFEST = {
     },
     "IB5M11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1666,7 +1666,7 @@ window.MANIFEST = {
     },
     "IBOB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1686,7 +1686,7 @@ window.MANIFEST = {
     },
     "IMAB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1698,7 +1698,7 @@ window.MANIFEST = {
     },
     "IMBB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1732,7 +1732,7 @@ window.MANIFEST = {
     },
     "IRFM11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1745,7 +1745,7 @@ window.MANIFEST = {
     },
     "ISUS11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -1756,7 +1756,7 @@ window.MANIFEST = {
     "ITSA4": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1768,7 +1768,7 @@ window.MANIFEST = {
     "ITUB4": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1777,7 +1777,7 @@ window.MANIFEST = {
     },
     "IVVB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -1787,7 +1787,7 @@ window.MANIFEST = {
     },
     "IVWO11": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -1820,7 +1820,7 @@ window.MANIFEST = {
     "JHSF3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1886,7 +1886,7 @@ window.MANIFEST = {
     "KNCR11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1922,7 +1922,7 @@ window.MANIFEST = {
     "KNRI11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -1932,7 +1932,7 @@ window.MANIFEST = {
     "KNSC11": {
       "primeira": "2022-02-17",
       "ultima": "2026-09-25",
-      "pontos": 1149,
+      "pontos": 1150,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -1943,7 +1943,7 @@ window.MANIFEST = {
     },
     "LFIN11": {
       "primeira": "2025-10-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 220,
       "universo": "etfs",
       "qualidade": {
@@ -1965,7 +1965,7 @@ window.MANIFEST = {
     },
     "LFTI11": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -1975,7 +1975,7 @@ window.MANIFEST = {
     },
     "LFTS11": {
       "primeira": "2022-11-08",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 757,
       "universo": "etfs",
       "qualidade": {
@@ -1995,7 +1995,7 @@ window.MANIFEST = {
     },
     "LLFT11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 182,
       "universo": "etfs",
       "qualidade": {
@@ -2006,7 +2006,7 @@ window.MANIFEST = {
     "LREN3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2015,7 +2015,7 @@ window.MANIFEST = {
     },
     "LTBX11": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -2027,7 +2027,7 @@ window.MANIFEST = {
     },
     "LTNB11": {
       "primeira": "2025-09-01",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 257,
       "universo": "etfs",
       "qualidade": {
@@ -2038,7 +2038,7 @@ window.MANIFEST = {
     "LWSA3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2059,7 +2059,7 @@ window.MANIFEST = {
     },
     "MATB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2070,7 +2070,7 @@ window.MANIFEST = {
     "MCCI11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2082,7 +2082,7 @@ window.MANIFEST = {
     "MELI34": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2091,8 +2091,8 @@ window.MANIFEST = {
     },
     "META11": {
       "primeira": "2022-05-31",
-      "ultima": "2026-09-23",
-      "pontos": 1078,
+      "ultima": "2026-09-24",
+      "pontos": 1079,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2116,7 +2116,7 @@ window.MANIFEST = {
     "MGLU3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2127,8 +2127,8 @@ window.MANIFEST = {
     },
     "MIDB11": {
       "primeira": "2026-02-18",
-      "ultima": "2026-09-24",
-      "pontos": 151,
+      "ultima": "2026-09-25",
+      "pontos": 152,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2137,7 +2137,7 @@ window.MANIFEST = {
     },
     "MILL11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2148,7 +2148,7 @@ window.MANIFEST = {
     "MRVE3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2158,7 +2158,7 @@ window.MANIFEST = {
     "MSFT34": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2168,7 +2168,7 @@ window.MANIFEST = {
     "MXRF11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2179,7 +2179,7 @@ window.MANIFEST = {
     },
     "NASD11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -2221,7 +2221,7 @@ window.MANIFEST = {
     },
     "NDIV11": {
       "primeira": "2023-09-29",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 744,
       "universo": "etfs",
       "qualidade": {
@@ -2243,7 +2243,7 @@ window.MANIFEST = {
     },
     "NLFA11": {
       "primeira": "2026-06-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 68,
       "universo": "etfs",
       "qualidade": {
@@ -2253,7 +2253,7 @@ window.MANIFEST = {
     },
     "NSDV11": {
       "primeira": "2023-09-29",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 740,
       "universo": "etfs",
       "qualidade": {
@@ -2263,7 +2263,7 @@ window.MANIFEST = {
     },
     "NTNS11": {
       "primeira": "2023-06-19",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 608,
       "universo": "etfs",
       "qualidade": {
@@ -2275,7 +2275,7 @@ window.MANIFEST = {
     },
     "NUCL11": {
       "primeira": "2021-12-15",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1192,
       "universo": "etfs",
       "qualidade": {
@@ -2307,7 +2307,7 @@ window.MANIFEST = {
     },
     "PACB11": {
       "primeira": "2025-02-24",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 340,
       "universo": "etfs",
       "qualidade": {
@@ -2319,7 +2319,7 @@ window.MANIFEST = {
     },
     "PACC11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 243,
       "universo": "etfs",
       "qualidade": {
@@ -2329,7 +2329,7 @@ window.MANIFEST = {
     },
     "PACG11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 243,
       "universo": "etfs",
       "qualidade": {
@@ -2339,8 +2339,8 @@ window.MANIFEST = {
     },
     "PACL11": {
       "primeira": "2025-09-01",
-      "ultima": "2026-09-23",
-      "pontos": 256,
+      "ultima": "2026-09-24",
+      "pontos": 257,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2350,7 +2350,7 @@ window.MANIFEST = {
     "PETR3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2360,7 +2360,7 @@ window.MANIFEST = {
     "PETR4": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2369,7 +2369,7 @@ window.MANIFEST = {
     },
     "PEVC11": {
       "primeira": "2022-08-29",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1017,
       "universo": "etfs",
       "qualidade": {
@@ -2381,7 +2381,7 @@ window.MANIFEST = {
     },
     "PHIP11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 181,
       "universo": "etfs",
       "qualidade": {
@@ -2391,7 +2391,7 @@ window.MANIFEST = {
     },
     "PIBB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2401,7 +2401,7 @@ window.MANIFEST = {
     },
     "PIPE11": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -2411,7 +2411,7 @@ window.MANIFEST = {
     },
     "PKIN11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -2421,7 +2421,7 @@ window.MANIFEST = {
     },
     "PREX11": {
       "primeira": "2026-07-13",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 53,
       "universo": "etfs",
       "qualidade": {
@@ -2432,7 +2432,7 @@ window.MANIFEST = {
     "PRIO3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2451,7 +2451,7 @@ window.MANIFEST = {
     },
     "QBTC11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2461,7 +2461,7 @@ window.MANIFEST = {
     },
     "QDFI11": {
       "primeira": "2022-02-07",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1157,
       "universo": "etfs",
       "qualidade": {
@@ -2473,7 +2473,7 @@ window.MANIFEST = {
     },
     "QETH11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2483,7 +2483,7 @@ window.MANIFEST = {
     },
     "QLBR11": {
       "primeira": "2026-06-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 68,
       "universo": "etfs",
       "qualidade": {
@@ -2493,7 +2493,7 @@ window.MANIFEST = {
     },
     "QQQI11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 252,
       "universo": "etfs",
       "qualidade": {
@@ -2524,7 +2524,7 @@ window.MANIFEST = {
     "RADL3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2543,8 +2543,8 @@ window.MANIFEST = {
     },
     "RBRF11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-24",
-      "pontos": 1247,
+      "ultima": "2026-09-25",
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2578,7 +2578,7 @@ window.MANIFEST = {
     "RDOR3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2588,7 +2588,7 @@ window.MANIFEST = {
     "RECR11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2600,7 +2600,7 @@ window.MANIFEST = {
     "RECT11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2610,7 +2610,7 @@ window.MANIFEST = {
     "RENT3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2619,8 +2619,8 @@ window.MANIFEST = {
     },
     "REVE11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-23",
-      "pontos": 1246,
+      "ultima": "2026-09-24",
+      "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2666,7 +2666,7 @@ window.MANIFEST = {
     "RZTR11": {
       "primeira": "2024-01-30",
       "ultima": "2026-09-25",
-      "pontos": 664,
+      "pontos": 665,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2686,7 +2686,7 @@ window.MANIFEST = {
     "SAPR4": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -2707,7 +2707,7 @@ window.MANIFEST = {
     },
     "SCVB11": {
       "primeira": "2022-10-03",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 992,
       "universo": "etfs",
       "qualidade": {
@@ -2729,7 +2729,7 @@ window.MANIFEST = {
     },
     "SILK11": {
       "primeira": "2025-08-04",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 287,
       "universo": "etfs",
       "qualidade": {
@@ -2741,7 +2741,7 @@ window.MANIFEST = {
     },
     "SLVR11": {
       "primeira": "2026-06-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 68,
       "universo": "etfs",
       "qualidade": {
@@ -2751,7 +2751,7 @@ window.MANIFEST = {
     },
     "SMAB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2763,7 +2763,7 @@ window.MANIFEST = {
     },
     "SMAC11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2775,7 +2775,7 @@ window.MANIFEST = {
     },
     "SMAL11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -2796,7 +2796,7 @@ window.MANIFEST = {
     "SMTO3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2817,7 +2817,7 @@ window.MANIFEST = {
     },
     "SOLH11": {
       "primeira": "2024-12-09",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 434,
       "universo": "etfs",
       "qualidade": {
@@ -2827,7 +2827,7 @@ window.MANIFEST = {
     },
     "SPBZ11": {
       "primeira": "2026-05-18",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 92,
       "universo": "etfs",
       "qualidade": {
@@ -2837,7 +2837,7 @@ window.MANIFEST = {
     },
     "SPXB11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2849,7 +2849,7 @@ window.MANIFEST = {
     },
     "SPXH11": {
       "primeira": "2026-06-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 68,
       "universo": "etfs",
       "qualidade": {
@@ -2859,7 +2859,7 @@ window.MANIFEST = {
     },
     "SPXI11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2871,7 +2871,7 @@ window.MANIFEST = {
     },
     "SPYR11": {
       "primeira": "2026-06-08",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 78,
       "universo": "etfs",
       "qualidade": {
@@ -2882,7 +2882,7 @@ window.MANIFEST = {
     "SUZB3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2891,7 +2891,7 @@ window.MANIFEST = {
     },
     "SVAL11": {
       "primeira": "2022-07-12",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1050,
       "universo": "etfs",
       "qualidade": {
@@ -2901,7 +2901,7 @@ window.MANIFEST = {
     },
     "T10R11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 245,
       "universo": "etfs",
       "qualidade": {
@@ -2921,7 +2921,7 @@ window.MANIFEST = {
     },
     "TD3511": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -2931,8 +2931,8 @@ window.MANIFEST = {
     },
     "TD5011": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-23",
-      "pontos": 96,
+      "ultima": "2026-09-24",
+      "pontos": 97,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2941,8 +2941,8 @@ window.MANIFEST = {
     },
     "TD6011": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-23",
-      "pontos": 96,
+      "ultima": "2026-09-24",
+      "pontos": 97,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -2951,7 +2951,7 @@ window.MANIFEST = {
     },
     "TECK11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1247,
       "universo": "etfs",
       "qualidade": {
@@ -2961,7 +2961,7 @@ window.MANIFEST = {
     },
     "TECX11": {
       "primeira": "2025-09-22",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 251,
       "universo": "etfs",
       "qualidade": {
@@ -2996,7 +2996,7 @@ window.MANIFEST = {
     "TGAR11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3008,7 +3008,7 @@ window.MANIFEST = {
     "TIMS3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3017,8 +3017,8 @@ window.MANIFEST = {
     },
     "TIRB11": {
       "primeira": "2025-05-19",
-      "ultima": "2026-09-23",
-      "pontos": 333,
+      "ultima": "2026-09-24",
+      "pontos": 334,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3030,7 +3030,7 @@ window.MANIFEST = {
     "TOTS3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3039,7 +3039,7 @@ window.MANIFEST = {
     },
     "TRIG11": {
       "primeira": "2021-11-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1216,
       "universo": "etfs",
       "qualidade": {
@@ -3050,7 +3050,7 @@ window.MANIFEST = {
     "TRXF11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3072,7 +3072,7 @@ window.MANIFEST = {
     "UGPA3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3081,7 +3081,7 @@ window.MANIFEST = {
     },
     "USDB11": {
       "primeira": "2022-07-13",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 893,
       "universo": "etfs",
       "qualidade": {
@@ -3091,7 +3091,7 @@ window.MANIFEST = {
     },
     "USTK11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -3101,7 +3101,7 @@ window.MANIFEST = {
     },
     "UTEC11": {
       "primeira": "2022-05-19",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1087,
       "universo": "etfs",
       "qualidade": {
@@ -3122,7 +3122,7 @@ window.MANIFEST = {
     "VALE3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3132,7 +3132,7 @@ window.MANIFEST = {
     "VAMO3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3144,7 +3144,7 @@ window.MANIFEST = {
     "VBBR3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3154,7 +3154,7 @@ window.MANIFEST = {
     "VGHF11": {
       "primeira": "2024-02-06",
       "ultima": "2026-09-25",
-      "pontos": 659,
+      "pontos": 660,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3178,7 +3178,7 @@ window.MANIFEST = {
     "VGIR11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3190,7 +3190,7 @@ window.MANIFEST = {
     "VILG11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3224,7 +3224,7 @@ window.MANIFEST = {
     "VISC11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3234,7 +3234,7 @@ window.MANIFEST = {
     "VIVT3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3278,7 +3278,7 @@ window.MANIFEST = {
     "WALM34": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3287,7 +3287,7 @@ window.MANIFEST = {
     },
     "WEB311": {
       "primeira": "2022-03-29",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1122,
       "universo": "etfs",
       "qualidade": {
@@ -3300,7 +3300,7 @@ window.MANIFEST = {
     "WEGE3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3309,8 +3309,8 @@ window.MANIFEST = {
     },
     "WEJR11": {
       "primeira": "2025-10-20",
-      "ultima": "2026-09-24",
-      "pontos": 213,
+      "ultima": "2026-09-25",
+      "pontos": 214,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3319,7 +3319,7 @@ window.MANIFEST = {
     },
     "WRLD11": {
       "primeira": "2021-10-19",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1231,
       "universo": "etfs",
       "qualidade": {
@@ -3331,7 +3331,7 @@ window.MANIFEST = {
     },
     "XB3011": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -3351,8 +3351,8 @@ window.MANIFEST = {
     },
     "XB4511": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-23",
-      "pontos": 96,
+      "ultima": "2026-09-24",
+      "pontos": 97,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3361,8 +3361,8 @@ window.MANIFEST = {
     },
     "XB5011": {
       "primeira": "2025-12-11",
-      "ultima": "2026-09-24",
-      "pontos": 195,
+      "ultima": "2026-09-25",
+      "pontos": 196,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3371,7 +3371,7 @@ window.MANIFEST = {
     },
     "XB6011": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -3381,7 +3381,7 @@ window.MANIFEST = {
     },
     "XBCI11": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 67,
       "universo": "etfs",
       "qualidade": {
@@ -3393,7 +3393,7 @@ window.MANIFEST = {
     },
     "XBIT11": {
       "primeira": "2026-06-08",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 78,
       "universo": "etfs",
       "qualidade": {
@@ -3403,8 +3403,8 @@ window.MANIFEST = {
     },
     "XBOV11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-23",
-      "pontos": 1245,
+      "ultima": "2026-09-24",
+      "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3413,7 +3413,7 @@ window.MANIFEST = {
     },
     "XETH11": {
       "primeira": "2026-06-08",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 78,
       "universo": "etfs",
       "qualidade": {
@@ -3423,7 +3423,7 @@ window.MANIFEST = {
     },
     "XFIX11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -3435,7 +3435,7 @@ window.MANIFEST = {
     },
     "XINA11": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1246,
       "universo": "etfs",
       "qualidade": {
@@ -3448,7 +3448,7 @@ window.MANIFEST = {
     "XPLG11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3460,7 +3460,7 @@ window.MANIFEST = {
     "XPML11": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": false,
@@ -3472,7 +3472,7 @@ window.MANIFEST = {
     },
     "XSPI11": {
       "primeira": "2026-05-11",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 97,
       "universo": "etfs",
       "qualidade": {
@@ -3483,7 +3483,7 @@ window.MANIFEST = {
     "YDUQ3": {
       "primeira": "2021-09-27",
       "ultima": "2026-09-25",
-      "pontos": 1247,
+      "pontos": 1248,
       "universo": "etfs",
       "qualidade": {
         "ok": true,
@@ -3997,7 +3997,7 @@ window.MANIFEST = {
     },
     "CSPX": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1259,
       "universo": "offshore",
       "qualidade": {
@@ -4007,8 +4007,8 @@ window.MANIFEST = {
     },
     "CTEC": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-24",
-      "pontos": 1254,
+      "ultima": "2026-09-25",
+      "pontos": 1255,
       "universo": "offshore",
       "qualidade": {
         "ok": false,
@@ -4237,7 +4237,7 @@ window.MANIFEST = {
     },
     "EIMI": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1261,
       "universo": "offshore",
       "qualidade": {
@@ -4853,7 +4853,7 @@ window.MANIFEST = {
     },
     "IWDA": {
       "primeira": "2021-09-27",
-      "ultima": "2026-09-25",
+      "ultima": "2026-09-24",
       "pontos": 1261,
       "universo": "offshore",
       "qualidade": {
@@ -6321,8 +6321,8 @@ window.MANIFEST = {
     },
     "WSML": {
       "primeira": "2025-04-03",
-      "ultima": "2026-09-24",
-      "pontos": 371,
+      "ultima": "2026-09-25",
+      "pontos": 372,
       "universo": "offshore",
       "qualidade": {
         "ok": true,
